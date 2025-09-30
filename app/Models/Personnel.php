@@ -28,7 +28,7 @@ class Personnel extends Model
             'email_verified_at' => 'datetime',
         ];
     }
-    
+
     public function area()
     {
         return $this->belongsTo(Area::class);
@@ -37,5 +37,14 @@ class Personnel extends Model
     public function user()
     {
         return $this->hasOne(User::class);
+    }
+
+    public function assignedAssets()
+    {
+        return $this->hasMany(PersonalAsset::class, 'assigner_id');
+    }
+    public function receivedAssets()
+    {
+        return $this->hasMany(PersonalAsset::class, 'receiver_id');
     }
 }
