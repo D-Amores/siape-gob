@@ -22,3 +22,5 @@
 Homestead.json
 Homestead.yaml
 Thumbs.db
+/public/test/
+/resources/views/test.blade.php
