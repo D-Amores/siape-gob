@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('username');
             $table->string('password');
+            $table->string('profile_picture')->nullable();
             $table->rememberToken();
             $table->foreignId('area_id')->constrained('areas')->onDelete('cascade');
             $table->foreignId('personnel_id')->nullable()->constrained('personnel')->onDelete('set null');
