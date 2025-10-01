@@ -103,6 +103,27 @@ class PersonnelController extends Controller
      */
     public function destroy(Personnel $personnel)
     {
-        //
+        $response = ['ok'=> false, 'message'=> ''];
+        $status = 200;
+
+        if($personnel->assignedAssets()->count() > 0 || $personnel->receivedAssets()->count() > 0) {
+            $response['message'] = 'No se puede eliminar el personal porque tiene activos asignados o recibidos.';
+            $status = 400;
+            return response()->json($response, $status);
+        }
+
+        try {
+            $personnel->delete();
+            $response['ok'] = true;
+            $response['message'] = 'Personal eliminado con éxito.';
+        } catch (\Exception $e) {
+            $response['message'] = 'Error al eliminar el personal.';
+            if(config('app.debug')) {
+                $response['errors'][] = $e->getMessage();
+            }
+            $status = 500;
+            Log::error('Error al eliminar el personal: ' . $e->getMessage());
+        }
+        return response()->json($response, $status);
     }
 }
