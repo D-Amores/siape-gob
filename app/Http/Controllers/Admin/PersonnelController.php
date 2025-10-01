@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
-use App\Http\Requests\StorePersonnelRequest;
-use App\Http\Requests\UpdatePersonnelRequest;
+use App\Http\Requests\Admin\StorePersonnelRequest;
+use App\Http\Requests\Admin\UpdatePersonnelRequest;
+use App\Http\Controllers\Controller;
 use App\Models\Personnel;
-use Illuminate\Foundation\Exceptions\Renderer\Exception;
 
 class PersonnelController extends Controller
 {
