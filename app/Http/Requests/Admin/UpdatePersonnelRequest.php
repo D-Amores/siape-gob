@@ -30,6 +30,7 @@ class UpdatePersonnelRequest extends FormRequest
             'middle_name' => 'nullable|string|max:255',
             'phone' => 'nullable|string|max:20',
             'email' => 'sometimes|required|email|unique:personnel,email,' . $this->getPersonnelId(),
+            'is_active' => 'sometimes|boolean',
             'area_id' => 'sometimes|required|exists:areas,id',
         ];
     }
@@ -42,6 +43,7 @@ class UpdatePersonnelRequest extends FormRequest
             'email.required' => 'El correo electrónico es obligatorio.',
             'email.email' => 'El correo electrónico debe ser una dirección de correo electrónico válida.',
             'email.unique' => 'El correo electrónico ya ha sido registrado.',
+            'is_active.boolean' => 'El campo activo debe ser verdadero o falso, activo o inactivo.',
             'area_id.required' => 'El área es obligatoria.',
             'area_id.exists' => 'El área seleccionada no es válida.',
         ];
@@ -55,6 +57,7 @@ class UpdatePersonnelRequest extends FormRequest
             'middle_name' => 'segundo apellido',
             'phone' => 'teléfono',
             'email' => 'correo electrónico',
+            'is_active' => 'estado',
             'area_id' => 'área',
         ];
     }
@@ -67,6 +70,7 @@ class UpdatePersonnelRequest extends FormRequest
             'middle_name' => $this->has('middle_name') ? trim($this->input('middle_name')) : null,
             'phone' => $this->has('phone') ? Tools::formatPhoneNumber($this->input('phone')) : null,
             'email' => $this->has('email') ? trim(strtolower($this->input('email'))) : null,
+            'is_active' => $this->has('is_active') ? filter_var($this->input('is_active'), FILTER_VALIDATE_BOOLEAN) : null,
         ]));
     }
 
