@@ -17,6 +17,7 @@ class Personnel extends Model
         'middle_name',
         'phone',
         'email',
+        'is_active',
         'area_id'
     ];
     /**
@@ -28,7 +29,29 @@ class Personnel extends Model
     {
         return [
             'email_verified_at' => 'datetime',
+            'is_active' => 'boolean',
         ];
+    }
+    /**
+     * Deactivate the personnel and their associated user account.
+     */
+    public function deactivate()
+    {
+        if (!$this->is_active) return;
+
+        $this->update(['is_active' => false]);
+
+        if ($this->user) {
+            $this->user->update(['is_active' => false]);
+        }
+    }
+
+    /**
+     * Verifies if the personnel is active.
+     */
+    public function isActive(): bool
+    {
+        return $this->is_active;
     }
 
     public function area()
