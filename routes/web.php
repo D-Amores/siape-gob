@@ -8,5 +8,5 @@ Route::get('/', function () {
 });
 
 Route::resource('personnel', PersonnelController::class)->only([
-    'index', 'store'
+    'index', 'store', 'update', 'destroy'
 ]);

@@ -6,6 +6,7 @@ use App\Http\Requests\Admin\StorePersonnelRequest;
 use App\Http\Requests\Admin\UpdatePersonnelRequest;
 use App\Http\Controllers\Controller;
 use App\Models\Personnel;
+use Illuminate\Support\Facades\Log;
 
 class PersonnelController extends Controller
 {
@@ -52,6 +53,7 @@ class PersonnelController extends Controller
                 $response['errors'][] = $e->getMessage();
             }
             $status = 500;
+            Log::error('Error al registrar el personal: ' . $e->getMessage());
         }
         return response()->json($response, $status);
     }
@@ -77,7 +79,23 @@ class PersonnelController extends Controller
      */
     public function update(UpdatePersonnelRequest $request, Personnel $personnel)
     {
-        //
+        $response = ['ok'=> false, 'message'=> ''];
+        $status = 200;
+        $data = $request->validated();
+
+        try {
+            $personnel->update($data);
+            $response['ok'] = true;
+            $response['message'] = 'Personal actualizado con éxito.';
+        } catch (\Exception $e) {
+            $response['message'] = 'Error al actualizar el personal.';
+            if(config('app.debug')) {
+                $response['errors'][] = $e->getMessage();
+            }
+            $status = 500;
+            Log::error('Error al actualizar el personal: ' . $e->getMessage());
+        }
+        return response()->json($response, $status);
     }
 
     /**

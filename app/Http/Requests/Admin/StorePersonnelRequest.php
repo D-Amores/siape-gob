@@ -5,6 +5,7 @@ namespace App\Http\Requests\Admin;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Contracts\Validation\Validator;
+use App\Services\Tools;
 
 class StorePersonnelRequest extends FormRequest
 {
@@ -65,7 +66,7 @@ class StorePersonnelRequest extends FormRequest
             'name' => trim($this->name),
             'last_name' => trim($this->last_name),
             'middle_name' => trim($this->middle_name ?? ''),
-            'phone' => trim($this->phone ?? ''),
+            'phone' => Tools::formatPhoneNumber(trim($this->phone ?? '')),
         ]);
     }
 
