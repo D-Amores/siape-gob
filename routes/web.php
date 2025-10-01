@@ -10,3 +10,5 @@ Route::get('/', function () {
 Route::resource('personnel', PersonnelController::class)->only([
     'index', 'store', 'update', 'destroy'
 ]);
+
+Route::post('personnel/api', [PersonnelController::class, 'personnelApi']);

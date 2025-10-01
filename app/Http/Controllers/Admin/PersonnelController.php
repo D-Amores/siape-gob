@@ -4,12 +4,50 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Requests\Admin\StorePersonnelRequest;
 use App\Http\Requests\Admin\UpdatePersonnelRequest;
+use App\Http\Requests\Admin\PersonnelApiRequest;
 use App\Http\Controllers\Controller;
 use App\Models\Personnel;
 use Illuminate\Support\Facades\Log;
 
 class PersonnelController extends Controller
 {
+    /**
+     * Handle the incoming request.
+     */
+    public function personnelApi(PersonnelApiRequest $request)
+    {
+        $option = $request->input('option');
+
+        $query = Personnel::query();
+
+        switch ($option) {
+            case 'area':
+                $query->withArea();
+                break;
+
+            case 'area_user':
+                $query->withArea()->withUser();
+                break;
+
+            // Agregar más casos según sea necesario
+            // case 'area_user_status':
+            //     $query->whereHas('area')->whereHas('user')->where('is_active', true);
+            //     break;
+
+            default:
+                return response()->json([
+                    'ok' => false,
+                    'message' => 'Opción no válida.',
+                ], 422);
+        }
+
+        $data = $query->get();
+        return response()->json([
+            'ok' => true,
+            'data' => $data,
+        ]);
+    }
+
     /**
      * Display a listing of the resource.
      */

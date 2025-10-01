@@ -54,6 +54,19 @@ class Personnel extends Model
         return $this->is_active;
     }
 
+    /**
+     * Scopes for querying personnel with specific relationships.
+     */
+    public function scopeWithArea($query)
+    {
+        return $query->whereHas('area');
+    }
+
+    public function scopeWithUser($query)
+    {
+        return $query->whereHas('user');
+    }
+
     public function area()
     {
         return $this->belongsTo(Area::class);
