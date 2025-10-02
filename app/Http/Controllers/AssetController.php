@@ -91,6 +91,20 @@ class AssetController extends Controller
      */
     public function destroy(Asset $asset)
     {
-        //
+            try {
+            $asset->delete();
+
+            return response()->json([
+                'ok' => true,
+                'message' => 'Activo eliminado exitosamente'
+            ], 200);
+
+        } catch (\Throwable $e) {
+            return response()->json([
+                'ok' => false,
+                'message' => 'Error al eliminar el activo',
+                'error' => config('app.debug') ? $e->getMessage() : 'Error interno'
+            ], 500);
+        }
     }
 }
