@@ -29,9 +29,6 @@ class AssetController extends Controller
      */
     public function store(StoreAssetRequest $request)
     {
-        // $response = ['ok' => false, 'message' => '', 'error' => []];
-        // $status = 201;
-
         try {
             $asset = Asset::create($request->validated());
             $asset->load(['brand', 'category']);
@@ -72,9 +69,23 @@ class AssetController extends Controller
      */
     public function update(UpdateAssetRequest $request, Asset $asset)
     {
-        //
-    }
+        $data = $request -> validated();
+        try {
+            $asset->update($data);
 
+            return response()->json([
+                'ok' => true,
+                'message' => 'Activo actualizado exitosamente',
+                'data' => $asset
+            ], 200);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'ok' => false,
+                'message' => 'Error al actualizar el activo',
+                'error' => config('app.debug') ? $th->getMessage() : 'Error interno'
+            ], 500);
+        }
+    }
     /**
      * Remove the specified resource from storage.
      */
