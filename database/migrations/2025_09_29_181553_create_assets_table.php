@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('assets', function (Blueprint $table) {
             $table->id();
-            $table->integer('inventory_number')->unique();
+            $table->string('inventory_number')->unique();
             $table->string('model');
             $table->string('serial_number')->unique()->nullable();
             $table->string('cpu')->comment('Ej: Intel i5-11400H');
