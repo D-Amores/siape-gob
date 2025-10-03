@@ -18,15 +18,15 @@ class PersonnelController extends Controller
     {
         $option = $request->input('option');
 
-        $query = Personnel::query();
+        $data = null;
 
         switch ($option) {
             case 'area':
-                $query->withArea();
+                $data = Personnel::withArea()->get();
                 break;
 
             case 'area_user':
-                $query->withArea()->withUser();
+                $data = Personnel::withArea()->withUser()->get();
                 break;
 
             // Agregar más casos según sea necesario
@@ -41,7 +41,6 @@ class PersonnelController extends Controller
                 ], 422);
         }
 
-        $data = $query->get();
         return response()->json([
             'ok' => true,
             'data' => $data,
@@ -53,7 +52,7 @@ class PersonnelController extends Controller
      */
     public function index()
     {
-        return view('test');
+        //
     }
 
     /**
