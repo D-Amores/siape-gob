@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AssetController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\PersonnelController;
 use App\Http\Controllers\Admin\UserController;
@@ -11,6 +12,9 @@ Route::get('/', function () {
 
 //Ruta de test
 Route::get('personnel', [TestController::class, 'index']);
+
+Route::resource('assets', AssetController::class)->only(['index', 'store', 'update', 'destroy']);
+
 //RUTA PARA EL CRUD DE PERSONAL
 Route::resource('personnel', PersonnelController::class)->only([
     'store', 'update', 'destroy'
@@ -23,4 +27,3 @@ Route::resource('users', UserController::class)->only([
     'store', 'update', 'destroy'
 ]);
 Route::post('users/api', [UserController::class, 'userApi']);
-
