@@ -22,4 +22,5 @@ Route::post('personnel/api', [PersonnelController::class, 'personnelApi']);
 Route::resource('users', UserController::class)->only([
     'store', 'update', 'destroy'
 ]);
+Route::post('users/api', [UserController::class, 'userApi']);
 
