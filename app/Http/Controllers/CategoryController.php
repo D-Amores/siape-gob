@@ -68,7 +68,24 @@ class CategoryController extends Controller
      */
     public function update(UpdateCategoryRequest $request, Category $category)
     {
-        //
+        $data = $request->validated();
+
+        try {
+            $category->update($data);
+
+            return response()->json([
+                'ok' => true,
+                'message' => 'Categoría actualizada exitosamente',
+                'data' => $category
+            ], 200);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'ok' => false,
+                'message' => 'Error al actualizar la categoría',
+                'error' => config('app.debug') ? $e->getMessage() : 'Error interno'
+            ], 500);
+        }
     }
 
     /**
