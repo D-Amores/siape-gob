@@ -1,3 +1,5 @@
+userURL = vURI + 'users';
+personnelURL = vURI + 'personnel';
 async function testStore() {
     console.log('Test function executed.');
 
@@ -10,14 +12,22 @@ async function testStore() {
         'area_id': 1
     };
 
+    let dataUser = {
+        "username": "usuario123",
+        "password": "secreta123",
+        "password_confirmation": "secreta123",
+        "personnel_id": 3
+    };
+
+
     try {
-        let response = await fetch(urlTest, {
+        let response = await fetch(userURL, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
                 'X-CSRF-TOKEN': csrfToken
             },
-            body: JSON.stringify(data)
+            body: JSON.stringify(dataUser)
         });
 
         let result = await response.json();
@@ -37,18 +47,25 @@ async function testUpdate() {
     console.log('Test function executed.');
     
     let data = {
-        'is_active': false,
+        'is_active': true,
+    };
+
+    let dataUser = {
+        //"username": "usuario_actualizado",
+        "password": "nueva_secreta1",
+        "password_confirmation": "nueva_secreta1",
     };
     personnelId = 1;
+    userId = 1;
 
     try {
-        let response = await fetch(urlTest + '/' + personnelId, {
+        let response = await fetch(userURL + '/' + userId, {
             method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json',
                 'X-CSRF-TOKEN': csrfToken
             },
-            body: JSON.stringify(data)
+            body: JSON.stringify(dataUser)
         });
 
         let result = await response.json();
@@ -66,10 +83,10 @@ async function testUpdate() {
 
 async function testPersonnelApi() {
     console.log('Test function executed (Personnel API).');
-    let option = 'area';  // <- Aquí defines la opción que quieres probar
+    let option = 'users_areas_personnel';  // <- Aquí defines la opción que quieres probar
 
     try {
-        let response = await fetch(urlTest + '/api', {
+        let response = await fetch(userURL + '/api', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -94,9 +111,10 @@ async function testPersonnelApi() {
 
 async function testDestroy(){
     console.log('Test function executed.');
-    personnelId = 2;
+    personnelId = 3;
+    userId = 1;
     try {
-        let response = await fetch(urlTest + '/' + personnelId, {
+        let response = await fetch(personnelURL + '/' + personnelId, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
@@ -119,7 +137,9 @@ async function testDestroy(){
 
 document.addEventListener('DOMContentLoaded', function() {
     console.log('Test script loaded and DOM is ready.');
-    console.log(urlTest);
+    console.log(personnelURL);
+    console.log(userURL);
+
 
     btnStore = document.getElementById('btnStore');
     btnUpdate = document.getElementById('btnUpdate');

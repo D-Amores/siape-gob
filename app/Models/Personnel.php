@@ -59,12 +59,12 @@ class Personnel extends Model
      */
     public function scopeWithArea($query)
     {
-        return $query->whereHas('area');
+        return $query->with('area');
     }
 
     public function scopeWithUser($query)
     {
-        return $query->whereHas('user');
+        return $query->with('user');
     }
 
     public function area()

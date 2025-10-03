@@ -15,6 +15,7 @@
 <script>
     const csrfToken = '{{ csrf_token() }}';
     var urlTest = window.location.origin + '/personnel';
+    var vURI = 'http://localhost/';
 </script>
 <script src="{{ asset('test/test.js') }}"></script>
 </html>
