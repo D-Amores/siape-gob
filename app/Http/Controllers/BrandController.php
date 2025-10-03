@@ -67,7 +67,21 @@ class BrandController extends Controller
      */
     public function update(UpdateBrandRequest $request, Brand $brand)
     {
-        //
+        $data = $request->validated();
+        try {
+            $brand->update($data);
+            return response()->json([
+                'ok' => true,
+                'message' => 'Marca actualizada exitosamente',
+                'data' => $brand
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'ok' => false,
+                'message' => 'Error al actualizar la marca',
+                'error' => config('app.debug') ? $e->getMessage() : 'Error interno'
+            ], 500);
+        }
     }
 
     /**
