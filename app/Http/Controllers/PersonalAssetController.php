@@ -95,6 +95,20 @@ class PersonalAssetController extends Controller
      */
     public function destroy(PersonalAsset $personalAsset)
     {
-        //
+        try {
+            $personalAsset->delete();
+
+            return response()->json([
+                'ok' => true,
+                'message' => 'Activo personal eliminado exitosamente'
+            ], 200);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'ok' => false,
+                'message' => 'Error al eliminar el activo personal',
+                'error' => config('app.debug') ? $e->getMessage() : 'Error interno'
+            ], 500);
+        }
     }
 }
