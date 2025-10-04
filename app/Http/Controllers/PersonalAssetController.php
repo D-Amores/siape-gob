@@ -69,7 +69,25 @@ class PersonalAssetController extends Controller
      */
     public function update(UpdatePersonalAssetRequest $request, PersonalAsset $personalAsset)
     {
-        //
+        $data = $request ->validated();
+
+        try {
+            $personalAsset->update($data);
+            $personalAsset->load(['asset', 'assigner', 'receiver']);
+
+            return response()->json([
+                'ok' => true,
+                'message' => 'Activo personal actualizado exitosamente',
+                'data' => $personalAsset
+            ], 200);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'ok' => false,
+                'message' => 'Error al actualizar el activo personal',
+                'error' => config('app.debug') ? $e->getMessage() : 'Error interno'
+            ], 500);
+        }
     }
 
     /**
