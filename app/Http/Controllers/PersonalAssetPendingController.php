@@ -31,7 +31,6 @@ class PersonalAssetPendingController extends Controller
     {
         try {
             $personalAssetPending = PersonalAssetPending::create($request->validated());
-            $personalAssetPending->load(['asset', 'assigner', 'receiver']);
 
             return response()->json([
                 'ok' => true,
@@ -72,7 +71,6 @@ class PersonalAssetPendingController extends Controller
         $data = $request ->validated();
         try {
             $personalAssetPending->update($data);
-            $personalAssetPending->load(['asset', 'assigner', 'receiver']);
 
             return response()->json([
                 'ok' => true,
