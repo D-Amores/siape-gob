@@ -1,0 +1,63 @@
+.inventory-header {
+    background: transparent;
+    padding: 2rem 0 1rem 0;
+    margin-bottom: 1.5rem;
+    position: relative;
+}
+
+.header-content {
+    text-align: center;
+    position: relative;
+}
+
+.inventory-title {
+    font-size: 2.8rem;
+    font-weight: 800;
+    color: #2c3e50;
+    margin-bottom: 0.5rem;
+    position: relative;
+    display: inline-block;
+    letter-spacing: -0.5px;
+}
+
+.inventory-title::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 3px;
+    background: linear-gradient(90deg, #3498db, #2ecc71);
+    border-radius: 2px;
+}
+
+.inventory-subtitle {
+    font-size: 1.2rem;
+    color: #7f8c8d;
+    font-weight: 400;
+    margin-top: 1rem;
+    line-height: 1.5;
+    font-style: italic;
+}
+
+/* Efecto sutil al hover */
+.inventory-title:hover {
+    transform: translateY(-2px);
+    transition: transform 0.3s ease;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .inventory-title {
+        font-size: 2.2rem;
+    }
+
+    .inventory-subtitle {
+        font-size: 1.1rem;
+    }
+
+    .inventory-header {
+        padding: 1.5rem 0 0.5rem 0;
+    }
+}
