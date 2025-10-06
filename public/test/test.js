@@ -1,5 +1,7 @@
 userURL = vURI + 'users';
 personnelURL = vURI + 'personnel';
+loginURL = vURI + 'login';
+logoutURL = vURI + 'logout';
 async function testStore() {
     console.log('Test function executed.');
 
@@ -16,7 +18,7 @@ async function testStore() {
         "username": "usuario123",
         "password": "secreta123",
         "password_confirmation": "secreta123",
-        "personnel_id": 3
+        "personnel_id": 1
     };
 
 
@@ -81,10 +83,14 @@ async function testUpdate() {
     }
 }
 
-async function testPersonnelApi() {
+async function testApi() {
     console.log('Test function executed (Personnel API).');
     let option = 'users_areas_personnel';  // <- Aquí defines la opción que quieres probar
-
+/*
+{
+    option: '',
+}
+*/
     try {
         let response = await fetch(userURL + '/api', {
             method: 'POST',
@@ -107,7 +113,6 @@ async function testPersonnelApi() {
         console.error('Network or parsing error:', error);
     }
 }
-
 
 async function testDestroy(){
     console.log('Test function executed.');
@@ -135,6 +140,69 @@ async function testDestroy(){
     }
 }
 
+async function testLogin() {
+    console.log('Test function executed (Login).');
+    
+    let dataLogin = {
+        "username": "usuario123",
+        "password": "secreta123",
+        "remember": false
+    };
+    
+    try {
+        let response = await fetch(loginURL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': csrfToken
+            },
+            body: JSON.stringify(dataLogin)
+        });
+
+        let result = await response.json();
+
+        if (!response.ok) {
+            console.error('Server error:', result);
+        } else {
+            console.log('Response from server:', result);
+            // Si la respuesta incluye una ubicación, redirige allí
+            if (result.location) {
+                DelayNode(2000);
+                window.location.href = result.location;
+            }
+        }
+
+    } catch (error) {
+        console.error('Network or parsing error:', error);
+    }
+}
+
+async function testLogout() {
+    console.log('Test function executed (Logout).');
+    
+    try {
+        let response = await fetch(logoutURL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': csrfToken
+            },
+            credentials: 'same-origin'
+        });
+        
+        let result = await response.json();
+
+        if (!response.ok) {
+            console.error('Server error:', result);
+        } else {
+            console.log('Response from server:', result);
+        }
+
+    } catch (error) {
+        console.error('Network or parsing error:', error);
+    }
+}
+
 document.addEventListener('DOMContentLoaded', function() {
     console.log('Test script loaded and DOM is ready.');
     console.log(personnelURL);
@@ -144,10 +212,22 @@ document.addEventListener('DOMContentLoaded', function() {
     btnStore = document.getElementById('btnStore');
     btnUpdate = document.getElementById('btnUpdate');
     btnDelete = document.getElementById('btnDelete');
-    btnPersonnelApi = document.getElementById('btnPersonnelApi');
+    btnApi = document.getElementById('btnApi');
+    btnLogin = document.getElementById('btnLogin');
+    btnLogOut = document.getElementById('btnLogOut');
 
-    btnPersonnelApi.addEventListener('click', function() {
-        testPersonnelApi();
+    btnLogin.addEventListener('click', function() {
+        testLogin();
+        alert('Button clicked, test function called.');
+    });
+
+    btnLogOut.addEventListener('click', function() {
+        testLogout();
+        alert('Button clicked, test function called.');
+    });
+
+    btnApi.addEventListener('click', function() {
+        testApi();
         alert('Button clicked, test function called.');
     });
     
@@ -166,6 +246,7 @@ document.addEventListener('DOMContentLoaded', function() {
         alert('Button clicked, test function called.');
     });
 });
+
 
 /*
 Tabla Assets

@@ -10,7 +10,14 @@
     <button id="btnStore"> Crear</button>
     <button id="btnUpdate"> Actualizar</button>
     <button id="btnDelete"> Eliminar</button>
-    <button id="btnPersonnelApi"> Probar API</button>
+    <button id="btnApi"> Probar API</button>
+    <button id="btnLogin"> Probar Iniciar Sesión</button>
+    <button id="btnLogOut"> Probar Cerrar Sesión</button>
+    <form method="POST" action="{{ route('logout') }}">
+        @csrf
+        <button type="submit">Cerrar sesión</button>
+    </form>
+
 </body>
 <script>
     const csrfToken = '{{ csrf_token() }}';
