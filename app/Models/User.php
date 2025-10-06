@@ -57,4 +57,9 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Area::class);
     }
+
+    public function getAuthIdentifierName()
+    {
+        return 'username';
+    }
 }
