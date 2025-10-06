@@ -69,7 +69,24 @@ class PersonalAssetPendingController extends Controller
      */
     public function update(UpdatePersonalAssetPendingRequest $request, PersonalAssetPending $personalAssetPending)
     {
-        //
+        $data = $request ->validated();
+        try {
+            $personalAssetPending->update($data);
+            $personalAssetPending->load(['asset', 'assigner', 'receiver']);
+
+            return response()->json([
+                'ok' => true,
+                'message' => 'Activo personal pendiente actualizado exitosamente',
+                'data' => $personalAssetPending
+            ], 200);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'ok' => false,
+                'message' => 'Error al actualizar el activo personal pendiente',
+                'error' => config('app.debug') ? $e->getMessage() : 'Error interno'
+            ], 500);
+        }
     }
 
     /**
