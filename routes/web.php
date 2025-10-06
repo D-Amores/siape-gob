@@ -11,7 +11,7 @@ use App\Http\Controllers\PersonalAssetPendingController;
 use App\Http\Controllers\TestController;
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('layouts.layout');
 });
 
 //Ruta de test
