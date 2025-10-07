@@ -1,6 +1,7 @@
 async function loginUser(data) {
     const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
+    console.log('CSRF Token:', csrfToken);
     try {
         console.log('Enviando datos de login:', data);
         const response = await fetch(vURI, {
@@ -10,6 +11,7 @@ async function loginUser(data) {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
+            credentials: 'same-origin',
             body: JSON.stringify(data)
         });
 
@@ -18,7 +20,11 @@ async function loginUser(data) {
         const alertBox = document.getElementById('alert');
         alertBox.classList.add('d-none');
         alertBox.textContent = '';
-
+        if (response.ok) {
+            console.log('Login successful:', result.message);
+            console.log('Redirecting to:', result.location);
+            window.location.href = result.location;
+        }
         if (!response.ok) {
             // Mostrar mensaje general
             let errorText = result.message || 'Error de autenticación.';
@@ -31,15 +37,7 @@ async function loginUser(data) {
 
             alertBox.textContent = errorText;
             alertBox.classList.remove('d-none');
-        } else {
-            // Redirección si todo salió bien
-            if (result.location) {
-                window.location.href = result.location;
-            } else {
-                window.location.reload();
-            }
         }
-
     } catch (error) {
         console.error('Error de conexión:', error);
     }
