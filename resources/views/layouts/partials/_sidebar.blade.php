@@ -170,11 +170,8 @@
                     <h6 class="mb-0 fs-4 fw-semibold">Mathew</h6>
                     <span class="fs-2">Designer</span>
                 </div>
-                <form action="{{ route('logout') }}" method="POST" id="logout-form" class="d-none">
-                    @csrf
-                </form>
-                <button class="border-0 bg-transparent text-primary ms-auto" tabindex="0" type="button"
-                aria-label="logout" data-bs-toggle="tooltip" title="Logout" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                <button id="btnLogout" class="border-0 bg-transparent text-primary ms-auto" tabindex="0" type="button"
+                aria-label="logout" data-bs-toggle="tooltip" title="Logout">
                     <i class="ti ti-power fs-6"></i>
                 </button>
             </div>

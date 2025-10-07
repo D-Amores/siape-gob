@@ -21,16 +21,15 @@ function btnAnimation() {
 
 async function logoutUser() {
     const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-    const formData = new FormData();
-    formData.append('_token', csrfToken);
 
     try {
         const response = await fetch('/logout', {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
+                'X-CSRF-TOKEN': csrfToken
             },
-            body: formData
+            credentials: 'same-origin'
         });
 
         if (response.ok) {
@@ -52,5 +51,5 @@ document.addEventListener('DOMContentLoaded', function () {
     btnAnimation();
 
     const btnLogout = document.getElementById('btnLogout');
-   // btnLogout.addEventListener('click', logoutUser);
+    btnLogout.addEventListener('click', logoutUser);
 });

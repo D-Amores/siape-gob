@@ -28,6 +28,7 @@ class LoginController extends Controller
             $response = ['ok' => true, 'message' => 'Sesión iniciada correctamente', 'location' => route('dashboard')];
             return response()->json($response, 200);
         }
+        
         return response()->json($response, 401);
     }
 
