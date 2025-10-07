@@ -12,10 +12,6 @@ use App\Http\Controllers\PersonalAssetController;
 use App\Http\Controllers\PersonalAssetPendingController;
 use App\Http\Controllers\TestController;
 
-Route::get('/', function () {
-    return view('layouts.layout');
-});
-
 //Ruta de test
 Route::get('personnel', [TestController::class, 'index'])->name('personnel.index');
 
@@ -28,6 +24,9 @@ Route::middleware('guest')->group(function () {
 Route::middleware('auth')->group(function () {
     // Logout route
     Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
+    Route::get('/', function () {
+        return view('layouts.layout');
+    })->name('dashboard');
 });
 
 

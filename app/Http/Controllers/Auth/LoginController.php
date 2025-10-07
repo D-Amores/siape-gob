@@ -37,6 +37,7 @@ class LoginController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
+    
         return response()->json(['ok' => true, 'message' => 'Sesión cerrada correctamente'], 200);
     }
 }
