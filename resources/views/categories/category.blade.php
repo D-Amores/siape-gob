@@ -13,6 +13,12 @@
     Aquí puedes administrar las categorias de tus Bienes.
 @endsection
 
+@section('actions')
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addCategoryModal">
+        <i class="fas fa-plus-circle me-2"></i> Agregar Categoria
+    </button>
+@endsection
+
 @section('content')
     <div class="container-fluid">
         <div class="datatables">

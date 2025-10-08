@@ -13,6 +13,12 @@
     Aquí puedes administrar las marcas de tus Bienes.
 @endsection
 
+@section('actions')
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addBrandModal">
+        <i class="fas fa-plus-circle me-2"></i> Agregar Marca
+    </button>
+@endsection
+
 @section('content')
     <div class="container-fluid">
         <div class="datatables">

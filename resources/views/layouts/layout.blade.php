@@ -63,11 +63,9 @@
                         </div>
                     </div>
                     <!-- /Page Header -->
-                    <div class="row">
 
-                        @yield('content')
+                    @yield('content')
 
-                    </div>
                 </div>
             </div>
             <script>
@@ -90,8 +88,6 @@
 
     <!-- solar icons -->
     <script src="https://cdn.jsdelivr.net/npm/iconify-icon@1.0.8/dist/iconify-icon.min.js"></script>
-    <script src="{{ asset('modernize/assets/libs/apexcharts/dist/apexcharts.min.js') }}"></script>
-    <script src="{{ asset('modernize/assets/js/dashboards/dashboard2.js') }}"></script>
 
     @yield('scripts')
 </body>
