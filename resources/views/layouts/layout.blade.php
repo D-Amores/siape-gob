@@ -39,16 +39,27 @@
             <div class="body-wrapper">
                 <div class="container-fluid">
                     <!-- Page Header -->
-                    <div class="page-header inventory-header">
-                        <div class="row align-items-center">
-                            <div class="col">
-                                <div class="header-content">
-                                    <h1 class="inventory-title">@yield('title')</h1>
-                                    @hasSection('subtitle')
-                                        <p class="inventory-subtitle">@yield('subtitle')</p>
-                                    @endif
-                                </div>
-                            </div>
+                    <div class="d-flex flex-column flex-md-row align-items-center justify-content-between mb-4 pe-2">
+                        <!-- Título y breadcrumb -->
+                        <div class="page-header-content d-flex flex-column align-items-center align-items-md-start">
+                            <h4 class="mb-1 fw-bold text-primary">@yield('title')</h4>
+
+                            @hasSection('subtitle')
+                                <small class="text-muted d-block mb-1">@yield('subtitle')</small>
+                            @endif
+
+                            <!-- Breadcrumb -->
+                            <nav aria-label="breadcrumb">
+                                <ol class="breadcrumb mb-0 bg-transparent p-0">
+                                    <li class="breadcrumb-item"><a href="{{ url('/dashboard') }}">Dashboard</a></li>
+                                    <li class="breadcrumb-item active" aria-current="page">@yield('title')</li>
+                                </ol>
+                            </nav>
+                        </div>
+
+                        <!-- Acciones -->
+                        <div class="page-header-actions mt-2 mt-md-0 gap-2">
+                            @yield('actions')
                         </div>
                     </div>
                     <!-- /Page Header -->
