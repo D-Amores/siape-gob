@@ -38,8 +38,6 @@
 
             <div class="body-wrapper">
                 <div class="container-fluid">
-<<<<<<< HEAD
-=======
                     <!-- Page Header -->
                     <div class="d-flex flex-column flex-md-row align-items-center justify-content-between mb-4 pe-2">
                         <!-- Título y breadcrumb -->
@@ -65,7 +63,6 @@
                         </div>
                     </div>
                     <!-- /Page Header -->
->>>>>>> 5c28457 (Update layout.blade.php)
                     <div class="row">
 
                         @yield('content')
