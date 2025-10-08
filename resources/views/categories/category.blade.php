@@ -174,28 +174,4 @@
     <script src="{{ asset('cdn/buttons/2.4.2/js/buttons.print.min.js') }}"></script>
 
     <script src="{{ asset('modernize/assets/js/datatable/datatable-advanced.init.js') }}"></script>
-
-    <script>
-        document.getElementById('categoryForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-
-            const categoryName = document.getElementById('categoryName').value;
-            const categoryDescription = document.getElementById('categoryDescription').value;
-            const categoryColor = document.querySelector('input[name="categoryColor"]:checked').value;
-
-            // Aquí iría tu lógica para guardar la categoría
-            console.log('Guardando categoría:', {
-                name: categoryName,
-                description: categoryDescription,
-                color: categoryColor
-            });
-
-            // Cerrar el modal después de guardar
-            const modal = bootstrap.Modal.getInstance(document.getElementById('addCategoryModal'));
-            modal.hide();
-
-            // Limpiar el formulario
-            this.reset();
-        });
-    </script>
 @endsection
