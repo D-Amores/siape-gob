@@ -14,7 +14,7 @@ use App\Http\Controllers\TestController;
 
 Route::get('/', function () {
     return view('layouts.layout');
-});
+})->name('dashboard');
 
 //Ruta de test
 Route::get('personnel', [TestController::class, 'index'])->name('personnel.index');

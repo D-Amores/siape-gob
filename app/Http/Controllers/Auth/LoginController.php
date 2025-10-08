@@ -28,6 +28,7 @@ class LoginController extends Controller
             $response = ['ok' => true, 'message' => 'Sesión iniciada correctamente', 'location' => route('dashboard')];
             return response()->json($response, 200);
         }
+        
         return response()->json($response, 401);
     }
 
@@ -37,6 +38,7 @@ class LoginController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
+    
         return response()->json(['ok' => true, 'message' => 'Sesión cerrada correctamente'], 200);
     }
 }

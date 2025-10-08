@@ -6,6 +6,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <!-- Favicon icon-->
     <link rel="shortcut icon" type="image/png" href="{{ asset('modernize/assets/images/logos/favicon.png') }}">
@@ -26,31 +27,17 @@
     </div>
     <div id="main-wrapper" class="show-sidebar">
         <!-- Sidebar Start -->
-        @include('layouts._sidebar')
+        @include('layouts.partials._sidebar')
         <!--  Sidebar End -->
         <div class="page-wrapper">
             <!--  Header Start -->
-            @include('layouts._header')
+            @include('layouts.partials._header')
             <!--  Header End -->
 
-            @include('layouts._sidebar-scrollbar')
+            @include('layouts.partials._sidebar-scrollbar')
 
             <div class="body-wrapper">
                 <div class="container-fluid">
-                    <!-- Page Header -->
-                    <div class="page-header inventory-header">
-                        <div class="row align-items-center">
-                            <div class="col">
-                                <div class="header-content">
-                                    <h1 class="inventory-title">@yield('title')</h1>
-                                    @hasSection('subtitle')
-                                        <p class="inventory-subtitle">@yield('subtitle')</p>
-                                    @endif
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- /Page Header -->
                     <div class="row">
 
                         @yield('content')
@@ -75,10 +62,10 @@
         <script src="{{ asset('modernize/assets/js/theme/app.min.js') }}"></script>
         <script src="{{ asset('modernize/assets/js/theme/sidebarmenu.js') }}"></script>
 
-        <!-- solar icons -->
-        <script src="https://cdn.jsdelivr.net/npm/iconify-icon@1.0.8/dist/iconify-icon.min.js"></script>
-        {{-- <script src="{{ asset('modernize/assets/libs/apexcharts/dist/apexcharts.min.js') }}"></script> --}}
-        {{-- <script src="{{ asset('modernize/assets/js/dashboards/dashboard2.js') }}"></script> --}}
+    <!-- solar icons -->
+    <script src="https://cdn.jsdelivr.net/npm/iconify-icon@1.0.8/dist/iconify-icon.min.js"></script>
+    <script src="{{ asset('modernize/assets/libs/apexcharts/dist/apexcharts.min.js') }}"></script>
+    <script src="{{ asset('modernize/assets/js/dashboards/dashboard2.js') }}"></script>
 
         @yield('scripts')
 </body>
