@@ -2,7 +2,7 @@
 
 @section('styles')
     <link rel="stylesheet" href="{{ asset('modernize/assets/libs/datatables.net-bs5/css/dataTables.bootstrap5.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('cdn/buttons/2.4.2/css/buttons.dataTables.min.css')}}">
+    <link rel="stylesheet" href="{{ asset('cdn/buttons/2.4.2/css/buttons.dataTables.min.css') }}">
 @endsection
 
 @section('title')
@@ -122,6 +122,45 @@
     </div>
 
     <div class="dark-transparent sidebartoggler"></div>
+
+    <!-- Modal Sin Botón de Cerrar -->
+    <div class="modal fade" id="addCategoryModal" tabindex="-1" aria-labelledby="addCategoryModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-md modal-dialog-centered">
+            <div class="modal-content border-0 shadow">
+                <!-- Encabezado del Modal con gris oscuro -->
+                <div class="modal-header bg-dark text-white py-3">
+                    <h5 class="modal-title fw-bold text-center w-100 m-0 text-white" id="addCategoryModalLabel">
+                        <i class="fas fa-folder-plus me-2"></i>Agregar Categoría
+                    </h5>
+                    <!-- Se eliminó el botón de cerrar (X) -->
+                </div>
+
+                <!-- Formulario del Modal -->
+                <form id="categoryForm">
+                    <div class="modal-body p-4">
+                        <!-- Solo Campo Nombre -->
+                        <div class="mb-3">
+                            <label for="categoryName" class="form-label fw-semibold">
+                                <i class="fas fa-tag text-dark me-2"></i>Nombre de la Categoría
+                            </label>
+                            <input type="text" class="form-control form-control-lg" id="categoryName"
+                                placeholder="Ingrese el nombre" required>
+                        </div>
+                    </div>
+
+                    <!-- Pie del Modal -->
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">
+                            <i class="fas fa-times me-2"></i>Cancelar
+                        </button>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-check me-2"></i>Agregar
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 @endsection
 
 @section('scripts')
@@ -135,4 +174,28 @@
     <script src="{{ asset('cdn/buttons/2.4.2/js/buttons.print.min.js') }}"></script>
 
     <script src="{{ asset('modernize/assets/js/datatable/datatable-advanced.init.js') }}"></script>
+
+    <script>
+        document.getElementById('categoryForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const categoryName = document.getElementById('categoryName').value;
+            const categoryDescription = document.getElementById('categoryDescription').value;
+            const categoryColor = document.querySelector('input[name="categoryColor"]:checked').value;
+
+            // Aquí iría tu lógica para guardar la categoría
+            console.log('Guardando categoría:', {
+                name: categoryName,
+                description: categoryDescription,
+                color: categoryColor
+            });
+
+            // Cerrar el modal después de guardar
+            const modal = bootstrap.Modal.getInstance(document.getElementById('addCategoryModal'));
+            modal.hide();
+
+            // Limpiar el formulario
+            this.reset();
+        });
+    </script>
 @endsection
