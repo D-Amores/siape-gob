@@ -1,31 +1,32 @@
-<html lang="en" dir="ltr" data-bs-theme="light" data-color-theme="Blue_Theme" data-layout="vertical"
-    data-boxed-layout="boxed" data-card="shadow">
+<!DOCTYPE html>
+<html lang="en" dir="ltr" data-bs-theme="light" data-color-theme="Blue_Theme" data-layout="vertical">
 
 <head>
     <!-- Required meta tags -->
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <!-- Favicon icon-->
-    <link rel="shortcut icon" type="image/png" href="{{ asset('modernize/assets/images/logos/favicon.png') }}">
+    <link rel="shortcut icon" type="image/png" href="{{ asset('modernize/assets/images/logos/favicon.png') }}" />
+
     <!-- Core Css -->
-    <link rel="stylesheet" href="{{ asset('modernize/assets/css/styles.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/title.css') }}">
+    <link rel="stylesheet" href="{{ asset('modernize/assets/css/styles.css') }}" />
 
     <title>@yield('title')</title>
+    <!-- Owl Carousel  -->
+    <link rel="stylesheet" href="{{ asset('modernize/assets/libs/owl.carousel/dist/assets/owl.carousel.min.css') }}" />
 
     @yield('styles')
-
 </head>
 
-<body data-sidebartype="mini-sidebar">
-    <!-- Preloader -->
-    <div class="preloader" style="display: none;">
-        <img src="{{ asset('modernize/assets/images/logos/favicon.png') }}" alt="loader" class="lds-ripple img-fluid">
+<body>
+    <div class="preloader">
+        <img src="{{ asset('modernize/assets/images/logos/favicon.png') }}" alt="loader"
+            class="lds-ripple img-fluid" />
     </div>
-    <div id="main-wrapper" class="show-sidebar">
+    <div id="main-wrapper">
         <!-- Sidebar Start -->
         @include('layouts.partials._sidebar')
         <!--  Sidebar End -->
@@ -38,7 +39,6 @@
 
             <div class="body-wrapper">
                 <div class="container-fluid">
-                    <!-- Page Header -->
                     <div class="d-flex flex-column flex-md-row align-items-center justify-content-between mb-4 pe-2">
                         <!-- Título y breadcrumb -->
                         <div class="page-header-content d-flex flex-column align-items-center align-items-md-start">
@@ -62,10 +62,8 @@
                             @yield('actions')
                         </div>
                     </div>
-                    <!-- /Page Header -->
 
                     @yield('content')
-
                 </div>
             </div>
             <script>
@@ -75,6 +73,7 @@
             </script>
 
         </div>
+
     </div>
     <div class="dark-transparent sidebartoggler"></div>
     <script src="{{ asset('modernize/assets/js/vendor.min.js') }}"></script>
@@ -87,7 +86,10 @@
     <script src="{{ asset('modernize/assets/js/theme/sidebarmenu.js') }}"></script>
 
     <!-- solar icons -->
-    <script src="https://cdn.jsdelivr.net/npm/iconify-icon@1.0.8/dist/iconify-icon.min.js"></script>
+    <script src="{{ asset('cdn/npm/iconify-icon@1.0.8/dist/iconify-icon.min.js')}}"></script>
+    <script src="{{ asset('modernize/assets/libs/owl.carousel/dist/owl.carousel.min.js') }}"></script>
+    {{-- <script src="{{ asset('modernize/assets/libs/apexcharts/dist/apexcharts.min.js') }}"></script> --}}
+    {{-- <script src="{{ asset('modernize/assets/js/dashboards/dashboard.js') }}"></script> --}}
 
     @yield('scripts')
 </body>

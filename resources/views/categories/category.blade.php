@@ -27,7 +27,7 @@
                 <div class="card-body">
                     <div class="table-responsive">
                         <table id="file_export" class="table table-hover w-100 table-striped table-bordered display">
-                            <thead class="table-light">
+                            <thead>
                                 <tr>
                                     <th class="text-center">Categoria</th>
                                     <th class="text-center" style="width: 150px;">Acciones</th>
@@ -108,7 +108,7 @@
                                 </tr>
                                 <!-- Puedes agregar más filas según sea necesario -->
                             </tbody>
-                            <tfoot class="table-light">
+                            <tfoot>
                                 <tr>
                                     <th class="text-center">Categoria</th>
                                     <th class="text-center">Acciones</th>

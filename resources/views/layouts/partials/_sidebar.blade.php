@@ -3,10 +3,10 @@
         <!-- Start Vertical Layout Sidebar -->
         <!-- ---------------------------------- -->
         <div class="brand-logo d-flex align-items-center justify-content-between">
-            <a href="{{ asset('modernize/main/index.html') }}" class="text-nowrap logo-img">
-                <img src="{{ asset('modernize/assets/images/logos/dark-logo.svg') }}" class="dark-logo" alt="Logo-Dark">
-                <img src="{{ asset('modernize/assets/images/logos/light-logo.svg') }}" class="light-logo" alt="Logo-light"
-                    style="display: none;">
+            <a href="http://localhost/modernize/main/index.html" class="text-nowrap logo-img">
+                <img src="http://localhost/modernize/assets/images/logos/dark-logo.svg" class="dark-logo" alt="Logo-Dark">
+                <img src="http://localhost/modernize/assets/images/logos/light-logo.svg" class="light-logo"
+                    alt="Logo-light" style="display: none;">
             </a>
             <a href="javascript:void(0)" class="sidebartoggler ms-auto text-decoration-none fs-5 d-block d-xl-none">
                 <i class="ti ti-x"></i>
@@ -35,7 +35,8 @@
                                     <!-- Dashboard -->
                                     <!-- ---------------------------------- -->
                                     <li class="sidebar-item">
-                                        <a class="sidebar-link" href="./" id="get-url" aria-expanded="false">
+                                        <a class="sidebar-link active" href="./" id="get-url"
+                                            aria-expanded="false">
                                             <span>
                                                 <i class="ti ti-aperture"></i>
                                             </span>
@@ -43,7 +44,16 @@
                                         </a>
                                     </li>
                                     <li class="sidebar-item">
-                                        <a class="sidebar-link" href="{{ asset('modernize/main/index3.html') }}"
+                                        <a class="sidebar-link" href="http://localhost/modernize/main/index2.html"
+                                            aria-expanded="false">
+                                            <span>
+                                                <i class="ti ti-shopping-cart"></i>
+                                            </span>
+                                            <span class="hide-menu">eCommerce</span>
+                                        </a>
+                                    </li>
+                                    <li class="sidebar-item">
+                                        <a class="sidebar-link" href="http://localhost/modernize/main/index3.html"
                                             aria-expanded="false">
                                             <span>
                                                 <i class="ti ti-currency-dollar"></i>
@@ -52,7 +62,7 @@
                                         </a>
                                     </li>
                                     <li class="sidebar-item">
-                                        <a class="sidebar-link" href="{{ asset('modernize/main/index4.html') }}"
+                                        <a class="sidebar-link" href="http://localhost/modernize/main/index4.html"
                                             aria-expanded="false">
                                             <span>
                                                 <i class="ti ti-cpu"></i>
@@ -61,7 +71,7 @@
                                         </a>
                                     </li>
                                     <li class="sidebar-item">
-                                        <a class="sidebar-link" href="{{ asset('modernize/main/index5.html') }}"
+                                        <a class="sidebar-link" href="http://localhost/modernize/main/index5.html"
                                             aria-expanded="false">
                                             <span>
                                                 <i class="ti ti-activity-heartbeat"></i>
@@ -70,7 +80,7 @@
                                         </a>
                                     </li>
                                     <li class="sidebar-item">
-                                        <a class="sidebar-link" href="{{ asset('modernize/main/index6.html') }}"
+                                        <a class="sidebar-link" href="http://localhost/modernize/main/index6.html"
                                             aria-expanded="false">
                                             <span>
                                                 <i class="ti ti-playlist"></i>
@@ -91,7 +101,7 @@
                                         </a>
                                         <ul aria-expanded="false" class="collapse first-level">
                                             <li class="sidebar-item">
-                                                <a href="{{ asset('modernize/main/frontend-landingpage.html') }}"
+                                                <a href="http://localhost/modernize/main/frontend-landingpage.html"
                                                     class="sidebar-link">
                                                     <div
                                                         class="round-16 d-flex align-items-center justify-content-center">
@@ -101,7 +111,7 @@
                                                 </a>
                                             </li>
                                             <li class="sidebar-item">
-                                                <a href="{{ asset('modernize/main/frontend-aboutpage.html') }}"
+                                                <a href="http://localhost/modernize/main/frontend-aboutpage.html"
                                                     class="sidebar-link">
                                                     <div
                                                         class="round-16 d-flex align-items-center justify-content-center">
@@ -111,7 +121,7 @@
                                                 </a>
                                             </li>
                                             <li class="sidebar-item">
-                                                <a href="{{ asset('modernize/main/frontend-contactpage.html') }}"
+                                                <a href="http://localhost/modernize/main/frontend-contactpage.html"
                                                     class="sidebar-link">
                                                     <div
                                                         class="round-16 d-flex align-items-center justify-content-center">
@@ -121,7 +131,7 @@
                                                 </a>
                                             </li>
                                             <li class="sidebar-item">
-                                                <a href="{{ asset('modernize/main/frontend-blogpage.html') }}"
+                                                <a href="http://localhost/modernize/main/frontend-blogpage.html"
                                                     class="sidebar-link">
                                                     <div
                                                         class="round-16 d-flex align-items-center justify-content-center">
@@ -131,7 +141,7 @@
                                                 </a>
                                             </li>
                                             <li class="sidebar-item">
-                                                <a href="{{ asset('modernize/main/frontend-blogdetailpage.html') }}"
+                                                <a href="http://localhost/modernize/main/frontend-blogdetailpage.html"
                                                     class="sidebar-link">
                                                     <div
                                                         class="round-16 d-flex align-items-center justify-content-center">
@@ -142,7 +152,6 @@
                                             </li>
                                         </ul>
                                     </li>
-                                    <!-- ---------------------------------- -->
                                 </ul>
                             </div>
                         </div>
@@ -151,8 +160,7 @@
                 <div class="simplebar-placeholder" style="width: 269px; height: 399px;"></div>
             </div>
             <div class="simplebar-track simplebar-horizontal" style="visibility: hidden;">
-                <div class="simplebar-scrollbar"
-                    style="width: 0px; display: none; transform: translate3d(0px, 0px, 0px);"></div>
+                <div class="simplebar-scrollbar" style="width: 0px; display: none;"></div>
             </div>
             <div class="simplebar-track simplebar-vertical" style="visibility: hidden;">
                 <div class="simplebar-scrollbar"
@@ -163,15 +171,15 @@
         <div class="fixed-profile p-3 mx-4 mb-2 bg-secondary-subtle rounded mt-3">
             <div class="hstack gap-3">
                 <div class="john-img">
-                    <img src="{{ asset('modernize/assets/images/profile/user-1.jpg') }}" class="rounded-circle"
+                    <img src="http://localhost/modernize/assets/images/profile/user-1.jpg" class="rounded-circle"
                         width="40" height="40" alt="modernize-img">
                 </div>
                 <div class="john-title">
                     <h6 class="mb-0 fs-4 fw-semibold">Mathew</h6>
                     <span class="fs-2">Designer</span>
                 </div>
-                <button id="btnLogout" class="border-0 bg-transparent text-primary ms-auto" tabindex="0" type="button"
-                aria-label="logout" data-bs-toggle="tooltip" title="Logout">
+                <button class="border-0 bg-transparent text-primary ms-auto" tabindex="0" type="button"
+                    aria-label="logout" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="logout">
                     <i class="ti ti-power fs-6"></i>
                 </button>
             </div>
