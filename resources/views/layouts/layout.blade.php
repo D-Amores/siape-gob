@@ -10,9 +10,13 @@
 
     <!-- Favicon icon-->
     <link rel="shortcut icon" type="image/png" href="{{ asset('modernize/assets/images/logos/favicon.png') }}" />
-
+    <!-- Boxicons CSS -->
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
     <!-- Core Css -->
     <link rel="stylesheet" href="{{ asset('modernize/assets/css/styles.css') }}" />
+
+    <!-- Jquery Confirm -->
+    <link rel="stylesheet" href="{{asset('cdn/jquery-confirm-v3.3.4/jquery-confirm.min.css')}}">
 
     <title>@yield('title')</title>
     <!-- Owl Carousel  -->
@@ -90,6 +94,10 @@
     <script src="{{ asset('modernize/assets/libs/owl.carousel/dist/owl.carousel.min.js') }}"></script>
     {{-- <script src="{{ asset('modernize/assets/libs/apexcharts/dist/apexcharts.min.js') }}"></script> --}}
     {{-- <script src="{{ asset('modernize/assets/js/dashboards/dashboard.js') }}"></script> --}}
+    
+    <!-- Jquery -->
+    <script src="{{ asset('cdn/jquery/jquery-3.7.1.min.js') }}"></script>
+    <script src="{{ asset('cdn/jquery-confirm-v3.3.4/jquery-confirm.min.js') }}"></script>
 
     @yield('scripts')
 </body>
