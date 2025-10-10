@@ -34,79 +34,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td class="ps-4">
-                                        <div class="d-flex align-items-center">
-                                            <i class="fas fa-tag text-muted me-3"></i>
-                                            <span>Lenovo</span>
-                                        </div>
-                                    </td>
-                                    <td class="text-center">
-                                        <div class="d-flex justify-content-center gap-2">
-                                            <button type="button" class="btn btn-outline-primary border-0" title="Editar">
-                                                <i class="fas fa-edit"></i>
-                                            </button>
-                                            <button type="button" class="btn btn-outline-danger border-0" title="Eliminar">
-                                                <i class="fas fa-trash-alt"></i>
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="ps-4">
-                                        <div class="d-flex align-items-center">
-                                            <i class="fas fa-tag text-muted me-3"></i>
-                                            <span>Apple</span>
-                                        </div>
-                                    </td>
-                                    <td class="text-center">
-                                        <div class="d-flex justify-content-center gap-2">
-                                            <button type="button" class="btn btn-outline-primary border-0" title="Editar">
-                                                <i class="fas fa-edit"></i>
-                                            </button>
-                                            <button type="button" class="btn btn-outline-danger border-0" title="Eliminar">
-                                                <i class="fas fa-trash-alt"></i>
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="ps-4">
-                                        <div class="d-flex align-items-center">
-                                            <i class="fas fa-tag text-muted me-3"></i>
-                                            <span>Tiger Nixon</span>
-                                        </div>
-                                    </td>
-                                    <td class="text-center">
-                                        <div class="d-flex justify-content-center gap-2">
-                                            <button type="button" class="btn btn-outline-primary border-0" title="Editar">
-                                                <i class="fas fa-edit"></i>
-                                            </button>
-                                            <button type="button" class="btn btn-outline-danger border-0" title="Eliminar">
-                                                <i class="fas fa-trash-alt"></i>
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="ps-4">
-                                        <div class="d-flex align-items-center">
-                                            <i class="fas fa-tag text-muted me-3"></i>
-                                            <span>DELL</span>
-                                        </div>
-                                    </td>
-                                    <td class="text-center">
-                                        <div class="d-flex justify-content-center gap-2">
-                                            <button type="button" class="btn btn-outline-primary border-0" title="Editar">
-                                                <i class="fas fa-edit"></i>
-                                            </button>
-                                            <button type="button" class="btn btn-outline-danger border-0" title="Eliminar">
-                                                <i class="fas fa-trash-alt"></i>
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <!-- Puedes agregar más filas según sea necesario -->
+                                <!-- Los datos se cargarán dinámicamente via AJAX -->
                             </tbody>
                             <tfoot>
                                 <tr>
@@ -161,11 +89,49 @@
             </div>
         </div>
     </div>
+
+    <!-- Modal Editar Marca Sin Botón de Cerrar -->
+    <div class="modal fade" id="editBrandModal" tabindex="-1" aria-labelledby="editBrandModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-md modal-dialog-centered">
+            <div class="modal-content border-0 shadow">
+                <!-- Encabezado del Modal con gris oscuro -->
+                <div class="modal-header bg-dark text-white py-3">
+                    <h5 class="modal-title fw-bold text-center w-100 m-0 text-white" id="editBrandModalLabel">
+                        <i class="fas fa-folder-edit me-2"></i>Editar Marca
+                    </h5>
+                    <!-- Se eliminó el botón de cerrar (X) -->
+                </div>
+
+                <!-- Formulario del Modal -->
+                <form id="editBrandForm">
+                    <div class="modal-body p-4">
+                        <!-- Solo Campo Nombre -->
+                        <div class="mb-3">
+                            <label for="editBrandName" class="form-label fw-semibold">
+                                <i class="fas fa-tag text-dark me-2"></i>Nombre de la Marca
+                            </label>
+                            <input type="text" class="form-control form-control-lg" id="editBrandName"
+                                placeholder="Ingrese el nombre" required>
+                            <input type="hidden" id="editBrandId">
+                        </div>
+                    </div>
+                    <!-- Pie del Modal -->
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">
+                            <i class="fas fa-times me-2"></i>Cancelar
+                        </button>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-check me-2"></i>Guardar Cambios
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 @endsection
 
 @section('scripts')
     <script src="{{ asset('modernize/assets/libs/datatables.net/js/jquery.dataTables.min.js') }}"></script>
-
     <script src="{{ asset('cdn/buttons/2.4.2/js/dataTables.buttons.min.js') }}"></script>
     <script src="{{ asset('cdn/ajax/libs/jszip/3.10.1/jszip.min.js') }}"></script>
     <script src="{{ asset('cdn/ajax/libs/pdfmake/0.1.53/pdfmake.min.js') }}"></script>
@@ -173,5 +139,6 @@
     <script src="{{ asset('cdn/buttons/2.4.2/js/buttons.html5.min.js') }}"></script>
     <script src="{{ asset('cdn/buttons/2.4.2/js/buttons.print.min.js') }}"></script>
 
-    <script src="{{ asset('modernize/assets/js/datatable/datatable-advanced.init.js') }}"></script>
+    <script src="{{ asset('js/brands/brand.js') }}"></script>
+    <script> const language = "{{ asset('cdn/datatables-language/es-MX.json') }}"; </script>
 @endsection
