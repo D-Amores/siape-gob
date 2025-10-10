@@ -39,121 +39,6 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td class="text-center" width="80">000123</td>
-                                    <td>ThinkPad T14</td>
-                                    <td>PF3X9L2</td>
-                                    <td>Lenovo</td>
-                                    <td>Computadora portátil</td>
-                                    <td class="text-center">
-                                        <span class="badge status-active">Activo</span>
-                                    </td>
-                                    <td class="text-center">
-                                        <div class="btn-group btn-group-sm" role="group">
-                                            <button class="btn btn-outline-info" data-bs-toggle="modal" data-bs-target="#modalDetallesBien" data-bs-toggle="tooltip" title="Ver">
-                                                <i class="fas fa-eye"></i>
-                                            </button>
-                                            <button class="btn btn-outline-primary" data-bs-toggle="tooltip" title="Editar">
-                                                <i class="fas fa-edit"></i>
-                                            </button>
-                                            <button class="btn btn-outline-danger" data-bs-toggle="tooltip" title="Eliminar">
-                                                <i class="fas fa-trash"></i>
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="text-center" width="80">000124</td>
-                                    <td>OptiPlex 7090</td>
-                                    <td>CN0X4L2</td>
-                                    <td>Dell</td>
-                                    <td>PC de escritorio</td>
-                                    <td class="text-center">
-                                        <span class="badge status-active">Activo</span>
-                                    </td>
-                                    <td class="text-center">
-                                        <div class="btn-group btn-group-sm" role="group">
-                                            <button class="btn btn-outline-info" data-bs-toggle="modal" data-bs-target="#modalDetallesBien" data-bs-toggle="tooltip" title="Ver">
-                                                <i class="fas fa-eye"></i>
-                                            </button>
-                                            <button class="btn btn-outline-primary" data-bs-toggle="tooltip" title="Editar">
-                                                <i class="fas fa-edit"></i>
-                                            </button>
-                                            <button class="btn btn-outline-danger" data-bs-toggle="tooltip" title="Eliminar">
-                                                <i class="fas fa-trash"></i>
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="text-center" width="80">000125</td>
-                                    <td>MacBook Air M2</td>
-                                    <td>C02FQX3RMD6R</td>
-                                    <td>Apple</td>
-                                    <td>Computadora portátil</td>
-                                    <td class="text-center">
-                                        <span class="badge status-active">Activo</span>
-                                    </td>
-                                    <td class="text-center">
-                                        <div class="btn-group btn-group-sm" role="group">
-                                            <button class="btn btn-outline-info" data-bs-toggle="modal" data-bs-target="#modalDetallesBien" data-bs-toggle="tooltip" title="Ver">
-                                                <i class="fas fa-eye"></i>
-                                            </button>
-                                            <button class="btn btn-outline-primary" data-bs-toggle="tooltip" title="Editar">
-                                                <i class="fas fa-edit"></i>
-                                            </button>
-                                            <button class="btn btn-outline-danger" data-bs-toggle="tooltip" title="Eliminar">
-                                                <i class="fas fa-trash"></i>
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="text-center" width="80">000126</td>
-                                    <td>ProDesk 400 G6</td>
-                                    <td>8CC3471</td>
-                                    <td>HP</td>
-                                    <td>PC de escritorio</td>
-                                    <td class="text-center">
-                                        <span class="badge status-active">Activo</span>
-                                    </td>
-                                    <td class="text-center">
-                                        <div class="btn-group btn-group-sm" role="group">
-                                            <button class="btn btn-outline-info" data-bs-toggle="modal" data-bs-target="#modalDetallesBien" data-bs-toggle="tooltip" title="Ver">
-                                                <i class="fas fa-eye"></i>
-                                            </button>
-                                            <button class="btn btn-outline-primary" data-bs-toggle="tooltip" title="Editar">
-                                                <i class="fas fa-edit"></i>
-                                            </button>
-                                            <button class="btn btn-outline-danger" data-bs-toggle="tooltip" title="Eliminar">
-                                                <i class="fas fa-trash"></i>
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="text-center" width="80">000127</td>
-                                    <td>Latitude 7420</td>
-                                    <td>5HD94K2</td>
-                                    <td>Dell</td>
-                                    <td>Computadora portátil</td>
-                                    <td class="text-center">
-                                        <span class="badge status-active">Activo</span>
-                                    </td>
-                                    <td class="text-center">
-                                        <div class="btn-group btn-group-sm" role="group">
-                                            <button class="btn btn-outline-info" data-bs-toggle="modal" data-bs-target="#modalDetallesBien" data-bs-toggle="tooltip" title="Ver">
-                                                <i class="fas fa-eye"></i>
-                                            </button>
-                                            <button class="btn btn-outline-primary" data-bs-toggle="tooltip" title="Editar">
-                                                <i class="fas fa-edit"></i>
-                                            </button>
-                                            <button class="btn btn-outline-danger" data-bs-toggle="tooltip" title="Eliminar">
-                                                <i class="fas fa-trash"></i>
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
                             </tbody>
                         </table>
                     </div>
@@ -394,66 +279,155 @@
     <script src="{{ asset('modernize/assets/js/datatable/datatable-advanced.init.js') }}"></script>
 
     <script>
+    // ------------------------------
+    // Modal dinámico por categoría
+    // ------------------------------
+    const categoriaSelect = document.getElementById('categoria');
+    const camposDinamicos = document.getElementById('camposDinamicos');
 
-        // Modal dinamico agregar bien
-        const categoriaSelect = document.getElementById('categoria');
-        const camposDinamicos = document.getElementById('camposDinamicos');
-
-        const camposPorCategoria = {
-            computadora: `
-                <div class="row g-3 mt-2">
-                    <div class="col-md-6">
-                        <div class="form-floating">
-                            <input type="text" class="form-control" id="procesador" placeholder="Procesador">
-                            <label for="procesador">Procesador</label>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="form-floating">
-                            <input type="text" class="form-control" id="velocidad" placeholder="Velocidad">
-                            <label for="velocidad">Velocidad</label>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="form-floating">
-                            <input type="text" class="form-control" id="memoria" placeholder="Memoria">
-                            <label for="memoria">Memoria</label>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-floating">
-                            <input type="text" class="form-control" id="almacenamiento" placeholder="Capacidad de almacenamiento">
-                            <label for="almacenamiento">Capacidad de almacenamiento</label>
-                        </div>
+    const camposPorCategoria = {
+        computadora: `
+            <div class="row g-3 mt-2">
+                <div class="col-md-6">
+                    <div class="form-floating">
+                        <input type="text" class="form-control" id="procesador" placeholder="Procesador">
+                        <label for="procesador">Procesador</label>
                     </div>
                 </div>
-            `,
-            periferico: `
-                <div class="row g-3 mt-2">
-                    <div class="col-md-6">
-                        <div class="form-floating">
-                            <input type="text" class="form-control" id="tipoPeriferico" placeholder="Tipo de periférico">
-                            <label for="tipoPeriferico">Tipo de periférico</label>
-                        </div>
+                <div class="col-md-3">
+                    <div class="form-floating">
+                        <input type="text" class="form-control" id="velocidad" placeholder="Velocidad">
+                        <label for="velocidad">Velocidad</label>
                     </div>
                 </div>
-            `,
-            mobiliario: `
-                <div class="row g-3 mt-2">
-                    <div class="col-md-6">
-                        <div class="form-floating">
-                            <input type="text" class="form-control" id="material" placeholder="Material">
-                            <label for="material">Material</label>
-                        </div>
+                <div class="col-md-3">
+                    <div class="form-floating">
+                        <input type="text" class="form-control" id="memoria" placeholder="Memoria">
+                        <label for="memoria">Memoria</label>
                     </div>
                 </div>
-            `
-        };
+                <div class="col-md-6">
+                    <div class="form-floating">
+                        <input type="text" class="form-control" id="almacenamiento" placeholder="Capacidad de almacenamiento">
+                        <label for="almacenamiento">Capacidad de almacenamiento</label>
+                    </div>
+                </div>
+            </div>
+        `,
+        periferico: `
+            <div class="row g-3 mt-2">
+                <div class="col-md-6">
+                    <div class="form-floating">
+                        <input type="text" class="form-control" id="tipoPeriferico" placeholder="Tipo de periférico">
+                        <label for="tipoPeriferico">Tipo de periférico</label>
+                    </div>
+                </div>
+            </div>
+        `,
+        mobiliario: `
+            <div class="row g-3 mt-2">
+                <div class="col-md-6">
+                    <div class="form-floating">
+                        <input type="text" class="form-control" id="material" placeholder="Material">
+                        <label for="material">Material</label>
+                    </div>
+                </div>
+            </div>
+        `
+    };
 
-        categoriaSelect.addEventListener('change', () => {
-            const categoria = categoriaSelect.value;
-            camposDinamicos.innerHTML = camposPorCategoria[categoria] || '';
+    categoriaSelect.addEventListener('change', () => {
+        const categoria = categoriaSelect.value;
+        camposDinamicos.innerHTML = camposPorCategoria[categoria] || '';
+    });
+
+    // ------------------------------
+    // Inicialización profesional de DataTable
+    // ------------------------------
+    document.addEventListener('DOMContentLoaded', function () {
+        // Destruir instancia previa si existe
+        if ($.fn.DataTable.isDataTable('#file_export')) {
+            $('#file_export').DataTable().clear().destroy();
+        }
+
+        const table = $('#file_export').DataTable({
+            processing: true,
+            serverSide: false, // Paginación en frontend
+            responsive: true,
+            pageLength: 10,
+            lengthMenu: [10, 25, 50, 100],
+            order: [[0, 'asc']],
+            language: {
+                url: '//cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json'
+            },
+            ajax: function (data, callback, settings) {
+                fetch('/assets/api?option=table')
+                    .then(response => response.json())
+                    .then(json => {
+                        if (json.ok) callback({ data: json.data });
+                        else alert('Error al cargar los activos: ' + (json.message || 'Desconocido'));
+                    })
+                    .catch(error => {
+                        console.error('Error en la petición de assets:', error);
+                        alert('Error al cargar los activos. Revisa la consola.');
+                    });
+            },
+            columns: [
+                { data: 'inventory_number', className: 'text-center' },
+                { data: 'model' },
+                { data: 'serial_number' },
+                { data: 'brand.name' },
+                { data: 'category.name' },
+                {
+                    data: null,
+                    className: 'text-center',
+                    render: (data, type, row) => {
+                        return row.personal_assets && row.personal_assets.length > 0
+                            ? '<span class="badge bg-success">Asignado</span>'
+                            : '<span class="badge bg-secondary">Disponible</span>';
+                    }
+                },
+                {
+                    data: null,
+                    className: 'text-center',
+                    orderable: false,
+                    render: (data, type, row) => `
+                        <button class="btn btn-sm btn-primary me-1" onclick="editAsset(${row.id})">Editar</button>
+                        <button class="btn btn-sm btn-danger" onclick="deleteAsset(${row.id})">Eliminar</button>
+                    `
+                }
+            ]
         });
+    });
 
-    </script>
+    // ------------------------------
+    // Funciones para acciones
+    // ------------------------------
+    function editAsset(id) {
+        alert('Editar activo con ID ' + id);
+        // Aquí puedes abrir un modal con datos precargados para editar
+    }
+
+    function deleteAsset(id) {
+        if (confirm('¿Estás seguro de eliminar este activo?')) {
+            fetch(`/assets/${id}`, {
+                method: 'DELETE',
+                headers: {
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                }
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.ok) {
+                    alert(data.message);
+                    $('#file_export').DataTable().ajax.reload(); // Recargar tabla sin recargar página
+                } else {
+                    alert(data.message || 'Error al eliminar.');
+                }
+            })
+            .catch(err => console.error('Error al eliminar activo:', err));
+        }
+    }
+</script>
+
 @endsection
