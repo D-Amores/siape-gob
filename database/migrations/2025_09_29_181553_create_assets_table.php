@@ -16,10 +16,10 @@ return new class extends Migration
             $table->string('inventory_number')->unique();
             $table->string('model');
             $table->string('serial_number')->unique()->nullable();
-            $table->string('cpu')->comment('Ej: Intel i5-11400H');
-            $table->string('speed')->comment('Ej: 2.7GHz');
-            $table->string('memory')->comment('Ej: 8GB DDR4');
-            $table->string('storage')->comment('Ej: 512GB SSD');
+            $table->string('cpu')->nullable()->comment('Ej: Intel i5-11400H');
+            $table->string('speed')->nullable()->comment('Ej: 2.7GHz');
+            $table->string('memory')->nullable()->comment('Ej: 8GB DDR4');
+            $table->string('storage')->nullable()->comment('Ej: 512GB SSD');
             $table->text('description')->nullable();
             $table->foreignId('brand_id')->constrained('brands')->onDelete('cascade');
             $table->foreignId('category_id')->constrained('categories')->onDelete('cascade');

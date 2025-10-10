@@ -22,7 +22,7 @@ class AssetController extends Controller
      */
     public function assetsApi(AssetsApiRequest $request)
     {
-        $option = $request->input('option');
+        $option = $request->query('option');
 
         $data = null;
 

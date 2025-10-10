@@ -49,3 +49,6 @@ Route::resource('users', UserController::class)->only([
     'store', 'update', 'destroy'
 ]);
 Route::post('users/api', [UserController::class, 'userApi']);
+
+// Ruta para obtener assets para la tabla o detalles
+Route::get('assets/api', [AssetController::class, 'assetsApi'])->name('assets.api');

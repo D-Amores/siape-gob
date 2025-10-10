@@ -11,7 +11,7 @@ class AssetsApiRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true; // Para hacer pruebas, en producción se debe ajustar.
     }
 
     /**
