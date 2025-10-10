@@ -30,7 +30,7 @@ class AssetController extends Controller
             case 'table':
                 // Solo los campos necesarios para la tabla principal + relaciones básicas
                 $data = Asset::with(['brand', 'category'])
-                    ->get(['id', 'inventory_number', 'model', 'serial_number', 'brand_id', 'category_id']);
+                    ->get(['id', 'inventory_number', 'model', 'serial_number', 'brand_id', 'category_id', 'is_active']);
                 break;
 
             case 'details':
@@ -44,6 +44,11 @@ class AssetController extends Controller
                     'message' => 'Opción no válida.',
                 ], 422);
         }
+
+        $data = $data->map(function($asset) {
+            $asset->is_active_label = $asset->isActive() ? 'Activo' : 'Inactivo';
+            return $asset;
+        });
 
         return response()->json([
             'ok' => true,
