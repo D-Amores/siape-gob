@@ -23,6 +23,7 @@ return new class extends Migration
             $table->text('description')->nullable();
             $table->foreignId('brand_id')->constrained('brands')->onDelete('cascade');
             $table->foreignId('category_id')->constrained('categories')->onDelete('cascade');
+            $table->boolean('is_active')->default(true)->comment('Activo o inactivo');
             $table->timestamps();
 
             $table->index('brand_id');
