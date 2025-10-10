@@ -92,18 +92,18 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         },
         columns: [
-            { data: 'inventory_number', className: 'text-center' },
-            { data: 'model' },
-            { data: 'serial_number' },
-            { data: 'brand.name' },
-            { data: 'category.name' },
+            { data: 'inventory_number', className: 'text-center fw-medium' },
+            { data: 'model', className: 'fw-normal' },
+            { data: 'serial_number', className: 'fw-normal' },
+            { data: 'brand.name', className: 'fw-normal' },
+            { data: 'category.name', className: 'fw-normal' },
             {
                 data: null,
                 className: 'text-center',
                 render: (data, type, row) => {
-                    return row.personal_assets && row.personal_assets.length > 0
-                    ? '<span class="badge bg-success">Asignado</span>'
-                    : '<span class="badge bg-secondary">Disponible</span>';
+                    return row.personal_assets?.length > 0
+                        ? '<span class="badge bg-success rounded-pill px-3 py-1">Asignado</span>'
+                        : '<span class="badge bg-secondary rounded-pill px-3 py-1">Disponible</span>';
                 }
             },
             {
@@ -111,16 +111,15 @@ document.addEventListener('DOMContentLoaded', function () {
                 className: 'text-center',
                 orderable: false,
                 render: (data, type, row) => `
-                <!-- Ver (modal) -->
-                <button class="btn btn-outline-info" data-bs-toggle="modal" data-bs-target="#modalDetallesBien" data-bs-toggle="tooltip" title="Ver">
-                    <i class="fas fa-eye"></i>
-                </button>
-                <button class="btn btn-outline-primary" data-bs-toggle="tooltip" title="Editar">
-                    <i class="fas fa-edit"></i>
-                </button>
-                <button class="btn btn-outline-danger" data-bs-toggle="tooltip" title="Eliminar">
-                    <i class="fas fa-trash"></i>
-                </button>`
+                    <button class="btn btn-outline-info btn-sm mx-1" title="Ver">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                    <button class="btn btn-outline-primary btn-sm mx-1" title="Editar">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                    <button class="btn btn-outline-danger btn-sm mx-1" title="Eliminar">
+                        <i class="fas fa-trash"></i>
+                    </button>`
             }
         ]
     });

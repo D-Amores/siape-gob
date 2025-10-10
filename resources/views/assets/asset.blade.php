@@ -20,22 +20,21 @@
 @endsection
 
 @section('content')
-    <div class="container-fluid">
+    <div class="container-fluid py-3">
         <div class="datatables">
-            <!-- Card con sombra más pronunciada -->
-            <div class="card shadow-lg">
-                <div class="card-body">
+            <div class="card shadow-sm border-0 rounded-4">
+                <div class="card-body p-2">
                     <div class="table-responsive">
-                        <table id="file_export" class="table table-hover table-striped table-sm align-middle mb-0">
-                            <thead class="table-light">
+                        <table id="file_export" class="table table-hover table-sm align-middle mb-0">
+                            <thead class="table-light text-uppercase text-muted small">
                                 <tr>
-                                    <th class="text-center">N. de Inventario</th>
-                                    <th>Modelo</th>
-                                    <th>Serie</th>
-                                    <th>Marca</th>
-                                    <th>Categoría</th>
-                                    <th width="120" class="text-center">Estado</th>
-                                    <th width="100" class="text-center">Acciones</th>
+                                    <th class="text-center py-1">N. de Inventario</th>
+                                    <th class="py-1">Modelo</th>
+                                    <th class="py-1">Serie</th>
+                                    <th class="py-1">Marca</th>
+                                    <th class="py-1">Categoría</th>
+                                    <th class="text-center py-1">Estado</th>
+                                    <th class="text-center py-1">Acciones</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -45,18 +44,13 @@
                 </div>
 
                 <!-- Card Footer -->
-                <div class="card-footer bg-light py-3">
-                    <div class="row align-items-center">
-                        <div class="col-md-6">
-                            <small class="text-muted">
-                                <i class="fas fa-info-circle me-1"></i>
-                                Mostrando 5 marcas registradas
-                            </small>
+                <div class="card-footer bg-white border-top py-2">
+                    <div class="d-flex justify-content-between small text-muted">
+                        <div>
+                            <i class="fas fa-info-circle me-1"></i> Mostrando 5 marcas registradas
                         </div>
-                        <div class="col-md-6 text-end">
-                            <small class="text-muted">
-                                Última actualización: {{ now()->format('d/m/Y H:i') }}
-                            </small>
+                        <div>
+                            Última actualización: {{ now()->format('d/m/Y H:i') }}
                         </div>
                     </div>
                 </div>
