@@ -103,4 +103,25 @@ class BrandController extends Controller
             ], 500);
         }
     }
+
+    public function brandApi()
+    {
+        try {
+            $brands = Brand::select('id', 'name', 'created_at')
+                ->orderBy('name', 'asc')
+                ->get();
+
+            return response()->json([
+                'ok' => true,
+                'data' => $brands
+            ], 200);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'ok' => false,
+                'message' => 'Error al obtener las marcas',
+                'error' => config('app.debug') ? $e->getMessage() : 'Error interno'
+            ], 500);
+        }
+    }
 }
