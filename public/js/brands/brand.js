@@ -87,6 +87,44 @@ brandForm.addEventListener('submit', async function (e) {
     }
 });
 
+document.addEventListener('click', function (e) {
+    if (e.target.closest('.btn-delete')) {
+        const button = e.target.closest('.btn-delete');
+        const brandId = button.getAttribute('data-brand-id');
+        const brandName = button.getAttribute('data-brand-name');
+
+        $.confirm({
+            title: 'Confirmar eliminación',
+            content: `¿Estás seguro de que deseas eliminar la marca "<strong>${brandName}</strong>"?`,
+            type: 'red',
+            theme: 'material',
+            backgroundDismiss: true,
+            buttons: {
+                confirm: {
+                    text: 'Eliminar',
+                    btnClass: 'btn-red',
+                    action: function () {
+                        deleteBrand(brandId);
+                    }
+                },
+                cancel: {
+                    text: 'Cancelar',
+                    btnClass: 'btn-default'
+                }
+            }
+        });
+    }
+
+    if (e.target.closest('.btn-edit')) {
+        const button = e.target.closest('.btn-edit');
+        const brandId = button.getAttribute('data-brand-id');
+        const brandName = button.getAttribute('data-brand-name');
+
+
+    }
+});
+
+
 const loadBrands = async () => {
 
     try {
@@ -197,3 +235,49 @@ const updateBrandsTable = (brands) => {
     });
 
 };
+
+const deleteBrand = async (brandId) => {
+    try {
+        const response = await fetch(`brands/${brandId}`, {
+            method: 'DELETE',
+            headers: {
+                'X-CSRF-Token': csrfToken,
+                'Content-Type': 'application/json'
+            }
+        });
+
+        const data = await response.json();
+
+        if (data.ok) {
+            $.alert({
+                title: 'Éxito',
+                content: 'La marca se ha eliminado correctamente.',
+                type: 'green',
+                theme: 'material',
+                backgroundDismiss: true,
+                buttons: {
+                    ok: {
+                        text: 'Aceptar',
+                        btnClass: 'btn-green'
+                    }
+                }
+            });
+            loadBrands();
+        }
+    } catch (error) {
+        console.error('❌ Error al eliminar la marca:', error);
+        $.alert({
+            title: 'Error',
+            content: 'Ocurrió un error al eliminar la marca. Revisa la consola para más detalles.',
+            type: 'red',
+            theme: 'material',
+            backgroundDismiss: true,
+            buttons: {
+                ok: {
+                    text: 'Aceptar',
+                    btnClass: 'btn-red'
+                }
+            }
+        });
+    }
+}
