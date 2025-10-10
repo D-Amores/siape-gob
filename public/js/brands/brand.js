@@ -7,6 +7,86 @@ document.addEventListener('DOMContentLoaded', function () {
     loadBrands();
 });
 
+brandForm.addEventListener('submit', async function (e) {
+    e.preventDefault();
+
+    const brandName = brandNameInput.value.trim();
+
+    if (!brandName) {
+        $.alert({
+            title: 'Atención',
+            content: 'El nombre de la marca no puede estar vacío.',
+            type: 'orange',
+            theme: 'material',
+            backgroundDismiss: true,
+            buttons: {
+                ok: {
+                    text: 'Aceptar',
+                    btnClass: 'btn-orange'
+                }
+            }
+        });
+    }
+
+    const submitButton = this.querySelector('button[type="submit"]');
+    const originalText = submitButton.innerHTML;
+    submitButton.disabled = true;
+    submitButton.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Guardando...';
+
+    try {
+        const response = await fetch('brands', {
+            method: 'POST',
+            headers: {
+                'X-CSRF-Token': csrfToken,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                name: brandName
+            })
+        });
+
+        const data = await response.json();
+
+        if (data.ok) {
+            $.alert({
+                title: 'Éxito',
+                content: 'La marca se ha guardado correctamente.',
+                type: 'green',
+                theme: 'material',
+                backgroundDismiss: true,
+                buttons: {
+                    ok: {
+                        text: 'Aceptar',
+                        btnClass: 'btn-green'
+                    }
+                }
+            });
+            const modal = bootstrap.Modal.getInstance(document.getElementById('addBrandModal'));
+            modal.hide();
+            brandForm.reset();
+            loadBrands();
+        }
+    } catch (error) {
+        console.error('❌ Error al guardar la marca:', error);
+        $.alert({
+            title: 'Error',
+            content: 'Ocurrió un error al guardar la marca. Revisa la consola para más detalles.',
+            type: 'red',
+            theme: 'material',
+            backgroundDismiss: true,
+            buttons: {
+                ok: {
+                    text: 'Aceptar',
+                    btnClass: 'btn-red'
+                }
+            }
+        });
+    } finally {
+        submitButton.disabled = false;
+        submitButton.innerHTML = originalText;
+    }
+});
+
 const loadBrands = async () => {
 
     try {
