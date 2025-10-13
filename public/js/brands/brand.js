@@ -5,28 +5,39 @@ const brandNameInput = document.getElementById('brandName');
 
 document.addEventListener('DOMContentLoaded', function () {
     loadBrands();
+
+    brandNameInput.addEventListener('input', function () {
+        this.value = this.value.toUpperCase();
+    });
 });
 
 brandForm.addEventListener('submit', async function (e) {
     e.preventDefault();
 
-    const brandName = brandNameInput.value.trim();
+    let brandName = brandNameInput.value.trim().toUpperCase();
 
-    if (!brandName) {
+    const validation = validateBrandForm(brandName);
+
+    if (!validation.isValid) {
+        // Mostrar todos los errores en una sola alerta
+        const errorMessage = validation.errors.join('<br>• ');
         $.alert({
-            title: 'Atención',
-            content: 'El nombre de la marca no puede estar vacío.',
-            type: 'orange',
+            title: 'Errores en el formulario',
+            content: `• ${errorMessage}`,
+            type: 'red',
             theme: 'material',
-            backgroundDismiss: true,
             buttons: {
                 ok: {
-                    text: 'Aceptar',
-                    btnClass: 'btn-orange'
+                    text: 'Corregir',
+                    btnClass: 'btn-red'
                 }
             }
         });
+        return;
     }
+
+    // Usar el valor limpio (sin espacios extras)
+    brandName = validation.cleanedValue;
 
     const submitButton = this.querySelector('button[type="submit"]');
     const originalText = submitButton.innerHTML;
@@ -65,6 +76,22 @@ brandForm.addEventListener('submit', async function (e) {
             modal.hide();
             brandForm.reset();
             loadBrands();
+        } else {
+            let errorMessage = 'Ocurrió un error al guardar la marca.';
+
+            $.alert({
+                title: 'Error',
+                content: errorMessage,
+                type: 'red',
+                theme: 'material',
+                backgroundDismiss: true,
+                buttons: {
+                    ok: {
+                        text: 'Aceptar',
+                        btnClass: 'btn-red'
+                    }
+                }
+            });
         }
     } catch (error) {
         console.error('❌ Error al guardar la marca:', error);
@@ -176,11 +203,11 @@ const updateBrandsTable = (brands) => {
             <tr>
                 <td class="text-center text-muted py-4">
                     <i class="fas fa-inbox fa-2x mb-2"></i><br>
-                    No hay marcas registradas
-                </td>
-                <td class="text-center text-muted py-4">
                     <i class="fas fa-plus"></i><br>
                     Agrega la primera marca
+                </td>
+                <td class="text-center text-muted py-4">
+                    <p>No hay marcas disponibles</p>
                 </td>
             </tr>
         `;
@@ -280,4 +307,36 @@ const deleteBrand = async (brandId) => {
             }
         });
     }
+}
+
+function validateBrandForm(brandName) {
+    const errors = [];
+
+    // 1. Campo requerido
+    if (!brandName) {
+        errors.push('El nombre de la marca es obligatorio');
+    }
+
+    // 2. Longitud mínima
+    if (brandName.length < 2) {
+        errors.push('El nombre debe tener al menos 2 caracteres');
+    }
+
+    // 3. Longitud máxima
+    if (brandName.length > 50) {
+        errors.push('El nombre no puede exceder los 50 caracteres');
+    }
+
+    const validChars = /^[a-zA-Z0-9áéíóúÁÉÍÓÚñÑ\s\-_.&]+$/;
+    if (!validChars.test(brandName)) {
+        errors.push('Solo se permiten letras, números, espacios y los caracteres: - _ . &');
+    }
+
+    const cleanedName = brandName.trim().replace(/\s+/g, ' ');
+
+    return {
+        isValid: errors.length === 0,
+        errors: errors,
+        cleanedValue: cleanedName
+    };
 }

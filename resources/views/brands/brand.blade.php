@@ -72,7 +72,7 @@
                                 <i class="fas fa-tag text-dark me-2"></i>Nombre de la Marca
                             </label>
                             <input type="text" class="form-control form-control-lg" id="brandName"
-                                placeholder="Ingrese el nombre" required>
+                                placeholder="Ingrese el nombre">
                         </div>
                     </div>
 
