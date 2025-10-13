@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('personal_assets', function (Blueprint $table) {
+        Schema::create('personnel_assets', function (Blueprint $table) {
             $table->id();
             $table->date('assignment_date')->nullable();
             $table->date('confirmation_date')->nullable();
@@ -28,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('personal_assets');
+        Schema::dropIfExists('personnel_assets');
     }
 };
