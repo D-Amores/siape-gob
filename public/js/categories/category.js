@@ -120,6 +120,44 @@ categoryForm.addEventListener('submit', async function (e) {
     }
 });
 
+document.addEventListener('click', function (e) {
+    if (e.target.closest('.btn-delete')) {
+        const button = e.target.closest('.btn-delete');
+        const categoryId = button.getAttribute('data-category-id');
+        const categoryName = button.getAttribute('data-category-name');
+
+        $.confirm({
+            title: 'Confirmar eliminación',
+            content: `¿Estás seguro de que deseas eliminar la categoría "<strong>${categoryName}</strong>"?`,
+            type: 'red',
+            theme: 'material',
+            backgroundDismiss: true,
+            buttons: {
+                confirm: {
+                    text: 'Eliminar',
+                    btnClass: 'btn-red',
+                    action: function () {
+                        deleteCategory(categoryId);
+                    }
+                },
+                cancel: {
+                    text: 'Cancelar',
+                    btnClass: 'btn-default'
+                }
+            }
+        });
+    }
+
+    if (e.target.closest('.btn-edit')) {
+        const button = e.target.closest('.btn-edit');
+        const categoryId = button.getAttribute('data-category-id');
+        const categoryName = button.getAttribute('data-category-name');
+
+        editCategoryNameInput.value = categoryName;
+        editCategoryIdInput.value = categoryId;
+    }
+});
+
 const loadCategories = async () => {
 
     try {
@@ -232,6 +270,52 @@ const updateCategoriesTable = (categories) => {
     });
 
 };
+
+const deleteCategory = async (categoryId) => {
+    try {
+        const response = await fetch(`categories/${categoryId}`, {
+            method: 'DELETE',
+            headers: {
+                'X-CSRF-Token': csrfToken,
+                'Content-Type': 'application/json'
+            }
+        });
+
+        const data = await response.json();
+
+        if (data.ok) {
+            $.alert({
+                title: 'Éxito',
+                content: 'La categoría se ha eliminado correctamente.',
+                type: 'green',
+                theme: 'material',
+                backgroundDismiss: true,
+                buttons: {
+                    ok: {
+                        text: 'Aceptar',
+                        btnClass: 'btn-green'
+                    }
+                }
+            });
+            loadCategories();
+        }
+    } catch (error) {
+        console.error('❌ Error al eliminar la categoría:', error);
+        $.alert({
+            title: 'Error',
+            content: 'Ocurrió un error al eliminar la categoría. Revisa la consola para más detalles.',
+            type: 'red',
+            theme: 'material',
+            backgroundDismiss: true,
+            buttons: {
+                ok: {
+                    text: 'Aceptar',
+                    btnClass: 'btn-red'
+                }
+            }
+        });
+    }
+}
 
 function validateCategoryForm(categoryName) {
     const errors = [];
