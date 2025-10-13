@@ -143,121 +143,108 @@
 
     <!-- Modal para ver detalles del bien -->
     <div class="modal fade" id="modalDetallesBien" tabindex="-1" aria-labelledby="modalDetallesBienLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header bg-light">
-                    <h5 class="modal-title text-primary" id="modalDetallesBienLabel">
-                        <i class="fas fa-laptop me-2"></i>Detalles del Bien
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg rounded-4">
+
+                <!-- Encabezado -->
+                <div class="modal-header bg-primary bg-opacity-10 border-0">
+                    <h5 class="modal-title fw-bold text-primary" id="modalDetallesBienLabel">
+                    <i class="fas fa-circle-info me-2"></i>Detalles del Bien
                     </h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
                 </div>
-                <div class="modal-body">
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <h6 class="text-muted mb-2">Información General</h6>
-                            <div class="mb-2">
-                                <strong>Número de Inventario:</strong>
-                                <span class="ms-2">000123</span>
+
+                <!-- Cuerpo -->
+                <div class="modal-body py-4 px-4">
+                    <!-- Sección: Información general -->
+                    <div class="card border-0 bg-light-subtle mb-4">
+                        <div class="card-body">
+                            <h6 class="text-uppercase text-secondary fw-semibold mb-3">
+                            <i class="fas fa-info-circle me-2"></i>Información General
+                            </h6>
+                            <div class="row g-3">
+                            <div class="col-md-6">
+                                <div class="small text-muted">Número de Inventario</div>
+                                <div id="detalle-inventario" class="fw-semibold"></div>
                             </div>
-                            <div class="mb-2">
-                                <strong>Modelo:</strong>
-                                <span class="ms-2">ThinkPad T14</span>
+                            <div class="col-md-6">
+                                <div class="small text-muted">Modelo</div>
+                                <div id="detalle-modelo" class="fw-semibold"></div>
                             </div>
-                            <div class="mb-2">
-                                <strong>Serie:</strong>
-                                <span class="ms-2">PF3X9L2</span>
+                            <div class="col-md-6">
+                                <div class="small text-muted">Serie</div>
+                                <div id="detalle-serie" class="fw-semibold"></div>
                             </div>
-                            <div class="mb-2">
-                                <strong>Marca:</strong>
-                                <span class="ms-2">Lenovo</span>
+                            <div class="col-md-6">
+                                <div class="small text-muted">Marca</div>
+                                <div id="detalle-marca" class="fw-semibold"></div>
                             </div>
-                            <div class="mb-2">
-                                <strong>Categoría:</strong>
-                                <span class="ms-2">Computadora portátil</span>
+                            <div class="col-md-6">
+                                <div class="small text-muted">Categoría</div>
+                                <div id="detalle-categoria" class="fw-semibold"></div>
                             </div>
-                            <div class="mb-2">
-                                <strong>Estado:</strong>
-                                <span class="ms-2 badge status-active">Activo</span>
+                            <div class="col-md-6">
+                                <div class="small text-muted">Estado</div>
+                                <span id="detalle-estado" class="badge rounded-pill px-3 py-2"></span>
                             </div>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <h6 class="text-muted mb-2">Especificaciones Técnicas</h6>
-                            <div class="mb-2">
-                                <strong>Procesador:</strong>
-                                <span class="ms-2">Intel Core i5-1135G7</span>
-                            </div>
-                            <div class="mb-2">
-                                <strong>Velocidad:</strong>
-                                <span class="ms-2">2.4 GHz</span>
-                            </div>
-                            <div class="mb-2">
-                                <strong>Memoria:</strong>
-                                <span class="ms-2">16 GB</span>
-                            </div>
-                            <div class="mb-2">
-                                <strong>Almacenamiento:</strong>
-                                <span class="ms-2">512 GB SSD</span>
-                            </div>
-                            <div class="mb-2">
-                                <strong>Tarjeta Gráfica:</strong>
-                                <span class="ms-2">Intel Iris Xe</span>
-                            </div>
-                            <div class="mb-2">
-                                <strong>Sistema Operativo:</strong>
-                                <span class="ms-2">Windows 11 Pro</span>
                             </div>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-12 mb-3">
-                            <h6 class="text-muted mb-2">Descripción</h6>
-                            <div class="border rounded p-3 bg-light">
-                                Laptop de uso administrativo con excelente rendimiento y durabilidad. Equipo asignado al departamento de tecnología.
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <h6 class="text-muted mb-2">Información Adicional</h6>
-                            <div class="mb-2">
-                                <strong>Fecha de Adquisición:</strong>
-                                <span class="ms-2">15/03/2023</span>
-                            </div>
-                            <div class="mb-2">
-                                <strong>Proveedor:</strong>
-                                <span class="ms-2">TecnoImport S.A.</span>
-                            </div>
-                            <div class="mb-2">
-                                <strong>Garantía:</strong>
-                                <span class="ms-2">24 meses</span>
-                            </div>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <h6 class="text-muted mb-2">Ubicación y Asignación</h6>
-                            <div class="mb-2">
-                                <strong>Departamento:</strong>
-                                <span class="ms-2">Tecnología</span>
-                            </div>
-                            <div class="mb-2">
-                                <strong>Responsable:</strong>
-                                <span class="ms-2">Juan Pérez</span>
-                            </div>
-                            <div class="mb-2">
-                                <strong>Ubicación Física:</strong>
-                                <span class="ms-2">Oficina 304, Piso 3</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cerrar</button>
-                    <button type="button" class="btn btn-primary">
-                        <i class="fas fa-edit me-1"></i> Editar
-                    </button>
-                </div>
+
+        <!-- Sección: Especificaciones técnicas -->
+        <div class="card border-0 bg-light-subtle mb-4">
+          <div class="card-body">
+            <h6 class="text-uppercase text-secondary fw-semibold mb-3">
+              <i class="fas fa-microchip me-2"></i>Especificaciones Técnicas
+            </h6>
+            <div class="row g-3">
+              <div class="col-md-6">
+                <div class="small text-muted">CPU</div>
+                <div id="detalle-cpu" class="fw-semibold"></div>
+              </div>
+              <div class="col-md-6">
+                <div class="small text-muted">Velocidad</div>
+                <div id="detalle-velocidad" class="fw-semibold"></div>
+              </div>
+              <div class="col-md-6">
+                <div class="small text-muted">Memoria</div>
+                <div id="detalle-memoria" class="fw-semibold"></div>
+              </div>
+              <div class="col-md-6">
+                <div class="small text-muted">Almacenamiento</div>
+                <div id="detalle-almacenamiento" class="fw-semibold"></div>
+              </div>
+              <div class="col-md-6">
+                <div class="small text-muted">Creado el</div>
+                <div id="detalle-creado" class="fw-semibold">—</div>
+              </div>
             </div>
+          </div>
         </div>
+
+        <!-- Sección: Descripción -->
+        <div class="card border-0 bg-light-subtle">
+          <div class="card-body">
+            <h6 class="text-uppercase text-secondary fw-semibold mb-3">
+              <i class="fas fa-align-left me-2"></i>Descripción
+            </h6>
+            <div id="detalle-descripcion" class="p-3 bg-white border rounded text-secondary small" style="min-height: 80px;"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <div class="modal-footer border-0">
+        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+          <i class="fas fa-times me-1"></i> Cerrar
+        </button>
+        <button type="button" class="btn btn-primary">
+          <i class="fas fa-edit me-1"></i> Editar
+        </button>
+      </div>
     </div>
+  </div>
+</div>
 @endsection
 
 @section('scripts')

@@ -55,63 +55,70 @@ const camposPorCategoria = {
     `
 };
 
-categoriaSelect.addEventListener('change', () => {
-    const categoria = categoriaSelect.value;
-    camposDinamicos.innerHTML = camposPorCategoria[categoria] || '';
-});
+if (categoriaSelect) {
+    categoriaSelect.addEventListener('change', () => {
+        const categoria = categoriaSelect.value;
+        camposDinamicos.innerHTML = camposPorCategoria[categoria] || '';
+    });
+}
 
 // ------------------------------
 // Inicialización profesional de DataTable
 // ------------------------------
 document.addEventListener('DOMContentLoaded', function () {
+
     // Destruir instancia previa si existe
     if ($.fn.DataTable.isDataTable('#file_export')) {
         $('#file_export').DataTable().clear().destroy();
     }
 
-    const table = $('#file_export').DataTable({
-        processing: true,
-        serverSide: false, // Paginación en frontend
-        responsive: true,
-        pageLength: 10,
-        lengthMenu: [10, 25, 50, 100],
-        order: [[0, 'asc']],
-        language: {
-            url: '//cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json'
-        },
-        ajax: function (data, callback, settings) {
-            fetch('/assets/api?option=table')
-            .then(response => response.json())
-            .then(json => {
-                if (json.ok) callback({ data: json.data });
-                else alert('Error al cargar los activos: ' + (json.message || 'Desconocido'));
-            })
-            .catch(error => {
-                console.error('Error en la petición de assets:', error);
-                alert('Error al cargar los activos. Revisa la consola.');
-            });
-        },
-        columns: [
-            { data: 'inventory_number', className: 'text-center fw-medium' },
-            { data: 'model', className: 'fw-normal' },
-            { data: 'serial_number', className: 'fw-normal' },
-            { data: 'brand.name', className: 'fw-normal' },
-            { data: 'category.name', className: 'fw-normal' },
-            {
-                data: null,
-                className: 'text-center',
-                render: (data, type, row) => {
-                    return row.personal_assets?.length > 0
+    // Cargar datos con Fetch API
+    fetch('/assets/api?option=table')
+    .then(response => response.json())
+    .then(json => {
+        if (!json.ok) {
+            alert('Error al cargar los activos: ' + (json.message || 'Desconocido'));
+            return;
+        }
+
+        // Inicializar DataTable con los datos obtenidos
+        const table = $('#file_export').DataTable({
+            processing: true,
+            serverSide: false,
+            responsive: true,
+            pageLength: 10,
+            lengthMenu: [10, 25, 50, 100],
+            order: [[0, 'asc']],
+            language: {
+                url: '//cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json'
+            },
+            data: json.data, // Datos cargados via Fetch
+            columns: [
+                { data: 'inventory_number', className: 'text-center fw-medium' },
+                { data: 'model', className: 'fw-normal' },
+                { data: 'serial_number', className: 'fw-normal' },
+                { data: 'brand.name', className: 'fw-normal' },
+                { data: 'category.name', className: 'fw-normal' },
+                {
+                    data: null,
+                    className: 'text-center',
+                    render: (data, type, row) => {
+                        return row.personal_assets?.length > 0
                         ? '<span class="badge bg-success rounded-pill px-3 py-1">Asignado</span>'
                         : '<span class="badge bg-secondary rounded-pill px-3 py-1">Disponible</span>';
-                }
-            },
-            {
-                data: null,
-                className: 'text-center',
-                orderable: false,
-                render: (data, type, row) => `
-                    <button class="btn btn-outline-info btn-sm mx-1" title="Ver">
+                    }
+                },
+                {
+                    data: null,
+                    className: 'text-center',
+                    orderable: false,
+                    render: (data, type, row) => `
+                    <button
+                        class="btn btn-outline-info btn-sm mx-1 btn-ver"
+                        title="Ver"
+                        data-id="${row.id}"
+                        data-bs-toggle="modal"
+                        data-bs-target="#modalDetallesBien">
                         <i class="fas fa-eye"></i>
                     </button>
                     <button class="btn btn-outline-primary btn-sm mx-1" title="Editar">
@@ -120,7 +127,68 @@ document.addEventListener('DOMContentLoaded', function () {
                     <button class="btn btn-outline-danger btn-sm mx-1" title="Eliminar">
                         <i class="fas fa-trash"></i>
                     </button>`
+                }
+            ]
+        });
+    })
+    .catch(error => {
+        console.error('Error en la petición de assets:', error);
+        alert('Error al cargar los activos. Revisa la consola.');
+    });
+
+    // ------------------------------
+    // Evento delegado: Ver detalles
+    // ------------------------------
+    const tableBody = document.querySelector('#file_export tbody');
+    const modal = document.getElementById('modalDetallesBien');
+
+    tableBody.addEventListener('click', async (event) => {
+        const button = event.target.closest('.btn-ver');
+        if (!button) return;
+
+        const id = button.dataset.id;
+        if (!id) return;
+
+        // Limpia el modal antes de llenarlo
+        modal.querySelectorAll('span[id^="detalle-"]').forEach(span => span.textContent = '...');
+        modal.querySelector('#detalle-descripcion').textContent = '';
+
+        try {
+            const response = await fetch('/assets/api?option=details');
+            const result = await response.json();
+
+            if (!result.ok) {
+                console.error('Error:', result.message);
+                return;
             }
-        ]
+
+            // Busca el activo por ID
+            const asset = result.data.find(a => a.id == id);
+            if (!asset) {
+                console.warn('No se encontró el activo con ID', id);
+                return;
+            }
+
+            // Rellena los campos del modal
+            modal.querySelector('#detalle-inventario').textContent = asset.inventory_number ?? '—';
+            modal.querySelector('#detalle-modelo').textContent = asset.model ?? '—';
+            modal.querySelector('#detalle-serie').textContent = asset.serial_number ?? '—';
+            modal.querySelector('#detalle-marca').textContent = asset.brand?.name ?? '—';
+            modal.querySelector('#detalle-categoria').textContent = asset.category?.name ?? '—';
+
+            const estadoSpan = modal.querySelector('#detalle-estado');
+            estadoSpan.textContent = asset.is_active_label;
+            estadoSpan.classList.remove('bg-success', 'bg-danger');
+            estadoSpan.classList.add(asset.is_active ? 'bg-success' : 'bg-danger');
+
+            modal.querySelector('#detalle-cpu').textContent = asset.cpu ?? '—';
+            modal.querySelector('#detalle-velocidad').textContent = asset.speed ?? '—';
+            modal.querySelector('#detalle-memoria').textContent = asset.memory ?? '—';
+            modal.querySelector('#detalle-almacenamiento').textContent = asset.storage ?? '—';
+            modal.querySelector('#detalle-descripcion').textContent = asset.description ?? '—';
+
+        } catch (error) {
+            console.error('Error al cargar detalles:', error);
+        }
     });
 });
