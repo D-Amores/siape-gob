@@ -158,6 +158,115 @@ document.addEventListener('click', function (e) {
     }
 });
 
+editCategoryForm.addEventListener('submit', async function (e) {
+    e.preventDefault();
+
+    let categoryName = editCategoryNameInput.value.trim().toUpperCase();
+    const categoryId = editCategoryIdInput.value;
+
+    const validation = validateCategoryForm(categoryName);
+
+    if (!validation.isValid) {
+        const errorMessage = validation.errors.join('<br>• ');
+        $.alert({
+            title: 'Errores en el formulario',
+            content: `• ${errorMessage}`,
+            type: 'red',
+            theme: 'material',
+            buttons: {
+                ok: {
+                    text: 'Corregir',
+                    btnClass: 'btn-red'
+                }
+            }
+        });
+        return;
+    }
+
+    categoryName = validation.cleanedValue;
+
+    const submitButton = this.querySelector('button[type="submit"]');
+    const originalText = submitButton.innerHTML;
+    submitButton.disabled = true;
+    submitButton.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Actualizando...';
+
+    try {
+        // NUEVO: Petición PUT para actualizar
+        const response = await fetch(`/categories/${categoryId}`, {
+            method: 'PUT', // Usamos PUT para actualizar
+            headers: {
+                'X-CSRF-Token': csrfToken,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                name: categoryName
+            })
+        });
+
+        const data = await response.json();
+
+        if (data.ok) {
+            $.alert({
+                title: 'Éxito',
+                content: 'La categoría se ha actualizado correctamente.',
+                type: 'green',
+                theme: 'material',
+                backgroundDismiss: true,
+                buttons: {
+                    ok: {
+                        text: 'Aceptar',
+                        btnClass: 'btn-green'
+                    }
+                }
+            });
+
+            const modal = bootstrap.Modal.getInstance(document.getElementById('editCategoryModal'));
+            modal.hide();
+
+            editCategoryForm.reset();
+
+            loadCategories();
+        } else {
+            let errorMessage = 'Ocurrió un error al actualizar la categoría.';
+            if (data.message) {
+                errorMessage = data.message;
+            }
+
+            $.alert({
+                title: 'Error',
+                content: errorMessage,
+                type: 'red',
+                theme: 'material',
+                backgroundDismiss: true,
+                buttons: {
+                    ok: {
+                        text: 'Aceptar',
+                        btnClass: 'btn-red'
+                    }
+                }
+            });
+        }
+    } catch (error) {
+        console.error('❌ Error al actualizar la categoría:', error);
+        $.alert({
+            title: 'Error',
+            content: 'Ocurrió un error al actualizar la categoría. Revisa la consola para más detalles.',
+            type: 'red',
+            theme: 'material',
+            backgroundDismiss: true,
+            buttons: {
+                ok: {
+                    text: 'Aceptar',
+                    btnClass: 'btn-red'
+                }
+            }
+        });
+    } finally {
+        submitButton.disabled = false;
+        submitButton.innerHTML = originalText;
+    }
+});
+
 const loadCategories = async () => {
 
     try {
