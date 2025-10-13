@@ -6,11 +6,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Testing\Fluent\Concerns\Has;
 
-class PersonalAssetPending extends Model
+class PersonnelAssetPending extends Model
 {
     use HasFactory;
 
-    protected $table = 'personal_assets_pendig';
+    protected $table = 'personnel_assets_pending';
 
     protected $fillable = [
         'assignment_date',

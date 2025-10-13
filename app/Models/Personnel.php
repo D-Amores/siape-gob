@@ -79,10 +79,10 @@ class Personnel extends Model
 
     public function assignedAssets()
     {
-        return $this->hasMany(PersonalAsset::class, 'assigner_id');
+        return $this->hasMany(PersonnelAsset::class, 'assigner_id');
     }
     public function receivedAssets()
     {
-        return $this->hasMany(PersonalAsset::class, 'receiver_id');
+        return $this->hasMany(PersonnelAsset::class, 'receiver_id');
     }
 }

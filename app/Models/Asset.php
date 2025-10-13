@@ -32,8 +32,8 @@ class Asset extends Model
         return $this->belongsTo(Category::class);
     }
 
-    public function personalAssets()
+    public function personnelAssets()
     {
-        return $this->hasMany(PersonalAsset::class);
+        return $this->hasMany(PersonnelAsset::class);
     }
 }

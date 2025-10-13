@@ -8,8 +8,8 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\BrandController;
 
 use App\Http\Controllers\CategoryController;
-use App\Http\Controllers\PersonalAssetController;
-use App\Http\Controllers\PersonalAssetPendingController;
+use App\Http\Controllers\PersonnelAssetController;
+use App\Http\Controllers\PersonnelAssetPendingController;
 use App\Http\Controllers\TestController;
 
 Route::get('/', function () {
@@ -34,8 +34,8 @@ Route::middleware('auth')->group(function () {
 Route::resource('assets', AssetController::class)->only(['index', 'store', 'update', 'destroy']);
 Route::resource('brands', BrandController::class)->only(['index', 'store', 'update', 'destroy']);
 Route::resource('categories', CategoryController::class)->only(['index', 'store', 'update', 'destroy']);
-Route::resource('personal-asset', PersonalAssetController::class)->only(['index', 'store', 'update', 'destroy']);
-Route::resource('personal-asset-pending', PersonalAssetPendingController::class)->only(['index', 'store', 'update', 'destroy']);
+Route::resource('personnel-asset', PersonnelAssetController::class)->only(['index', 'store', 'update', 'destroy']);
+Route::resource('personnel-asset-pending', PersonnelAssetPendingController::class)->only(['index', 'store', 'update', 'destroy']);
 
 Route::post('brands/api', [BrandController::class, 'brandApi']);
 Route::post('categories/api', [CategoryController::class, 'categoryApi']);
