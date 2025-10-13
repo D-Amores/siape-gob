@@ -5,49 +5,55 @@ const categoriaSelect = document.getElementById('categoria');
 const camposDinamicos = document.getElementById('camposDinamicos');
 const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
-const camposPorCategoria = {
-    1: `
-        <h6 class="text-uppercase text-secondary fw-semibold mb-3">
-            <i class="fas fa-cogs me-2"></i>Detalles Específicos
-        </h6>
-        <div class="row g-3 mt-2">
-            <div class="col-md-6">
-                <div class="form-floating">
-                    <input type="text" class="form-control" id="procesador" placeholder="Procesador">
-                    <label for="procesador">Procesador</label>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="form-floating">
-                    <input type="text" class="form-control" id="velocidad" placeholder="Velocidad">
-                    <label for="velocidad">Velocidad</label>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="form-floating">
-                    <input type="text" class="form-control" id="memoria" placeholder="Memoria">
-                    <label for="memoria">Memoria</label>
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="form-floating">
-                    <input type="text" class="form-control" id="almacenamiento" placeholder="Capacidad de almacenamiento">
-                    <label for="almacenamiento">Capacidad de almacenamiento</label>
-                </div>
+const camposGenericos = `
+    <h6 class="text-uppercase text-secondary fw-semibold mb-3">
+        <i class="fas fa-cogs me-2"></i>Detalles Específicos
+    </h6>
+    <div class="row g-3 mt-2">
+        <div class="col-md-6">
+            <div class="form-floating">
+                <input type="text" class="form-control" id="procesador" placeholder="Procesador">
+                <label for="procesador">Procesador</label>
             </div>
         </div>
-    `
-};
+        <div class="col-md-3">
+            <div class="form-floating">
+                <input type="text" class="form-control" id="velocidad" placeholder="Velocidad">
+                <label for="velocidad">Velocidad</label>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="form-floating">
+                <input type="text" class="form-control" id="memoria" placeholder="Memoria">
+                <label for="memoria">Memoria</label>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="form-floating">
+                <input type="text" class="form-control" id="almacenamiento" placeholder="Capacidad de almacenamiento">
+                <label for="almacenamiento">Capacidad de almacenamiento</label>
+            </div>
+        </div>
+    </div>
+`
+
+
+const categoriasConCamposGenericos = ['1', '2', '5'];
 
 if (categoriaSelect) {
     categoriaSelect.addEventListener('change', () => {
         const categoria = categoriaSelect.value;
-        camposDinamicos.innerHTML = camposPorCategoria[categoria] || '';
+
+        if (categoriasConCamposGenericos.includes(categoria)) {
+            camposDinamicos.innerHTML = camposGenericos;
+        } else {
+            camposDinamicos.innerHTML = camposPorCategoria[categoria] || '';
+        }
     });
 }
 
 // ------------------------------
-// Inicialización profesional de DataTable
+// Inicialización de DataTable
 // ------------------------------
 document.addEventListener('DOMContentLoaded', function () {
 
@@ -210,7 +216,11 @@ if (formNuevoBien) {
 
         // Campos dinámicos por categoría
         const categoria = document.getElementById('categoria').value;
-        if (categoria === '1') {
+
+        // Categorías que tienen campos dinámicos
+        const categoriasConCamposGenericos = ['1', '2', '5'];
+
+        if (categoriasConCamposGenericos.includes(categoria)) {
             data.cpu = document.getElementById('procesador')?.value.trim() || null;
             data.speed = document.getElementById('velocidad')?.value.trim() || null;
             data.memory = document.getElementById('memoria')?.value.trim() || null;
@@ -245,10 +255,29 @@ if (formNuevoBien) {
             formNuevoBien.reset();
             camposDinamicos.innerHTML = '';
 
-            alert(result.message);
+            // --- Mostrar modal de éxito ---
+            document.getElementById('mensajeExito').textContent = result.message;
+            const modalExito = new bootstrap.Modal(document.getElementById('modalExito'));
+            modalExito.show();
 
+            // --- Transformar el asset para DataTable ---
+            const nuevoAsset = {
+                ...result.data,
+                brand: result.data.brand,
+                category: result.data.category,
+                is_active_label: result.data.is_active ? 'Activo' : 'Inactivo'
+            };
+
+            // --- Agregar a DataTable ---
             const table = $('#file_export').DataTable();
-            table.row.add(result.data).draw(false);
+            const rowNode = table.row.add(nuevoAsset).draw(false).node();
+
+            const estadoTd = rowNode.querySelector('td:nth-child(6)');
+            if (estadoTd) {
+                estadoTd.innerHTML = `<span class="badge ${nuevoAsset.is_active ? 'bg-success' : 'bg-danger'} rounded-pill px-3 py-1">
+                    ${nuevoAsset.is_active_label}
+                </span>`;
+            }
 
         } catch (error) {
             console.error('Error al crear el activo:', error);

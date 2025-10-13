@@ -36,6 +36,7 @@ class StoreAssetRequest extends FormRequest
             'description' => 'nullable|string',
             'brand_id' => 'required|exists:brands,id',
             'category_id' => 'required|exists:categories,id',
+            'is_active' => 'required|boolean',
         ];
     }
 
@@ -99,6 +100,7 @@ class StoreAssetRequest extends FormRequest
             'memory' => trim($this->memory),
             'storage' => trim($this->storage),
             'description' => trim($this->description ?? ''),
+            'is_active' => $this->has('is_active') ? (bool) $this->is_active : true,
         ]);
     }
 

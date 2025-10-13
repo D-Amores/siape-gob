@@ -280,6 +280,37 @@
             </div>
         </div>
     </div>
+
+    <!-- Modal de Éxito -->
+    <div class="modal fade" id="modalExito" tabindex="-1" aria-labelledby="modalExitoLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow rounded-4">
+
+                <!-- Encabezado -->
+                <div class="modal-header bg-light border-0">
+                    <h5 class="modal-title fw-bold text-primary" id="modalExitoLabel">
+                        <i class="fas fa-circle-check me-2"></i>Éxito
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+
+                <!-- Cuerpo -->
+                <div class="modal-body text-center py-4">
+                    <i class="fas fa-check-circle fa-3x text-primary mb-3"></i>
+                    <p id="mensajeExito" class="mb-0 fw-medium text-secondary">Activo creado exitosamente</p>
+                </div>
+
+                <!-- Footer -->
+                <div class="modal-footer border-0 justify-content-center">
+                    <button type="button" class="btn btn-outline-primary px-4" data-bs-dismiss="modal">
+                        <i class="fas fa-thumbs-up me-1"></i> Aceptar
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
 @endsection
 
 @section('scripts')
