@@ -14,7 +14,7 @@
 @endsection
 
 @section('actions')
-    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addBrandModal">
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalNuevoBien">
         <i class="fas fa-plus-circle me-2"></i> Agregar bien
     </button>
 @endsection
@@ -59,87 +59,105 @@
     </div>
     <div class="dark-transparent sidebartoggler"></div>
 
-    <!-- Modal para agregar un bien -->
+    <!-- Modal: Nuevo Bien -->
     <div class="modal fade" id="modalNuevoBien" tabindex="-1" aria-labelledby="modalNuevoBienLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header bg-light">
-                    <h5 class="modal-title text-primary" id="modalNuevoBienLabel">
+        <div class="modal-dialog modal-xl modal-dialog-centered">
+            <div class="modal-content border-0 shadow rounded-4">
+
+                <!-- Header -->
+                <div class="modal-header bg-light border-0">
+                    <h5 class="modal-title fw-bold text-primary" id="modalNuevoBienLabel">
                         <i class="fas fa-laptop me-2"></i>Nuevo Bien
                     </h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
                 </div>
-                <div class="modal-body">
+
+                <!-- Body -->
+                <div class="modal-body py-4 px-4">
                     <form id="formNuevoBien">
-                        <div class="row g-3">
-                            <!-- Numero de inventario -->
+                        <div class="row g-4">
+
+                            <!-- Columna Izquierda -->
                             <div class="col-md-6">
-                                <div class="form-floating">
-                                    <input type="text" class="form-control" id="numeroInventario" placeholder="Número de inventario" required>
-                                    <label for="numeroInventario">Número de inventario</label>
+                                <div class="card h-100 border-0 bg-light-subtle">
+                                    <div class="card-body">
+                                        <h6 class="text-uppercase text-secondary fw-semibold mb-3">
+                                            <i class="fas fa-info-circle me-2"></i>Información General
+                                        </h6>
+
+                                        <div class="form-floating mb-3">
+                                            <input type="text" class="form-control" id="numeroInventario" placeholder="Número de inventario" required>
+                                            <label for="numeroInventario"><i class="fas fa-barcode me-1 text-muted"></i> Número de inventario</label>
+                                        </div>
+
+                                        <div class="form-floating mb-3">
+                                            <input type="text" class="form-control" id="marca" placeholder="Marca" required>
+                                            <label for="marca"><i class="fas fa-tag me-1 text-muted"></i> Marca</label>
+                                        </div>
+
+                                        <div class="form-floating mb-3">
+                                            <input type="text" class="form-control" id="modelo" placeholder="Modelo">
+                                            <label for="modelo"><i class="fas fa-laptop-code me-1 text-muted"></i> Modelo</label>
+                                        </div>
+
+                                        <div class="form-floating mb-3">
+                                            <input type="text" class="form-control" id="serie" placeholder="Serie">
+                                            <label for="serie"><i class="fas fa-hashtag me-1 text-muted"></i> Serie</label>
+                                        </div>
+
+                                        <div class="form-floating">
+                                            <select class="form-select" id="categoria" required>
+                                                <option value="" selected>Seleccione categoría</option>
+                                                <option value="computadora">Computadora</option>
+                                                <option value="periferico">Periférico</option>
+                                                <option value="mobiliario">Mobiliario</option>
+                                            </select>
+                                            <label for="categoria"><i class="fas fa-layer-group me-1 text-muted"></i> Categoría</label>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
 
-                            <!-- Marca -->
+                            <!-- Columna Derecha -->
                             <div class="col-md-6">
-                                <div class="form-floating">
-                                    <input type="text" class="form-control" id="marca" placeholder="Marca" required>
-                                    <label for="marca">Marca</label>
+                                <div class="card h-100 border-0 bg-light-subtle">
+                                    <div class="card-body">
+                                        <h6 class="text-uppercase text-secondary fw-semibold mb-3">
+                                            <i class="fas fa-cogs me-2"></i>Detalles Específicos
+                                        </h6>
+
+                                        <!-- Campos dinámicos -->
+                                        <div id="camposDinamicos"></div>
+
+                                        <h6 class="text-uppercase text-secondary fw-semibold mt-4 mb-3">
+                                            <i class="fas fa-align-left me-2"></i>Descripción
+                                        </h6>
+                                        <div class="form-floating">
+                                            <textarea class="form-control" placeholder="Descripción" id="descripcion" style="height: 100px"></textarea>
+                                            <label for="descripcion"><i class="fas fa-pen me-1 text-muted"></i> Descripción</label>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
 
-                            <!-- Modelo -->
-                            <div class="col-md-6">
-                                <div class="form-floating">
-                                    <input type="text" class="form-control" id="modelo" placeholder="Modelo">
-                                    <label for="modelo">Modelo</label>
-                                </div>
-                            </div>
-
-                            <!-- Serie -->
-                            <div class="col-md-6">
-                                <div class="form-floating">
-                                    <input type="text" class="form-control" id="serie" placeholder="Serie">
-                                    <label for="serie">Serie</label>
-                                </div>
-                            </div>
-
-                            <!-- Categoría -->
-                            <div class="col-md-6">
-                                <div class="form-floating">
-                                    <select class="form-select" id="categoria" required>
-                                        <option value="" selected>Seleccione categoría</option>
-                                        <option value="computadora">Computadora</option>
-                                        <option value="periferico">Periférico</option>
-                                        <option value="mobiliario">Mobiliario</option>
-                                    </select>
-                                    <label for="categoria">Categoría</label>
-                                </div>
-                            </div>
-
-                            <!-- Campos dinámicos -->
-                            <div id="camposDinamicos" class="col-12"></div>
-
-                            <!-- Descripción -->
-                            <div class="col-12">
-                                <div class="form-floating">
-                                    <textarea class="form-control" placeholder="Descripción" id="descripcion" style="height: 100px"></textarea>
-                                    <label for="descripcion">Descripción</label>
-                                </div>
-                            </div>
                         </div>
                     </form>
                 </div>
 
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cerrar</button>
+                <!-- Footer -->
+                <div class="modal-footer border-0">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                        <i class="fas fa-times me-1"></i> Cerrar
+                    </button>
                     <button type="submit" form="formNuevoBien" class="btn btn-primary">
                         <i class="fas fa-plus me-1"></i> Guardar
                     </button>
                 </div>
+
             </div>
         </div>
     </div>
+
 
     <!-- Modal Detalles del Bien -->
     <div class="modal fade" id="modalDetallesBien" tabindex="-1" aria-labelledby="modalDetallesBienLabel" aria-hidden="true">

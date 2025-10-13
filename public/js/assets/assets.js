@@ -100,12 +100,12 @@ document.addEventListener('DOMContentLoaded', function () {
                 { data: 'brand.name', className: 'fw-normal' },
                 { data: 'category.name', className: 'fw-normal' },
                 {
-                    data: null,
+                    data: 'is_active_label',
                     className: 'text-center',
-                    render: (data, type, row) => {
-                        return row.personal_assets?.length > 0
-                        ? '<span class="badge bg-success rounded-pill px-3 py-1">Asignado</span>'
-                        : '<span class="badge bg-secondary rounded-pill px-3 py-1">Disponible</span>';
+                    render: function(data, type, row) {
+                        // Determinar la clase del badge según el estado
+                        const badgeClass = row.is_active ? 'bg-success' : 'bg-danger';
+                        return `<span class="badge ${badgeClass} rounded-pill px-3 py-1">${data}</span>`;
                     }
                 },
                 {
