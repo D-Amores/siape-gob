@@ -51,22 +51,18 @@
 
     <div class="dark-transparent sidebartoggler"></div>
 
-    <!-- Modal Sin Botón de Cerrar -->
     <div class="modal fade" id="addBrandModal" tabindex="-1" aria-labelledby="addBrandModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-md modal-dialog-centered">
             <div class="modal-content border-0 shadow">
-                <!-- Encabezado del Modal con gris oscuro -->
+
                 <div class="modal-header bg-dark text-white py-3">
                     <h5 class="modal-title fw-bold text-center w-100 m-0 text-white" id="addBrandModalLabel">
                         <i class="fas fa-folder-plus me-2"></i>Agregar Marca
                     </h5>
-                    <!-- Se eliminó el botón de cerrar (X) -->
                 </div>
 
-                <!-- Formulario del Modal -->
                 <form id="brandForm">
                     <div class="modal-body p-4">
-                        <!-- Solo Campo Nombre -->
                         <div class="mb-3">
                             <label for="brandName" class="form-label fw-semibold">
                                 <i class="fas fa-tag text-dark me-2"></i>Nombre de la Marca
@@ -76,7 +72,6 @@
                         </div>
                     </div>
 
-                    <!-- Pie del Modal -->
                     <div class="modal-footer">
                         <button type="button" class="btn btn-danger" data-bs-dismiss="modal">
                             <i class="fas fa-times me-2"></i>Cancelar
@@ -90,38 +85,37 @@
         </div>
     </div>
 
-    <!-- Modal Editar Marca Sin Botón de Cerrar -->
     <div class="modal fade" id="editBrandModal" tabindex="-1" aria-labelledby="editBrandModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-md modal-dialog-centered">
             <div class="modal-content border-0 shadow">
-                <!-- Encabezado del Modal con gris oscuro -->
                 <div class="modal-header bg-dark text-white py-3">
                     <h5 class="modal-title fw-bold text-center w-100 m-0 text-white" id="editBrandModalLabel">
-                        <i class="fas fa-folder-edit me-2"></i>Editar Marca
+                        <i class="fas fa-edit me-2"></i>Editar Marca
                     </h5>
-                    <!-- Se eliminó el botón de cerrar (X) -->
                 </div>
 
-                <!-- Formulario del Modal -->
                 <form id="editBrandForm">
                     <div class="modal-body p-4">
-                        <!-- Solo Campo Nombre -->
                         <div class="mb-3">
                             <label for="editBrandName" class="form-label fw-semibold">
                                 <i class="fas fa-tag text-dark me-2"></i>Nombre de la Marca
                             </label>
                             <input type="text" class="form-control form-control-lg" id="editBrandName"
-                                placeholder="Ingrese el nombre" required>
+                                placeholder="Ingrese el nombre">
                             <input type="hidden" id="editBrandId">
+                            <!-- Mensaje de ayuda -->
+                            <div class="form-text">
+                                Modifique el nombre de la marca según sea necesario
+                            </div>
                         </div>
                     </div>
-                    <!-- Pie del Modal -->
+
                     <div class="modal-footer">
                         <button type="button" class="btn btn-danger" data-bs-dismiss="modal">
                             <i class="fas fa-times me-2"></i>Cancelar
                         </button>
                         <button type="submit" class="btn btn-primary">
-                            <i class="fas fa-check me-2"></i>Guardar Cambios
+                            <i class="fas fa-save me-2"></i>Guardar Cambios
                         </button>
                     </div>
                 </form>
@@ -140,5 +134,7 @@
     <script src="{{ asset('cdn/buttons/2.4.2/js/buttons.print.min.js') }}"></script>
 
     <script src="{{ asset('js/brands/brand.js') }}"></script>
-    <script> const language = "{{ asset('cdn/datatables-language/es-MX.json') }}"; </script>
+    <script>
+        const language = "{{ asset('cdn/datatables-language/es-MX.json') }}";
+    </script>
 @endsection

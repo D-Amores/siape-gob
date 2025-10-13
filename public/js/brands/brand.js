@@ -2,11 +2,19 @@ const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute
 const brandForm = document.getElementById('brandForm');
 const brandNameInput = document.getElementById('brandName');
 
+const editBrandForm = document.getElementById('editBrandForm');
+const editBrandNameInput = document.getElementById('editBrandName');
+const editBrandIdInput = document.getElementById('editBrandId');
+
 
 document.addEventListener('DOMContentLoaded', function () {
     loadBrands();
 
     brandNameInput.addEventListener('input', function () {
+        this.value = this.value.toUpperCase();
+    });
+
+    editBrandNameInput.addEventListener('input', function () {
         this.value = this.value.toUpperCase();
     });
 });
@@ -19,7 +27,6 @@ brandForm.addEventListener('submit', async function (e) {
     const validation = validateBrandForm(brandName);
 
     if (!validation.isValid) {
-        // Mostrar todos los errores en una sola alerta
         const errorMessage = validation.errors.join('<br>• ');
         $.alert({
             title: 'Errores en el formulario',
@@ -36,7 +43,6 @@ brandForm.addEventListener('submit', async function (e) {
         return;
     }
 
-    // Usar el valor limpio (sin espacios extras)
     brandName = validation.cleanedValue;
 
     const submitButton = this.querySelector('button[type="submit"]');
@@ -147,10 +153,122 @@ document.addEventListener('click', function (e) {
         const brandId = button.getAttribute('data-brand-id');
         const brandName = button.getAttribute('data-brand-name');
 
+        const editBrandNameInput = document.getElementById('editBrandName');
+        const editBrandIdInput = document.getElementById('editBrandId');
 
+        editBrandNameInput.value = brandName;
+        editBrandIdInput.value = brandId;
     }
 });
 
+editBrandForm.addEventListener('submit', async function (e) {
+    e.preventDefault();
+
+    let brandName = editBrandNameInput.value.trim().toUpperCase();
+    const brandId = editBrandIdInput.value;
+
+    const validation = validateBrandForm(brandName);
+
+    if (!validation.isValid) {
+        const errorMessage = validation.errors.join('<br>• ');
+        $.alert({
+            title: 'Errores en el formulario',
+            content: `• ${errorMessage}`,
+            type: 'red',
+            theme: 'material',
+            buttons: {
+                ok: {
+                    text: 'Corregir',
+                    btnClass: 'btn-red'
+                }
+            }
+        });
+        return;
+    }
+
+    brandName = validation.cleanedValue;
+
+    const submitButton = this.querySelector('button[type="submit"]');
+    const originalText = submitButton.innerHTML;
+    submitButton.disabled = true;
+    submitButton.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Actualizando...';
+
+    try {
+        // NUEVO: Petición PUT para actualizar
+        const response = await fetch(`/brands/${brandId}`, {
+            method: 'PUT', // Usamos PUT para actualizar
+            headers: {
+                'X-CSRF-Token': csrfToken,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                name: brandName
+            })
+        });
+
+        const data = await response.json();
+
+        if (data.ok) {
+            $.alert({
+                title: 'Éxito',
+                content: 'La marca se ha actualizado correctamente.',
+                type: 'green',
+                theme: 'material',
+                backgroundDismiss: true,
+                buttons: {
+                    ok: {
+                        text: 'Aceptar',
+                        btnClass: 'btn-green'
+                    }
+                }
+            });
+
+            const modal = bootstrap.Modal.getInstance(document.getElementById('editBrandModal'));
+            modal.hide();
+
+            editBrandForm.reset();
+
+            loadBrands();
+        } else {
+            let errorMessage = 'Ocurrió un error al actualizar la marca.';
+            if (data.message) {
+                errorMessage = data.message;
+            }
+
+            $.alert({
+                title: 'Error',
+                content: errorMessage,
+                type: 'red',
+                theme: 'material',
+                backgroundDismiss: true,
+                buttons: {
+                    ok: {
+                        text: 'Aceptar',
+                        btnClass: 'btn-red'
+                    }
+                }
+            });
+        }
+    } catch (error) {
+        console.error('❌ Error al actualizar la marca:', error);
+        $.alert({
+            title: 'Error',
+            content: 'Ocurrió un error al actualizar la marca. Revisa la consola para más detalles.',
+            type: 'red',
+            theme: 'material',
+            backgroundDismiss: true,
+            buttons: {
+                ok: {
+                    text: 'Aceptar',
+                    btnClass: 'btn-red'
+                }
+            }
+        });
+    } finally {
+        submitButton.disabled = false;
+        submitButton.innerHTML = originalText;
+    }
+});
 
 const loadBrands = async () => {
 
@@ -228,6 +346,8 @@ const updateBrandsTable = (brands) => {
                                 class="btn btn-outline-primary border-0 btn-edit"
                                 data-brand-id="${brand.id}"
                                 data-brand-name="${brand.name}"
+                                data-bs-toggle="modal"
+                                data-bs-target="#editBrandModal"
                                 title="Editar">
                             <i class="fas fa-edit"></i>
                         </button>
