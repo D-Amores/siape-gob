@@ -91,7 +91,14 @@
                                         </div>
 
                                         <div class="form-floating mb-3">
-                                            <input type="text" class="form-control" id="marca" placeholder="Marca" required>
+                                            <select class="form-select" id="marca" required>
+                                                <option value="" selected>Seleccione marca</option>
+                                                <option value="1">Dell</option>
+                                                <option value="2">HP</option>
+                                                <option value="3">Lenovo</option>
+                                                <option value="4">Asus</option>
+                                                <option value="5">Acer</option>
+                                            </select>
                                             <label for="marca"><i class="fas fa-tag me-1 text-muted"></i> Marca</label>
                                         </div>
 
@@ -105,12 +112,22 @@
                                             <label for="serie"><i class="fas fa-hashtag me-1 text-muted"></i> Serie</label>
                                         </div>
 
+                                        <div class="form-floating mb-3">
+                                            <select class="form-select" id="estado" required>
+                                                <option value="1" selected>Activo</option>
+                                                <option value="0">Inactivo</option>
+                                            </select>
+                                            <label for="estado"><i class="fas fa-toggle-on me-1 text-muted"></i> Estado</label>
+                                        </div>
+
                                         <div class="form-floating">
                                             <select class="form-select" id="categoria" required>
                                                 <option value="" selected>Seleccione categoría</option>
-                                                <option value="computadora">Computadora</option>
-                                                <option value="periferico">Periférico</option>
-                                                <option value="mobiliario">Mobiliario</option>
+                                                <option value="1">Laptop</option>
+                                                <option value="2">Desktop</option>
+                                                <option value="3">Monitor</option>
+                                                <option value="4">Impresora</option>
+                                                <option value="5">Servidor</option>
                                             </select>
                                             <label for="categoria"><i class="fas fa-layer-group me-1 text-muted"></i> Categoría</label>
                                         </div>
@@ -122,9 +139,6 @@
                             <div class="col-md-6">
                                 <div class="card h-100 border-0 bg-light-subtle">
                                     <div class="card-body">
-                                        <h6 class="text-uppercase text-secondary fw-semibold mb-3">
-                                            <i class="fas fa-cogs me-2"></i>Detalles Específicos
-                                        </h6>
 
                                         <!-- Campos dinámicos -->
                                         <div id="camposDinamicos"></div>
@@ -157,7 +171,6 @@
             </div>
         </div>
     </div>
-
 
     <!-- Modal Detalles del Bien -->
     <div class="modal fade" id="modalDetallesBien" tabindex="-1" aria-labelledby="modalDetallesBienLabel" aria-hidden="true">

@@ -3,9 +3,13 @@
 // ------------------------------
 const categoriaSelect = document.getElementById('categoria');
 const camposDinamicos = document.getElementById('camposDinamicos');
+const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
 const camposPorCategoria = {
-    computadora: `
+    1: `
+        <h6 class="text-uppercase text-secondary fw-semibold mb-3">
+            <i class="fas fa-cogs me-2"></i>Detalles Específicos
+        </h6>
         <div class="row g-3 mt-2">
             <div class="col-md-6">
                 <div class="form-floating">
@@ -29,26 +33,6 @@ const camposPorCategoria = {
                 <div class="form-floating">
                     <input type="text" class="form-control" id="almacenamiento" placeholder="Capacidad de almacenamiento">
                     <label for="almacenamiento">Capacidad de almacenamiento</label>
-                </div>
-            </div>
-        </div>
-    `,
-    periferico: `
-        <div class="row g-3 mt-2">
-            <div class="col-md-6">
-                <div class="form-floating">
-                    <input type="text" class="form-control" id="tipoPeriferico" placeholder="Tipo de periférico">
-                    <label for="tipoPeriferico">Tipo de periférico</label>
-                </div>
-            </div>
-        </div>
-    `,
-    mobiliario: `
-        <div class="row g-3 mt-2">
-            <div class="col-md-6">
-                <div class="form-floating">
-                    <input type="text" class="form-control" id="material" placeholder="Material">
-                    <label for="material">Material</label>
                 </div>
             </div>
         </div>
@@ -89,10 +73,7 @@ document.addEventListener('DOMContentLoaded', function () {
             pageLength: 10,
             lengthMenu: [10, 25, 50, 100],
             order: [[0, 'asc']],
-            language: {
-                url: '//cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json'
-            },
-            data: json.data, // Datos cargados via Fetch
+            data: json.data,
             columns: [
                 { data: 'inventory_number', className: 'text-center fw-medium' },
                 { data: 'model', className: 'fw-normal' },
@@ -205,3 +186,73 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 });
+
+
+// ------------------------------
+// Guardar nuevo bien
+// ------------------------------
+const formNuevoBien = document.getElementById('formNuevoBien');
+
+if (formNuevoBien) {
+    formNuevoBien.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        // Recolectar datos del formulario
+        const data = {
+            inventory_number: document.getElementById('numeroInventario').value.trim(),
+            brand_id: document.getElementById('marca').value,
+            model: document.getElementById('modelo').value.trim(),
+            serial_number: document.getElementById('serie').value.trim(),
+            category_id: document.getElementById('categoria').value,
+            description: document.getElementById('descripcion').value.trim(),
+            is_active: document.getElementById('estado').value === '1'
+        };
+
+        // Campos dinámicos por categoría
+        const categoria = document.getElementById('categoria').value;
+        if (categoria === '1') {
+            data.cpu = document.getElementById('procesador')?.value.trim() || null;
+            data.speed = document.getElementById('velocidad')?.value.trim() || null;
+            data.memory = document.getElementById('memoria')?.value.trim() || null;
+            data.storage = document.getElementById('almacenamiento')?.value.trim() || null;
+        }
+
+        try {
+            const response = await fetch('/assets', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken
+                },
+                body: JSON.stringify(data)
+            });
+
+            const result = await response.json();
+
+            if (!result.ok) {
+                if (result.errors) {
+                    let messages = Object.values(result.errors).flat().join('\n');
+                    alert('Errores:\n' + messages);
+                } else {
+                    alert(result.message || 'Error al crear el activo');
+                }
+                return;
+            }
+
+            // Éxito: cerrar modal, limpiar formulario y refrescar tabla
+            const modalNuevo = bootstrap.Modal.getInstance(document.getElementById('modalNuevoBien'));
+            modalNuevo.hide();
+            formNuevoBien.reset();
+            camposDinamicos.innerHTML = '';
+
+            alert(result.message);
+
+            const table = $('#file_export').DataTable();
+            table.row.add(result.data).draw(false);
+
+        } catch (error) {
+            console.error('Error al crear el activo:', error);
+            alert('Ocurrió un error inesperado. Revisa la consola.');
+        }
+    });
+}
