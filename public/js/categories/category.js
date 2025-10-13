@@ -19,6 +19,107 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 
+categoryForm.addEventListener('submit', async function (e) {
+    e.preventDefault();
+
+    let categoryName = categoryNameInput.value.trim().toUpperCase();
+
+    const validation = validateCategoryForm(categoryName);
+
+    if (!validation.isValid) {
+        const errorMessage = validation.errors.join('<br>• ');
+        $.alert({
+            title: 'Errores en el formulario',
+            content: `• ${errorMessage}`,
+            type: 'red',
+            theme: 'material',
+            buttons: {
+                ok: {
+                    text: 'Corregir',
+                    btnClass: 'btn-red'
+                }
+            }
+        });
+        return;
+    }
+
+    categoryName = validation.cleanedValue;
+
+    const submitButton = this.querySelector('button[type="submit"]');
+    const originalText = submitButton.innerHTML;
+    submitButton.disabled = true;
+    submitButton.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Guardando...';
+
+    try {
+        const response = await fetch('categories', {
+            method: 'POST',
+            headers: {
+                'X-CSRF-Token': csrfToken,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                name: categoryName
+            })
+        });
+
+        const data = await response.json();
+
+        if (data.ok) {
+            $.alert({
+                title: 'Éxito',
+                content: 'La categoría se ha guardado correctamente.',
+                type: 'green',
+                theme: 'material',
+                backgroundDismiss: true,
+                buttons: {
+                    ok: {
+                        text: 'Aceptar',
+                        btnClass: 'btn-green'
+                    }
+                }
+            });
+            const modal = bootstrap.Modal.getInstance(document.getElementById('addCategoryModal'));
+            modal.hide();
+            categoryForm.reset();
+            loadCategories();
+        } else {
+            let errorMessage = 'Ocurrió un error al guardar la categoría.';
+
+            $.alert({
+                title: 'Error',
+                content: errorMessage,
+                type: 'red',
+                theme: 'material',
+                backgroundDismiss: true,
+                buttons: {
+                    ok: {
+                        text: 'Aceptar',
+                        btnClass: 'btn-red'
+                    }
+                }
+            });
+        }
+    } catch (error) {
+        console.error('❌ Error al guardar la categoría:', error);
+        $.alert({
+            title: 'Error',
+            content: 'Ocurrió un error al guardar la categoría. Revisa la consola para más detalles.',
+            type: 'red',
+            theme: 'material',
+            backgroundDismiss: true,
+            buttons: {
+                ok: {
+                    text: 'Aceptar',
+                    btnClass: 'btn-red'
+                }
+            }
+        });
+    } finally {
+        submitButton.disabled = false;
+        submitButton.innerHTML = originalText;
+    }
+});
+
 const loadCategories = async () => {
 
     try {
@@ -132,3 +233,31 @@ const updateCategoriesTable = (categories) => {
 
 };
 
+function validateCategoryForm(categoryName) {
+    const errors = [];
+
+    if (!categoryName) {
+        errors.push('El nombre de la categoría es obligatorio');
+    }
+
+    if (categoryName.length < 2) {
+        errors.push('El nombre debe tener al menos 2 caracteres');
+    }
+
+    if (categoryName.length > 50) {
+        errors.push('El nombre no puede exceder los 50 caracteres');
+    }
+
+    const validChars = /^[a-zA-Z0-9áéíóúÁÉÍÓÚñÑ\s\-_.&]+$/;
+    if (!validChars.test(categoryName)) {
+        errors.push('Solo se permiten letras, números, espacios y los caracteres: - _ . &');
+    }
+
+    const cleanedName = categoryName.trim().replace(/\s+/g, ' ');
+
+    return {
+        isValid: errors.length === 0,
+        errors: errors,
+        cleanedValue: cleanedName
+    };
+}
