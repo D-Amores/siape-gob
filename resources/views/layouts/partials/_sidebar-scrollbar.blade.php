@@ -190,62 +190,6 @@
                         </li>
                     </ul>
                 </li>
-
-                <!-- ============================= -->
-                <!-- Frontend pages -->
-                <!-- ============================= -->
-                <li class="nav-small-cap">
-                    <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
-                    <span class="hide-menu">Frontend pages</span>
-                </li>
-                <!-- =================== -->
-                <!-- pages -->
-                <!-- =================== -->
-                <li class="sidebar-item">
-                    <a class="sidebar-link has-arrow" href="javascript:void(0)" aria-expanded="false">
-                        <span class="rounded-3">
-                            <i class="ti ti-app-window"></i>
-                        </span>
-                        <span class="hide-menu">Frontend pages</span>
-                    </a>
-                    <ul aria-expanded="false" class="collapse first-level">
-                        <li class="sidebar-item">
-                            <a href="{{ asset('modernize/main/frontend-landingpage.html') }}"
-                                class="sidebar-link">
-                                <i class="ti ti-circle"></i>
-                                <span class="hide-menu">Homepage</span>
-                            </a>
-                        </li>
-                        <li class="sidebar-item">
-                            <a href="{{ asset('modernize/main/frontend-aboutpage.html') }}"
-                                class="sidebar-link">
-                                <i class="ti ti-circle"></i>
-                                <span class="hide-menu">About Us</span>
-                            </a>
-                        </li>
-                        <li class="sidebar-item">
-                            <a href="{{ asset('modernize/main/frontend-contactpage.html') }}"
-                                class="sidebar-link">
-                                <i class="ti ti-circle"></i>
-                                <span class="hide-menu">Contact Us</span>
-                            </a>
-                        </li>
-                        <li class="sidebar-item">
-                            <a href="{{ asset('modernize/main/frontend-blogpage.html') }}"
-                                class="sidebar-link">
-                                <i class="ti ti-circle"></i>
-                                <span class="hide-menu">Blog</span>
-                            </a>
-                        </li>
-                        <li class="sidebar-item">
-                            <a href="{{ asset('modernize/main/frontend-blogdetailpage.html') }}"
-                                class="sidebar-link">
-                                <i class="ti ti-circle"></i>
-                                <span class="hide-menu">Blog Details</span>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
             </ul>
         </nav>
         <!-- End Sidebar navigation -->
