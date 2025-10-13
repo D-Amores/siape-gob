@@ -109,4 +109,25 @@ class CategoryController extends Controller
             ], 500);
         }
     }
+
+    public function categoryApi()
+    {
+        try {
+            $categories = Category::select('id', 'name', 'created_at')
+                ->orderBy('name', 'asc')
+                ->get();
+
+            return response()->json([
+                'ok' => true,
+                'data' => $categories
+            ], 200);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'ok' => false,
+                'message' => 'Error al obtener las categorías',
+                'error' => config('app.debug') ? $e->getMessage() : 'Error interno'
+            ], 500);
+        }
+    }
 }
