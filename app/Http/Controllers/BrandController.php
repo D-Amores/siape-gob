@@ -30,7 +30,9 @@ class BrandController extends Controller
     public function store(StoreBrandRequest $request)
     {
         try {
-            $brand = Brand::create($request->validated());
+            $validatedData = $request->validated();
+            $validatedData['name'] = strtoupper($validatedData['name']);
+            $brand = Brand::create($validatedData);
             return response()->json([
                 'ok' => true,
                 'message' => 'Marca creada exitosamente',
@@ -99,6 +101,27 @@ class BrandController extends Controller
             return response()->json([
                 'ok' => false,
                 'message' => 'Error al eliminar la marca',
+                'error' => config('app.debug') ? $e->getMessage() : 'Error interno'
+            ], 500);
+        }
+    }
+
+    public function brandApi()
+    {
+        try {
+            $brands = Brand::select('id', 'name', 'created_at')
+                ->orderBy('name', 'asc')
+                ->get();
+
+            return response()->json([
+                'ok' => true,
+                'data' => $brands
+            ], 200);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'ok' => false,
+                'message' => 'Error al obtener las marcas',
                 'error' => config('app.debug') ? $e->getMessage() : 'Error interno'
             ], 500);
         }

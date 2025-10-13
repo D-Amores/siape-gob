@@ -37,6 +37,8 @@ Route::resource('categories', CategoryController::class)->only(['index', 'store'
 Route::resource('personal-asset', PersonalAssetController::class)->only(['index', 'store', 'update', 'destroy']);
 Route::resource('personal-asset-pending', PersonalAssetPendingController::class)->only(['index', 'store', 'update', 'destroy']);
 
+Route::post('brands/api', [BrandController::class, 'brandApi']);
+
 //RUTA PARA EL CRUD DE PERSONAL
 Route::resource('personnel', PersonnelController::class)->only([
     'store', 'update', 'destroy'
