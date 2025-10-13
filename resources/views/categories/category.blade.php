@@ -67,7 +67,7 @@
                                 <i class="fas fa-tag text-dark me-2"></i>Nombre de la Categoría
                             </label>
                             <input type="text" class="form-control form-control-lg" id="categoryName"
-                                placeholder="Ingrese el nombre" required>
+                                placeholder="Ingrese el nombre">
                         </div>
                     </div>
 
@@ -101,7 +101,7 @@
                                 <i class="fas fa-tag text-dark me-2"></i>Nombre de la Categoría
                             </label>
                             <input type="text" class="form-control form-control-lg" id="editCategoryName"
-                                placeholder="Ingrese el nombre" required>
+                                placeholder="Ingrese el nombre">
                             <input type="hidden" id="editCategoryId">
                             <!-- Mensaje de ayuda -->
                             <div class="form-text">
