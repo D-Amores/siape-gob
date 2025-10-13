@@ -44,3 +44,20 @@ function confirmStore(functionToCall) {
         }
     });
 }
+
+function confirmUpdate(functionToCall) {
+    $.confirm({
+        title: 'Confirmar acción',
+        content: '¿Está seguro de actualizar el registro? Esta acción no podrá ser revertida.',
+        type: 'blue',
+        theme: 'material',
+        buttons: {
+            Cancelar: function() { },
+            Actualizar: async function() {
+                if (typeof functionToCall === "function") {
+                    await functionToCall(); // soporta funciones async
+                }
+            }
+        }
+    });
+}
