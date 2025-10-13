@@ -162,11 +162,23 @@ document.addEventListener('DOMContentLoaded', function () {
                 return;
             }
 
-            // Busca el activo por ID
             const asset = result.data.find(a => a.id == id);
             if (!asset) {
                 console.warn('No se encontró el activo con ID', id);
                 return;
+            }
+
+            // --- Función para formatear fechas ---
+            function formatDate(isoString) {
+                if (!isoString) return '—';
+                const date = new Date(isoString);
+                return date.toLocaleString('es-MX', {
+                    year: 'numeric',
+                    month: '2-digit',
+                    day: '2-digit',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                });
             }
 
             // Rellena los campos del modal
@@ -181,6 +193,7 @@ document.addEventListener('DOMContentLoaded', function () {
             estadoSpan.classList.remove('bg-success', 'bg-danger');
             estadoSpan.classList.add(asset.is_active ? 'bg-success' : 'bg-danger');
 
+            modal.querySelector('#detalle-creado').textContent = formatDate(asset.created_at);
             modal.querySelector('#detalle-cpu').textContent = asset.cpu ?? '—';
             modal.querySelector('#detalle-velocidad').textContent = asset.speed ?? '—';
             modal.querySelector('#detalle-memoria').textContent = asset.memory ?? '—';
