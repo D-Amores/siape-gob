@@ -42,7 +42,7 @@ async function loadPersonnel() {
     loadPersonnelTable(data);
 }
 
-//crear personnel
+// Función para crear personal
 async function personnelCreate() {
     if (!isFormValid('#personnelCreateForm')) return;
 
@@ -73,6 +73,28 @@ async function personnelCreate() {
     });
 }
 
+// Abrir modal de edición con datos del personal
+function openPersonnelEditModal(personnel) {
+    // Llenar campos
+    document.getElementById('edit_personnel_id').value = personnel.id;
+    document.getElementById('edit_name').value = personnel.name;
+
+    // Área
+    const areaSelect = document.getElementById('edit_area_id');
+    Array.from(areaSelect.options).forEach(option => {
+        option.selected = option.value == (personnel.area?.id || '');
+    });
+
+    // Rol (minúsculas para coincidir con el backend)
+    const rolSelect = document.getElementById('edit_rol');
+    Array.from(rolSelect.options).forEach(option => {
+        option.selected = option.value.toLowerCase() == (user.roles?.[0]?.name || '').toLowerCase();
+    });
+}
+
+//funcion para actualizar personal
+async function personnelUpdate(personnelId) {
+}
 
 // Guardar el estado de las pestañas en localStorage
 function saveTabsState() {
@@ -93,21 +115,31 @@ function saveTabsState() {
     });
 }
 
-// ===============================
-// 📌 FUNCIÓN PRINCIPAL
-// ===============================
+
 async function initAdminPanel() {
+
     const btnCreatePersonnel = document.getElementById('btnPersonnelCreate');
-    console.log('🚀 Iniciando Panel de Administración...');
+    const personnelTable = document.getElementById('dataPersonnelTable');
+
+
     saveTabsState(); // Guarda el estado de las pestañas
     await areasToSelect(); // Carga las áreas
     await loadPersonnel(); // Carga el personal
 
     btnCreatePersonnel.addEventListener('click', personnelCreate);
 
+    personnelTable.querySelector('tbody').addEventListener('click', function(e) {
+        // Botón de Editar
+        const btnEdit = e.target.closest('.btn-edit'); // coincide con tu render de DataTable
+        if (btnEdit) {
+            const row = btnEdit.closest('tr');
+            // Obtenemos los datos completos de la fila desde DataTable
+            const rowData = personnelTableInstance.row(row).data(); 
+            if (rowData) openPersonnelEditModal(rowData);
+            return;
+        }
+    });
+
 }
 
-// ===============================
-// 📌 EJECUCIÓN AUTOMÁTICA
-// ===============================
 document.addEventListener('DOMContentLoaded', initAdminPanel);
