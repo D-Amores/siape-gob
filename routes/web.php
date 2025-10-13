@@ -17,7 +17,7 @@ Route::get('/', function () {
 })->name('dashboard');
 
 //Ruta de test
-Route::get('personnel', [TestController::class, 'index'])->name('personnel.index');
+//Route::get('personnel', [TestController::class, 'index'])->name('personnel.index');
 
 Route::middleware('guest')->group(function () {
     // Login routes
@@ -42,7 +42,7 @@ Route::post('categories/api', [CategoryController::class, 'categoryApi']);
 
 //RUTA PARA EL CRUD DE PERSONAL
 Route::resource('personnel', PersonnelController::class)->only([
-    'store', 'update', 'destroy'
+    'index', 'store', 'update', 'destroy'
 ]);
 Route::post('personnel/api', [PersonnelController::class, 'personnelApi']);
 
