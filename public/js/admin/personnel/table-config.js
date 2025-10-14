@@ -25,8 +25,6 @@ function loadPersonnelTable(data) {
                 title: "Nombre(s)",
                 render: (row) => `
                     <div class="d-flex align-items-center">
-                        <img src="/modernize/assets/images/profile/user-6.jpg"
-                             class="rounded-circle" width="40" height="40">
                         <div class="ms-3">
                             <h6 class="fs-4 fw-semibold mb-0 text-truncate"
                                 style="max-width: 140px;">
