@@ -61,3 +61,20 @@ function confirmUpdate(functionToCall) {
         }
     });
 }
+
+function confirmDestroy(functionToCall) {
+    $.confirm({
+        title: 'Confirmar acción',
+        content: '¿Está seguro de eliminar el registro? Esta acción no podrá ser revertida.',
+        type: 'blue',
+        theme: 'material',
+        buttons: {
+            Cancelar: function() { },
+            Eliminar: async function() {
+                if (typeof functionToCall === "function") {
+                    await functionToCall(); // soporta funciones async
+                }
+            }
+        }
+    });
+}
