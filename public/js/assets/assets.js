@@ -4,6 +4,7 @@
 const categoriaSelect = document.getElementById('categoria');
 const camposDinamicos = document.getElementById('camposDinamicos');
 const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+let editingAssetId = null;
 
 const camposGenericos = `
     <h6 class="text-uppercase text-secondary fw-semibold mb-3">
@@ -47,7 +48,7 @@ if (categoriaSelect) {
         if (categoriasConCamposGenericos.includes(categoria)) {
             camposDinamicos.innerHTML = camposGenericos;
         } else {
-            camposDinamicos.innerHTML = camposPorCategoria[categoria] || '';
+            camposDinamicos.innerHTML = '';
         }
     });
 }
@@ -203,97 +204,90 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 // ------------------------------
-// Guardar nuevo bien
+// Guardar o actualizar asset
 // ------------------------------
-const formNuevoBien = document.getElementById('formNuevoBien');
+formNuevoBien.addEventListener('submit', async (e) => {
+    e.preventDefault();
 
-if (formNuevoBien) {
-    formNuevoBien.addEventListener('submit', async (e) => {
-        e.preventDefault();
+    const data = {
+        inventory_number: document.getElementById('numeroInventario').value.trim(),
+        brand_id: document.getElementById('marca').value,
+        model: document.getElementById('modelo').value.trim(),
+        serial_number: document.getElementById('serie').value.trim(),
+        category_id: document.getElementById('categoria').value,
+        description: document.getElementById('descripcion').value.trim(),
+        is_active: document.getElementById('estado').value === '1'
+    };
 
-        // Recolectar datos del formulario
-        const data = {
-            inventory_number: document.getElementById('numeroInventario').value.trim(),
-            brand_id: document.getElementById('marca').value,
-            model: document.getElementById('modelo').value.trim(),
-            serial_number: document.getElementById('serie').value.trim(),
-            category_id: document.getElementById('categoria').value,
-            description: document.getElementById('descripcion').value.trim(),
-            is_active: document.getElementById('estado').value === '1'
-        };
+    const categoria = document.getElementById('categoria').value;
+    if (categoriasConCamposGenericos.includes(categoria)) {
+        data.cpu = document.getElementById('procesador')?.value.trim() || null;
+        data.speed = document.getElementById('velocidad')?.value.trim() || null;
+        data.memory = document.getElementById('memoria')?.value.trim() || null;
+        data.storage = document.getElementById('almacenamiento')?.value.trim() || null;
+    }
 
-        // Campos dinámicos por categoría
-        const categoria = document.getElementById('categoria').value;
+    const url = editingAssetId ? `/assets/${editingAssetId}` : '/assets';
+    const method = editingAssetId ? 'PUT' : 'POST';
 
-        // Categorías que tienen campos dinámicos
-        const categoriasConCamposGenericos = ['1', '2', '5'];
+    try {
+        const res = await fetch(url, {
+            method: method,
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': csrfToken
+            },
+            body: JSON.stringify(data)
+        });
 
-        if (categoriasConCamposGenericos.includes(categoria)) {
-            data.cpu = document.getElementById('procesador')?.value.trim() || null;
-            data.speed = document.getElementById('velocidad')?.value.trim() || null;
-            data.memory = document.getElementById('memoria')?.value.trim() || null;
-            data.storage = document.getElementById('almacenamiento')?.value.trim() || null;
+        const result = await res.json();
+
+        if (!result.ok) {
+            if (result.errors) {
+                alert('Errores:\n' + Object.values(result.errors).flat().join('\n'));
+            } else {
+                alert(result.message || 'Error en la operación');
+            }
+            return;
         }
 
-        try {
-            const response = await fetch('/assets', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': csrfToken
-                },
-                body: JSON.stringify(data)
-            });
+        // Cerrar modal y reset
+        const modalNuevo = bootstrap.Modal.getInstance(document.getElementById('modalNuevoBien'));
+        modalNuevo.hide();
+        formNuevoBien.reset();
+        camposDinamicos.innerHTML = '';
+        editingAssetId = null;
 
-            const result = await response.json();
+        // Modal éxito
+        document.getElementById('mensajeExito').textContent = result.message;
+        new bootstrap.Modal(document.getElementById('modalExito')).show();
 
-            if (!result.ok) {
-                if (result.errors) {
-                    let messages = Object.values(result.errors).flat().join('\n');
-                    alert('Errores:\n' + messages);
-                } else {
-                    alert(result.message || 'Error al crear el activo');
-                }
-                return;
-            }
+        // Actualizar DataTable
+        const table = $('#file_export').DataTable();
+        const nuevoAsset = { ...result.data, brand: result.data.brand, category: result.data.category, is_active_label: result.data.is_active ? 'Activo' : 'Inactivo' };
 
-            // Éxito: cerrar modal, limpiar formulario y refrescar tabla
-            const modalNuevo = bootstrap.Modal.getInstance(document.getElementById('modalNuevoBien'));
-            modalNuevo.hide();
-            formNuevoBien.reset();
-            camposDinamicos.innerHTML = '';
-
-            // --- Mostrar modal de éxito ---
-            document.getElementById('mensajeExito').textContent = result.message;
-            const modalExito = new bootstrap.Modal(document.getElementById('modalExito'));
-            modalExito.show();
-
-            // --- Transformar el asset para DataTable ---
-            const nuevoAsset = {
-                ...result.data,
-                brand: result.data.brand,
-                category: result.data.category,
-                is_active_label: result.data.is_active ? 'Activo' : 'Inactivo'
-            };
-
-            // --- Agregar a DataTable ---
-            const table = $('#file_export').DataTable();
+        if (method === 'POST') {
             const rowNode = table.row.add(nuevoAsset).draw(false).node();
-
             const estadoTd = rowNode.querySelector('td:nth-child(6)');
             if (estadoTd) {
-                estadoTd.innerHTML = `<span class="badge ${nuevoAsset.is_active ? 'bg-success' : 'bg-danger'} rounded-pill px-3 py-1">
-                    ${nuevoAsset.is_active_label}
-                </span>`;
+                estadoTd.innerHTML = `<span class="badge ${nuevoAsset.is_active ? 'bg-success' : 'bg-danger'} rounded-pill px-3 py-1">${nuevoAsset.is_active_label}</span>`;
             }
+        } else {
+            const updatedAsset = {
+                ...nuevoAsset,
+                brand: nuevoAsset.brand || { name: '' },
+                category: nuevoAsset.category || { name: '' }
+            };
 
-        } catch (error) {
-            console.error('Error al crear el activo:', error);
-            alert('Ocurrió un error inesperado. Revisa la consola.');
+            const row = document.querySelector(`#file_export tbody button.btn-editar[data-id='${result.data.id}']`).closest('tr');
+            table.row(row).data(updatedAsset).draw(false);
         }
-    });
-}
 
+    } catch(err) {
+        console.error('Error al enviar el formulario:', err);
+        alert('Ocurrió un error inesperado. Revisa la consola.');
+    }
+});
 
 // ------------------------------
 // Eliminar bien
@@ -342,39 +336,33 @@ document.addEventListener('click', async (e) => {
 
 
 // ------------------------------
-// Modal dinámico para "Nuevo Bien" y "Editar Bien"
+// Modal para Nuevo/Editar
 // ------------------------------
 document.addEventListener('DOMContentLoaded', () => {
     const modalElement = document.getElementById('modalNuevoBien');
     const modalTitle = modalElement.querySelector('.modal-title');
     const modalSubmitBtn = modalElement.querySelector('button[type="submit"]');
-    const formNuevoBien = document.getElementById('formNuevoBien');
-    const camposDinamicos = document.getElementById('camposDinamicos');
 
-    // Delegación de eventos: botones Editar dentro de la tabla
-    document.querySelector('#file_export tbody').addEventListener('click', async function(e) {
+    document.querySelector('#file_export tbody').addEventListener('click', async e => {
         const btnEditar = e.target.closest('.btn-editar');
         if (!btnEditar) return;
 
-        // Obtener ID del asset desde el row o data-id del botón
         const row = btnEditar.closest('tr');
         const id = row.dataset.id || btnEditar.dataset.id;
         if (!id) return;
 
         try {
-            // Fetch a details para obtener todos los campos
-            const response = await fetch('/assets/api?option=details');
-            const result = await response.json();
+            const res = await fetch('/assets/api?option=details');
+            const result = await res.json();
             if (!result.ok) throw new Error(result.message || 'Error al obtener detalles');
 
             const asset = result.data.find(a => a.id == id);
             if (!asset) throw new Error('Activo no encontrado');
 
-            // --- Cambiar título y botón ---
+            editingAssetId = asset.id;
             modalTitle.innerHTML = '<i class="fas fa-laptop me-2"></i>Editar Bien';
             modalSubmitBtn.innerHTML = '<i class="fas fa-save me-1"></i>Actualizar';
 
-            // --- Rellenar campos del formulario ---
             formNuevoBien.querySelector('#numeroInventario').value = asset.inventory_number ?? '';
             formNuevoBien.querySelector('#marca').value = asset.brand?.id ?? '';
             formNuevoBien.querySelector('#modelo').value = asset.model ?? '';
@@ -383,11 +371,8 @@ document.addEventListener('DOMContentLoaded', () => {
             formNuevoBien.querySelector('#categoria').value = asset.category?.id ?? '';
             formNuevoBien.querySelector('#descripcion').value = asset.description ?? '';
 
-            // --- Campos dinámicos según categoría ---
-            const categoriasConCamposGenericos = ['1','2','5'];
             if (categoriasConCamposGenericos.includes(String(asset.category?.id))) {
                 camposDinamicos.innerHTML = camposGenericos;
-
                 formNuevoBien.querySelector('#procesador').value = asset.cpu ?? '';
                 formNuevoBien.querySelector('#velocidad').value = asset.speed ?? '';
                 formNuevoBien.querySelector('#memoria').value = asset.memory ?? '';
@@ -396,21 +381,19 @@ document.addEventListener('DOMContentLoaded', () => {
                 camposDinamicos.innerHTML = '';
             }
 
-            // --- Mostrar modal ---
-            const modalBootstrap = new bootstrap.Modal(modalElement);
-            modalBootstrap.show();
+            new bootstrap.Modal(modalElement).show();
 
-        } catch (error) {
-            console.error('Error al cargar asset para editar:', error);
-            alert('No se pudo cargar el activo para editar. Revisa la consola.');
+        } catch(err) {
+            console.error('Error al cargar asset para editar:', err);
+            alert('No se pudo cargar el activo. Revisa la consola.');
         }
     });
 
-    // Reset modal al cerrar
     modalElement.addEventListener('hidden.bs.modal', () => {
         modalTitle.innerHTML = '<i class="fas fa-laptop me-2"></i>Nuevo Bien';
         modalSubmitBtn.innerHTML = '<i class="fas fa-plus me-1"></i>Guardar';
         formNuevoBien.reset();
         camposDinamicos.innerHTML = '';
+        editingAssetId = null;
     });
 });
