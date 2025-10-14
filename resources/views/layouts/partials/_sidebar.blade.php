@@ -62,7 +62,7 @@
                                         </a>
                                     </li>
                                     <li class="sidebar-item">
-                                        <a class="sidebar-link" href="{{ route('brands.index') }}"
+                                        <a class="sidebar-link" href="{{ route('personnel-asset-pending.index') }}"
                                             aria-expanded="false">
                                             <span>
                                                 <i class="ti ti-arrow-right"></i>
