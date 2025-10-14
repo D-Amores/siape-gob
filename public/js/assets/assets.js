@@ -108,7 +108,11 @@ document.addEventListener('DOMContentLoaded', function () {
                             data-bs-target="#modalDetallesBien">
                             <i class="fas fa-eye"></i>
                         </button>
-                        <button class="btn btn-outline-primary btn-sm mx-1" title="Editar">
+                        <button class="btn btn-outline-primary btn-sm mx-1 btn-editar"
+                                title="Editar"
+                                data-bs-toggle="modal"
+                                data-id="${row.id}"
+                                data-bs-target="#modalNuevoBien">
                             <i class="fas fa-edit"></i>
                         </button>
                         <button
@@ -334,4 +338,79 @@ document.addEventListener('click', async (e) => {
         console.error('Error al eliminar el activo:', error);
         alert('Ocurrió un error inesperado. Revisa la consola.');
     }
+});
+
+
+// ------------------------------
+// Modal dinámico para "Nuevo Bien" y "Editar Bien"
+// ------------------------------
+document.addEventListener('DOMContentLoaded', () => {
+    const modalElement = document.getElementById('modalNuevoBien');
+    const modalTitle = modalElement.querySelector('.modal-title');
+    const modalSubmitBtn = modalElement.querySelector('button[type="submit"]');
+    const formNuevoBien = document.getElementById('formNuevoBien');
+    const camposDinamicos = document.getElementById('camposDinamicos');
+
+    // Delegación de eventos: botones Editar dentro de la tabla
+    document.querySelector('#file_export tbody').addEventListener('click', async function(e) {
+        const btnEditar = e.target.closest('.btn-editar');
+        if (!btnEditar) return;
+
+        // Obtener ID del asset desde el row o data-id del botón
+        const row = btnEditar.closest('tr');
+        const id = row.dataset.id || btnEditar.dataset.id;
+        if (!id) return;
+
+        try {
+            // Fetch a details para obtener todos los campos
+            const response = await fetch('/assets/api?option=details');
+            const result = await response.json();
+            if (!result.ok) throw new Error(result.message || 'Error al obtener detalles');
+
+            const asset = result.data.find(a => a.id == id);
+            if (!asset) throw new Error('Activo no encontrado');
+
+            // --- Cambiar título y botón ---
+            modalTitle.innerHTML = '<i class="fas fa-laptop me-2"></i>Editar Bien';
+            modalSubmitBtn.innerHTML = '<i class="fas fa-save me-1"></i>Actualizar';
+
+            // --- Rellenar campos del formulario ---
+            formNuevoBien.querySelector('#numeroInventario').value = asset.inventory_number ?? '';
+            formNuevoBien.querySelector('#marca').value = asset.brand?.id ?? '';
+            formNuevoBien.querySelector('#modelo').value = asset.model ?? '';
+            formNuevoBien.querySelector('#serie').value = asset.serial_number ?? '';
+            formNuevoBien.querySelector('#estado').value = asset.is_active ? '1' : '0';
+            formNuevoBien.querySelector('#categoria').value = asset.category?.id ?? '';
+            formNuevoBien.querySelector('#descripcion').value = asset.description ?? '';
+
+            // --- Campos dinámicos según categoría ---
+            const categoriasConCamposGenericos = ['1','2','5'];
+            if (categoriasConCamposGenericos.includes(String(asset.category?.id))) {
+                camposDinamicos.innerHTML = camposGenericos;
+
+                formNuevoBien.querySelector('#procesador').value = asset.cpu ?? '';
+                formNuevoBien.querySelector('#velocidad').value = asset.speed ?? '';
+                formNuevoBien.querySelector('#memoria').value = asset.memory ?? '';
+                formNuevoBien.querySelector('#almacenamiento').value = asset.storage ?? '';
+            } else {
+                camposDinamicos.innerHTML = '';
+            }
+
+            // --- Mostrar modal ---
+            const modalBootstrap = new bootstrap.Modal(modalElement);
+            modalBootstrap.show();
+
+        } catch (error) {
+            console.error('Error al cargar asset para editar:', error);
+            alert('No se pudo cargar el activo para editar. Revisa la consola.');
+        }
+    });
+
+    // Reset modal al cerrar
+    modalElement.addEventListener('hidden.bs.modal', () => {
+        modalTitle.innerHTML = '<i class="fas fa-laptop me-2"></i>Nuevo Bien';
+        modalSubmitBtn.innerHTML = '<i class="fas fa-plus me-1"></i>Guardar';
+        formNuevoBien.reset();
+        camposDinamicos.innerHTML = '';
+    });
 });
