@@ -50,6 +50,7 @@
 
     <div class="dark-transparent sidebartoggler"></div>
 
+    <!-- Modal para Nueva Asignación Pendiente -->
     <div class="modal fade" id="addAssignmentModal" tabindex="-1" aria-labelledby="addAssignmentModalLabel"
         aria-hidden="true">
         <div class="modal-dialog modal-md modal-dialog-centered">
@@ -57,20 +58,21 @@
 
                 <div class="modal-header bg-dark text-white py-3">
                     <h5 class="modal-title fw-bold text-center w-100 m-0 text-white" id="addAssignmentModalLabel">
-                        <i class="ti ti-arrows-exchange me-2"></i>Nueva Asignación
+                        <i class="ti ti-arrows-exchange me-2"></i>Nueva Asignación Pendiente
                     </h5>
                 </div>
 
                 <form id="assignmentForm">
+                    @csrf
                     <div class="modal-body p-4">
+
                         <!-- Select para Personal -->
                         <div class="mb-4">
                             <label for="assignedUser" class="form-label fw-semibold">
                                 <i class="ti ti-user me-2 text-primary"></i>Personal
                             </label>
-                            <select class="form-control form-control-lg select2-user" id="assignedUser" name="user_id"
-                                required>
-                                <option value="">Seleccione un funcionario</option>
+                            <select class="form-control" id="assignedUser" name="personnel_id" required>
+                                {{-- <option value="">Cargando personal...</option> --}}
                             </select>
                         </div>
 
@@ -79,11 +81,11 @@
                             <label for="assignedAsset" class="form-label fw-semibold">
                                 <i class="ti ti-package me-2 text-success"></i>Bien
                             </label>
-                            <select class="form-control form-control-lg select2-asset" id="assignedAsset" name="asset_id"
-                                required>
-                                <option value="">Seleccione un bien</option>
+                            <select class="form-control" id="assignedAsset" name="asset_id" required>
+                                {{-- <option value="">Cargando bienes...</option> --}}
                             </select>
                         </div>
+
                     </div>
 
                     <div class="modal-footer">
@@ -91,7 +93,7 @@
                             <i class="fas fa-times me-2"></i>Cancelar
                         </button>
                         <button type="submit" class="btn btn-primary">
-                            <i class="ti ti-check me-2"></i>Asignar
+                            <i class="ti ti-check me-2"></i>Crear Asignación
                         </button>
                     </div>
                 </form>
@@ -154,4 +156,7 @@
     <script>
         const language = "{{ asset('cdn/datatables-language/es-MX.json') }}";
     </script>
+    <script src="{{ asset('js/admin/assigment/assets.js') }}"></script>
+    <script src="{{ asset('js/admin/assigment/personnel.js') }}"></script>
+    <script src="{{ asset('js/admin/assigment/assigments.js') }}"></script>
 @endsection
