@@ -22,16 +22,12 @@ async function getPersonnelApi() {
         if (!response.ok) throw new Error(`Error HTTP: ${response.status}`);
 
         const result = await response.json();
-        console.log('Datos recibidos del personal:', result);
 
         if (result.ok) {
             return result.data;
-        } else {
-            showAlert(result.message || 'Error al cargar los datos del personal', 'red');
         }
     } catch (error) {
-        console.error('Error en getPersonnelApi:', error);
-        showAlert('Error al cargar los datos. Intente nuevamente.', 'red');
+        console.error('Error en obtener personal:', error);
     }
     return [];
 }
@@ -51,16 +47,12 @@ async function getAreaApi() {
         if (!response.ok) throw new Error(`Error HTTP: ${response.status}`);
 
         const result = await response.json();
-        console.log('✅ Áreas cargadas:', result);
 
         if (result.ok) {
             return result.data;
-        } else {
-            showAlert(result.message || 'Error al cargar las áreas', 'red');
         }
     } catch (error) {
-        console.error('❌ Error en getAreaApi:', error);
-        showAlert('Error en la solicitud. Intente nuevamente.', 'red');
+        console.error('Error en obtener areas:', error);
     }
     return [];
 }

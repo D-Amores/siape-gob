@@ -9,8 +9,7 @@
 @section('subtitle', 'Gestión de usuarios')
 
 @section('actions')
-    <button class="btn btn-primary w-md-auto me-2" id="btnOpenmodalUserCreate" data-bs-toggle="modal"
-        data-bs-target="#modalUserCreate">
+    <button class="btn btn-primary w-md-auto me-2" id="btnOpenmodalUserCreate">
         <i class="bx bx-plus me-1"></i>
         Crear Usuario
     </button>
@@ -67,9 +66,9 @@
                                         </td>
                                         <td>
                                             <div class="btn-group" role="group">
-                                                <button class="btn btn-sm btn-outline-success"><i
+                                                <button class="btn btn-sm btn-outline-success btn-edit" data-id="1"><i
                                                         class="bx bx-edit"></i></button>
-                                                <button class="btn btn-sm btn-outline-danger"><i
+                                                <button class="btn btn-sm btn-outline-danger btn-delete" data-id="1"><i
                                                         class="bx bx-trash"></i></button>
                                             </div>
                                         </td>
@@ -105,6 +104,22 @@
                             </div>
 
                             <div class="col-md-6">
+                                <label for="password" class="form-label">
+                                    <i class="bx bx-lock me-1"></i> Contraseña *
+                                </label>
+                                <input type="password" class="form-control" id="password" name="password" required>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="personnel_id" class="form-label">
+                                    <i class="bx bx-buildings me-1"></i> Asignar Personal *
+                                </label>
+                                <select class="form-select personnelSelect select2" id="personnel_id" name="personnel_id">
+                                    <option value="">Seleccionar personal...</option>
+                                </select>
+                            </div>
+
+                            {{-- <div class="col-md-6">
                                 <label for="area_id" class="form-label">
                                     <i class="bx bx-buildings me-1"></i> Área
                                 </label>
@@ -119,7 +134,7 @@
                                 <select class="form-select rol-select" id="rol" name="rol" required>
                                     <option value="">Seleccionar rol...</option>
                                 </select>
-                            </div>
+                            </div> --}}
                         </div>
 
                         <div class="alert alert-info mt-3">
@@ -204,7 +219,7 @@
                     </div>
                     <div class="modal-footer d-flex flex-row justify-content-md-end ps-1 justify-content-center">
                         <button type="button" class="btn btn-outline-secondary" id="btnCloseModalUserEdit">Cancelar</button>
-                        <button type="button" class="btn btn-primary" id="btnUserEdit">
+                        <button type="button" class="btn btn-primary" id="btnUserUpdate">
                             <span class="spinner-border spinner-border-sm me-2 d-none" id="userEditSpinner"
                                 role="status"></span>
                             <i class="bx bx-save d-none d-md-inline me-1"></i> Guardar Cambios
@@ -218,7 +233,7 @@
 @endsection
 
 @section('scripts')
-    {{-- <script>
+    <script>
         const languageDataTable = '{{ asset('cdn/datatables-language/es-MX.json') }}';
     </script>
     <script src="{{ asset('modernize/assets/libs/datatables.net/js/jquery.dataTables.min.js') }}"></script>
@@ -226,6 +241,7 @@
 
     <!-- Scripts para manejar usuarios -->
     <script src="{{ asset('js/admin/alerts.js') }}"></script>
-    <script src="{{ asset('js/admin/modal-actions.js') }}"></script>
-    <script src="{{ asset('js/admin/users/users.js') }}"></script> --}}
+    <script src="{{ asset('js/admin/modal-actions1.js') }}"></script>
+    <script src="{{ asset('js/admin/panel-api.js') }}"></script>
+    <script src="{{ asset('js/admin/users/users.js') }}"></script>
 @endsection
