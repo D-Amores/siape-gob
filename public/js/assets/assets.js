@@ -100,20 +100,24 @@ document.addEventListener('DOMContentLoaded', function () {
                     className: 'text-center',
                     orderable: false,
                     render: (data, type, row) => `
-                    <button
-                        class="btn btn-outline-info btn-sm mx-1 btn-ver"
-                        title="Ver"
-                        data-id="${row.id}"
-                        data-bs-toggle="modal"
-                        data-bs-target="#modalDetallesBien">
-                        <i class="fas fa-eye"></i>
-                    </button>
-                    <button class="btn btn-outline-primary btn-sm mx-1" title="Editar">
-                        <i class="fas fa-edit"></i>
-                    </button>
-                    <button class="btn btn-outline-danger btn-sm mx-1" title="Eliminar">
-                        <i class="fas fa-trash"></i>
-                    </button>`
+                        <button
+                            class="btn btn-outline-info btn-sm mx-1 btn-ver"
+                            title="Ver"
+                            data-id="${row.id}"
+                            data-bs-toggle="modal"
+                            data-bs-target="#modalDetallesBien">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                        <button class="btn btn-outline-primary btn-sm mx-1" title="Editar">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button
+                            class="btn btn-outline-danger btn-sm mx-1 btn-delete-asset"
+                            data-id="${row.id}"
+                            title="Eliminar">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    `
                 }
             ]
         });
@@ -285,3 +289,49 @@ if (formNuevoBien) {
         }
     });
 }
+
+
+// ------------------------------
+// Eliminar bien
+// ------------------------------
+document.addEventListener('click', async (e) => {
+    const deleteButton = e.target.closest('.btn-delete-asset');
+    if (!deleteButton) return;
+
+    const id = deleteButton.dataset.id;
+    if (!id) return;
+
+    if (!confirm('¿Estás seguro de eliminar este activo? Esta acción no se puede deshacer.')) {
+        return;
+    }
+
+    try {
+        const response = await fetch(`/assets/${id}`, {
+            method: 'DELETE',
+            headers: {
+                'X-CSRF-TOKEN': csrfToken
+            }
+        });
+
+        const result = await response.json();
+
+        if (!result.ok) {
+            alert(result.message || 'Error al eliminar el activo');
+            return;
+        }
+
+        // Éxito: eliminar fila de DataTable
+        const table = $('#file_export').DataTable();
+        const row = deleteButton.closest('tr');
+        table.row(row).remove().draw();
+
+        // --- Mostrar modal de éxito ---
+        document.getElementById('mensajeExito').textContent = result.message;
+        const modalExito = new bootstrap.Modal(document.getElementById('modalExito'));
+        modalExito.show();
+
+    } catch (error) {
+        console.error('Error al eliminar el activo:', error);
+        alert('Ocurrió un error inesperado. Revisa la consola.');
+    }
+});
