@@ -1,3 +1,4 @@
+let dataOriginal = [];
 //funciones auxiliares
 function resetFormAndSelect(form) {
     form.reset();
@@ -16,6 +17,51 @@ function closeModal(modalId, focusButtonId) {
     document.getElementById(focusButtonId)?.focus();
     modal?.hide();
 }
+
+function getChangedData(original, current) {
+    const changed = {};
+
+    // 🔹 Función auxiliar para normalizar tipos
+    const normalizeValue = (key, value) => {
+        if (value === null || value === undefined) return value;
+
+        const strValue = String(value).trim();
+
+        // Si termina en _id o es numérico → número
+        if (key.endsWith('_id') || /^-?\d+$/.test(strValue)) {
+            return Number(strValue);
+        }
+
+        // Si parece booleano → boolean
+        if (["true", "false", "1", "0"].includes(strValue.toLowerCase())) {
+            return strValue === "true" || strValue === "1";
+        }
+
+        return strValue;
+    };
+
+    // 🔹 Comparamos ambos objetos normalizados
+    for (const key in current) {
+        const normalizedCurrent = normalizeValue(key, current[key]);
+        const normalizedOriginal = normalizeValue(key, original[key]);
+
+        if (normalizedCurrent !== normalizedOriginal) {
+            changed[key] = normalizedCurrent;
+        }
+    }
+
+    console.log("🟦 Original (normalized):", Object.fromEntries(
+        Object.entries(original).map(([k, v]) => [k, normalizeValue(k, v)])
+    ));
+    console.log("🟩 Current (normalized):", Object.fromEntries(
+        Object.entries(current).map(([k, v]) => [k, normalizeValue(k, v)])
+    ));
+    console.log("🟧 Changed Data:", changed);
+
+    return changed;
+}
+
+
 
 // Cargar datos en las tablas y selects
 async function areasToSelect() {
@@ -73,6 +119,61 @@ async function personnelCreate() {
     });
 }
 
+//funcion para actualizar personal
+async function personnelUpdate() {
+    const personnel = document.getElementById('personnelEditForm');
+    const spinnerPersonnel = document.getElementById('personnelEditSpinner');
+    const btnPersonnelEdit = document.getElementById('btnPersonnelEdit');
+    const btnPersonnelUpdate = document.getElementById('btnPersonnelUpdate');
+
+    const formData = new FormData(personnel);
+    const data = {};
+    let personnelId = null;
+
+    formData.forEach((value, key) => {  
+        const trimmedValue = value.trim();
+
+        if (key === "personnel_id") {
+            personnelId = trimmedValue; // Guardamos aparte
+        } else if (trimmedValue !== "") {
+            // Solo agregamos si tiene contenido
+            data[key] = trimmedValue;
+        }
+    });
+
+    // 🔍 Solo enviar los campos que cambiaron
+    const changedData = getChangedData(dataOriginal, data);
+    console.log("Datos modificados:", changedData);
+
+    // Si no hay cambios, cancelamos
+    if (Object.keys(changedData).length === 0) {
+        showAlert('No se detectaron cambios para actualizar.', 'blue', 'Sin cambios');
+        return;
+    }
+
+    console.log('Datos a actualizar:', changedData);
+    confirmUpdate(async () => {
+        // Deshabilitar botón y mostrar spinner
+        spinnerPersonnel.classList.remove('d-none');
+        btnPersonnelUpdate.disabled = true;
+        
+        // Llamar a la función para almacenar el personal
+        const isOk = await updatePersonnel(personnelId, changedData);
+        if (isOk) {
+            closeModal('personnelModalEdit', 'btnPersonnelEdit');
+            resetFormAndSelect(personnel);
+            btnPersonnelEdit.removeAttribute('id');
+            loadPersonnel(); // recarga la tabla solo si la creación fue exitosa
+            console.log('tabla recargada');
+        }
+
+        // Habilitar botón y ocultar spinner
+        spinnerPersonnel.classList.add('d-none');
+        btnPersonnelUpdate.disabled = false;
+    });
+
+}
+
 // Abrir modal de edición con datos del personal y actualizar
 async function openModalPersonnelEdit(personnelId) {
     const personnel = await showPersonnel(personnelId);
@@ -103,16 +204,22 @@ async function openModalPersonnelEdit(personnelId) {
     });
 
     console.log(personnel);
+    // Guardamos los datos originales para comparar después
+    dataOriginal = {
+        name: personnel.name || '',
+        last_name: personnel.last_name || '',
+        middle_name: personnel.middle_name || '',
+        phone: personnel.phone || '',
+        email: personnel.email || '',
+        is_active: personnel.is_active ? '1' : '0',
+        area_id: personnel.area_id || ''
+    };
 
     const modal = new bootstrap.Modal(document.getElementById("personnelModalEdit"));
     modal.show();
-
 }
 
-//funcion para actualizar personal
-async function personnelUpdate(personnelId) {
 
-}
 
 // Guardar el estado de las pestañas en localStorage
 function saveTabsState() {
@@ -138,6 +245,7 @@ async function initAdminPanel() {
 
     const btnCreatePersonnel = document.getElementById('btnPersonnelCreate');
     const personnelTableTbody = document.querySelector('#dataPersonnelTable tbody');
+    const btnPersonnelUpdate = document.getElementById('btnPersonnelUpdate');
 
 
     saveTabsState(); // Guarda el estado de las pestañas
@@ -145,6 +253,7 @@ async function initAdminPanel() {
     await loadPersonnel(); // Carga el personal
 
     btnCreatePersonnel.addEventListener('click', personnelCreate);
+    btnPersonnelUpdate.addEventListener('click', personnelUpdate);
 
     personnelTableTbody.addEventListener('click', (e)=>{
         const btnEdit = e.target.closest('.btn-edit');
