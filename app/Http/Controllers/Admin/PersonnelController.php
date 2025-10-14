@@ -100,7 +100,12 @@ class PersonnelController extends Controller
      */
     public function show(Personnel $personnel)
     {
-        //
+        $personnel->load('area');
+        return response()->json([
+            'ok' => true,
+            'message' => 'Personal encontrado con éxito.',
+            'data' => $personnel,
+        ]);
     }
 
     /**

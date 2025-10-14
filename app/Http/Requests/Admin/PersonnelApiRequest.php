@@ -22,7 +22,7 @@ class PersonnelApiRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'option' => 'required|string|in:area,area_user',
+            'option' => 'required|string|in:area,area_user, show_personnel',
         ];
     }
 }

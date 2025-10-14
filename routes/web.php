@@ -43,7 +43,7 @@ Route::post('categories/api', [CategoryController::class, 'categoryApi']);
 
 //RUTA PARA EL CRUD DE PERSONAL
 Route::resource('admin/personnel', PersonnelController::class)->only([
-    'index', 'store', 'update', 'destroy'
+    'index', 'show', 'store', 'update', 'destroy'
 ]);
 Route::post('admin/personnel/api', [PersonnelController::class, 'personnelApi']);
 
