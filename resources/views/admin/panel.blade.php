@@ -497,5 +497,6 @@
     <script src="{{ asset('js/admin/personnel/form-validate.js') }}"></script>
     <script src="{{ asset('js/admin/panel-api.js') }}"></script>
     <script src="{{ asset('js/admin/modal-actions.js') }}"></script>
+    <script src="{{ asset('js/admin/helpers.js') }}"></script>
     <script src="{{ asset('js/admin/panel.js') }}"></script>
 @endsection
