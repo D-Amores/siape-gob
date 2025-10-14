@@ -9,8 +9,7 @@
 @section('subtitle', 'Gestión de personal y usuarios')
 
 @section('actions')
-    <button class="btn btn-primary w-md-auto me-2" id="btnAbrirCrearUsuario" data-bs-toggle="modal"
-        data-bs-target="#personnelModalCreate">
+    <button class="btn btn-primary w-md-auto me-2" id="btnpersonnelCreateModal">
         <i class="bx bx-plus me-1"></i>
         Registrar Personal
     </button>
@@ -25,22 +24,6 @@
     <div class="container-fluid" style="max-width: none;">
         <div class="row">
             <div class="col-12">
-                <!-- Header -->
-                {{-- <div class="card mb-4">
-                <div class="card-header d-flex flex-column flex-md-row align-items-center justify-content-between">
-                    <div class="mb-2 mb-md-0 d-flex flex-column align-items-center align-items-md-start">
-                        <h4 class="mb-0">
-                            Panel de Administración
-                        </h4>
-                        <small class="text-muted">Gestión de users y registros personnel</small>
-                    </div>
-                    <button class="btn btn-primary w-md-auto" id="btnAbrirCrearUsuario" data-bs-toggle="modal" data-bs-target="#userModalCreate">
-                        <i class="bx bx-plus me-1"></i>
-                        Crear Usuario
-                    </button>
-                </div>
-            </div> --}}
-
                 <!-- Tabs -->
                 <ul class="nav nav-tabs gap-2" id="adminTabs" role="tablist">
                     <li class="nav-item" role="presentation">
@@ -83,10 +66,11 @@
                                     </thead>
                                     <tbody>
                                         <tr>
-                                            <th scope="row">1</th>
+                                            <td scope="row">1</td>
                                             <td>
                                                 <div class="d-flex align-items-center">
-                                                    <img src="{{ asset('modernize/assets/images/profile/user-6.jpg') }}" class="rounded-circle" width="40" height="40">
+                                                    <img src="{{ asset('modernize/assets/images/profile/user-6.jpg') }}"
+                                                        class="rounded-circle" width="40" height="40">
                                                     <div class="ms-3">
                                                         <h6 class="fs-4 fw-semibold mb-0">Christopher Jamil</h6>
                                                         <span class="fw-normal">Morales Flores</span>
@@ -113,7 +97,8 @@
                                             <th scope="row">1</th>
                                             <td>
                                                 <div class="d-flex align-items-center">
-                                                    <img src="{{ asset('modernize/assets/images/profile/user-6.jpg') }}" class="rounded-circle" width="40" height="40">
+                                                    <img src="{{ asset('modernize/assets/images/profile/user-6.jpg') }}"
+                                                        class="rounded-circle" width="40" height="40">
                                                     <div class="ms-3">
                                                         <h6 class="fs-4 fw-semibold mb-0">Jose Jamil</h6>
                                                         <span class="fw-normal">Martinez Morales</span>
@@ -137,9 +122,6 @@
                                         </tr>
                                     </tbody>
                                 </table>
-                            </div>
-                            <div class="d-flex justify-content-center mt-3">
-                                {{-- Paginación si es necesario --}}
                             </div>
                         </div>
                     </div>
@@ -230,91 +212,196 @@
                     </div>
                 </div>
                 <!-- /Tabs -->
-
             </div>
         </div>
     </div>
 
-        <!-- Modal Crear Personal -->
-<div class="modal fade" id="personnelModalCreate" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
-  <div class="modal-dialog modal-dialog-centered modal-lg">
-    <div class="modal-content border border-primary border-2 shadow">
-      <div class="modal-header bg-primary text-white">
-        <h5 class="modal-title">
-          <i class="bx bx-user-plus me-2"></i>
-          Crear Nuevo Personal
-        </h5>
-      </div>
+    <!-- Modal Crear Personal -->
+    <div class="modal fade" id="personnelCreateModal" tabindex="-1" data-bs-backdrop="static"
+        data-bs-keyboard="false">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content border border-primary border-2 shadow">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title">
+                        <i class="bx bx-user-plus me-2"></i>
+                        Crear Nuevo Personal
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="alert alert-info m-3 d-none" id="personnelCreateAlert">
+                    <i class="bx bx-info-circle me-2"></i>
+                    Error de validación: Por favor, completa todos los campos obligatorios marcados con *
+                </div>
+                <form id="personnelCreateForm">
+                    <div class="modal-body pb-0">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label for="name" class="form-label">
+                                    <i class="bx bx-user me-1"></i> Nombre *
+                                </label>
+                                <input type="text" class="form-control" id="name" name="name" required
+                                    maxlength="255">
+                            </div>
 
-      <form id="personalCreateForm">
-        <div class="modal-body pb-0">
-          <div class="row g-3">
-            <div class="col-md-6">
-              <label for="name" class="form-label">
-                <i class="bx bx-user me-1"></i> Nombre *
-              </label>
-              <input type="text" class="form-control" id="name" name="name" required maxlength="255">
+                            <div class="col-md-6">
+                                <label for="last_name" class="form-label">
+                                    <i class="bx bx-user-pin me-1"></i> Apellido Paterno *
+                                </label>
+                                <input type="text" class="form-control" id="last_name" name="last_name" required
+                                    maxlength="255">
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="middle_name" class="form-label">
+                                    <i class="bx bx-user-circle me-1"></i> Apellido Materno
+                                </label>
+                                <input type="text" class="form-control" id="middle_name" name="middle_name"
+                                    maxlength="255">
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="email" class="form-label">
+                                    <i class="bx bx-envelope me-1"></i> Correo Electrónico *
+                                </label>
+                                <input type="email" class="form-control" id="email" name="email" required>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="phone" class="form-label">
+                                    <i class="bx bx-phone me-1"></i> Teléfono
+                                </label>
+                                <input type="text" class="form-control" id="phone" name="phone"
+                                    maxlength="20">
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="area_id" class="form-label">
+                                    <i class="bx bx-buildings me-1"></i> Área *
+                                </label>
+                                <select class="form-select areaSelect select2" id="area_id" name="area_id" required>
+                                    <option value="">Seleccionar área...</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="alert alert-info mt-3">
+                            <i class="bx bx-info-circle me-2"></i>
+                            Recuerda verificar que los datos sean correctos antes de guardar el registro.
+                        </div>
+                    </div>
+
+                    <div class="modal-footer ps-1 d-flex flex-row justify-content-end">
+                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal"
+                            id="btnClosePersonnelCreate">
+                            Cancelar
+                        </button>
+                        <button type="button" class="btn btn-primary" id="btnPersonnelCreate">
+                            <span class="spinner-border spinner-border-sm me-2 d-none" id="spinnerPersonnelCreate"
+                                role="status"></span>
+                            <i class="bx bx-plus me-1 d-none d-md-inline"></i>
+                            Crear Personal
+                        </button>
+                    </div>
+                </form>
             </div>
-
-            <div class="col-md-6">
-              <label for="last_name" class="form-label">
-                <i class="bx bx-user-pin me-1"></i> Apellido Paterno *
-              </label>
-              <input type="text" class="form-control" id="last_name" name="last_name" required maxlength="255">
-            </div>
-
-            <div class="col-md-6">
-              <label for="middle_name" class="form-label">
-                <i class="bx bx-user-circle me-1"></i> Apellido Materno
-              </label>
-              <input type="text" class="form-control" id="middle_name" name="middle_name" maxlength="255">
-            </div>
-
-            <div class="col-md-6">
-              <label for="email" class="form-label">
-                <i class="bx bx-envelope me-1"></i> Correo Electrónico *
-              </label>
-              <input type="email" class="form-control" id="email" name="email" required>
-            </div>
-
-            <div class="col-md-6">
-              <label for="phone" class="form-label">
-                <i class="bx bx-phone me-1"></i> Teléfono
-              </label>
-              <input type="text" class="form-control" id="phone" name="phone" maxlength="20">
-            </div>
-
-            <div class="col-md-6">
-              <label for="area_id" class="form-label">
-                <i class="bx bx-buildings me-1"></i> Área *
-              </label>
-              <select class="form-select areaSelect" id="area_id" name="area_id" required>
-                <option value="">Seleccionar área...</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="alert alert-info mt-3">
-            <i class="bx bx-info-circle me-2"></i>
-            Recuerda verificar que los datos sean correctos antes de guardar el registro.
-          </div>
         </div>
-
-        <div class="modal-footer ps-1 d-flex flex-row justify-content-end">
-          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
-            Cancelar
-          </button>
-          <button type="button" class="btn btn-primary" id="btnPersonalCreate">
-            <span class="spinner-border spinner-border-sm me-2 d-none" id="personalCreateSpinner" role="status"></span>
-            <i class="bx bx-plus me-1 d-none d-md-inline"></i>
-            Crear Personal
-          </button>
-        </div>
-      </form>
     </div>
-  </div>
-</div>
 
+    <!-- Modal Editar personal -->
+    <div class="modal fade" id="personnelModalEdit" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <i class="bx bx-edit me-2"></i>
+                        Editar Usuario
+                    </h5>
+                    <!-- Quité el botón de cierre (X) -->
+                </div>
+                <form id="personnelEditForm">
+                    <input type="hidden" id="edit_personnel_id" name="personnel_id">
+                    <div class="modal-body">
+                        <div class="row g-3">
+                            <!-- Nombre -->
+                            <div class="col-md-6">
+                                <label for="edit_name" class="form-label">
+                                    <i class="bx bx-user me-1"></i> Nombre *
+                                </label>
+                                <input type="text" class="form-control" id="edit_name" name="name"
+                                    maxlength="255" required>
+                            </div>
+
+                            <!-- Apellido Paterno -->
+                            <div class="col-md-6">
+                                <label for="edit_last_name" class="form-label">
+                                    <i class="bx bx-user-pin me-1"></i> Apellido Paterno *
+                                </label>
+                                <input type="text" class="form-control" id="edit_last_name" name="last_name"
+                                    maxlength="255" required>
+                            </div>
+
+                            <!-- Apellido Materno -->
+                            <div class="col-md-6">
+                                <label for="edit_middle_name" class="form-label">
+                                    <i class="bx bx-user-circle me-1"></i> Apellido Materno
+                                </label>
+                                <input type="text" class="form-control" id="edit_middle_name" name="middle_name"
+                                    maxlength="255">
+                            </div>
+
+                            <!-- Teléfono -->
+                            <div class="col-md-6">
+                                <label for="edit_phone" class="form-label">
+                                    <i class="bx bx-phone me-1"></i> Teléfono
+                                </label>
+                                <input type="text" class="form-control" id="edit_phone" name="phone"
+                                    maxlength="20">
+                            </div>
+
+                            <!-- Correo electrónico -->
+                            <div class="col-md-6">
+                                <label for="edit_email" class="form-label">
+                                    <i class="bx bx-envelope me-1"></i> Correo electrónico *
+                                </label>
+                                <input type="email" class="form-control" id="edit_email" name="email"
+                                    maxlength="255" required>
+                            </div>
+
+                            <!-- Estado (Activo / Inactivo) -->
+                            <div class="col-md-6">
+                                <label for="edit_is_active" class="form-label">
+                                    <i class="bx bx-toggle-left me-1"></i> Estado
+                                </label>
+                                <select class="form-select" id="edit_is_active" name="is_active">
+                                    <option value="1">Activo</option>
+                                    <option value="0">Inactivo</option>
+                                </select>
+                            </div>
+
+                            <!-- Área -->
+                            <div class="col-md-6">
+                                <label for="edit_area_id" class="form-label">
+                                    <i class="bx bx-buildings me-1"></i> Área *
+                                </label>
+                                <select class="form-select areaSelect select2" id="edit_area_id" name="area_id" required>
+                                    <option value="">Seleccionar área...</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer d-flex flex-row justify-content-md-end ps-1 justify-content-center">
+                        <button type="button" class="btn btn-outline-secondary"
+                            id="btnClosePersonnelEdit">Cancelar</button>
+                        <button type="button" class="btn btn-primary" id="btnPersonnelUpdate">
+                            <span class="spinner-border spinner-border-sm me-2 d-none" id="personnelEditSpinner"
+                                role="status"></span>
+                            <i class="bx bx-save d-none d-md-inline me-1"></i> Guardar Cambios
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 
     <!-- Modal Crear Usuario -->
     <div class="modal fade" id="userModalCreate" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
@@ -360,7 +447,7 @@
                                 <label for="area_id" class="form-label">
                                     <i class="bx bx-buildings me-1"></i> Área
                                 </label>
-                                <select class="form-select areaSelect" id="area_id" name="area_id">
+                                <select class="form-select areaSelect select2" id="area_id" name="area_id">
                                     <option value="">Seleccionar área...</option>
                                 </select>
                             </div>
@@ -441,7 +528,7 @@
                                 <label for="edit_area_id" class="form-label">
                                     <i class="bx bx-buildings me-1"></i> Área
                                 </label>
-                                <select class="form-select areaSelect" id="edit_area_id" name="area_id">
+                                <select class="form-select areaSelect select2" id="edit_area_id" name="area_id">
                                     <option value="">Seleccionar área...</option>
                                 </select>
                             </div>
@@ -485,11 +572,23 @@
 
 @section('scripts')
     <script>
-        const languageDataTable = '{{ asset("cdn/datatables-language/es-MX.json") }}';
+        const languageDataTable = '{{ asset('cdn/datatables-language/es-MX.json') }}';
+        // const vURIPersonnel = window.location.origin + '/admin/personnel';
+        // const vURIAreaApi = window.location.origin + '/admin/area/api';
+        // console.log(vURIPersonnel);
     </script>
     <script src="{{ asset('modernize/assets/libs/datatables.net/js/jquery.dataTables.min.js') }}"></script>
     <script src="{{ asset('modernize/assets/js/datatable/datatable-advanced.init.js') }}"></script>
-    
+
     <!-- Script table-config.js -->
-    <script src="{{ asset('js/admin/table-config.js') }}"></script>
+    <script src="{{ asset('js/admin/personnel/table-config.js') }}"></script>
+
+    <!-- Script para manejar el panel de administración -->
+    <script src="{{ asset('js/admin/alerts.js') }}"></script>
+    <script src="{{ asset('js/admin/personnel/personnel-crud.js') }}"></script>
+    <script src="{{ asset('js/admin/personnel/form-actions.js') }}"></script>
+    <script src="{{ asset('js/admin/personnel/form-validate.js') }}"></script>
+    <script src="{{ asset('js/admin/panel-api.js') }}"></script>
+    <script src="{{ asset('js/admin/modal-actions.js') }}"></script>
+    <script src="{{ asset('js/admin/panel.js') }}"></script>
 @endsection

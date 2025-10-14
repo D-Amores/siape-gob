@@ -4,8 +4,8 @@
         <!-- ---------------------------------- -->
         <div class="brand-logo d-flex align-items-center justify-content-between">
             <a href="http://localhost/modernize/main/index.html" class="text-nowrap logo-img">
-                <img src="http://localhost/modernize/assets/images/logos/dark-logo.svg" class="dark-logo" alt="Logo-Dark">
-                <img src="http://localhost/modernize/assets/images/logos/light-logo.svg" class="light-logo"
+                <img src="{{ asset('modernize/assets/images/logos/dark-logo.svg') }}" class="dark-logo" alt="Logo-Dark">
+                <img src="{{ asset('modernize/assets/images/logos/light-logo.svg') }}" class="light-logo"
                     alt="Logo-light" style="display: none;">
             </a>
             <a href="javascript:void(0)" class="sidebartoggler ms-auto text-decoration-none fs-5 d-block d-xl-none">
@@ -89,7 +89,7 @@
         <div class="fixed-profile p-3 mx-4 mb-2 bg-secondary-subtle rounded mt-3">
             <div class="hstack gap-3">
                 <div class="john-img">
-                    <img src="http://localhost/modernize/assets/images/profile/user-1.jpg" class="rounded-circle"
+                    <img src="{{ asset('modernize/assets/images/profile/user-1.jpg') }}" class="rounded-circle"
                         width="40" height="40" alt="modernize-img">
                 </div>
                 <div class="john-title">
