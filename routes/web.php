@@ -48,10 +48,10 @@ Route::post('admin/personnel/api', [PersonnelController::class, 'personnelApi'])
 
 
 //RUTA PARA EL CRUD DE USUARIOS
-Route::resource('users', UserController::class)->only([
-    'store', 'update', 'destroy'
+Route::resource('admin/users', UserController::class)->only([
+    'index', 'show', 'store', 'update', 'destroy'
 ]);
-Route::post('users/api', [UserController::class, 'userApi']);
+Route::post('admin/users/api', [UserController::class, 'userApi']);
 
 //RUTA PARA EL CRUD DE AREAS
 Route::post('admin/area/api', [AreaController::class, 'areaApi']);
