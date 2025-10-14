@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Admin;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Contracts\Validation\Validator;
 
-class UpdatePersonnelAssetPendingRequest extends FormRequest
+class StorePersonnelAssetPendingRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.

@@ -9,7 +9,7 @@ use App\Http\Controllers\BrandController;
 
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\PersonnelAssetController;
-use App\Http\Controllers\PersonnelAssetPendingController;
+use App\Http\Controllers\Admin\PersonnelAssetPendingController;
 use App\Http\Controllers\TestController;
 
 Route::get('/', function () {

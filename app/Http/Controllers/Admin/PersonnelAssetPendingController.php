@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
-use App\Http\Requests\StorePersonnelAssetPendingRequest;
-use App\Http\Requests\UpdatePersonnelAssetPendingRequest;
 use App\Models\PersonnelAssetPending;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\StorePersonnelAssetPendingRequest;
+use App\Http\Requests\Admin\UpdatePersonnelAssetPendingRequest;
 
 class PersonnelAssetPendingController extends Controller
 {
@@ -13,7 +14,7 @@ class PersonnelAssetPendingController extends Controller
      */
     public function index()
     {
-        //
+        return view('admin.assigments');
     }
 
     /**
