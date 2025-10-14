@@ -73,11 +73,28 @@ async function personnelCreate() {
     });
 }
 
-// Abrir modal de edición con datos del personal
-function openPersonnelEditModal(personnel) {
-    // Llenar campos
-    document.getElementById('edit_personnel_id').value = personnel.id;
-    document.getElementById('edit_name').value = personnel.name;
+// Abrir modal de edición con datos del personal y actualizar
+async function openModalPersonnelEdit(personnelId) {
+    const personnel = await showPersonnel(personnelId);
+    if (!personnel) {
+        showAlert('No se pudo cargar la información del personal.', 'red', 'Error');
+        return;
+    }
+
+    // Llenar los campos del formulario de edición
+    document.getElementById('edit_personnel_id').value = personnel.id || '';
+    document.getElementById('edit_name').value = personnel.name || '';
+    document.getElementById('edit_last_name').value = personnel.last_name || '';
+    document.getElementById('edit_middle_name').value = personnel.middle_name || '';
+    document.getElementById('edit_phone').value = personnel.phone || '';
+    document.getElementById('edit_email').value = personnel.email || '';
+
+    // Estado (is_active)
+    const isActiveSelect = document.getElementById('edit_is_active');
+    Array.from(isActiveSelect.options).forEach(option => {
+        option.selected = option.value == (personnel.is_active ? '1' : '0');
+    });
+
 
     // Área
     const areaSelect = document.getElementById('edit_area_id');
@@ -85,15 +102,16 @@ function openPersonnelEditModal(personnel) {
         option.selected = option.value == (personnel.area?.id || '');
     });
 
-    // Rol (minúsculas para coincidir con el backend)
-    const rolSelect = document.getElementById('edit_rol');
-    Array.from(rolSelect.options).forEach(option => {
-        option.selected = option.value.toLowerCase() == (user.roles?.[0]?.name || '').toLowerCase();
-    });
+    console.log(personnel);
+
+    const modal = new bootstrap.Modal(document.getElementById("personnelModalEdit"));
+    modal.show();
+
 }
 
 //funcion para actualizar personal
 async function personnelUpdate(personnelId) {
+
 }
 
 // Guardar el estado de las pestañas en localStorage
@@ -119,7 +137,7 @@ function saveTabsState() {
 async function initAdminPanel() {
 
     const btnCreatePersonnel = document.getElementById('btnPersonnelCreate');
-    const personnelTable = document.getElementById('dataPersonnelTable');
+    const personnelTableTbody = document.querySelector('#dataPersonnelTable tbody');
 
 
     saveTabsState(); // Guarda el estado de las pestañas
@@ -128,15 +146,12 @@ async function initAdminPanel() {
 
     btnCreatePersonnel.addEventListener('click', personnelCreate);
 
-    personnelTable.querySelector('tbody').addEventListener('click', function(e) {
-        // Botón de Editar
-        const btnEdit = e.target.closest('.btn-edit'); // coincide con tu render de DataTable
+    personnelTableTbody.addEventListener('click', (e)=>{
+        const btnEdit = e.target.closest('.btn-edit');
         if (btnEdit) {
-            const row = btnEdit.closest('tr');
-            // Obtenemos los datos completos de la fila desde DataTable
-            const rowData = personnelTableInstance.row(row).data(); 
-            if (rowData) openPersonnelEditModal(rowData);
-            return;
+            btnEdit.id = 'btnPersonnelEdit'
+            const personnelId = btnEdit.getAttribute('data-id');
+            openModalPersonnelEdit(personnelId);
         }
     });
 
