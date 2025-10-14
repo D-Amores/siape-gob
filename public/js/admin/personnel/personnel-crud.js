@@ -115,3 +115,38 @@ async function showPersonnel(personnelId) {
     return personnel; // objeto personnel o null
 }
 
+async function destroyPersonnel(personnelId) {
+    let isOk = false; // usar let, no const
+    const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+    try {
+        const response = await fetch(`${vURIPersonnel}/${personnelId}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': csrfToken
+            }
+        });
+
+        if (!response.ok) {
+            if (response.status === 404) {
+                showAlert('El personal no fue encontrado.', 'red', 'Error', null, 2000);
+                return false;
+            } else {
+                throw new Error(`Error HTTP: ${response.status}`);
+            }
+        }
+
+        const result = await response.json();
+        if (result.ok) {
+            showAlert(result.message || 'Personal eliminado exitosamente', 'green', 'Éxito', null, 2000);
+            isOk = true;
+        } else {
+            showAlert(result.message || 'Error al eliminar el personal', 'red', 'Error', null, 2000);
+        }
+    } catch (error) {
+        console.error('Error en destroyPersonnel:', error);
+        showAlert('Error al eliminar el personal. Intente nuevamente.', 'red', 'Error');
+    }
+
+    return isOk; // true si se eliminó, false si no
+}
