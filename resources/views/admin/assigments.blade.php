@@ -93,7 +93,7 @@
                             <i class="fas fa-times me-2"></i>Cancelar
                         </button>
                         <button type="submit" class="btn btn-primary">
-                            <i class="ti ti-check me-2"></i>Crear Asignación
+                            <i class="fas fa-check me-2"></i>Crear Asignación
                         </button>
                     </div>
                 </form>

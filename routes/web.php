@@ -12,6 +12,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\PersonnelAssetController;
 use App\Http\Controllers\Admin\PersonnelAssetPendingController;
 use App\Http\Controllers\TestController;
+use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 
 Route::get('/', function () {
     return view('layouts.layout');
@@ -32,7 +33,7 @@ Route::middleware('auth')->group(function () {
 });
 
 
-Route::resource('assets', AssetController::class)->only(['index', 'store', 'update', 'destroy']);
+Route::resource('assets', AssetController::class)->only(['index', 'store', 'update', 'destroy'])->withoutMiddleware([VerifyCsrfToken::class]);
 Route::resource('brands', BrandController::class)->only(['index', 'store', 'update', 'destroy']);
 Route::resource('categories', CategoryController::class)->only(['index', 'store', 'update', 'destroy']);
 Route::resource('personnel-asset', PersonnelAssetController::class)->only(['index', 'store', 'update', 'destroy']);
@@ -44,7 +45,7 @@ Route::post('categories/api', [CategoryController::class, 'categoryApi']);
 //RUTA PARA EL CRUD DE PERSONAL
 Route::resource('admin/personnel', PersonnelController::class)->only([
     'index', 'show', 'store', 'update', 'destroy'
-]);
+])->withoutMiddleware([VerifyCsrfToken::class]);
 Route::post('admin/personnel/api', [PersonnelController::class, 'personnelApi']);
 
 
@@ -56,3 +57,5 @@ Route::post('users/api', [UserController::class, 'userApi']);
 
 //RUTA PARA EL CRUD DE AREAS
 Route::post('admin/area/api', [AreaController::class, 'areaApi']);
+
+Route::post('assets/api', [AssetController::class, 'assetsApi']);

@@ -38,7 +38,6 @@ class AssetController extends Controller
                 'message' => 'Activo creado exitosamente',
                 'data' => $asset
             ], 201);
-
         } catch (\Exception $e) {
             return response()->json([
                 'ok' => false,
@@ -69,7 +68,7 @@ class AssetController extends Controller
      */
     public function update(UpdateAssetRequest $request, Asset $asset)
     {
-        $data = $request -> validated();
+        $data = $request->validated();
         try {
             $asset->update($data);
 
@@ -91,19 +90,44 @@ class AssetController extends Controller
      */
     public function destroy(Asset $asset)
     {
-            try {
+        try {
             $asset->delete();
 
             return response()->json([
                 'ok' => true,
                 'message' => 'Activo eliminado exitosamente'
             ], 200);
-
         } catch (\Throwable $e) {
             return response()->json([
                 'ok' => false,
                 'message' => 'Error al eliminar el activo',
                 'error' => config('app.debug') ? $e->getMessage() : 'Error interno'
+            ], 500);
+        }
+    }
+
+    public function assetsApi()
+    {
+        try {
+            $assets = Asset::select('id', 'inventory_number', 'model')
+                ->orderBy('inventory_number', 'asc')
+                ->get()
+                ->map(function ($asset) {
+                    return [
+                        'id' => $asset->id,
+                        'text' => "{$asset->inventory_number} - {$asset->model}"
+                    ];
+                });
+
+            return response()->json([
+                'ok' => true,
+                'data' => $assets
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'ok' => false,
+                'message' => 'Error al obtener los bienes (assets)',
+                'error' => config('app.debug') ? $e->getMessage() : 'Error interno del servidor'
             ], 500);
         }
     }
