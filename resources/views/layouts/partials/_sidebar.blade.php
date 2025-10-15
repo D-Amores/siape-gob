@@ -5,8 +5,8 @@
         <div class="brand-logo d-flex align-items-center justify-content-between">
             <a href="http://localhost/modernize/main/index.html" class="text-nowrap logo-img">
                 <img src="{{ asset('modernize/assets/images/logos/dark-logo.svg') }}" class="dark-logo" alt="Logo-Dark">
-                <img src="{{ asset('modernize/assets/images/logos/light-logo.svg') }}" class="light-logo"
-                    alt="Logo-light" style="display: none;">
+                <img src="{{ asset('modernize/assets/images/logos/light-logo.svg') }}" class="light-logo" alt="Logo-light"
+                    style="display: none;">
             </a>
             <a href="javascript:void(0)" class="sidebartoggler ms-auto text-decoration-none fs-5 d-block d-xl-none">
                 <i class="ti ti-x"></i>
@@ -35,8 +35,7 @@
                                     <!-- Dashboard -->
                                     <!-- ---------------------------------- -->
                                     <li class="sidebar-item">
-                                        <a class="sidebar-link" href="#" id="get-url"
-                                            aria-expanded="false">
+                                        <a class="sidebar-link" href="#" id="get-url" aria-expanded="false">
                                             <span>
                                                 <i class="ti ti-home"></i>
                                             </span>
@@ -70,6 +69,15 @@
                                             <span class="hide-menu">Asignaciones</span>
                                         </a>
                                     </li>
+                                    <li class="sidebar-item">
+                                        <a class="sidebar-link" href="{{ route('personnel-asset.index') }}"
+                                            aria-expanded="false">
+                                            <span>
+                                                <i class="ti ti-arrows-exchange me-2"></i>
+                                            </span>
+                                            <span class="hide-menu">Aceptar Asignaciones</span>
+                                        </a>
+                                    </li>
                                     <!-- ADMIN -->
                                     <li class="nav-small-cap">
                                         <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
@@ -85,8 +93,7 @@
                                         </a>
                                     </li>
                                     <li class="sidebar-item">
-                                        <a class="sidebar-link" href="{{ route('users.index') }}"
-                                            aria-expanded="false">
+                                        <a class="sidebar-link" href="{{ route('users.index') }}" aria-expanded="false">
                                             <span>
                                                 <i class="ti ti-user"></i>
                                             </span>
