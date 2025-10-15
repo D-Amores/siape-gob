@@ -36,6 +36,8 @@ class User extends Authenticatable
         'remember_token',
     ];
 
+    protected $appends = ['avatar_url'];
+
     /**
      * Get the attributes that should be cast.
      *
@@ -56,5 +58,17 @@ class User extends Authenticatable
     public function area()
     {
         return $this->belongsTo(Area::class);
+    }
+
+    public function getAvatarUrlAttribute(): string
+    {
+        if ($this->profile_picture) {
+            return asset('storage/' . $this->profile_picture);
+        }
+
+        // Generar número entre 1 y 7 (basado en el id)
+        $defaultNumber = ($this->id % 7) + 1;
+
+        return asset("storage/avatars/user-{$defaultNumber}.jpg");
     }
 }

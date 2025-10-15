@@ -1,18 +1,20 @@
-let personnelTable = null;
+let usersTable = null;
 
 /**
- * Inicializa o actualiza la tabla de personal.
- * @param {Array} data - Datos del personal obtenidos del backend.
+ * Inicializa o actualiza la tabla de usuarios.
+ * @param {Array} data - Datos de usuarios obtenidos del backend.
  */
-function loadPersonnelTable(data) {
-    // Si ya existe la tabla, solo actualizamos los datos
-    if (personnelTable) {
-        personnelTable.clear().rows.add(data).draw();
+function loadUsersTable(data) {
+    const tableSelector = "#dataUsersTable";
+
+    // Si ya existe la tabla, actualizamos los datos
+    if (usersTable) {
+        usersTable.clear().rows.add(data).draw();
         return;
     }
 
-    // Inicializar DataTable
-    personnelTable = new DataTable("#dataPersonnelTable", {
+    // Inicializamos la DataTable sobre tu estructura existente
+    usersTable = new DataTable(tableSelector, {
         data: data,
         columns: [
             {
@@ -22,51 +24,51 @@ function loadPersonnelTable(data) {
             },
             {
                 data: null,
-                title: "Nombre(s)",
+                title: "Usuario",
                 render: (row) => `
                     <div class="d-flex align-items-center">
+                        <img src="${row.avatar_url}"
+                             class="rounded-circle" width="40" height="40"
+                             alt="Avatar de ${row.username}">
                         <div class="ms-3">
                             <h6 class="fs-4 fw-semibold mb-0 text-truncate"
-                                style="max-width: 140px;">
-                                ${row.name ?? ''}
-                            </h6>
-                            <span class="fw-normal text-truncate"
-                                  style="display: inline-block; max-width: 140px; cursor: pointer;"
-                                  title="${(row.middle_name ?? '') + ' ' + (row.last_name ?? '')}"
-                                  data-bs-toggle="tooltip"
-                                  data-bs-placement="top">
-                                ${(row.middle_name ?? '') + ' ' + (row.last_name ?? '')}
-                            </span>
+                                style="max-width: 140px;">${row.username ?? ''}</h6>
                         </div>
                     </div>
                 `
             },
-            { data: "phone", defaultContent: "—", title: "Teléfono" },
-
-            // 📨 E-mail con truncado + tooltip
             {
-                data: "email",
-                defaultContent: "—",
-                title: "E-mail",
-                render: (email) => `
-                    <div class="text-truncate"
-                         style="max-width: 150px; cursor: pointer;"
-                         title="${email ?? '—'}"
-                         data-bs-toggle="tooltip"
-                         data-bs-placement="top">
-                        ${email ?? '—'}
-                    </div>
-                `
+                data: null,
+                title: "Persona Asignada",
+                render: (row) => {
+                    const fullName = `${row.personnel?.middle_name ?? ''} ${row.personnel?.last_name ?? ''}`.trim();
+                    const displayName = `${row.personnel?.name ?? ''}`.trim();
+
+                    return `
+                        <div class="d-flex align-items-center">
+                            <div class="ms-3">
+                                <h6 class="fs-4 fw-semibold mb-0 text-truncate" style="max-width: 140px;">
+                                    ${displayName || '—'}
+                                </h6>
+                                <span class="fw-normal text-truncate"
+                                      style="display: inline-block; max-width: 140px; cursor: pointer;"
+                                      title="${fullName}"
+                                      data-bs-toggle="tooltip"
+                                      data-bs-placement="top">
+                                    ${fullName || '—'}
+                                </span>
+                            </div>
+                        </div>
+                    `;
+                }
             },
-
-            // 🏢 Área con truncado + tooltip
             {
-                data: "area.name",
+                data: "personnel.area.name",
                 defaultContent: "Sin área",
                 title: "Área",
                 render: (area) => `
                     <div class="text-truncate"
-                         style="max-width: 120px; cursor: pointer;"
+                         style="max-width: 140px; cursor: pointer;"
                          title="${area ?? 'Sin área'}"
                          data-bs-toggle="tooltip"
                          data-bs-placement="top">
@@ -74,25 +76,25 @@ function loadPersonnelTable(data) {
                     </div>
                 `
             },
-
             {
                 data: "is_active",
                 title: "Estado",
-                render: (active) =>
-                    `<span class="badge ${active ? 'bg-success-subtle text-success' : 'bg-danger-subtle text-danger'}">
+                render: (active) => `
+                    <span class="badge ${active ? 'bg-primary-subtle text-primary' : 'bg-danger-subtle text-danger'}">
                         ${active ? 'Activo' : 'Inactivo'}
-                     </span>`
+                    </span>
+                `
             },
             {
                 data: null,
                 title: "Acciones",
                 render: (row) => `
                     <div class="btn-group" role="group">
-                        <button class="btn btn-sm btn-outline-primary btn-edit" data-id="${row.id}">
-                            <i class="fas fa-edit"></i>
+                        <button class="btn btn-sm btn-outline-success btn-edit" data-id="${row.id}">
+                            <i class="bx bx-edit"></i>
                         </button>
                         <button class="btn btn-sm btn-outline-danger btn-delete" data-id="${row.id}">
-                            <i class="fas fa-trash-alt"></i>
+                            <i class="bx bx-trash"></i>
                         </button>
                     </div>
                 `
@@ -104,12 +106,13 @@ function loadPersonnelTable(data) {
         language: { url: languageDataTable }
     });
 
-    // ⚡ Activar tooltips después de renderizar la tabla
+    // ⚡ Reactivar tooltips en cada renderizado
     const activateTooltips = () => {
-        const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
-        [...tooltipTriggerList].forEach((el) => new bootstrap.Tooltip(el));
+        document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach((el) => {
+            new bootstrap.Tooltip(el);
+        });
     };
 
-    personnelTable.on('draw', activateTooltips);
-    activateTooltips(); // Inicial para la primera carga
+    usersTable.on('draw', activateTooltips);
+    activateTooltips();
 }

@@ -55,4 +55,4 @@ Route::resource('admin/users', UserController::class)->only([
 Route::post('admin/users/api', [UserController::class, 'userApi']);
 
 //RUTA PARA EL CRUD DE AREAS
-Route::post('admin/area/api', [AreaController::class, 'areaApi']);
+Route::post('admin/areas/api', [AreaController::class, 'areaApi']);
