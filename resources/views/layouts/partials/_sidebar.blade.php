@@ -35,8 +35,8 @@
                                     <!-- Dashboard -->
                                     <!-- ---------------------------------- -->
                                     <li class="sidebar-item">
-                                        <a class="sidebar-link" href="#" id="get-url"
-                                            aria-expanded="false">
+                                        <a id="get-url" class="sidebar-link" href="{{ route('assets.index') }}"
+                                        aria-expanded="false">
                                             <span>
                                                 <i class="ti ti-home"></i>
                                             </span>

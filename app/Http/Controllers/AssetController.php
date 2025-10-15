@@ -35,7 +35,7 @@ class AssetController extends Controller
 
             case 'details':
                 // Todos los campos, incluyendo relaciones y posibles datos nulos
-                $data = Asset::with(['brand', 'category', 'personalAssets'])->get();
+                $data = Asset::with(['brand', 'category', 'personnelAssets'])->get();
                 break;
 
             default:
