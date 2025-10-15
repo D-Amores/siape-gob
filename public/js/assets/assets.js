@@ -109,11 +109,11 @@ document.addEventListener('DOMContentLoaded', function () {
                             data-bs-target="#modalDetallesBien">
                             <i class="fas fa-eye"></i>
                         </button>
-                        <button class="btn btn-outline-primary btn-sm mx-1 btn-editar"
-                                title="Editar"
-                                data-bs-toggle="modal"
-                                data-id="${row.id}"
-                                data-bs-target="#modalNuevoBien">
+                        <button class="btn btn-outline-primary btn-sm mx-1 btn-modal-bien"
+                            data-bs-toggle="modal"
+                            data-bs-target="#modalBien"
+                            data-mode="edit"
+                            data-id="${row.id}">
                             <i class="fas fa-edit"></i>
                         </button>
                         <button
@@ -195,88 +195,6 @@ document.querySelector('#file_export tbody').addEventListener('click', async (ev
 
 
 // ------------------------------
-// Guardar o actualizar asset
-// ------------------------------
-formNuevoBien.addEventListener('submit', async (e) => {
-    e.preventDefault();
-
-    const data = {
-        inventory_number: document.getElementById('numeroInventario').value.trim(),
-        brand_id: document.getElementById('marca').value,
-        model: document.getElementById('modelo').value.trim(),
-        serial_number: document.getElementById('serie').value.trim(),
-        category_id: document.getElementById('categoria').value,
-        description: document.getElementById('descripcion').value.trim(),
-        is_active: document.getElementById('estado').value === '1'
-    };
-
-    const categoria = document.getElementById('categoria').value;
-    if (categoriasConCamposGenericos.includes(categoria)) {
-        data.cpu = document.getElementById('procesador')?.value.trim() || null;
-        data.speed = document.getElementById('velocidad')?.value.trim() || null;
-        data.memory = document.getElementById('memoria')?.value.trim() || null;
-        data.storage = document.getElementById('almacenamiento')?.value.trim() || null;
-    }
-
-    const url = editingAssetId ? `/assets/${editingAssetId}` : '/assets';
-    const method = editingAssetId ? 'PUT' : 'POST';
-
-    try {
-        const res = await fetch(url, {
-            method: method,
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': csrfToken
-            },
-            body: JSON.stringify(data)
-        });
-
-        const result = await res.json();
-
-        if (!result.ok) {
-            if (result.errors) {
-                alert('Errores:\n' + Object.values(result.errors).flat().join('\n'));
-            } else {
-                alert(result.message || 'Error en la operación');
-            }
-            return;
-        }
-
-        closeModal('btnCerrarModalNuevo', 'modalNuevoBien', 'categoria');
-
-        formNuevoBien.reset();
-        camposDinamicos.innerHTML = '';
-        editingAssetId = null;
-
-        document.getElementById('mensajeExito').textContent = result.message;
-        openModalForEdit('modalExito');
-
-        const table = $('#file_export').DataTable();
-        const nuevoAsset = { ...result.data, brand: result.data.brand, category: result.data.category, is_active_label: result.data.is_active ? 'Activo' : 'Inactivo' };
-
-        if (method === 'POST') {
-            const rowNode = table.row.add(nuevoAsset).draw(false).node();
-            const estadoTd = rowNode.querySelector('td:nth-child(6)');
-            if (estadoTd) {
-                estadoTd.innerHTML = `<span class="badge ${nuevoAsset.is_active ? 'bg-success' : 'bg-danger'} rounded-pill px-3 py-1">${nuevoAsset.is_active_label}</span>`;
-            }
-        } else {
-            const updatedAsset = {
-                ...nuevoAsset,
-                brand: nuevoAsset.brand || { name: '' },
-                category: nuevoAsset.category || { name: '' }
-            };
-            const row = document.querySelector(`#file_export tbody button.btn-editar[data-id='${result.data.id}']`).closest('tr');
-            table.row(row).data(updatedAsset).draw(false);
-        }
-
-    } catch(err) {
-        console.error('Error al enviar el formulario:', err);
-        alert('Ocurrió un error inesperado. Revisa la consola.');
-    }
-});
-
-// ------------------------------
 // Eliminar bien
 // ------------------------------
 document.addEventListener('click', async (e) => {
@@ -320,52 +238,103 @@ document.addEventListener('click', async (e) => {
     }
 });
 
-
 // ------------------------------
-// Editar asset
+// Modal para crear/editar bien
 // ------------------------------
-document.querySelector('#file_export tbody').addEventListener('click', async e => {
-    const btnEditar = e.target.closest('.btn-editar');
-    if (!btnEditar) return;
+document.addEventListener('DOMContentLoaded', () => {
+    const modalBien = document.getElementById('modalBien');
+    const modalTitle = document.getElementById('modalBienTitulo');
+    const formBien = document.getElementById('formNuevoBien');
+    const btnSubmit = modalBien.querySelector('button[type="submit"]');
 
-    const row = btnEditar.closest('tr');
-    const id = row.dataset.id || btnEditar.dataset.id;
-    if (!id) return;
+    document.addEventListener('click', e => {
+        const btn = e.target.closest('.btn-modal-bien');
+        if (!btn) return; // si no se hizo click en un botón válido, salir
 
-    try {
-        const res = await fetch('/assets/api?option=details');
-        const result = await res.json();
-        if (!result.ok) throw new Error(result.message || 'Error al obtener detalles');
+        const mode = btn.dataset.mode;
+        const id = btn.dataset.id || null;
 
-        const asset = result.data.find(a => a.id == id);
-        if (!asset) throw new Error('Activo no encontrado');
+        // Limpia el formulario al abrir
+        formBien.reset();
 
-        editingAssetId = asset.id;
-
-        formNuevoBien.querySelector('#numeroInventario').value = asset.inventory_number ?? '';
-        formNuevoBien.querySelector('#marca').value = asset.brand?.id ?? '';
-        formNuevoBien.querySelector('#modelo').value = asset.model ?? '';
-        formNuevoBien.querySelector('#serie').value = asset.serial_number ?? '';
-        formNuevoBien.querySelector('#estado').value = asset.is_active ? '1' : '0';
-        formNuevoBien.querySelector('#categoria').value = asset.category?.id ?? '';
-        formNuevoBien.querySelector('#descripcion').value = asset.description ?? '';
-
-        if (categoriasConCamposGenericos.includes(String(asset.category?.id))) {
-            camposDinamicos.innerHTML = camposGenericos;
-            formNuevoBien.querySelector('#procesador').value = asset.cpu ?? '';
-            formNuevoBien.querySelector('#velocidad').value = asset.speed ?? '';
-            formNuevoBien.querySelector('#memoria').value = asset.memory ?? '';
-            formNuevoBien.querySelector('#almacenamiento').value = asset.storage ?? '';
-        } else {
-            camposDinamicos.innerHTML = '';
+        if (mode === 'create') {
+            modalTitle.textContent = 'Nuevo Bien';
+            btnSubmit.innerHTML = '<i class="fas fa-plus me-1"></i> Guardar';
+            btnSubmit.classList.remove('btn-warning');
+            btnSubmit.classList.add('btn-primary');
+            formBien.dataset.mode = 'create';
+            delete formBien.dataset.id;
         }
 
-        openModalForEdit('modalNuevoBien');
+        if (mode === 'edit') {
+            modalTitle.textContent = 'Editar Bien';
+            btnSubmit.innerHTML = '<i class="fas fa-save me-1"></i> Actualizar';
+            btnSubmit.classList.remove('btn-primary');
+            btnSubmit.classList.add('btn-warning');
+            formBien.dataset.mode = 'edit';
+            formBien.dataset.id = id;
 
-    } catch(err) {
-        console.error('Error al cargar asset para editar:', err);
-        alert('No se pudo cargar el activo. Revisa la consola.');
-    }
+            // Cargar datos del bien
+            fetch('/assets/api?option=details')
+            .then(res => res.json())
+            .then(result => {
+                if (!result.ok) return;
+                const asset = result.data.find(a => a.id == id);
+                if (!asset) return;
+
+                document.getElementById('numeroInventario').value = asset.inventory_number ?? '';
+                document.getElementById('marca').value = asset.brand_id ?? '';
+                document.getElementById('modelo').value = asset.model ?? '';
+                document.getElementById('serie').value = asset.serial_number ?? '';
+                document.getElementById('estado').value = asset.is_active ? '1' : '0';
+                document.getElementById('categoria').value = asset.category_id ?? '';
+                document.getElementById('descripcion').value = asset.description ?? '';
+            })
+            .catch(err => console.error('Error al cargar el bien:', err));
+        }
+    });
+
+    // Control del envío del formulario
+    formBien.addEventListener('submit', async e => {
+        e.preventDefault();
+        const mode = formBien.dataset.mode;
+
+        const formData = {
+            numeroInventario: document.getElementById('numeroInventario').value,
+            marca: document.getElementById('marca').value,
+            modelo: document.getElementById('modelo').value,
+            serie: document.getElementById('serie').value,
+            estado: document.getElementById('estado').value,
+            categoria: document.getElementById('categoria').value,
+            descripcion: document.getElementById('descripcion').value
+        };
+
+        try {
+            if (mode === 'create') {
+                const res = await fetch('/assets/api?option=create', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify(formData)
+                });
+                if (!res.ok) throw new Error('Error al crear bien');
+                // actualizar tabla, cerrar modal, etc.
+            } else if (mode === 'edit') {
+                const id = formBien.dataset.id;
+                const res = await fetch(`/assets/api?option=update&id=${id}`, {
+                    method: 'PUT',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify(formData)
+                });
+                if (!res.ok) throw new Error('Error al actualizar bien');
+                // actualizar fila en tabla, cerrar modal, etc.
+            }
+
+            const modalInstance = bootstrap.Modal.getInstance(modalBien);
+            modalInstance.hide();
+        } catch (error) {
+            console.error('Error al enviar formulario:', error);
+        }
+    });
 });
 
 // ------------------------------

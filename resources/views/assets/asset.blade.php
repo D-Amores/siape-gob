@@ -14,8 +14,11 @@
 @endsection
 
 @section('actions')
-    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalNuevoBien">
-        <i class="fas fa-plus-circle me-2"></i> Agregar bien
+    <button class="btn btn-primary btn-modal-bien"
+            data-bs-toggle="modal"
+            data-bs-target="#modalBien"
+            data-mode="create">
+        <i class="fas fa-plus me-1"></i> Agregar bien
     </button>
 @endsection
 
@@ -60,14 +63,14 @@
     <div class="dark-transparent sidebartoggler"></div>
 
     <!-- Modal: Nuevo Bien -->
-    <div class="modal fade" id="modalNuevoBien" tabindex="-1" aria-labelledby="modalNuevoBienLabel" aria-hidden="true">
+    <div class="modal fade" id="modalBien" tabindex="-1" aria-labelledby="modalNuevoBienLabel" aria-hidden="true">
         <div class="modal-dialog modal-xl modal-dialog-centered">
             <div class="modal-content border-0 shadow rounded-4">
 
                 <!-- Header -->
                 <div class="modal-header bg-light border-0">
-                    <h5 class="modal-title fw-bold text-primary" id="modalNuevoBienLabel">
-                        <i class="fas fa-laptop me-2"></i>Nuevo Bien
+                    <h5 class="modal-title fw-bold text-primary" id="modalBienLabel">
+                        <i class="fas fa-laptop me-2"></i><span id="modalBienTitulo">Nuevo Bien</span>
                     </h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
                 </div>
