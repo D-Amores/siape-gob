@@ -50,7 +50,6 @@
 
     <div class="dark-transparent sidebartoggler"></div>
 
-    <!-- Modal para Nueva Asignación Pendiente -->
     <div class="modal fade" id="addAssignmentModal" tabindex="-1" aria-labelledby="addAssignmentModalLabel"
         aria-hidden="true">
         <div class="modal-dialog modal-md modal-dialog-centered">
@@ -65,12 +64,11 @@
                 <form id="assignmentForm">
                     <div class="modal-body p-4">
 
-                        <!-- Select para Personal -->
                         <div class="mb-4">
                             <label for="assignedUser" class="form-label fw-semibold">
                                 <i class="ti ti-user me-2 text-primary"></i>Personal
                             </label>
-                            <select class="form-control" id="assignedUser" name="receiver_id" required>
+                            <select class="form-control" id="assignedUser" name="receiver_id">
                                 {{-- <option value="">Cargando personal...</option> --}}
                             </select>
                         </div>
@@ -80,7 +78,7 @@
                             <label for="assignedAsset" class="form-label fw-semibold">
                                 <i class="ti ti-package me-2 text-success"></i>Bien
                             </label>
-                            <select class="form-control" id="assignedAsset" name="asset_id" required>
+                            <select class="form-control" id="assignedAsset" name="asset_id">
                                 {{-- <option value="">Cargando bienes...</option> --}}
                             </select>
                         </div>
@@ -100,7 +98,6 @@
         </div>
     </div>
 
-    <!-- Modal para editar categoría -->
     <div class="modal fade" id="editCategoryModal" tabindex="-1" aria-labelledby="editCategoryModalLabel"
         aria-hidden="true">
         <div class="modal-dialog modal-md modal-dialog-centered">
