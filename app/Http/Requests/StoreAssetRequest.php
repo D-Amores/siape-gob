@@ -22,20 +22,21 @@ class StoreAssetRequest extends FormRequest
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
 
-    private const REQUIRED_STRING_MAX_100 = 'required|string|max:100';
+    public const SOMETIMES_STRING_MAX_100 = 'sometimes|string|max:100';
     public function rules(): array
     {
         return [
             'inventory_number' => 'string|required|unique:assets|max:255',
-            'model' => self::REQUIRED_STRING_MAX_100,
+            'model' => self::SOMETIMES_STRING_MAX_100,
             'serial_number' => 'nullable|unique:assets|max:255',
-            'cpu' => self::REQUIRED_STRING_MAX_100,
-            'speed' => self::REQUIRED_STRING_MAX_100,
-            'memory' => self::REQUIRED_STRING_MAX_100,
-            'storage' => self::REQUIRED_STRING_MAX_100,
+            'cpu' => self::SOMETIMES_STRING_MAX_100,
+            'speed' => self::SOMETIMES_STRING_MAX_100,
+            'memory' => self::SOMETIMES_STRING_MAX_100,
+            'storage' => self::SOMETIMES_STRING_MAX_100,
             'description' => 'nullable|string',
             'brand_id' => 'required|exists:brands,id',
             'category_id' => 'required|exists:categories,id',
+            'is_active' => 'required|boolean',
         ];
     }
 
@@ -56,13 +57,9 @@ class StoreAssetRequest extends FormRequest
             'serial_number.max' => 'El número de serie no debe exceder 255 caracteres',
 
             // cpu, speed, memory, storage
-            'cpu.required' => 'El procesador es obligatorio',
             'cpu.max' => 'El procesador no debe exceder 100 caracteres',
-            'speed.required' => 'La velocidad es obligatoria',
             'speed.max' => 'La velocidad no debe exceder 100 caracteres',
-            'memory.required' => 'La memoria es obligatoria',
             'memory.max' => 'La memoria no debe exceder 100 caracteres',
-            'storage.required' => 'El almacenamiento es obligatorio',
             'storage.max' => 'El almacenamiento no debe exceder 100 caracteres',
 
             // description
@@ -103,6 +100,7 @@ class StoreAssetRequest extends FormRequest
             'memory' => trim($this->memory),
             'storage' => trim($this->storage),
             'description' => trim($this->description ?? ''),
+            'is_active' => $this->filled('is_active') ? (bool) $this->is_active : true,
         ]);
     }
 

@@ -20,6 +20,7 @@ class Asset extends Model
         'description',
         'brand_id',
         'category_id',
+        'is_active',
     ];
 
     public function brand()
@@ -35,5 +36,15 @@ class Asset extends Model
     public function personnelAssets()
     {
         return $this->hasMany(PersonnelAsset::class);
+    }
+
+    /**
+     * Check if the asset is active.
+     *
+     * @return bool
+     */
+    public function isActive(): bool
+    {
+        return (bool) $this->is_active;
     }
 }

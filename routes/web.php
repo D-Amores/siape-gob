@@ -54,5 +54,7 @@ Route::resource('users', UserController::class)->only([
 ]);
 Route::post('users/api', [UserController::class, 'userApi']);
 
+// Ruta para obtener assets para la tabla o detalles
+Route::get('assets/api', [AssetController::class, 'assetsApi'])->name('assets.api');
 //RUTA PARA EL CRUD DE AREAS
 Route::post('admin/area/api', [AreaController::class, 'areaApi']);
