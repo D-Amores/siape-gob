@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Admin;
 
-use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
+use Illuminate\Contracts\Validation\Validator;
 
-class UpdatePersonnelAssetRequest extends FormRequest
+class StorePersonnelAssetPendingRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,12 +24,11 @@ class UpdatePersonnelAssetRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'assignment_date' => 'sometimes|required|string|max:255',
-            'confirmation_date' => 'sometimes|nullable|string|max:255',
-            'pac_acceptance_doc' => 'sometimes|nullable|string|max:255',
-            'asset_id' => 'sometimes|required|integer|exists:assets,id',
-            'assigner_id' => 'sometimes|required|integer|exists:personnel,id',
-            'receiver_id' => 'sometimes|required|integer|exists:personnel,id',
+            "assignment_date" => "required|string|max:255",
+            //"confirmation_date" => "nullable|string|max:255",
+            "asset_id" => "required|integer|exists:assets,id",
+            //"assigner_id" => "required|integer|exists:personnel,id",
+            "receiver_id" => "required|integer|exists:personnel,id",
         ];
     }
 
@@ -42,9 +41,6 @@ class UpdatePersonnelAssetRequest extends FormRequest
 
             'confirmation_date.string' => 'La fecha de confirmación debe ser una cadena de texto.',
             'confirmation_date.max' => 'La fecha de confirmación no debe exceder los 255 caracteres.',
-
-            'pac_acceptance_doc.string' => 'El documento de aceptación PAC debe ser una cadena de texto.',
-            'pac_acceptance_doc.max' => 'El documento de aceptación PAC no debe exceder los 255 caracteres.',
 
             'asset_id.required' => 'El ID del activo es obligatorio.',
             'asset_id.integer' => 'El ID del activo debe ser un número entero.',
@@ -60,12 +56,11 @@ class UpdatePersonnelAssetRequest extends FormRequest
         ];
     }
 
-    public function attributes (): array
+    public function attributes(): array
     {
         return [
             'assignment_date' => 'fecha de asignación',
             'confirmation_date' => 'fecha de confirmación',
-            'pac_acceptance_doc' => 'documento de aceptación PAC',
             'asset_id' => 'ID del activo',
             'assigner_id' => 'ID del asignador',
             'receiver_id' => 'ID del receptor',
@@ -74,18 +69,16 @@ class UpdatePersonnelAssetRequest extends FormRequest
 
     protected function prepareForValidation()
     {
-        $fields = [
-            'assignment_date',
-            'confirmation_date',
-            'pac_acceptance_doc',
-        ];
+        if ($this->has('assignment_date')) {
+            $this->merge([
+                'assignment_date' => trim($this->input('assignment_date')),
+            ]);
+        }
 
-        foreach ($fields as $field) {
-            if ($this->has($field)) {
-                $this->merge([
-                    $field => trim($this->input($field)),
-                ]);
-            }
+        if ($this->has('confirmation_date')) {
+            $this->merge([
+                'confirmation_date' => trim($this->input('confirmation_date')),
+            ]);
         }
     }
 
@@ -93,9 +86,8 @@ class UpdatePersonnelAssetRequest extends FormRequest
     {
         throw new HttpResponseException(response()->json([
             'success' => false,
-            'message' => 'Error de validación',
+            'message' => 'Validation errors',
             'errors' => $validator->errors()
         ], 422));
     }
-
 }

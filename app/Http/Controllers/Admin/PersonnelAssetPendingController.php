@@ -1,10 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
-use App\Http\Requests\StorePersonnelAssetPendingRequest;
-use App\Http\Requests\UpdatePersonnelAssetPendingRequest;
 use App\Models\PersonnelAssetPending;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\StorePersonnelAssetPendingRequest;
+use App\Http\Requests\Admin\UpdatePersonnelAssetPendingRequest;
+use Illuminate\Support\Facades\Auth;
 
 class PersonnelAssetPendingController extends Controller
 {
@@ -13,7 +15,7 @@ class PersonnelAssetPendingController extends Controller
      */
     public function index()
     {
-        //
+        return view('admin.assigments');
     }
 
     /**
@@ -30,7 +32,19 @@ class PersonnelAssetPendingController extends Controller
     public function store(StorePersonnelAssetPendingRequest $request)
     {
         try {
-            $personnelAssetPending = PersonnelAssetPending::create($request->validated());
+            $user = Auth::user();
+            if (!$user || !$user->personnel_id) {
+                return response()->json([
+                    'ok' => false,
+                    'message' => 'Usuario no válido o sin personal asignado'
+                ], 403);
+            }
+
+            $validatedData = $request->validated();
+
+            $validatedData['assigner_id'] = $user->personnel_id;
+
+            $personnelAssetPending = PersonnelAssetPending::create($validatedData);
 
             return response()->json([
                 'ok' => true,
