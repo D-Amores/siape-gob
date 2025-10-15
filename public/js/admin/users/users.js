@@ -24,7 +24,8 @@ async function personnelToSelect() {
 
 // Cargar datos en la tabla
 async function loadUsers() {
-    console.log('Cargando usuarios...');
+    data = await getUserApi();
+    loadUsersTable(data);
 }
 
 // Crear usuario
@@ -66,8 +67,8 @@ async function initAdminPanel() {
     
     
     //saveTabsState(); // Guarda el estado de las pestañas
+    await loadUsers(); // Carga los usuarios
     await personnelToSelect(); // Carga los personales
-    //await loadUsers(); // Carga los usuarios
 
     btnUserCreate.addEventListener('click', userCreate);
     //btnUserUpdate.addEventListener('click', userUpdate);
