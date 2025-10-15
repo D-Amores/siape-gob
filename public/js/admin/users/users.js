@@ -136,6 +136,16 @@ async function userEdit() {
 
 }
 
+async function userDelete(userId) {
+    confirmDestroy(async () => {
+        const isOk = await destroyUser(userId);
+        if (isOk) {
+            loadUsers(); // recarga la tabla solo si la creación fue exitosa
+            console.log('tabla recargada');
+        }
+    });
+}
+
 async function initAdminPanel() {
 
     const btnUserCreate = document.getElementById('btnUserCreate');
@@ -166,7 +176,7 @@ async function initAdminPanel() {
         const btnDelete = e.target.closest('.btn-delete');
         if (btnDelete) {
             const userId = btnDelete.getAttribute('data-id');
-            //userDelete(userId);
+            userDelete(userId);
         }
     });
 
