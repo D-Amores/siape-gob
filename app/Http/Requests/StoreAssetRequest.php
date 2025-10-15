@@ -100,7 +100,7 @@ class StoreAssetRequest extends FormRequest
             'memory' => trim($this->memory),
             'storage' => trim($this->storage),
             'description' => trim($this->description ?? ''),
-            'is_active' => $this->has('is_active') ? (bool) $this->is_active : true,
+            'is_active' => $this->filled('is_active') ? (bool) $this->is_active : true,
         ]);
     }
 

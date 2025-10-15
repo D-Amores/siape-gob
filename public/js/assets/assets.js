@@ -333,7 +333,7 @@ document.addEventListener('DOMContentLoaded', () => {
             brand_id: document.getElementById('marca').value,
             model: document.getElementById('modelo').value,
             serial_number: document.getElementById('serie').value,
-            is_active: document.getElementById('estado').value,
+            is_active: document.getElementById('estado').value === '1',
             category_id: document.getElementById('categoria').value,
             description: document.getElementById('descripcion').value,
             cpu: document.getElementById('procesador')?.value || null,
