@@ -7,7 +7,7 @@ const vURIUsers = `${window.location.origin}/admin/users`;
 // ===============================
 // FUNCIONES STORE, UPDATE, DELETE
 // ===============================
-async function storePersonnel(personnel) {
+async function storeUsers(users) {
     let isOk = false; // usar let, no const
     const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
     try {
@@ -17,14 +17,15 @@ async function storePersonnel(personnel) {
                 'Content-Type': 'application/json',
                 'X-CSRF-TOKEN': csrfToken
             },
-            body: JSON.stringify(personnel)
+            body: JSON.stringify(users)
         });
+        console.log('Respuesta del servidor:', response);
 
         if (!response.ok) {
             if (response.status === 422) {
                 const errorData = await response.json();
                 let errorMessages = Object.values(errorData.errors).flat().join('<br>');
-                showAlert(errorMessages, 'red', 'Errores de Validación');
+                showAlert(errorMessages, 'red', response.message || 'Error de Validación');
                 return false;
             } else {
                 throw new Error(`Error HTTP: ${response.status}`);
@@ -34,13 +35,13 @@ async function storePersonnel(personnel) {
         const result = await response.json();
         
         if (result.ok) {
-            showAlert(result.message || 'Personal creado exitosamente', 'green', 'Éxito', null, 2000);
+            showAlert(result.message || 'Usuario creado exitosamente', 'green', 'Éxito', null, 2000);
             isOk = true;
         } else {
-            showAlert(result.message || 'Error al crear el personal', 'red', 'Error', null, 2000);
+            showAlert(result.message || 'Error al crear el usuario', 'red', 'Error', null, 2000);
         }
     } catch (error) {
-        showAlert('Error al crear el personal. Intente nuevamente.', 'red', 'Error');
+        showAlert('Error al crear el usuario. Intente nuevamente.', 'red', 'Error');
     }
 
     return isOk; // true si se creó, false si no
