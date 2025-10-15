@@ -48,14 +48,14 @@ function loadUsersTable(data) {
                         <div class="d-flex align-items-center">
                             <div class="ms-3">
                                 <h6 class="fs-4 fw-semibold mb-0 text-truncate" style="max-width: 140px;">
-                                    ${displayName || '—'}
+                                    ${capitalizeWords(displayName) || '—'}
                                 </h6>
                                 <span class="fw-normal text-truncate"
                                       style="display: inline-block; max-width: 140px; cursor: pointer;"
-                                      title="${fullName}"
+                                      title="${capitalizeWords(fullName)}"
                                       data-bs-toggle="tooltip"
                                       data-bs-placement="top">
-                                    ${fullName || '—'}
+                                    ${capitalizeWords(fullName) || '—'}
                                 </span>
                             </div>
                         </div>
@@ -63,16 +63,16 @@ function loadUsersTable(data) {
                 }
             },
             {
-                data: "personnel.area.name",
+                data: "area.name",
                 defaultContent: "Sin área",
                 title: "Área",
                 render: (area) => `
                     <div class="text-truncate"
                          style="max-width: 140px; cursor: pointer;"
-                         title="${area ?? 'Sin área'}"
+                         title="${capitalizeWords(area ?? 'Sin área')}"
                          data-bs-toggle="tooltip"
                          data-bs-placement="top">
-                        ${area ?? 'Sin área'}
+                        ${capitalizeWords(area ?? 'Sin área')}
                     </div>
                 `
             },
@@ -116,3 +116,9 @@ function loadUsersTable(data) {
     usersTable.on('draw', activateTooltips);
     activateTooltips();
 }
+
+/**
+ * Convierte la primera letra en mayúscula y el resto en minúsculas.
+ * @param {string} text
+ * @returns {string}
+ */

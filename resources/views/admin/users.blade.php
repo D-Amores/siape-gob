@@ -16,8 +16,8 @@
 @endsection
 
 @section('content')
-    <div class="container-fluid" style="max-width: none;">
-        <div class="row">
+    <div class="container-fluid">
+        <div class="datatables">
             <div class="col-12">
                 <div class="card shadow">
                     <div class="card-header text-center">
@@ -28,7 +28,7 @@
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
-                            <table id="dataUsersTable" class="table text-nowrap table-bordered align-middle">
+                            <table id="dataUsersTable" class="table w-100 table-hover text-nowrap table-bordered align-middle">
                                 <thead class="text-dark fs-4">
                                     <tr>
                                         <th scope="col">#</th>
@@ -176,52 +176,45 @@
                     <!-- Quité el botón de cierre (X) -->
                 </div>
                 <form id="userEditForm">
-                    <input type="hidden" id="edit_usuario_id" name="user_id">
-                    <div class="modal-body">
-
-                        <div class="row g-3">
-                            {{-- <div class="col-md-6">
-                            <label for="edit_name" class="form-label">
-                                <i class="bx bx-user me-1"></i> Nombre Completo *
-                            </label>
-                            <input type="text" class="form-control" id="edit_name" name="name" required>
-                        </div> --}}
+                    <input type="hidden" id="userEdit" name="user_id">
+                    <div class="modal-body pb-0">
+                        <div class="row g-3"> <!-- Espaciado responsivo -->
                             <div class="col-md-6">
-                                <label for="edit_username" class="form-label">
+                                <label for="username_edit" class="form-label">
                                     <i class="bx bx-at me-1"></i> Nombre de Usuario *
                                 </label>
-                                <input type="text" class="form-control" id="edit_username" name="username" required>
+                                <input type="text" class="form-control" id="username_edit" name="username" required>
                             </div>
 
-                            {{-- <div class="col-md-6">
-                            <label for="edit_email" class="form-label">
-                                <i class="bx bx-envelope me-1"></i> Correo Electrónico *
-                            </label>
-                            <input type="email" class="form-control" id="edit_email" name="email" required>
+                            <div class="col-md-6">
+                                <label for="password_edit" class="form-label">
+                                    <i class="bx bx-lock me-1"></i> Contraseña *
+                                </label>
+                                <input type="password" class="form-control" id="password_edit" name="password">
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="password_confirmation_edit" class="form-label">
+                                <i class="bx bx-lock-alt me-1"></i> Confirmar Contraseña *
+                                </label>
+                                <input type="password" class="form-control" id="password_confirmation_edit" name="password_confirmation" minlength="8">
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="personnel_id_edit" class="form-label">
+                                    <i class="bx bx-buildings me-1"></i> Asignar Personal *
+                                </label>
+                                <select class="form-select personnelSelect select2" id="personnel_id_edit" name="personnel_id">
+                                    <option value="">Seleccionar personal...</option>
+                                </select>
+                            </div>
                         </div>
-                        <div class="col-md-6">
-                            <label for="edit_phone" class="form-label">
-                                <i class="bx bx-phone me-1"></i> Teléfono
-                            </label>
-                            <input type="text" class="form-control" id="edit_phone" name="phone">
-                        </div> --}}
 
-                            <div class="col-md-6">
-                                <label for="edit_area_id" class="form-label">
-                                    <i class="bx bx-buildings me-1"></i> Área
-                                </label>
-                                <select class="form-select areaSelect select2" id="edit_area_id" name="area_id">
-                                    <option value="">Seleccionar área...</option>
-                                </select>
-                            </div>
-                            <div class="col-md-6">
-                                <label for="edit_rol" class="form-label">
-                                    <i class="bx bx-shield me-1"></i> Rol *
-                                </label>
-                                <select class="form-select rol-select" id="edit_rol" name="rol" required>
-                                    <option value="">Seleccionar rol...</option>
-                                </select>
-                            </div>
+                        <div class="alert alert-info mt-3">
+                            <i class="bx bx-info-circle me-2"></i>
+                            Al desactivar un personal, se desactivará su cuenta y no podrá acceder al sistema.
+                            Al eliminar un personal, la cuenta queda desactivada pero se mantiene el registro en el sistema.
+                            Puede reasignar el personal a otro usuario si es necesario, recuerde guardar los cambios.
                         </div>
                     </div>
                     <div class="modal-footer d-flex flex-row justify-content-md-end ps-1 justify-content-center">
@@ -245,10 +238,10 @@
     </script>
     <script src="{{ asset('modernize/assets/libs/datatables.net/js/jquery.dataTables.min.js') }}"></script>
     <script src="{{ asset('modernize/assets/js/datatable/datatable-advanced.init.js') }}"></script>
-<script src="{{ asset('js/admin/users/table-config.js') }}"></script>
+    <script src="{{ asset('js/admin/helpers.js') }}"></script>
+    <script src="{{ asset('js/admin/users/table-config.js') }}"></script>
     <!-- Scripts para manejar usuarios -->
     <script src="{{ asset('js/admin/users/form-validate.js') }}"></script>
-    <script src="{{ asset('js/admin/helpers.js') }}"></script>
     <script src="{{ asset('js/admin/alerts.js') }}"></script>
     <script src="{{ asset('js/admin/modal-actions1.js') }}"></script>
     <script src="{{ asset('js/admin/panel-api.js') }}"></script>

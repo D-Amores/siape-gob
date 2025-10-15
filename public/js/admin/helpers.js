@@ -1,4 +1,15 @@
 //funciones auxiliares
+// Capitalizar la primera letra de una palabra
+function capitalizeWords(text) {
+    if (!text) return '';
+    return text
+        .toLowerCase()
+        .split(' ')
+        .filter(word => word.trim() !== '') // evita espacios dobles
+        .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(' ');
+}
+
 // resetear formulario y selects con Select2
 function resetFormAndSelect(form) {
     form.reset();
@@ -46,6 +57,8 @@ function getChangedData(original, current) {
     for (const key in current) {
         const normalizedCurrent = normalizeValue(key, current[key]);
         const normalizedOriginal = normalizeValue(key, original[key]);
+
+        console.log(`Comparando campo "${key}": original="${normalizedOriginal}", actual="${normalizedCurrent}"`);
 
         if (normalizedCurrent !== normalizedOriginal) {
             changed[key] = normalizedCurrent;

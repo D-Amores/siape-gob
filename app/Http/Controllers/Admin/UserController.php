@@ -108,7 +108,11 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
-        //
+        return response()->json([
+            'ok' => true, 
+            'message' => 'Usuario obtenido exitosamente.', 
+            'data' => $user],
+         200);
     }
 
     /**
