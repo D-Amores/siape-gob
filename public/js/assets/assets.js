@@ -228,10 +228,6 @@ document.addEventListener('click', async (e) => {
         const row = deleteButton.closest('tr');
         table.row(row).remove().draw();
 
-        // --- Mostrar modal de éxito ---
-        document.getElementById('mensajeExito').textContent = result.message;
-        openModalForEdit('modalExito');
-
     } catch (error) {
         console.error('Error al eliminar el activo:', error);
         alert('Ocurrió un error inesperado. Revisa la consola.');
@@ -246,10 +242,31 @@ document.addEventListener('DOMContentLoaded', () => {
     const modalTitle = document.getElementById('modalBienTitulo');
     const formBien = document.getElementById('formNuevoBien');
     const btnSubmit = modalBien.querySelector('button[type="submit"]');
+    const tableBody = document.querySelector('#file_export tbody');
+
+    function loadAssets() {
+    if ($.fn.DataTable.isDataTable('#file_export')) {
+        const table = $('#file_export').DataTable();
+
+        fetch('/assets/api?option=table')
+            .then(res => res.json())
+            .then(json => {
+                if (!json.ok) return;
+
+                table.clear();
+                table.rows.add(json.data);
+                table.draw();
+            })
+            .catch(err => console.error('Error al refrescar la tabla:', err));
+    }
+}
+
+    // Carga inicial de la tabla
+    loadAssets();
 
     document.addEventListener('click', e => {
         const btn = e.target.closest('.btn-modal-bien');
-        if (!btn) return; // si no se hizo click en un botón válido, salir
+        if (!btn) return;
 
         const mode = btn.dataset.mode;
         const id = btn.dataset.id || null;
@@ -282,6 +299,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const asset = result.data.find(a => a.id == id);
                 if (!asset) return;
 
+                // Campos fijos
                 document.getElementById('numeroInventario').value = asset.inventory_number ?? '';
                 document.getElementById('marca').value = asset.brand_id ?? '';
                 document.getElementById('modelo').value = asset.model ?? '';
@@ -289,6 +307,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 document.getElementById('estado').value = asset.is_active ? '1' : '0';
                 document.getElementById('categoria').value = asset.category_id ?? '';
                 document.getElementById('descripcion').value = asset.description ?? '';
+
+                // Campos opcionales / dinámicos
+                if (document.getElementById('procesador')) document.getElementById('procesador').value = asset.cpu ?? '';
+                if (document.getElementById('velocidad')) document.getElementById('velocidad').value = asset.speed ?? '';
+                if (document.getElementById('memoria')) document.getElementById('memoria').value = asset.memory ?? '';
+                if (document.getElementById('almacenamiento')) document.getElementById('almacenamiento').value = asset.storage ?? '';
             })
             .catch(err => console.error('Error al cargar el bien:', err));
         }
@@ -299,14 +323,19 @@ document.addEventListener('DOMContentLoaded', () => {
         e.preventDefault();
         const mode = formBien.dataset.mode;
 
+        // Añadirlos al formData
         const formData = {
             inventory_number: document.getElementById('numeroInventario').value,
             brand_id: document.getElementById('marca').value,
             model: document.getElementById('modelo').value,
             serial_number: document.getElementById('serie').value,
-            is_active: document.getElementById('estado').value, // 1 o 0
+            is_active: document.getElementById('estado').value,
             category_id: document.getElementById('categoria').value,
-            description: document.getElementById('descripcion').value
+            description: document.getElementById('descripcion').value,
+            cpu: document.getElementById('procesador')?.value || null,
+            speed: document.getElementById('velocidad')?.value || null,
+            memory: document.getElementById('memoria')?.value || null,
+            storage: document.getElementById('almacenamiento')?.value || null
         };
 
         try {
@@ -319,7 +348,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     },
                     body: JSON.stringify(formData)
                 });
-                if (!res.ok) throw new Error('Error al crear bien');
+                result = await res.json();
+                if (!res.ok) throw new Error(result.message || 'Error al crear bien');
             } else if (mode === 'edit') {
                 const id = formBien.dataset.id;
                 const res = await fetch(`/assets/${id}`, {
@@ -330,12 +360,14 @@ document.addEventListener('DOMContentLoaded', () => {
                     },
                     body: JSON.stringify(formData)
                 });
+                result = await res.json();
                 if (!res.ok) throw new Error('Error al actualizar bien');
-                // actualizar fila en tabla, cerrar modal, etc.
             }
 
             const modalInstance = bootstrap.Modal.getInstance(modalBien);
             modalInstance.hide();
+
+            loadAssets();
         } catch (error) {
             console.error('Error al enviar formulario:', error);
         }
