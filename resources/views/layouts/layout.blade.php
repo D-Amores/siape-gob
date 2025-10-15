@@ -22,6 +22,9 @@
     <!-- Owl Carousel  -->
     <link rel="stylesheet" href="{{ asset('modernize/assets/libs/owl.carousel/dist/assets/owl.carousel.min.css') }}" />
 
+    <!-- Select2 -->
+    <link href="{{ asset('modernize/assets/libs/select2/dist/css/select2.min.css') }}" rel="stylesheet" />
+    
     @yield('styles')
 </head>
 
@@ -98,6 +101,12 @@
     <!-- Jquery -->
     <script src="{{ asset('cdn/jquery/jquery-3.7.1.min.js') }}"></script>
     <script src="{{ asset('cdn/jquery-confirm-v3.3.4/jquery-confirm.min.js') }}"></script>
+
+    <!-- Jquery Validate -->
+    <script src="{{ asset('cdn/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js') }}"></script>
+
+    <!-- Select2 -->
+    <script src="{{ asset('modernize/assets/libs/select2/dist/js/select2.min.js') }}"></script>
 
     @yield('scripts')
 </body>

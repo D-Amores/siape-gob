@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StorePersonalAssetPendingRequest;
-use App\Http\Requests\UpdatePersonalAssetPendingRequest;
-use App\Models\PersonalAssetPending;
+use App\Http\Requests\StorePersonnelAssetPendingRequest;
+use App\Http\Requests\UpdatePersonnelAssetPendingRequest;
+use App\Models\PersonnelAssetPending;
 
-class PersonalAssetPendingController extends Controller
+class PersonnelAssetPendingController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -27,15 +27,15 @@ class PersonalAssetPendingController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StorePersonalAssetPendingRequest $request)
+    public function store(StorePersonnelAssetPendingRequest $request)
     {
         try {
-            $personalAssetPending = PersonalAssetPending::create($request->validated());
+            $personnelAssetPending = PersonnelAssetPending::create($request->validated());
 
             return response()->json([
                 'ok' => true,
-                'message' => 'Activo personal pendiente creado exitosamente',
-                'data' => $personalAssetPending
+                'message' => 'Activo de personal pendiente creado exitosamente',
+                'data' => $personnelAssetPending
             ], 201);
 
         } catch (\Exception $e) {
@@ -50,7 +50,7 @@ class PersonalAssetPendingController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(PersonalAssetPending $personalAssetPending)
+    public function show(PersonnelAssetPending $personnelAssetPending)
     {
         //
     }
@@ -58,7 +58,7 @@ class PersonalAssetPendingController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(PersonalAssetPending $personalAssetPending)
+    public function edit(PersonnelAssetPending $personnelAssetPending)
     {
         //
     }
@@ -66,16 +66,16 @@ class PersonalAssetPendingController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdatePersonalAssetPendingRequest $request, PersonalAssetPending $personalAssetPending)
+    public function update(UpdatePersonnelAssetPendingRequest $request, PersonnelAssetPending $personnelAssetPending)
     {
         $data = $request ->validated();
         try {
-            $personalAssetPending->update($data);
+            $personnelAssetPending->update($data);
 
             return response()->json([
                 'ok' => true,
-                'message' => 'Activo personal pendiente actualizado exitosamente',
-                'data' => $personalAssetPending
+                'message' => 'Activo de personal pendiente actualizado exitosamente',
+                'data' => $personnelAssetPending
             ], 200);
 
         } catch (\Exception $e) {
@@ -90,14 +90,14 @@ class PersonalAssetPendingController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(PersonalAssetPending $personalAssetPending)
+    public function destroy(PersonnelAssetPending $personnelAssetPending)
     {
         try {
-            $personalAssetPending->delete();
+            $personnelAssetPending->delete();
 
             return response()->json([
                 'ok' => true,
-                'message' => 'Activo personal pendiente eliminado exitosamente'
+                'message' => 'Activo de personal pendiente eliminado exitosamente'
             ], 200);
 
         } catch (\Exception $e) {

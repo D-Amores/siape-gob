@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StorePersonalAssetRequest;
-use App\Http\Requests\UpdatePersonalAssetRequest;
-use App\Models\PersonalAsset;
+use App\Http\Requests\StorePersonnelAssetRequest;
+use App\Http\Requests\UpdatePersonnelAssetRequest;
+use App\Models\PersonnelAsset;
 
-class PersonalAssetController extends Controller
+class PersonnelAssetController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -27,16 +27,16 @@ class PersonalAssetController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StorePersonalAssetRequest $request)
+    public function store(StorePersonnelAssetRequest $request)
     {
         try {
-            $personalAsset = PersonalAsset::create($request->validated());
-            $personalAsset->load(['asset', 'assigner', 'receiver']);
+            $personnelAsset = PersonnelAsset::create($request->validated());
+            $personnelAsset->load(['asset', 'assigner', 'receiver']);
 
             return response()->json([
                 'ok' => true,
-                'message' => 'Activo personal creado exitosamente',
-                'data' => $personalAsset
+                'message' => 'Activo de personal creado exitosamente',
+                'data' => $personnelAsset
             ], 201);
 
         } catch (\Exception $e) {
@@ -51,7 +51,7 @@ class PersonalAssetController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(PersonalAsset $personalAsset)
+    public function show(PersonnelAsset $personnelAsset)
     {
         //
     }
@@ -59,7 +59,7 @@ class PersonalAssetController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(PersonalAsset $personalAsset)
+    public function edit(PersonnelAsset $personnelAsset)
     {
         //
     }
@@ -67,18 +67,18 @@ class PersonalAssetController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdatePersonalAssetRequest $request, PersonalAsset $personalAsset)
+    public function update(UpdatePersonnelAssetRequest $request, PersonnelAsset $personnelAsset)
     {
         $data = $request ->validated();
 
         try {
-            $personalAsset->update($data);
-            $personalAsset->load(['asset', 'assigner', 'receiver']);
+            $personnelAsset->update($data);
+            $personnelAsset->load(['asset', 'assigner', 'receiver']);
 
             return response()->json([
                 'ok' => true,
-                'message' => 'Activo personal actualizado exitosamente',
-                'data' => $personalAsset
+                'message' => 'Activo de personal actualizado exitosamente',
+                'data' => $personnelAsset
             ], 200);
 
         } catch (\Exception $e) {
@@ -93,14 +93,14 @@ class PersonalAssetController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(PersonalAsset $personalAsset)
+    public function destroy(PersonnelAsset $personnelAsset)
     {
         try {
-            $personalAsset->delete();
+            $personnelAsset->delete();
 
             return response()->json([
                 'ok' => true,
-                'message' => 'Activo personal eliminado exitosamente'
+                'message' => 'Activo de personal eliminado exitosamente'
             ], 200);
 
         } catch (\Exception $e) {
