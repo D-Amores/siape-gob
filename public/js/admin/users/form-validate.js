@@ -5,11 +5,21 @@ function initFormValidation() {
         rules: {
             username: { required: true, minlength: 6 },
             password: { required: true, minlength: 8 },
+            password_confirmation: {
+                required: true,
+                minlength: 8,
+                equalTo: "#password"
+            },
             personnel_id: { required: true }
         },
         messages: {
             username: { required: "El nombre de usuario es obligatorio", minlength: "Mínimo 6 caracteres" },
             password: { required: "La contraseña es obligatoria", minlength: "Mínimo 8 caracteres" },
+            password_confirmation: {
+                required: "Debes confirmar la contraseña",
+                minlength: "Mínimo 8 caracteres",
+                equalTo: "Las contraseñas no coinciden"
+            },
             personnel_id: { required: "Selecciona un personal" }
         },
         errorClass: 'is-invalid',

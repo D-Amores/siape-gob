@@ -9,7 +9,7 @@
 @section('subtitle', 'Gestión de usuarios')
 
 @section('actions')
-    <button class="btn btn-primary w-md-auto me-2" id="btnOpenmodalUserCreate">
+    <button class="btn btn-primary w-md-auto me-2" id="btnOpenModalUserCreate">
         <i class="bx bx-plus me-1"></i>
         Crear Usuario
     </button>
@@ -111,6 +111,13 @@
                             </div>
 
                             <div class="col-md-6">
+                                <label for="password_confirmation" class="form-label">
+                                <i class="bx bx-lock-alt me-1"></i> Confirmar Contraseña *
+                                </label>
+                                <input type="password" class="form-control" id="password_confirmation" name="password_confirmation" minlength="8" required>
+                            </div>
+
+                            <div class="col-md-6">
                                 <label for="personnel_id" class="form-label">
                                     <i class="bx bx-buildings me-1"></i> Asignar Personal *
                                 </label>
@@ -137,11 +144,11 @@
                             </div> --}}
                         </div>
 
-                        <div class="alert alert-info mt-3">
+                        {{-- <div class="alert alert-info mt-3">
                             <i class="bx bx-info-circle me-2"></i>
                             Se generará automáticamente una contraseña segura y se enviará al usuario por correo electrónico
                             despues de confirmar su correo.
-                        </div>
+                        </div> --}}
                     </div>
                     <div class="modal-footer ps-1 d-flex flex-row justify-content-end">
                         <button type="button" class="btn btn-outline-secondary" id="btnCloseModalUserCreate">Cancelar</button>
@@ -240,8 +247,11 @@
     <script src="{{ asset('modernize/assets/js/datatable/datatable-advanced.init.js') }}"></script>
 
     <!-- Scripts para manejar usuarios -->
+    <script src="{{ asset('js/admin/users/form-validate.js') }}"></script>
+    <script src="{{ asset('js/admin/helpers.js') }}"></script>
     <script src="{{ asset('js/admin/alerts.js') }}"></script>
     <script src="{{ asset('js/admin/modal-actions1.js') }}"></script>
     <script src="{{ asset('js/admin/panel-api.js') }}"></script>
+    <script src="{{ asset('js/admin/users/users-crud.js') }}"></script>
     <script src="{{ asset('js/admin/users/users.js') }}"></script>
 @endsection

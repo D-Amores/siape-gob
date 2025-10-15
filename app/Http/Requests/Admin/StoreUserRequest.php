@@ -24,7 +24,7 @@ class StoreUserRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'username' => 'required|string|max:20|min:6',
+            'username' => 'required|string|max:20|min:6|unique:users',
             'password' => 'required|string|min:8|confirmed',
             'personnel_id' => 'required|exists:personnel,id',
         ];
@@ -34,6 +34,7 @@ class StoreUserRequest extends FormRequest
     {
         return [
             'username.required' => 'El nombre de usuario es obligatorio.',
+            'username.unique' => 'Usa otro nombre de usuario.',
             'password.required' => 'La contraseña es obligatoria.',
             'personnel_id.required' => 'El ID de personal es obligatorio.',
             'personnel_id.exists' => 'El ID de personal no existe en la base de datos.',

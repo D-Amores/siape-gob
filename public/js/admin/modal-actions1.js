@@ -18,10 +18,17 @@ function openModalForEdit(modalId) {
 function closeModal(btnCloseId, modalId, focusId) {
     document.getElementById(btnCloseId).addEventListener("click", () => {
         let focusIdFinal = `#${focusId}`;
-        moveFocus(focusIdFinal);
         const modal = bootstrap.Modal.getInstance(document.getElementById(modalId));
         modal.hide();
+        moveFocus(focusIdFinal);
     });
+}
+
+function closeModalForSuccess(modalId, focusId) {
+    let focusIdFinal = `#${focusId}`;
+    const modal = bootstrap.Modal.getInstance(document.getElementById(modalId));
+    modal.hide();
+    moveFocus(focusIdFinal);
 }
 
 function forceCloseModalWithBlur(btnCloseId, modalId, focusId) {

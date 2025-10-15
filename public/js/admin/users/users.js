@@ -22,22 +22,54 @@ async function personnelToSelect() {
     });
 }
 
+// Cargar datos en la tabla
+async function loadUsers() {
+    console.log('Cargando usuarios...');
+}
+
+// Crear usuario
+async function userCreate() {
+    if (!isFormValid('#userCreateForm')) return;
+
+    const userForm = document.getElementById('userCreateForm');
+    const formData = Object.fromEntries(new FormData(userForm));
+
+    const spinnerUser = document.getElementById('userCreateSpinner');
+    const btnUserCreate = document.getElementById('btnUserCreate');
+
+    confirmStore(async () => {
+        spinnerUser.classList.remove('d-none');
+        btnUserCreate.disabled = true;
+
+        const isOk = await storeUsers(formData); // Cambiado a storeUsers
+        if (isOk) {
+            closeModalForSuccess('modalUserCreate', 'btnOpenModalUserCreate');
+            resetFormAndSelect(userForm);
+            await loadUsers(); // Recargar tabla de usuarios
+        }
+        spinnerUser.classList.add('d-none');
+        btnUserCreate.disabled = false;
+
+    });
+
+}
+
 async function initAdminPanel() {
 
-    const btnCreateUser = document.getElementById('btnUserCreate');
+    const btnUserCreate = document.getElementById('btnUserCreate');
     const userTableTbody = document.querySelector('#dataUsersTable tbody');
     const btnUserUpdate = document.getElementById('btnUserUpdate');
 
-    openModal("btnOpenmodalUserCreate", "modalUserCreate");
-    forceCloseModalWithBlur('btnCloseModalUserCreate', 'modalUserCreate', 'btnOpenmodalUserCreate');
+    openModal("btnOpenModalUserCreate", "modalUserCreate");
+    forceCloseModalWithBlur('btnCloseModalUserCreate', 'modalUserCreate', 'btnOpenModalUserCreate');
     forceCloseModalWithRemoveId('btnCloseModalUserEdit', 'modalUserEdit', 'btnUserEdit');
     
     
     //saveTabsState(); // Guarda el estado de las pestañas
     await personnelToSelect(); // Carga los personales
     //await loadUsers(); // Carga los usuarios
-    
-    //btnCreateUser.addEventListener('click', userCreate);
+
+    btnUserCreate.addEventListener('click', userCreate);
     //btnUserUpdate.addEventListener('click', userUpdate);
     
     userTableTbody.addEventListener('click', (e)=>{
