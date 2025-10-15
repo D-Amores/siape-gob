@@ -299,7 +299,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 const asset = result.data.find(a => a.id == id);
                 if (!asset) return;
 
-                // Campos fijos
                 document.getElementById('numeroInventario').value = asset.inventory_number ?? '';
                 document.getElementById('marca').value = asset.brand_id ?? '';
                 document.getElementById('modelo').value = asset.model ?? '';
@@ -308,7 +307,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 document.getElementById('categoria').value = asset.category_id ?? '';
                 document.getElementById('descripcion').value = asset.description ?? '';
 
-                // Campos opcionales / dinámicos
+                if (categoriasConCamposGenericos.includes(asset.category_id?.toString())) {
+                    camposDinamicos.innerHTML = camposGenericos;
+                } else {
+                    camposDinamicos.innerHTML = '';
+                }
+
                 if (document.getElementById('procesador')) document.getElementById('procesador').value = asset.cpu ?? '';
                 if (document.getElementById('velocidad')) document.getElementById('velocidad').value = asset.speed ?? '';
                 if (document.getElementById('memoria')) document.getElementById('memoria').value = asset.memory ?? '';
