@@ -24,6 +24,13 @@ function closeModal(btnCloseId, modalId, focusId) {
     });
 }
 
+function closeModalForSuccess(modalId, focusId) {
+    let focusIdFinal = `#${focusId}`;
+    const modal = bootstrap.Modal.getInstance(document.getElementById(modalId));
+    modal.hide();
+    moveFocus(focusIdFinal);
+}
+
 function forceCloseModalWithBlur(btnCloseId, modalId, focusId) {
     document.getElementById(btnCloseId).addEventListener("click", () => {
         const modal = bootstrap.Modal.getInstance(document.getElementById(modalId));
@@ -56,29 +63,4 @@ function forceCloseModalWithRemoveIdAndBlur(btnCloseId, modalId, focusId) {
         btnEdit.removeAttribute('id');
     });
 }
-
-document.addEventListener("DOMContentLoaded", () => {
-  // Abrir modal "Crear personal"
-    document.getElementById("btnpersonnelCreateModal").addEventListener("click", () => {
-        const modal = new bootstrap.Modal(document.getElementById("personnelCreateModal"));
-        modal.show();
-    });
-
-    // Cerrar modal "Crear personal"
-    document.getElementById("btnClosePersonnelCreate").addEventListener("click", () => {
-        moveFocus("#btnpersonnelCreateModal");
-        const modal = bootstrap.Modal.getInstance(document.getElementById("personnelCreateModal"));
-        modal.hide();
-    });
-
-    // Cerrar modal "Editar personal"
-    document.getElementById("btnClosePersonnelEdit").addEventListener("click", () => {
-        const modal = bootstrap.Modal.getInstance(document.getElementById("personnelModalEdit"));
-        document.activeElement.blur(); //Fuerza a que se quite el foco de un elemento
-        modal.hide();
-        moveFocus("#btnPersonnelEdit");
-        const btnEdit = document.querySelector("#btnPersonnelEdit");
-        btnEdit.removeAttribute('id');
-    });
-});
 

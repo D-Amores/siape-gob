@@ -24,9 +24,9 @@ class StoreUserRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'username' => 'required|string|max:20|min:6',
+            'username' => 'required|string|max:20|min:6|unique:users',
             'password' => 'required|string|min:8|confirmed',
-            'personnel_id' => 'required|exists:personnel,id',
+            'personnel_id' => 'required|exists:personnel,id|unique:users,personnel_id',
         ];
     }
 
@@ -34,6 +34,7 @@ class StoreUserRequest extends FormRequest
     {
         return [
             'username.required' => 'El nombre de usuario es obligatorio.',
+            'username.unique' => 'Usa otro nombre de usuario.',
             'password.required' => 'La contraseña es obligatoria.',
             'personnel_id.required' => 'El ID de personal es obligatorio.',
             'personnel_id.exists' => 'El ID de personal no existe en la base de datos.',
@@ -41,6 +42,7 @@ class StoreUserRequest extends FormRequest
             'username.min' => 'El nombre de usuario debe tener al menos 6 caracteres.',
             'password.min' => 'La contraseña debe tener al menos 8 caracteres.',
             'password.confirmed' => 'La confirmación de la contraseña no coincide.',
+            'personnel_id.unique' => 'El personal ya tiene una cuenta de usuario asociada.',
         ];
     }
 

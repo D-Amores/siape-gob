@@ -46,7 +46,7 @@
                     <div class="tab-pane fade datatables" id="personnel" role="tabpanel" aria-labelledby="personnel-tab">
                         <div class="card-header text-center">
                             <h4 class="mb-0">
-                                <i class="bx bx-user"></i>
+                                <i class="ti ti-user"></i>
                                 Lista de Personal
                             </h4>
                         </div>
@@ -65,61 +65,6 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td scope="row">1</td>
-                                            <td>
-                                                <div class="d-flex align-items-center">
-                                                    <img src="{{ asset('modernize/assets/images/profile/user-6.jpg') }}"
-                                                        class="rounded-circle" width="40" height="40">
-                                                    <div class="ms-3">
-                                                        <h6 class="fs-4 fw-semibold mb-0">Christopher Jamil</h6>
-                                                        <span class="fw-normal">Morales Flores</span>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td>9991112222</td>
-                                            <td>carlos.morales@example.com</td>
-                                            <td>Recursos Humanos</td>
-                                            <td>
-                                                <span class="badge bg-primary-subtle text-primary">activo</span>
-                                            </td>
-                                            <td>
-                                                <div class="btn-group" role="group">
-                                                    <button class="btn btn-sm btn-outline-success"><i
-                                                            class="bx bx-edit"></i></button>
-                                                    <button class="btn btn-sm btn-outline-danger"><i
-                                                            class="bx bx-trash"></i></button>
-                                                </div>
-                                            </td>
-                                        </tr>
-
-                                        <tr>
-                                            <th scope="row">1</th>
-                                            <td>
-                                                <div class="d-flex align-items-center">
-                                                    <img src="{{ asset('modernize/assets/images/profile/user-6.jpg') }}"
-                                                        class="rounded-circle" width="40" height="40">
-                                                    <div class="ms-3">
-                                                        <h6 class="fs-4 fw-semibold mb-0">Jose Jamil</h6>
-                                                        <span class="fw-normal">Martinez Morales</span>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td>9991112222</td>
-                                            <td>carlos.morales@example.com</td>
-                                            <td>Recursos Humanos</td>
-                                            <td>
-                                                <span class="badge bg-primary-subtle text-primary">activo</span>
-                                            </td>
-                                            <td>
-                                                <div class="btn-group" role="group">
-                                                    <button class="btn btn-sm btn-outline-success"><i
-                                                            class="bx bx-edit"></i></button>
-                                                    <button class="btn btn-sm btn-outline-danger"><i
-                                                            class="bx bx-trash"></i></button>
-                                                </div>
-                                            </td>
-                                        </tr>
                                     </tbody>
                                 </table>
                             </div>
@@ -127,76 +72,54 @@
                     </div>
                     <!-- Tabla users -->
                     <div class="tab-pane fade" id="users" role="tabpanel" aria-labelledby="users-tab">
-                        <div class="card-header">
-                            <h5 class="mb-0">
-                                <i class="bx bx-users me-2"></i>
-                                Lista de Usuarios
-                            </h5>
+                        <div class="card-header text-center">
+                            <h4 class="mb-0">
+                                <i class="ti ti-user"></i>
+                                Lista de Personal
+                            </h4>
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
-                                <table class="table mb-0">
-                                    <thead>
+                                <table id="dataUsersTable" class="table text-nowrap table-bordered align-middle">
+                                    <thead class="text-dark fs-4">
                                         <tr>
                                             <th scope="col">#</th>
-                                            <th scope="col">First</th>
-                                            <th scope="col">Last</th>
-                                            <th scope="col">Handle</th>
-                                            <th scope="col">Actions</th>
+                                            <th scope="col">Usuario</th>
+                                            <th scope="col">Persona Asignada</th>
+                                            <th scope="col">Área</th>
+                                            <th scope="col">Estado</th>
+                                            {{-- <th scope="col">Rol</th> --}}
+                                            <th scope="col">Acciones</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <tr>
-                                            <th scope="row">1</th>
-                                            <td>Mark</td>
-                                            <td>Otto</td>
-                                            <td>@mdo</td>
+                                            <td scope="row">1</td>
                                             <td>
-                                                <div class="btn-group" role="group">
-                                                    <button class="btn btn-sm btn-outline-success"><i
-                                                            class="bx bx-check"></i></button>
-                                                    <button class="btn btn-sm btn-outline-danger"><i
-                                                            class="bx bx-trash"></i></button>
+                                                <div class="d-flex align-items-center">
+                                                    <img src="{{ asset('modernize/assets/images/profile/user-6.jpg') }}"
+                                                        class="rounded-circle" width="40" height="40">
+                                                    <div class="ms-3">
+                                                        <h6 class="fs-4 fw-semibold mb-0">Christopher</h6>
+                                                    </div>
                                                 </div>
                                             </td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">2</th>
-                                            <td>Jacob</td>
-                                            <td>Thornton</td>
-                                            <td>@fat</td>
                                             <td>
-                                                <div class="btn-group" role="group">
-                                                    <button class="btn btn-sm btn-outline-success"><i
-                                                            class="bx bx-check"></i></button>
-                                                    <button class="btn btn-sm btn-outline-danger"><i
-                                                            class="bx bx-trash"></i></button>
+                                                <div class="d-flex align-items-center">
+                                                    <div class="ms-3">
+                                                        <h6 class="fs-4 fw-semibold mb-0">Christopher Jamil</h6>
+                                                        <span class="fw-normal">Morales Flores</span>
+                                                    </div>
                                                 </div>
                                             </td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">3</th>
-                                            <td>Larry</td>
-                                            <td>the Bird</td>
-                                            <td>@twitter</td>
+                                            <td>Recursos Humanos</td>
                                             <td>
-                                                <div class="btn-group" role="group">
-                                                    <button class="btn btn-sm btn-outline-success"><i
-                                                            class="bx bx-check"></i></button>
-                                                    <button class="btn btn-sm btn-outline-danger"><i
-                                                            class="bx bx-trash"></i></button>
-                                                </div>
+                                                <span class="badge bg-primary-subtle text-primary">activo</span>
                                             </td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">4</th>
-                                            <td>Larry</td>
-                                            <td>the Bird</td>
-                                            <td>@twitter</td>
                                             <td>
                                                 <div class="btn-group" role="group">
                                                     <button class="btn btn-sm btn-outline-success"><i
-                                                            class="bx bx-check"></i></button>
+                                                            class="bx bx-edit"></i></button>
                                                     <button class="btn btn-sm btn-outline-danger"><i
                                                             class="bx bx-trash"></i></button>
                                                 </div>
@@ -557,25 +480,9 @@
 
 @endsection
 
-{{-- @section('scripts')
-<script>
-    const csrfToken = "{{ csrf_token() }}";
-</script>
-<script src="{{ asset('js/jquery-confirm/jquery-confirm.js') }}"></script>
-<script src="{{ asset('js/admin/panel.js') }}"></script>
-<script>
-    var vURL=window.location.origin + '/agenda-new/admin/users';
-    var vURLPending=window.location.origin + '/agenda-new/admin/pending-registrations';
-    const authUserId = {{ auth()->id() }};
-</script>
-@endsection --}}
-
 @section('scripts')
     <script>
         const languageDataTable = '{{ asset('cdn/datatables-language/es-MX.json') }}';
-        // const vURIPersonnel = window.location.origin + '/admin/personnel';
-        // const vURIAreaApi = window.location.origin + '/admin/area/api';
-        // console.log(vURIPersonnel);
     </script>
     <script src="{{ asset('modernize/assets/libs/datatables.net/js/jquery.dataTables.min.js') }}"></script>
     <script src="{{ asset('modernize/assets/js/datatable/datatable-advanced.init.js') }}"></script>
@@ -590,5 +497,6 @@
     <script src="{{ asset('js/admin/personnel/form-validate.js') }}"></script>
     <script src="{{ asset('js/admin/panel-api.js') }}"></script>
     <script src="{{ asset('js/admin/modal-actions.js') }}"></script>
+    <script src="{{ asset('js/admin/helpers.js') }}"></script>
     <script src="{{ asset('js/admin/panel.js') }}"></script>
 @endsection

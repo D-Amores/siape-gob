@@ -24,12 +24,12 @@ class UpdateUserRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'username' => 'sometimes|string|max:255|unique:users,username,' . $this->route('user')->id,
+            'username' => 'sometimes|string|min:6|max:255|unique:users,username,' . $this->route('user')->id,
             'password' => 'sometimes|string|min:8|confirmed',
             //'profile_picture' => 'sometimes|image|max:2048', // Max size 2MB
-            'is_active' => 'sometimes|boolean',
-            'area_id' => 'sometimes|exists:areas,id',
-            'personnel_id' => 'sometimes|exists:personnel,id',
+            //'is_active' => 'sometimes|boolean',
+            //'area_id' => 'sometimes|exists:areas,id',
+            'personnel_id' => 'sometimes|exists:personnel,id|unique:users,personnel_id,' . $this->route('user')->id,
         ];
     }
 
@@ -37,12 +37,14 @@ class UpdateUserRequest extends FormRequest
     {
         return [
             'username.unique' => 'El nombre de usuario ya está en uso.',
+            'username.min' => 'El nombre de usuario debe tener al menos 6 caracteres.',
             'password.confirmed' => 'La confirmación de la contraseña no coincide.',
             'password.min' => 'La contraseña debe tener al menos 8 caracteres.',
             //'profile_picture.image' => 'La imagen de perfil debe ser una imagen.',
             //'profile_picture.max' => 'La imagen de perfil no puede ser mayor de 2MB.',
-            'area_id.exists' => 'El área seleccionada no es válida.',
+            //'area_id.exists' => 'El área seleccionada no es válida.',
             'personnel_id.exists' => 'El personal seleccionado no es válido.',
+            'personnel_id.unique' => 'El personal ya tiene una cuenta de usuario asociada.',
         ];
     }
 
@@ -52,8 +54,8 @@ class UpdateUserRequest extends FormRequest
             'username' => 'nombre de usuario',
             'password' => 'contraseña',
             //'profile_picture' => 'imagen de perfil',
-            'is_active' => 'estado activo',
-            'area_id' => 'área',
+            //'is_active' => 'estado activo',
+            //'area_id' => 'área',
             'personnel_id' => 'personal',
         ];
     }

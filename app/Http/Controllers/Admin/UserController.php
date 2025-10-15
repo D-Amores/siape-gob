@@ -58,7 +58,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        //
+        return view('admin.users');
     }
 
     /**
@@ -108,7 +108,11 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
-        //
+        return response()->json([
+            'ok' => true, 
+            'message' => 'Usuario obtenido exitosamente.', 
+            'data' => $user],
+         200);
     }
 
     /**
@@ -131,6 +135,13 @@ class UserController extends Controller
             if (isset($data['password'])) {
                 $data['password'] = Hash::make($data['password']);
             }
+            // Si se actualiza el personnel_id, actualizar también el area_id
+            if (isset($data['personnel_id'])) {
+                $personnel = Personnel::find($data['personnel_id']);
+                $data['area_id'] = $personnel->area_id;
+                $data['is_active'] = $personnel->isActive();
+            }
+
             $user->update($data);
             $response = ['ok'=>true, 'message'=>'Usuario actualizado exitosamente.'];
             $status = 200;
