@@ -4,6 +4,16 @@ document.addEventListener('DOMContentLoaded', function () {
     loadAssets();
 });
 
+$(document).ready(function() {
+    // Inicializar segunda tabla
+    $('#file_export2').DataTable({
+        dom: 'Bfrtip',
+        buttons: [
+            'copy', 'csv', 'excel', 'pdf', 'print'
+        ]
+    });
+});
+
 const assignmentForm = document.getElementById('assignmentForm');
 
 assignmentForm.addEventListener('submit', async function (e) {

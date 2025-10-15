@@ -20,33 +20,65 @@
 @endsection
 
 @section('content')
-    <div class="container-fluid">
-        <div class="datatables">
-            <div class="card shadow-lg">
-                <div class="card-body">
-                    <div class="table-responsive">
-                        <table id="file_export" class="table table-hover w-100 table-striped table-bordered display">
-                            <thead>
-                                <tr>
-                                    <th class="text-center">Asignación</th>
-                                    <th class="text-center" style="width: 150px;">Acciones</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-
-                            </tbody>
-                            <tfoot>
-                                <tr>
-                                    <th class="text-center">Asignación</th>
-                                    <th class="text-center">Acciones</th>
-                                </tr>
-                            </tfoot>
-                        </table>
-                    </div>
+<div class="container-fluid">
+    <div class="datatables">
+        <div class="card shadow-lg">
+            <div class="card-body">
+                <div class="mb-2">
+                    <h4 class="card-title mb-0">Asignaciones Pendientes</h4>
+                </div>
+                <div class="table-responsive">
+                    <table id="file_export" class="table table-hover w-100 table-striped table-bordered display">
+                        <thead>
+                            <tr>
+                                <th class="text-center">Asignación Pendientes</th>
+                                <th class="text-center" style="width: 150px;">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Contenido de la primera tabla -->
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <th class="text-center">Asignación Pendientes</th>
+                                <th class="text-center">Acciones</th>
+                            </tr>
+                        </tfoot>
+                    </table>
                 </div>
             </div>
         </div>
     </div>
+
+    <div class="datatables mt-4">
+        <div class="card shadow-lg">
+            <div class="card-body">
+                <div class="mb-2">
+                    <h4 class="card-title mb-0">Asignaciones Aceptadas</h4>
+                </div>
+                <div class="table-responsive">
+                    <table id="file_export2" class="table table-hover w-100 table-striped table-bordered display">
+                        <thead>
+                            <tr>
+                                <th class="text-center">Asignación Acceptadas</th>
+                                <th class="text-center" style="width: 150px;">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <th class="text-center">Asignación Aceptadas</th>
+                                <th class="text-center">Acciones</th>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
     <div class="dark-transparent sidebartoggler"></div>
 
