@@ -63,7 +63,6 @@
                 </div>
 
                 <form id="assignmentForm">
-                    @csrf
                     <div class="modal-body p-4">
 
                         <!-- Select para Personal -->
@@ -71,7 +70,7 @@
                             <label for="assignedUser" class="form-label fw-semibold">
                                 <i class="ti ti-user me-2 text-primary"></i>Personal
                             </label>
-                            <select class="form-control" id="assignedUser" name="personnel_id" required>
+                            <select class="form-control" id="assignedUser" name="receiver_id" required>
                                 {{-- <option value="">Cargando personal...</option> --}}
                             </select>
                         </div>

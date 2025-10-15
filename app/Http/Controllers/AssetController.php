@@ -106,7 +106,7 @@ class AssetController extends Controller
         }
     }
 
-    public function assetsApi()
+    public function selectAssetsApi()
     {
         try {
             $assets = Asset::select('id', 'inventory_number', 'model')
@@ -115,7 +115,7 @@ class AssetController extends Controller
                 ->map(function ($asset) {
                     return [
                         'id' => $asset->id,
-                        'text' => "{$asset->inventory_number} - {$asset->model}"
+                        'text' => "{$asset->model} - {$asset->inventory_number}"
                     ];
                 });
 

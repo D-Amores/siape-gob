@@ -2,7 +2,7 @@
 async function loadAssets() {
     try {
         const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-        const url = "/assets/api";
+        const url = "/select-assets/api";
 
         const response = await fetch(url, {
             method: 'POST',
