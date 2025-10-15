@@ -5,6 +5,7 @@ const categoriaSelect = document.getElementById('categoria');
 const camposDinamicos = document.getElementById('camposDinamicos');
 const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 let editingAssetId = null;
+let assetIdToDelete = null;
 
 const camposGenericos = `
     <h6 class="text-uppercase text-secondary fw-semibold mb-3">
@@ -52,6 +53,81 @@ if (categoriaSelect) {
         }
     });
 }
+
+// ------------------------------
+// Cargar categorías dinámicamente
+// ------------------------------
+async function cargarCategorias(selectedId = null) {
+    const categoriaSelect = document.getElementById('categoria');
+    if (!categoriaSelect) return;
+
+    try {
+        // Hacemos fetch a tu API de categorías
+        const res = await fetch('/categories/api', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': csrfToken
+            }
+        });
+
+        const json = await res.json();
+
+        if (!json.ok) {
+            console.error('Error al cargar categorías:', json.message);
+            return;
+        }
+
+        // Limpiar select antes de insertar
+        categoriaSelect.innerHTML = `<option value="" selected>Seleccione categoría</option>`;
+
+        // Insertar opciones dinámicamente
+        json.data.forEach(cat => {
+            const option = document.createElement('option');
+            option.value = cat.id;
+            option.textContent = cat.name;
+            if (selectedId && selectedId == cat.id) {
+                option.selected = true;
+            }
+            categoriaSelect.appendChild(option);
+        });
+
+    } catch (error) {
+        console.error('Error en fetch categorías:', error);
+    }
+}
+
+// ------------------------------
+// Cargar marcas dinámicamente
+// ------------------------------
+async function cargarMarcas(selectedId = null) {
+    try {
+        const res = await fetch('/brands/api', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': csrfToken
+            }
+        });
+        const json = await res.json();
+        if (!json.ok) return;
+
+        const marcaSelect = document.getElementById('marca');
+        marcaSelect.innerHTML = '<option value="">Seleccione marca</option>';
+        json.data.forEach(m => {
+            const option = document.createElement('option');
+            option.value = m.id;
+            option.textContent = m.name;
+            if (selectedId && selectedId == m.id) option.selected = true;
+            marcaSelect.appendChild(option);
+        });
+
+    } catch (error) {
+        console.error('Error cargando marcas:', error);
+    }
+}
+
+
 
 // ------------------------------
 // Inicialización de DataTable
@@ -122,6 +198,36 @@ document.addEventListener('DOMContentLoaded', function () {
                             <i class="fas fa-trash"></i>
                         </button>
                     `
+                }
+            ],
+            dom: 'Bfrtip', // Posición de los botones
+            buttons: [
+                {
+                    extend: 'copyHtml5',
+                    text: '<i></i> Copiar',
+                    className: 'btn btn-secondary btn-sm'
+                },
+                {
+                    extend: 'excelHtml5',
+                    text: '<i></i> Excel',
+                    className: 'btn btn-success btn-sm'
+                },
+                {
+                    extend: 'csvHtml5',
+                    text: '<i></i> CSV',
+                    className: 'btn btn-info btn-sm'
+                },
+                {
+                    extend: 'pdfHtml5',
+                    text: '<i></i> PDF',
+                    className: 'btn btn-danger btn-sm',
+                    orientation: 'landscape',
+                    pageSize: 'A4'
+                },
+                {
+                    extend: 'print',
+                    text: '<i></i> Imprimir',
+                    className: 'btn btn-primary btn-sm'
                 }
             ]
         });
@@ -196,19 +302,24 @@ document.querySelector('#file_export tbody').addEventListener('click', async (ev
 // ------------------------------
 // Eliminar bien
 // ------------------------------
-document.addEventListener('click', async (e) => {
+document.addEventListener('click', (e) => {
     const deleteButton = e.target.closest('.btn-delete-asset');
     if (!deleteButton) return;
 
-    const id = deleteButton.dataset.id;
-    if (!id) return;
+    assetIdToDelete = deleteButton.dataset.id;
+    if (!assetIdToDelete) return;
 
-    if (!confirm('¿Estás seguro de eliminar este activo? Esta acción no se puede deshacer.')) {
-        return;
-    }
+    // Abrir modal
+    const modalDelete = new bootstrap.Modal(document.getElementById('modalConfirmDelete'));
+    modalDelete.show();
+});
+
+// Botón Confirmar Eliminación
+document.getElementById('confirmDeleteBtn').addEventListener('click', async () => {
+    if (!assetIdToDelete) return;
 
     try {
-        const response = await fetch(`/assets/${id}`, {
+        const response = await fetch(`/assets/${assetIdToDelete}`, {
             method: 'DELETE',
             headers: {
                 'X-CSRF-TOKEN': csrfToken
@@ -222,16 +333,22 @@ document.addEventListener('click', async (e) => {
             return;
         }
 
-        // Éxito: eliminar fila de DataTable
+        // Cerrar modal
+        closeModalDirect('modalConfirmDelete');
+
+        // Eliminar fila de DataTable
         const table = $('#file_export').DataTable();
-        const row = deleteButton.closest('tr');
+        const row = document.querySelector(`.btn-delete-asset[data-id="${assetIdToDelete}"]`).closest('tr');
         table.row(row).remove().draw();
+
+        assetIdToDelete = null;
 
     } catch (error) {
         console.error('Error al eliminar el activo:', error);
         alert('Ocurrió un error inesperado. Revisa la consola.');
     }
 });
+
 
 // ------------------------------
 // Modal para crear/editar bien
@@ -263,7 +380,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Carga inicial de la tabla
     loadAssets();
 
-    document.addEventListener('click', e => {
+    document.addEventListener('click', async e => {
         const btn = e.target.closest('.btn-modal-bien');
         if (!btn) return;
 
@@ -279,6 +396,12 @@ document.addEventListener('DOMContentLoaded', () => {
             btnSubmit.classList.add('btn-primary');
             formBien.dataset.mode = 'create';
             delete formBien.dataset.id;
+
+            // Cargar categorías y marcas dinámicamente
+            await Promise.all([
+                cargarCategorias(),
+                cargarMarcas()
+            ]);
         }
 
         if (mode === 'edit') {
@@ -292,7 +415,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // Cargar datos del bien
             fetch('/assets/api?option=details')
             .then(res => res.json())
-            .then(result => {
+            .then(async result => {
                 if (!result.ok) return;
                 const asset = result.data.find(a => a.id == id);
                 if (!asset) return;
@@ -304,6 +427,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 document.getElementById('estado').value = asset.is_active ? '1' : '0';
                 document.getElementById('categoria').value = asset.category_id ?? '';
                 document.getElementById('descripcion').value = asset.description ?? '';
+
+                await Promise.all([
+                    cargarCategorias(asset.category_id),
+                    cargarMarcas(asset.brand_id)
+                ]);
 
                 if (categoriasConCamposGenericos.includes(asset.category_id?.toString())) {
                     camposDinamicos.innerHTML = camposGenericos;
@@ -379,15 +507,22 @@ document.addEventListener('DOMContentLoaded', () => {
 // Funciones auxiliares
 // ------------------------------
 function openModalForEdit(modalID){
-    const modal = new bootstrap.Modal(document.getElementById(modalID));
+    const modalEl = document.getElementById(modalID);
+    const modal = bootstrap.Modal.getOrCreateInstance(modalEl);
     modal.show();
 }
 
 function closeModal(btnCloseID, modalID, focusID){
     document.getElementById(btnCloseID).addEventListener('click', () => {
-        let focusIdFInal = '#${focusID}';
-        const modal = bootstrap.Modal.getInstance(document.getElementById(modalID));
-        moveFocus(focusIdFInal);
+        const modalEl = document.getElementById(modalID);
+        const modal = bootstrap.Modal.getOrCreateInstance(modalEl);
         modal.hide();
-    }
-)};
+        if(focusID) moveFocus(`#${focusID}`);
+    });
+};
+
+function closeModalDirect(modalID){
+    const modalEl = document.getElementById(modalID);
+    const modal = bootstrap.Modal.getOrCreateInstance(modalEl);
+    modal.hide();
+}
