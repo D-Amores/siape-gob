@@ -89,7 +89,7 @@ async function userCreate() {
 }
 
 //Actualizar usuario
-async function userUpdate() {
+async function userEdit() {
     if (!isFormValid('#userEditForm')) return;
     
     const userForm = document.getElementById('userEditForm');
@@ -152,7 +152,7 @@ async function initAdminPanel() {
     await personnelToSelect(); // Carga los personales
 
     btnUserCreate.addEventListener('click', userCreate);
-    btnUserUpdate.addEventListener('click', userUpdate);
+    btnUserUpdate.addEventListener('click', userEdit);
     
     userTableTbody.addEventListener('click', (e)=>{
         const btnEdit = e.target.closest('.btn-edit');
