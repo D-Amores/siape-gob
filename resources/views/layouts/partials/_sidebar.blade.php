@@ -70,6 +70,15 @@
                                             <span class="hide-menu">Asignaciones</span>
                                         </a>
                                     </li>
+                                    <li class="sidebar-item">
+                                        <a class="sidebar-link" href="{{ route('personnel-asset.index') }}"
+                                            aria-expanded="false">
+                                            <span>
+                                                <i class="ti ti-arrows-exchange me-2"></i>
+                                            </span>
+                                            <span class="hide-menu">Aceptar Asignaciones</span>
+                                        </a>
+                                    </li>
                                 </ul>
                             </div>
                         </div>
