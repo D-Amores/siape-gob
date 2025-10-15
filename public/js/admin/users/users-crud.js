@@ -19,7 +19,6 @@ async function storeUsers(users) {
             },
             body: JSON.stringify(users)
         });
-        console.log('Respuesta del servidor:', response);
 
         if (!response.ok) {
             if (response.status === 422) {
@@ -77,7 +76,6 @@ async function updateUser(userId, user) {
         }
 
     } catch (error) {
-        console.error('Error en updateUser:', error);
         showAlert('Error al actualizar el usuario. Intente nuevamente.', 'red', 'Error');
     }
     return isOk; // true si se actualizó, false si no
@@ -143,7 +141,6 @@ async function destroyUser(userId) {
             showAlert(result.message || 'Error al eliminar el usuario', 'red', 'Error', null, 2000);
         }
     } catch (error) {
-        console.error('Error en destroyUser:', error);
         showAlert('Error al eliminar el usuario. Intente nuevamente.', 'red', 'Error');
     }
 

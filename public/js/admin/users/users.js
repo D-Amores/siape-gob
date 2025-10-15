@@ -57,7 +57,6 @@ async function loadUserDataOnModalEdit(userId) {
 // Cargar datos en la tabla
 async function loadUsers() {
     data = await getUserApi();
-    console.log(data);
     loadUsersTable(data);
 }
 
@@ -141,7 +140,6 @@ async function userDelete(userId) {
         const isOk = await destroyUser(userId);
         if (isOk) {
             loadUsers(); // recarga la tabla solo si la creación fue exitosa
-            console.log('tabla recargada');
         }
     });
 }

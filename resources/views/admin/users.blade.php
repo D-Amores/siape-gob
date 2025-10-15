@@ -238,14 +238,20 @@
     </script>
     <script src="{{ asset('modernize/assets/libs/datatables.net/js/jquery.dataTables.min.js') }}"></script>
     <script src="{{ asset('modernize/assets/js/datatable/datatable-advanced.init.js') }}"></script>
-    <script src="{{ asset('js/admin/helpers.js') }}"></script>
+    
+    <!-- Helpers -->
+    <script src="{{ asset('js/helpers/tools/utils.js') }}"></script>
+    <script src="{{ asset('js/helpers/modals/modal-actions.js') }}"></script>
+    <script src="{{ asset('js/helpers/alerts/alerts.js') }}"></script>
+
+   <!-- Configuración de la tabla -->
     <script src="{{ asset('js/admin/users/table-config.js') }}"></script>
+
+    <!-- APIs -->
+    <script src="{{ asset('js/admin/admin-api.js') }}"></script>
+
     <!-- Scripts para manejar usuarios -->
     <script src="{{ asset('js/admin/users/form-validate.js') }}"></script>
-    <script src="{{ asset('js/admin/alerts.js') }}"></script>
-    <script src="{{ asset('js/admin/modal-actions1.js') }}"></script>
-    <script src="{{ asset('js/admin/panel-api.js') }}"></script>
-    
     <script src="{{ asset('js/admin/users/users-crud.js') }}"></script>
     <script src="{{ asset('js/admin/users/users.js') }}"></script>
 @endsection
