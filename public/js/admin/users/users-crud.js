@@ -47,17 +47,17 @@ async function storeUsers(users) {
     return isOk; // true si se creó, false si no
 }
 
-async function updatePersonnel(personnelId, personnel) {
+async function updateUser(userId, user) {
     let isOk = false; // usar let, no const
     const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
     try {
-        const response = await fetch(`${vURIUsers}/${personnelId}`, {
+        const response = await fetch(`${vURIUsers}/${userId}`, {
             method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json',
                 'X-CSRF-TOKEN': csrfToken
             },
-            body: JSON.stringify(personnel)
+            body: JSON.stringify(user)
         });
 
         if (!response.ok) {
@@ -70,24 +70,24 @@ async function updatePersonnel(personnelId, personnel) {
         }
         const result = await response.json();
         if (result.ok) {
-            showAlert(result.message || 'Personal actualizado exitosamente', 'green', 'Éxito', null, 2000);
+            showAlert(result.message || 'Usuario actualizado exitosamente', 'green', 'Éxito', null, 2000);
             isOk = true;
         } else {
-            showAlert(result.message || 'Error al actualizar el personal', 'red', 'Error', null, 2000);
+            showAlert(result.message || 'Error al actualizar el usuario', 'red', 'Error', null, 2000);
         }
 
     } catch (error) {
-        console.error('Error en updatePersonnel:', error);
-        showAlert('Error al actualizar el personal. Intente nuevamente.', 'red', 'Error');
+        console.error('Error en updateUser:', error);
+        showAlert('Error al actualizar el usuario. Intente nuevamente.', 'red', 'Error');
     }
     return isOk; // true si se actualizó, false si no
 }
 
-async function showPersonnel(personnelId) {
-    let personnel = null;
+async function showUser(userId) {
+    let user = null;
     const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
     try {
-        const response = await fetch(`${vURIUsers}/${personnelId}`, {
+        const response = await fetch(`${vURIUsers}/${userId}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -105,20 +105,20 @@ async function showPersonnel(personnelId) {
 
         const result = await response.json();
         if (result.ok) {
-            personnel = result.data;
+            user = result.data;
         }
     } catch (error) {
-        console.error('Error en showPersonnel:', error);
+        console.error('Error en showUser:', error);
     }
 
-    return personnel; // objeto personnel o null
+    return user; // objeto user o null
 }
 
-async function destroyPersonnel(personnelId) {
+async function destroyUser(userId) {
     let isOk = false; // usar let, no const
     const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
     try {
-        const response = await fetch(`${vURIUsers}/${personnelId}`, {
+        const response = await fetch(`${vURIUsers}/${userId}`, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
@@ -128,7 +128,7 @@ async function destroyPersonnel(personnelId) {
 
         if (!response.ok) {
             if (response.status === 404) {
-                showAlert('El personal no fue encontrado.', 'red', 'Error', null, 2000);
+                showAlert('El usuario no fue encontrado.', 'red', 'Error', null, 2000);
                 return false;
             } else {
                 throw new Error(`Error HTTP: ${response.status}`);
@@ -137,14 +137,14 @@ async function destroyPersonnel(personnelId) {
 
         const result = await response.json();
         if (result.ok) {
-            showAlert(result.message || 'Personal eliminado exitosamente', 'green', 'Éxito', null, 2000);
+            showAlert(result.message || 'Usuario eliminado exitosamente', 'green', 'Éxito', null, 2000);
             isOk = true;
         } else {
-            showAlert(result.message || 'Error al eliminar el personal', 'red', 'Error', null, 2000);
+            showAlert(result.message || 'Error al eliminar el usuario', 'red', 'Error', null, 2000);
         }
     } catch (error) {
-        console.error('Error en destroyPersonnel:', error);
-        showAlert('Error al eliminar el personal. Intente nuevamente.', 'red', 'Error');
+        console.error('Error en destroyUser:', error);
+        showAlert('Error al eliminar el usuario. Intente nuevamente.', 'red', 'Error');
     }
 
     return isOk; // true si se eliminó, false si no
