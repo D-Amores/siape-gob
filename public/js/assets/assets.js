@@ -300,29 +300,34 @@ document.addEventListener('DOMContentLoaded', () => {
         const mode = formBien.dataset.mode;
 
         const formData = {
-            numeroInventario: document.getElementById('numeroInventario').value,
-            marca: document.getElementById('marca').value,
-            modelo: document.getElementById('modelo').value,
-            serie: document.getElementById('serie').value,
-            estado: document.getElementById('estado').value,
-            categoria: document.getElementById('categoria').value,
-            descripcion: document.getElementById('descripcion').value
+            inventory_number: document.getElementById('numeroInventario').value,
+            brand_id: document.getElementById('marca').value,
+            model: document.getElementById('modelo').value,
+            serial_number: document.getElementById('serie').value,
+            is_active: document.getElementById('estado').value, // 1 o 0
+            category_id: document.getElementById('categoria').value,
+            description: document.getElementById('descripcion').value
         };
 
         try {
             if (mode === 'create') {
-                const res = await fetch('/assets/api?option=create', {
+                const res = await fetch('/assets', {
                     method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': csrfToken
+                    },
                     body: JSON.stringify(formData)
                 });
                 if (!res.ok) throw new Error('Error al crear bien');
-                // actualizar tabla, cerrar modal, etc.
             } else if (mode === 'edit') {
                 const id = formBien.dataset.id;
-                const res = await fetch(`/assets/api?option=update&id=${id}`, {
+                const res = await fetch(`/assets/${id}`, {
                     method: 'PUT',
-                    headers: {'Content-Type': 'application/json'},
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': csrfToken
+                    },
                     body: JSON.stringify(formData)
                 });
                 if (!res.ok) throw new Error('Error al actualizar bien');
