@@ -29,7 +29,7 @@ class UpdateUserRequest extends FormRequest
             //'profile_picture' => 'sometimes|image|max:2048', // Max size 2MB
             //'is_active' => 'sometimes|boolean',
             //'area_id' => 'sometimes|exists:areas,id',
-            'personnel_id' => 'sometimes|exists:personnel,id',
+            'personnel_id' => 'sometimes|exists:personnel,id|unique:users,personnel_id,' . $this->route('user')->id,
         ];
     }
 
@@ -44,6 +44,7 @@ class UpdateUserRequest extends FormRequest
             //'profile_picture.max' => 'La imagen de perfil no puede ser mayor de 2MB.',
             //'area_id.exists' => 'El área seleccionada no es válida.',
             'personnel_id.exists' => 'El personal seleccionado no es válido.',
+            'personnel_id.unique' => 'El personal ya tiene una cuenta de usuario asociada.',
         ];
     }
 

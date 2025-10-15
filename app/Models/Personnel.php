@@ -85,4 +85,49 @@ class Personnel extends Model
     {
         return $this->hasMany(PersonnelAsset::class, 'receiver_id');
     }
+
+    public function syncWithUser(): void
+    {
+        if (!$this->user) return;
+
+        $updateData = [];
+
+        // Solo actualizar si cambió el estado activo
+        if ($this->isDirty('is_active')) {
+            $updateData['is_active'] = $this->is_active;
+        }
+
+        // Solo actualizar si cambió el área
+        if ($this->isDirty('area_id')) {
+            $updateData['area_id'] = $this->area_id;
+        }
+
+        if (!empty($updateData)) {
+            $this->user->update($updateData);
+        }
+    }
+
+    public function syncDestroyWithUser(): void
+    {
+        if (!$this->user) return;
+
+         $this->user->update([
+            'is_active' => false,
+            'area_id' => null,
+        ]);
+    }
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::updated(function ($personnel) {
+            $personnel->syncWithUser();
+        });
+        // Al eliminar un personal
+        static::deleting(function ($personnel) {
+            $personnel->syncDestroyWithUser();
+        });
+    }
+
 }

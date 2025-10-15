@@ -26,7 +26,7 @@ class StoreUserRequest extends FormRequest
         return [
             'username' => 'required|string|max:20|min:6|unique:users',
             'password' => 'required|string|min:8|confirmed',
-            'personnel_id' => 'required|exists:personnel,id',
+            'personnel_id' => 'required|exists:personnel,id|unique:users,personnel_id',
         ];
     }
 
@@ -42,6 +42,7 @@ class StoreUserRequest extends FormRequest
             'username.min' => 'El nombre de usuario debe tener al menos 6 caracteres.',
             'password.min' => 'La contraseña debe tener al menos 8 caracteres.',
             'password.confirmed' => 'La confirmación de la contraseña no coincide.',
+            'personnel_id.unique' => 'El personal ya tiene una cuenta de usuario asociada.',
         ];
     }
 
