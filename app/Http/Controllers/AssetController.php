@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreAssetRequest;
 use App\Http\Requests\UpdateAssetRequest;
+use App\Http\Requests\AssetsApiRequest;
 use App\Models\Asset;
 
 class AssetController extends Controller
@@ -13,7 +14,46 @@ class AssetController extends Controller
      */
     public function index()
     {
-        //
+        return view('assets.asset');
+    }
+
+    /**
+     * Handle the incoming request for assets API.
+     */
+    public function assetsApi(AssetsApiRequest $request)
+    {
+        $option = $request->query('option');
+
+        $data = null;
+
+        switch ($option) {
+            case 'table':
+                // Solo los campos necesarios para la tabla principal + relaciones básicas
+                $data = Asset::with(['brand', 'category'])
+                    ->get(['id', 'inventory_number', 'model', 'serial_number', 'brand_id', 'category_id', 'is_active']);
+                break;
+
+            case 'details':
+                // Todos los campos, incluyendo relaciones y posibles datos nulos
+                $data = Asset::with(['brand', 'category', 'personalAssets'])->get();
+                break;
+
+            default:
+                return response()->json([
+                    'ok' => false,
+                    'message' => 'Opción no válida.',
+                ], 422);
+        }
+
+        $data = $data->map(function($asset) {
+            $asset->is_active_label = $asset->isActive() ? 'Activo' : 'Inactivo';
+            return $asset;
+        });
+
+        return response()->json([
+            'ok' => true,
+            'data' => $data,
+        ]);
     }
 
     /**

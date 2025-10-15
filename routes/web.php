@@ -57,3 +57,6 @@ Route::post('users/api', [UserController::class, 'userApi']);
 Route::post('admin/area/api', [AreaController::class, 'areaApi']);
 
 Route::post('select-assets/api', [AssetController::class, 'selectAssetsApi']);
+// Ruta para obtener assets para la tabla o detalles
+Route::get('assets/api', [AssetController::class, 'assetsApi'])->name('assets.api');
+
