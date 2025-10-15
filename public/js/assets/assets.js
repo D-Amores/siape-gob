@@ -91,7 +91,6 @@ document.addEventListener('DOMContentLoaded', function () {
                     data: 'is_active_label',
                     className: 'text-center',
                     render: function(data, type, row) {
-                        // Determinar la clase del badge según el estado
                         const badgeClass = row.is_active ? 'bg-success' : 'bg-danger';
                         return `<span class="badge ${badgeClass} rounded-pill px-3 py-1">${data}</span>`;
                     }
@@ -245,21 +244,21 @@ document.addEventListener('DOMContentLoaded', () => {
     const tableBody = document.querySelector('#file_export tbody');
 
     function loadAssets() {
-    if ($.fn.DataTable.isDataTable('#file_export')) {
-        const table = $('#file_export').DataTable();
+        if ($.fn.DataTable.isDataTable('#file_export')) {
+            const table = $('#file_export').DataTable();
 
-        fetch('/assets/api?option=table')
-            .then(res => res.json())
-            .then(json => {
-                if (!json.ok) return;
+            fetch('/assets/api?option=table')
+                .then(res => res.json())
+                .then(json => {
+                    if (!json.ok) return;
 
-                table.clear();
-                table.rows.add(json.data);
-                table.draw();
-            })
-            .catch(err => console.error('Error al refrescar la tabla:', err));
+                    table.clear();
+                    table.rows.add(json.data);
+                    table.draw();
+                })
+                .catch(err => console.error('Error al refrescar la tabla:', err));
+        }
     }
-}
 
     // Carga inicial de la tabla
     loadAssets();
@@ -271,7 +270,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const mode = btn.dataset.mode;
         const id = btn.dataset.id || null;
 
-        // Limpia el formulario al abrir
         formBien.reset();
 
         if (mode === 'create') {
@@ -327,7 +325,6 @@ document.addEventListener('DOMContentLoaded', () => {
         e.preventDefault();
         const mode = formBien.dataset.mode;
 
-        // Añadirlos al formData
         const formData = {
             inventory_number: document.getElementById('numeroInventario').value,
             brand_id: document.getElementById('marca').value,
