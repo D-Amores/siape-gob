@@ -10,8 +10,7 @@ use App\Http\Controllers\BrandController;
 
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\PersonnelAssetController;
-use App\Http\Controllers\PersonnelAssetPendingController;
-use App\Http\Controllers\TestController;
+use App\Http\Controllers\Admin\PersonnelAssetPendingController;
 
 Route::get('/', function () {
     return view('layouts.layout');
@@ -56,3 +55,8 @@ Route::post('admin/users/api', [UserController::class, 'userApi']);
 
 //RUTA PARA EL CRUD DE AREAS
 Route::post('admin/areas/api', [AreaController::class, 'areaApi']);
+
+Route::post('select-assets/api', [AssetController::class, 'selectAssetsApi']);
+// Ruta para obtener assets para la tabla o detalles
+Route::get('assets/api', [AssetController::class, 'assetsApi'])->name('assets.api');
+

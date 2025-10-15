@@ -36,6 +36,7 @@ class UpdateAssetRequest extends FormRequest
             'description' => 'sometimes|nullable|string',
             'brand_id' => 'sometimes|exists:brands,id',
             'category_id' => 'sometimes|exists:categories,id',
+            'is_active' => 'sometimes|boolean',
         ];
     }
 
@@ -116,6 +117,10 @@ class UpdateAssetRequest extends FormRequest
 
         if ($this->has('description')) {
             $data['description'] = trim($this->description ?? '');
+        }
+
+        if ($this->has('is_active')) {
+            $data['is_active'] = filter_var($this->is_active, FILTER_VALIDATE_BOOLEAN);
         }
 
         $this->merge($data);

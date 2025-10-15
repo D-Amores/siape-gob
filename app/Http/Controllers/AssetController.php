@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreAssetRequest;
 use App\Http\Requests\UpdateAssetRequest;
+use App\Http\Requests\AssetsApiRequest;
 use App\Models\Asset;
 
 class AssetController extends Controller
@@ -13,7 +14,46 @@ class AssetController extends Controller
      */
     public function index()
     {
-        //
+        return view('assets.asset');
+    }
+
+    /**
+     * Handle the incoming request for assets API.
+     */
+    public function assetsApi(AssetsApiRequest $request)
+    {
+        $option = $request->query('option');
+
+        $data = null;
+
+        switch ($option) {
+            case 'table':
+                // Solo los campos necesarios para la tabla principal + relaciones básicas
+                $data = Asset::with(['brand', 'category'])
+                    ->get(['id', 'inventory_number', 'model', 'serial_number', 'brand_id', 'category_id', 'is_active']);
+                break;
+
+            case 'details':
+                // Todos los campos, incluyendo relaciones y posibles datos nulos
+                $data = Asset::with(['brand', 'category', 'personalAssets'])->get();
+                break;
+
+            default:
+                return response()->json([
+                    'ok' => false,
+                    'message' => 'Opción no válida.',
+                ], 422);
+        }
+
+        $data = $data->map(function($asset) {
+            $asset->is_active_label = $asset->isActive() ? 'Activo' : 'Inactivo';
+            return $asset;
+        });
+
+        return response()->json([
+            'ok' => true,
+            'data' => $data,
+        ]);
     }
 
     /**
@@ -38,7 +78,6 @@ class AssetController extends Controller
                 'message' => 'Activo creado exitosamente',
                 'data' => $asset
             ], 201);
-
         } catch (\Exception $e) {
             return response()->json([
                 'ok' => false,
@@ -69,7 +108,7 @@ class AssetController extends Controller
      */
     public function update(UpdateAssetRequest $request, Asset $asset)
     {
-        $data = $request -> validated();
+        $data = $request->validated();
         try {
             $asset->update($data);
 
@@ -91,19 +130,44 @@ class AssetController extends Controller
      */
     public function destroy(Asset $asset)
     {
-            try {
+        try {
             $asset->delete();
 
             return response()->json([
                 'ok' => true,
                 'message' => 'Activo eliminado exitosamente'
             ], 200);
-
         } catch (\Throwable $e) {
             return response()->json([
                 'ok' => false,
                 'message' => 'Error al eliminar el activo',
                 'error' => config('app.debug') ? $e->getMessage() : 'Error interno'
+            ], 500);
+        }
+    }
+
+    public function selectAssetsApi()
+    {
+        try {
+            $assets = Asset::select('id', 'inventory_number', 'model')
+                ->orderBy('inventory_number', 'asc')
+                ->get()
+                ->map(function ($asset) {
+                    return [
+                        'id' => $asset->id,
+                        'text' => "{$asset->model} - {$asset->inventory_number}"
+                    ];
+                });
+
+            return response()->json([
+                'ok' => true,
+                'data' => $assets
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'ok' => false,
+                'message' => 'Error al obtener los bienes (assets)',
+                'error' => config('app.debug') ? $e->getMessage() : 'Error interno del servidor'
             ], 500);
         }
     }

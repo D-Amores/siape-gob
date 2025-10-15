@@ -27,7 +27,6 @@ class StorePersonnelAssetPendingRequest extends FormRequest
             "assignment_date" => "required|string|max:255",
             "confirmation_date" => "nullable|string|max:255",
             "asset_id" => "required|integer|exists:assets,id",
-            "assigner_id" => "required|integer|exists:personnel,id",
             "receiver_id" => "required|integer|exists:personnel,id",
         ];
     }
@@ -46,10 +45,6 @@ class StorePersonnelAssetPendingRequest extends FormRequest
             'asset_id.integer' => 'El ID del activo debe ser un número entero.',
             'asset_id.exists' => 'El ID del activo proporcionado no existe.',
 
-            'assigner_id.required' => 'El ID del asignador es obligatorio.',
-            'assigner_id.integer' => 'El ID del asignador debe ser un número entero.',
-            'assigner_id.exists' => 'El ID del asignador proporcionado no existe.',
-
             'receiver_id.required' => 'El ID del receptor es obligatorio.',
             'receiver_id.integer' => 'El ID del receptor debe ser un número entero.',
             'receiver_id.exists' => 'El ID del receptor proporcionado no existe.',
@@ -62,7 +57,6 @@ class StorePersonnelAssetPendingRequest extends FormRequest
             'assignment_date' => 'fecha de asignación',
             'confirmation_date' => 'fecha de confirmación',
             'asset_id' => 'ID del activo',
-            'assigner_id' => 'ID del asignador',
             'receiver_id' => 'ID del receptor',
         ];
     }
