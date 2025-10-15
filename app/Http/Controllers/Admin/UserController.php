@@ -135,6 +135,13 @@ class UserController extends Controller
             if (isset($data['password'])) {
                 $data['password'] = Hash::make($data['password']);
             }
+            // Si se actualiza el personnel_id, actualizar también el area_id
+            if (isset($data['personnel_id'])) {
+                $personnel = Personnel::find($data['personnel_id']);
+                $data['area_id'] = $personnel->area_id;
+                $data['is_active'] = $personnel->isActive();
+            }
+
             $user->update($data);
             $response = ['ok'=>true, 'message'=>'Usuario actualizado exitosamente.'];
             $status = 200;
