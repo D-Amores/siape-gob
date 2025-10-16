@@ -28,14 +28,14 @@ function loadPersonnelTable(data) {
                         <div class="ms-3">
                             <h6 class="fs-4 fw-semibold mb-0 text-truncate"
                                 style="max-width: 140px;">
-                                ${row.name ?? ''}
+                                ${capitalizeWords(row.name ?? '')}
                             </h6>
                             <span class="fw-normal text-truncate"
                                   style="display: inline-block; max-width: 140px; cursor: pointer;"
-                                  title="${(row.middle_name ?? '') + ' ' + (row.last_name ?? '')}"
+                                  title="${capitalizeWords(row.last_name ?? '') + ' ' + capitalizeWords(row.middle_name ?? '')}"
                                   data-bs-toggle="tooltip"
                                   data-bs-placement="top">
-                                ${(row.middle_name ?? '') + ' ' + (row.last_name ?? '')}
+                                ${capitalizeWords(row.last_name ?? '') + ' ' + capitalizeWords(row.middle_name ?? '')}
                             </span>
                         </div>
                     </div>
@@ -67,10 +67,10 @@ function loadPersonnelTable(data) {
                 render: (area) => `
                     <div class="text-truncate"
                          style="max-width: 120px; cursor: pointer;"
-                         title="${area ?? 'Sin área'}"
+                         title="${capitalizeWords(area ?? 'Sin área')}"
                          data-bs-toggle="tooltip"
                          data-bs-placement="top">
-                        ${area ?? 'Sin área'}
+                        ${capitalizeWords(area ?? 'Sin área')}
                     </div>
                 `
             },
