@@ -12,4 +12,12 @@ class Tools
         // Format the phone number as needed
         return preg_replace('/\D/', '', $phone);
     }
+
+    public static function convertToString($value): ?string
+    {
+        if (is_null($value)) {
+            return null;
+        }
+        return (string) $value;
+    }
 }
