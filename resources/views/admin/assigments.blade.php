@@ -28,7 +28,7 @@
                     <h4 class="card-title mb-0">Asignaciones Pendientes</h4>
                 </div>
                 <div class="table-responsive">
-                    <table id="file_export" class="table table-hover w-100 table-striped table-bordered display">
+                    <table id="table_pendings_assigments" class="table table-hover w-100 table-striped table-bordered display">
                         <thead>
                             <tr>
                                 <th class="text-center">Recibe</th>
@@ -61,7 +61,7 @@
                     <h4 class="card-title mb-0">Asignaciones Aceptadas</h4>
                 </div>
                 <div class="table-responsive">
-                    <table id="file_export2" class="table table-hover w-100 table-striped table-bordered display">
+                    <table id="table_acepted_assigments" class="table table-hover w-100 table-striped table-bordered display">
                         <thead>
                             <tr>
                                 <th class="text-center">Asigna</th>
@@ -100,24 +100,31 @@
                 <form id="assignmentForm">
                     <div class="modal-body p-4">
 
+                        <!-- Usuario asignado (receiver) -->
                         <div class="mb-4">
                             <label for="assignedUser" class="form-label fw-semibold">
                                 <i class="ti ti-user me-2 text-primary"></i>Personal
                             </label>
-                            <select class="form-control" id="assignedUser" name="receiver_id">
-                                {{-- <option value="">Cargando personal...</option> --}}
+                            <select class="form-control" id="assignedUser" name="receiver_id" required>
+                                <option value="">Selecciona personal...</option>
                             </select>
                         </div>
 
-                        <!-- Select para Bienes -->
+                        <!-- Bien asignado (asset) -->
                         <div class="mb-4">
                             <label for="assignedAsset" class="form-label fw-semibold">
                                 <i class="ti ti-package me-2 text-success"></i>Bien
                             </label>
-                            <select class="form-control" id="assignedAsset" name="asset_id">
-                                {{-- <option value="">Cargando bienes...</option> --}}
+                            <select class="form-control" id="assignedAsset" name="asset_id" required>
+                                <option value="">Selecciona un bien...</option>
                             </select>
                         </div>
+
+                        <!-- Fecha de asignación (hidden, se asigna automáticamente) -->
+                        <input type="hidden" name="assignment_date" id="assignmentDate">
+
+                        <!-- Asignador (assigner_id), usuario autenticado -->
+                        <input type="hidden" name="assigner_id" value="{{ auth()->user()?->id }}">
 
                     </div>
 
@@ -130,6 +137,7 @@
                         </button>
                     </div>
                 </form>
+
             </div>
         </div>
     </div>

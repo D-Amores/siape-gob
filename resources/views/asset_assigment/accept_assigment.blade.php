@@ -19,7 +19,7 @@
             <div class="card shadow-lg">
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table id="file_export" class="table table-hover w-100 table-striped table-bordered display">
+                        <table id="personnel_assigments" class="table table-hover w-100 table-striped table-bordered display">
                             <thead>
                                 <tr>
                                     <th class="text-center">Fecha de Asignación</th>
@@ -67,4 +67,6 @@
     <script>
         const language = "{{ asset('cdn/datatables-language/es-MX.json') }}";
     </script>
+
+    <script src="{{ asset('js/assigments/datatable-assigments-personnel.js') }}"></script>
 @endsection

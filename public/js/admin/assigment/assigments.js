@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', function () {
     loadPersonnel();
     loadAssets();
 
-    $('#file_export2').DataTable({
+    $('#table_acepted_assigments').DataTable({
         dom: 'Bfrtip',
         buttons: [
             'copy', 'csv', 'excel', 'pdf', 'print'
@@ -16,6 +16,7 @@ document.addEventListener('DOMContentLoaded', function () {
 const assignmentForm = document.getElementById('assignmentForm');
 const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
+// Manejar el envío del formulario de asignación
 assignmentForm.addEventListener('submit', async function (e) {
     e.preventDefault();
 
@@ -34,16 +35,18 @@ assignmentForm.addEventListener('submit', async function (e) {
         return;
     }
 
+    // Mostrar indicador de carga en el botón de envío
     const submitButton = this.querySelector('button[type="submit"]');
     const originalText = submitButton.innerHTML;
     submitButton.disabled = true;
     submitButton.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Guardando...';
 
+    // Enviar datos al servidor
     try {
 
         const formData = new FormData(assignmentForm);
+        formData.set('assignment_date', new Date().toISOString().slice(0, 10));
         const data = Object.fromEntries(formData.entries());
-        data.assignment_date = new Date().toISOString().slice(0, 10);
 
         const response = await fetch('/personnel-asset-pending', {
             method: 'POST',
@@ -97,6 +100,7 @@ assignmentForm.addEventListener('submit', async function (e) {
     }
 });
 
+// Función para cargar las asignaciones pendientes
 const loadAssetPending = async () => {
 
     try {
@@ -143,13 +147,16 @@ const loadAssetPending = async () => {
     }
 }
 
+// Función para actualizar la tabla de asignaciones pendientes
 const updateAssetPendingTable = (assetPendings) => {
-    const table = document.getElementById('file_export');
+    const table = document.getElementById('table_pendings_assigments');
 
+    // Destruir instancia previa de DataTable si existe
     if ($.fn.DataTable.isDataTable(table)) {
         $(table).DataTable().destroy();
     }
 
+    // Limpiar el cuerpo de la tabla
     const tbody = table.querySelector('tbody');
     tbody.innerHTML = '';
 
