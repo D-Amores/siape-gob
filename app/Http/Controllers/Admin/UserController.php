@@ -79,15 +79,10 @@ class UserController extends Controller
         $data = $request->validated();
 
         try {
-            $data['area_id'] = Personnel::find($data['personnel_id'])->area_id;
-            $user = User::create(
-                [
-                    'username' => $data['username'],
-                    'password' => Hash::make($data['password']),
-                    'personnel_id' => $data['personnel_id'],
-                    'area_id' => $data['area_id'],
-                ]
-            );
+            $personnel = Personnel::find($data['personnel_id']);
+            $data['area_id'] = $personnel->area_id;
+            $data['is_active'] = $personnel->isActive();
+            $user = User::create($data);
             $response = ['ok' => true, 'message' => 'Usuario creado exitosamente.', 'data' => $user];
             $status = 201;
         } catch (Exception $e) {

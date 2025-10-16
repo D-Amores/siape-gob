@@ -63,10 +63,23 @@ class UpdateUserRequest extends FormRequest
 
     public function prepareForValidation(): void
     {
-        $this->merge([
-            'password' => $this->has('password') ? Tools::convertToString($this->input('password')) : null,
-            'password_confirmation' => $this->has('password_confirmation')? Tools::convertToString($this->input('password_confirmation')) : $this->input('password_confirmation'),
-        ]);
+        if ($this->has('password')) {
+            $this->merge([
+                'password' => (string) $this->input('password'),
+            ]);
+        }
+
+        if ($this->has('password_confirmation')) {
+            $this->merge([
+                'password_confirmation' => (string) $this->input('password_confirmation'),
+            ]);
+        }
+
+        if ($this->has('username')) {
+            $this->merge([
+                'username' => strtolower($this->username),
+            ]);
+        }
     }
 
     public function failedValidation(Validator $validator): void
