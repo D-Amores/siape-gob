@@ -315,5 +315,6 @@
     <script src="{{ asset('cdn/buttons/2.4.2/js/buttons.print.min.js') }}"></script>
 
     <script src="{{ asset('modernize/assets/js/datatable/datatable-advanced.init.js') }}"></script>
+    <script src="/js/helpers/alerts/alerts.js"></script>
     <script src="{{ asset('js/assets/assets.js') }}"></script>
 @endsection
