@@ -69,6 +69,14 @@
                             <input type="text" class="form-control form-control-lg" id="categoryName"
                                 placeholder="Ingrese el nombre">
                         </div>
+
+                        <div class="form-check form-switch mt-3">
+                            <input class="form-check-input" type="checkbox" id="specialCategory">
+                            <label class="form-check-label fw-semibold" for="specialCategory">
+                                Categoría Especial
+                            </label>
+                        </div>
+
                     </div>
 
                     <div class="modal-footer">
@@ -84,8 +92,8 @@
         </div>
     </div>
 
-    <!-- Modal para editar categoría -->
-    <div class="modal fade" id="editCategoryModal" tabindex="-1" aria-labelledby="editCategoryModalLabel" aria-hidden="true">
+    <div class="modal fade" id="editCategoryModal" tabindex="-1" aria-labelledby="editCategoryModalLabel"
+        aria-hidden="true">
         <div class="modal-dialog modal-md modal-dialog-centered">
             <div class="modal-content border-0 shadow">
                 <div class="modal-header bg-dark text-white py-3">
@@ -103,7 +111,6 @@
                             <input type="text" class="form-control form-control-lg" id="editCategoryName"
                                 placeholder="Ingrese el nombre">
                             <input type="hidden" id="editCategoryId">
-                            <!-- Mensaje de ayuda -->
                             <div class="form-text">
                                 Modifique el nombre de la categoría según sea necesario
                             </div>
