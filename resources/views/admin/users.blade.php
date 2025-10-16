@@ -35,8 +35,8 @@
                                         <th scope="col">Usuario</th>
                                         <th scope="col">Persona Asignada</th>
                                         <th scope="col">Área</th>
+                                        <th scope="col">Rol</th>
                                         <th scope="col">Estado</th>
-                                        {{-- <th scope="col">Rol</th> --}}
                                         <th scope="col">Acciones</th>
                                     </tr>
                                 </thead>
@@ -101,15 +101,15 @@
                                 <select class="form-select areaSelect select2" id="area_id" name="area_id">
                                     <option value="">Seleccionar área...</option>
                                 </select>
-                            </div>
+                            </div>  --}}
                             <div class="col-md-6">
-                                <label for="rol" class="form-label">
+                                <label for="role_id" class="form-label">
                                     <i class="bx bx-shield me-1"></i> Rol *
                                 </label>
-                                <select class="form-select rol-select" id="rol" name="rol" required>
+                                <select class="form-select rolSelect" id="role_id" name="role_id" required>
                                     <option value="">Seleccionar rol...</option>
                                 </select>
-                            </div> --}}
+                            </div> 
                         </div>
 
                         {{-- <div class="alert alert-info mt-3">
@@ -176,6 +176,14 @@
                                     <option value="">Seleccionar personal...</option>
                                 </select>
                             </div>
+                            <div class="col-md-6">
+                                <label for="role_id_edit" class="form-label">
+                                    <i class="bx bx-shield me-1"></i> Rol *
+                                </label>
+                                <select class="form-select rolSelect" id="role_id_edit" name="role_id" required>
+                                    <option value="">Seleccionar rol...</option>
+                                </select>
+                            </div> 
                         </div>
 
                         <div class="alert alert-info mt-3">

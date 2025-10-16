@@ -9,7 +9,6 @@ use App\Http\Requests\Admin\UserApiRequest;
 use Spatie\Permission\Models\Role;
 use App\Models\Personnel;
 use App\Models\User;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Exception;
 
@@ -82,12 +81,31 @@ class UserController extends Controller
         $response = ['ok' => false, 'message' => 'Error al crear el usuario.'];
         $status = 500;
         $data = $request->validated();
-
         try {
+
             $personnel = Personnel::find($data['personnel_id']);
+
+            if (!$personnel) {
+                return response()->json(['ok' => false, 'message' => 'Personal no encontrado.'], 404);
+            }
+
+            // Extraer y eliminar role_id de los datos
+            $roleId = $data['role_id'];
+            unset($data['role_id']);
+            $role = Role::find($roleId); // Obtener el rol basado en el ID proporcionado
+
+            // Asignar el área y el estado activo basados en el personal seleccionado
             $data['area_id'] = $personnel->area_id;
             $data['is_active'] = $personnel->isActive();
-            $user = User::create($data);
+
+            if ($role) {
+                $user = User::create($data);
+                $user->assignRole($role); // Asignar el rol al usuario
+            } else {
+                $response['message'] = 'Rol no encontrado.';
+                return response()->json($response, 404);
+            }
+
             $response = ['ok' => true, 'message' => 'Usuario creado exitosamente.', 'data' => $user];
             $status = 201;
         } catch (Exception $e) {
@@ -108,6 +126,7 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
+        $user->load('roles');
         return response()->json([
             'ok' => true, 
             'message' => 'Usuario obtenido exitosamente.', 
@@ -132,14 +151,22 @@ class UserController extends Controller
         $status = 500;
         $data = $request->validated();
         try {
-            if (isset($data['password'])) {
-                $data['password'] = Hash::make($data['password']);
-            }
             // Si se actualiza el personnel_id, actualizar también el area_id
             if (isset($data['personnel_id'])) {
                 $personnel = Personnel::find($data['personnel_id']);
                 $data['area_id'] = $personnel->area_id;
                 $data['is_active'] = $personnel->isActive();
+            }
+            // Actualizar roles si se proporciona role_id
+            if (isset($data['role_id'])) {
+                $role = Role::find($data['role_id']);
+                if ($role) {
+                    $user->syncRoles([$role->name]); // Sincronizar roles
+                } else {
+                    $response['message'] = 'Rol no encontrado.';
+                    return response()->json($response, 404);
+                }
+                unset($data['role_id']); // Eliminar role_id de los datos para evitar errores de asignación masiva
             }
 
             $user->update($data);
