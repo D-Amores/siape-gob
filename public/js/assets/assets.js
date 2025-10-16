@@ -505,9 +505,19 @@ document.addEventListener('DOMContentLoaded', () => {
                     });
                 }
 
-                result = await res.json();
+                const result = await res.json();
 
                 if (!result.ok) {
+                    // Si hay errores de validación
+                    if (res.status === 422 && result.errors) {
+                        let messages = Object.values(result.errors)
+                            .flat()
+                            .join('<br>'); // junta todos los errores
+                        showAlert(messages, "red", "Error de validación");
+                        return;
+                    }
+
+                    // Otros errores
                     showAlert(result.message || 'Error en la operación.', "red", "Error");
                     return;
                 }
@@ -550,4 +560,20 @@ function closeModalDirect(modalID){
     const modal = bootstrap.Modal.getOrCreateInstance(modalEl);
     modal.hide();
 }
+
+document.addEventListener('DOMContentLoaded', () => {
+    const formBien = document.getElementById('formNuevoBien');
+
+    // Listener delegado para todos los inputs de texto y textarea, incluyendo dinámicos
+    formBien.addEventListener('input', e => {
+        const target = e.target;
+        if ((target.tagName === 'INPUT' && target.type === 'text') || target.tagName === 'TEXTAREA') {
+            const start = target.selectionStart;
+            const end = target.selectionEnd;
+            target.value = target.value.toUpperCase();
+            target.setSelectionRange(start, end); // mantener cursor
+        }
+    });
+});
+
 
