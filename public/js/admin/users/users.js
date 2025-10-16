@@ -138,7 +138,7 @@ async function userDelete(userId) {
     confirmDestroy(async () => {
         const isOk = await destroyUser(userId);
         if (isOk) {
-            loadUsers(); // recarga la tabla solo si la creación fue exitosa
+            await loadUsers(); // recarga la tabla solo si la creación fue exitosa
         }
     });
 }
@@ -153,27 +153,25 @@ async function initAdminPanel() {
     closeModal('btnCloseModalUserCreate', 'modalUserCreate', 'btnOpenModalUserCreate');
     forceCloseModalWithRemoveId('btnCloseModalUserEdit', 'modalUserEdit', 'btnOpenModalUserEdit');
     
-    
-    //saveTabsState(); // Guarda el estado de las pestañas
     await loadUsers(); // Carga los usuarios
     await personnelToSelect(); // Carga los personales
 
     btnUserCreate.addEventListener('click', userCreate);
     btnUserEdit.addEventListener('click', userEdit);
-    
-    userTableTbody.addEventListener('click', (e)=>{
+
+    userTableTbody.addEventListener('click', async (e)=>{
         const btnEdit = e.target.closest('.btn-edit');
         if (btnEdit) {
             btnEdit.id = 'btnOpenModalUserEdit'
             openModalForEdit("modalUserEdit");
             const userId = btnEdit.getAttribute('data-id');
-            loadUserDataOnModalEdit(userId);
+            await loadUserDataOnModalEdit(userId);
         }
 
         const btnDelete = e.target.closest('.btn-delete');
         if (btnDelete) {
             const userId = btnDelete.getAttribute('data-id');
-            userDelete(userId);
+            await userDelete(userId);
         }
     });
 
