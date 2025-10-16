@@ -96,11 +96,6 @@
                                         <div class="form-floating mb-3">
                                             <select class="form-select" id="marca" required>
                                                 <option value="" selected>Seleccione marca</option>
-                                                <option value="1">Dell</option>
-                                                <option value="2">HP</option>
-                                                <option value="3">Lenovo</option>
-                                                <option value="4">Asus</option>
-                                                <option value="5">Acer</option>
                                             </select>
                                             <label for="marca"><i class="fas fa-tag me-1 text-muted"></i> Marca</label>
                                         </div>
@@ -126,11 +121,6 @@
                                         <div class="form-floating">
                                             <select class="form-select" id="categoria" required>
                                                 <option value="" selected>Seleccione categoría</option>
-                                                <option value="1">Laptop</option>
-                                                <option value="2">Desktop</option>
-                                                <option value="3">Monitor</option>
-                                                <option value="4">Impresora</option>
-                                                <option value="5">Servidor</option>
                                             </select>
                                             <label for="categoria"><i class="fas fa-layer-group me-1 text-muted"></i> Categoría</label>
                                         </div>
@@ -275,9 +265,37 @@
                     <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
                         <i class="fas fa-times me-1"></i> Cerrar
                     </button>
-                    <button type="button" class="btn btn-primary">
-                        <i class="fas fa-edit me-1"></i> Editar
-                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Confirmación Eliminar -->
+    <div class="modal fade" id="modalConfirmDelete" tabindex="-1" aria-labelledby="modalConfirmDeleteLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow rounded-4">
+
+                <!-- Encabezado -->
+                <div class="modal-header bg-light border-0">
+                    <h5 class="modal-title fw-bold text-primary" id="modalConfirmDeleteLabel">
+                        <i class="fas fa-exclamation-triangle me-2"></i>Confirmación
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+
+                <!-- Cuerpo -->
+                <div class="modal-body py-4 px-4 d-flex align-items-center">
+                    <i class="fas fa-trash-alt fa-2x text-danger me-3"></i>
+                    <span id="modalConfirmDeleteMessage" class="text-secondary">
+                        ¿Estás seguro de eliminar este activo? Esta acción no se puede deshacer.
+                    </span>
+                </div>
+
+                <!-- Footer -->
+                <div class="modal-footer border-0">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" id="confirmDeleteBtn">Eliminar</button>
                 </div>
 
             </div>
@@ -297,5 +315,6 @@
     <script src="{{ asset('cdn/buttons/2.4.2/js/buttons.print.min.js') }}"></script>
 
     <script src="{{ asset('modernize/assets/js/datatable/datatable-advanced.init.js') }}"></script>
+    <script src="/js/helpers/alerts/alerts.js"></script>
     <script src="{{ asset('js/assets/assets.js') }}"></script>
 @endsection

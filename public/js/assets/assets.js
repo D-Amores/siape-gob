@@ -5,6 +5,8 @@ const categoriaSelect = document.getElementById('categoria');
 const camposDinamicos = document.getElementById('camposDinamicos');
 const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 let editingAssetId = null;
+let assetIdToDelete = null;
+let categoriasGlobales = [];
 
 const camposGenericos = `
     <h6 class="text-uppercase text-secondary fw-semibold mb-3">
@@ -39,19 +41,103 @@ const camposGenericos = `
 `
 
 
-const categoriasConCamposGenericos = ['1', '2', '5'];
-
 if (categoriaSelect) {
     categoriaSelect.addEventListener('change', () => {
-        const categoria = categoriaSelect.value;
+        const categoriaId = parseInt(categoriaSelect.value);
+        camposDinamicos.innerHTML = '';
 
-        if (categoriasConCamposGenericos.includes(categoria)) {
+        if (!categoriaId) return;
+
+        // Buscar la categoría seleccionada
+        const categoriaSeleccionada = categoriasGlobales.find(cat => cat.id === categoriaId);
+
+        // Si tiene marcado special_specifications = true, mostrar los campos
+        if (categoriaSeleccionada && categoriaSeleccionada.special_specifications) {
             camposDinamicos.innerHTML = camposGenericos;
-        } else {
-            camposDinamicos.innerHTML = '';
         }
     });
 }
+
+
+// ------------------------------
+// Cargar categorías dinámicamente
+// ------------------------------
+async function cargarCategorias(selectedId = null) {
+    const categoriaSelect = document.getElementById('categoria');
+    if (!categoriaSelect) return;
+
+    try {
+        const res = await fetch('/categories/api', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': csrfToken
+            }
+        });
+
+        const json = await res.json();
+
+        if (!json.ok) {
+            showAlert(json.message || 'Error al cargar las categorías', "red", "Error");
+            return;
+        }
+
+        // Guardar las categorías globalmente
+        categoriasGlobales = json.data;
+
+        // Limpiar select
+        categoriaSelect.innerHTML = `<option value="" selected>Seleccione categoría</option>`;
+
+        // Insertar opciones dinámicamente
+        json.data.forEach(cat => {
+            const option = document.createElement('option');
+            option.value = cat.id;
+            option.textContent = cat.name;
+            if (selectedId && selectedId == cat.id) {
+                option.selected = true;
+            }
+            categoriaSelect.appendChild(option);
+        });
+
+    } catch (error) {
+        showAlert('Error en la carga de categorías: ' + error.message, "red", "Error");
+    }
+}
+
+// ------------------------------
+// Cargar marcas dinámicamente
+// ------------------------------
+async function cargarMarcas(selectedId = null) {
+    try {
+        const res = await fetch('/brands/api', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': csrfToken
+            }
+        });
+        const json = await res.json();
+
+        if (!json.ok) {
+            showAlert(json.message || 'Error al cargar marcas', "red", "Error");
+            return;
+        }
+
+        const marcaSelect = document.getElementById('marca');
+        marcaSelect.innerHTML = '<option value="">Seleccione marca</option>';
+        json.data.forEach(m => {
+            const option = document.createElement('option');
+            option.value = m.id;
+            option.textContent = m.name;
+            if (selectedId && selectedId == m.id) option.selected = true;
+            marcaSelect.appendChild(option);
+        });
+    } catch (error) {
+        showAlert('Error al cargar las marcas: ' + error.message, "red", "Error");
+    }
+}
+
+
 
 // ------------------------------
 // Inicialización de DataTable
@@ -67,10 +153,10 @@ document.addEventListener('DOMContentLoaded', function () {
     fetch('/assets/api?option=table')
     .then(response => response.json())
     .then(json => {
-        if (!json.ok) {
-            alert('Error al cargar los activos: ' + (json.message || 'Desconocido'));
-            return;
-        }
+            if (!json.ok) {
+                showAlert('Error al cargar los activos: ' + (json.message || 'Desconocido'), "red", "Error");
+                return;
+            }
 
         // Inicializar DataTable con los datos obtenidos
         const table = $('#file_export').DataTable({
@@ -123,13 +209,42 @@ document.addEventListener('DOMContentLoaded', function () {
                         </button>
                     `
                 }
+            ],
+            dom: 'Bfrtip', // Posición de los botones
+            buttons: [
+                {
+                    extend: 'copyHtml5',
+                    text: '<i></i> Copiar',
+                    className: 'btn btn-secondary btn-sm'
+                },
+                {
+                    extend: 'excelHtml5',
+                    text: '<i></i> Excel',
+                    className: 'btn btn-success btn-sm'
+                },
+                {
+                    extend: 'csvHtml5',
+                    text: '<i></i> CSV',
+                    className: 'btn btn-info btn-sm'
+                },
+                {
+                    extend: 'pdfHtml5',
+                    text: '<i></i> PDF',
+                    className: 'btn btn-danger btn-sm',
+                    orientation: 'landscape',
+                    pageSize: 'A4'
+                },
+                {
+                    extend: 'print',
+                    text: '<i></i> Imprimir',
+                    className: 'btn btn-primary btn-sm'
+                }
             ]
         });
     })
-        .catch(error => {
-            console.error('Error en la petición de assets:', error);
-            alert('Error al cargar los activos. Revisa la consola.');
-        });
+    .catch(error => {
+        showAlert('Error al cargar los activos: ' + error.message, "red", "Error de conexión");
+    });
 });
 
 // ------------------------------
@@ -145,10 +260,16 @@ document.querySelector('#file_export tbody').addEventListener('click', async (ev
     try {
         const response = await fetch('/assets/api?option=details');
         const result = await response.json();
-        if (!result.ok) return;
+        if (!result.ok) {
+            showAlert(result.message || 'Error al cargar detalles del activo.', "red", "Error");
+            return;
+        }
 
         const asset = result.data.find(a => a.id == id);
-        if (!asset) return;
+        if (!asset) {
+            showAlert('No se encontró la información del activo.', "orange", "Advertencia");
+            return;
+        }
 
         const modal = document.getElementById('modalDetallesBien');
 
@@ -186,9 +307,8 @@ document.querySelector('#file_export tbody').addEventListener('click', async (ev
         modal.querySelector('#detalle-descripcion').textContent = asset.description ?? '—';
 
         openModalForEdit('modalDetallesBien');
-
     } catch (error) {
-        console.error('Error al cargar detalles:', error);
+        showAlert('Error al cargar los detalles: ' + error.message, "red", "Error");
     }
 });
 
@@ -196,19 +316,24 @@ document.querySelector('#file_export tbody').addEventListener('click', async (ev
 // ------------------------------
 // Eliminar bien
 // ------------------------------
-document.addEventListener('click', async (e) => {
+document.addEventListener('click', (e) => {
     const deleteButton = e.target.closest('.btn-delete-asset');
     if (!deleteButton) return;
 
-    const id = deleteButton.dataset.id;
-    if (!id) return;
+    assetIdToDelete = deleteButton.dataset.id;
+    if (!assetIdToDelete) return;
 
-    if (!confirm('¿Estás seguro de eliminar este activo? Esta acción no se puede deshacer.')) {
-        return;
-    }
+    // Abrir modal
+    const modalDelete = new bootstrap.Modal(document.getElementById('modalConfirmDelete'));
+    modalDelete.show();
+});
+
+// Botón Confirmar Eliminación
+document.getElementById('confirmDeleteBtn').addEventListener('click', async () => {
+    if (!assetIdToDelete) return;
 
     try {
-        const response = await fetch(`/assets/${id}`, {
+        const response = await fetch(`/assets/${assetIdToDelete}`, {
             method: 'DELETE',
             headers: {
                 'X-CSRF-TOKEN': csrfToken
@@ -218,20 +343,26 @@ document.addEventListener('click', async (e) => {
         const result = await response.json();
 
         if (!result.ok) {
-            alert(result.message || 'Error al eliminar el activo');
+            showAlert(result.message || 'Error al eliminar el activo', "red", "Error");
             return;
         }
 
-        // Éxito: eliminar fila de DataTable
-        const table = $('#file_export').DataTable();
-        const row = deleteButton.closest('tr');
-        table.row(row).remove().draw();
+        // Cerrar modal
+        closeModalDirect('modalConfirmDelete');
+
+        showAlert(result.message || 'Activo eliminado correctamente.', "green", "Éxito", () => {
+            const table = $('#file_export').DataTable();
+            const row = document.querySelector(`.btn-delete-asset[data-id="${assetIdToDelete}"]`).closest('tr');
+            table.row(row).remove().draw();
+
+            assetIdToDelete = null;
+        });
 
     } catch (error) {
-        console.error('Error al eliminar el activo:', error);
-        alert('Ocurrió un error inesperado. Revisa la consola.');
+        showAlert('Ocurrió un error al eliminar el activo: ' + error.message, "red", "Error inesperado");
     }
 });
+
 
 // ------------------------------
 // Modal para crear/editar bien
@@ -243,6 +374,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const btnSubmit = modalBien.querySelector('button[type="submit"]');
     const tableBody = document.querySelector('#file_export tbody');
 
+    // ------------------------------
+    // Cargar tabla
+    // ------------------------------
     function loadAssets() {
         if ($.fn.DataTable.isDataTable('#file_export')) {
             const table = $('#file_export').DataTable();
@@ -251,7 +385,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 .then(res => res.json())
                 .then(json => {
                     if (!json.ok) return;
-
                     table.clear();
                     table.rows.add(json.data);
                     table.draw();
@@ -260,16 +393,18 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Carga inicial de la tabla
+    // Carga inicial
     loadAssets();
 
-    document.addEventListener('click', e => {
+    // ------------------------------
+    // Abrir modal según modo
+    // ------------------------------
+    document.addEventListener('click', async e => {
         const btn = e.target.closest('.btn-modal-bien');
         if (!btn) return;
 
         const mode = btn.dataset.mode;
         const id = btn.dataset.id || null;
-
         formBien.reset();
 
         if (mode === 'create') {
@@ -279,6 +414,11 @@ document.addEventListener('DOMContentLoaded', () => {
             btnSubmit.classList.add('btn-primary');
             formBien.dataset.mode = 'create';
             delete formBien.dataset.id;
+
+            await Promise.all([
+                cargarCategorias(),
+                cargarMarcas()
+            ]);
         }
 
         if (mode === 'edit') {
@@ -289,38 +429,45 @@ document.addEventListener('DOMContentLoaded', () => {
             formBien.dataset.mode = 'edit';
             formBien.dataset.id = id;
 
-            // Cargar datos del bien
             fetch('/assets/api?option=details')
-            .then(res => res.json())
-            .then(result => {
-                if (!result.ok) return;
-                const asset = result.data.find(a => a.id == id);
-                if (!asset) return;
+                .then(res => res.json())
+                .then(async result => {
+                    if (!result.ok) return;
+                    const asset = result.data.find(a => a.id == id);
+                    if (!asset) return;
 
-                document.getElementById('numeroInventario').value = asset.inventory_number ?? '';
-                document.getElementById('marca').value = asset.brand_id ?? '';
-                document.getElementById('modelo').value = asset.model ?? '';
-                document.getElementById('serie').value = asset.serial_number ?? '';
-                document.getElementById('estado').value = asset.is_active ? '1' : '0';
-                document.getElementById('categoria').value = asset.category_id ?? '';
-                document.getElementById('descripcion').value = asset.description ?? '';
+                    document.getElementById('numeroInventario').value = asset.inventory_number ?? '';
+                    document.getElementById('marca').value = asset.brand_id ?? '';
+                    document.getElementById('modelo').value = asset.model ?? '';
+                    document.getElementById('serie').value = asset.serial_number ?? '';
+                    document.getElementById('estado').value = asset.is_active ? '1' : '0';
+                    document.getElementById('categoria').value = asset.category_id ?? '';
+                    document.getElementById('descripcion').value = asset.description ?? '';
 
-                if (categoriasConCamposGenericos.includes(asset.category_id?.toString())) {
-                    camposDinamicos.innerHTML = camposGenericos;
-                } else {
-                    camposDinamicos.innerHTML = '';
-                }
+                    await Promise.all([
+                        cargarCategorias(asset.category_id),
+                        cargarMarcas(asset.brand_id)
+                    ]);
 
-                if (document.getElementById('procesador')) document.getElementById('procesador').value = asset.cpu ?? '';
-                if (document.getElementById('velocidad')) document.getElementById('velocidad').value = asset.speed ?? '';
-                if (document.getElementById('memoria')) document.getElementById('memoria').value = asset.memory ?? '';
-                if (document.getElementById('almacenamiento')) document.getElementById('almacenamiento').value = asset.storage ?? '';
-            })
-            .catch(err => console.error('Error al cargar el bien:', err));
+                    const categoriaSeleccionada = categoriasGlobales.find(cat => cat.id === asset.category_id);
+                    if (categoriaSeleccionada && categoriaSeleccionada.special_specifications) {
+                        camposDinamicos.innerHTML = camposGenericos;
+                    } else {
+                        camposDinamicos.innerHTML = '';
+                    }
+
+                    if (document.getElementById('procesador')) document.getElementById('procesador').value = asset.cpu ?? '';
+                    if (document.getElementById('velocidad')) document.getElementById('velocidad').value = asset.speed ?? '';
+                    if (document.getElementById('memoria')) document.getElementById('memoria').value = asset.memory ?? '';
+                    if (document.getElementById('almacenamiento')) document.getElementById('almacenamiento').value = asset.storage ?? '';
+                })
+                .catch(err => console.error('Error al cargar el bien:', err));
         }
     });
 
-    // Control del envío del formulario
+    // ------------------------------
+    // Envío del formulario con alertas
+    // ------------------------------
     formBien.addEventListener('submit', async e => {
         e.preventDefault();
         const mode = formBien.dataset.mode;
@@ -339,39 +486,54 @@ document.addEventListener('DOMContentLoaded', () => {
             storage: document.getElementById('almacenamiento')?.value || null
         };
 
-        try {
-            if (mode === 'create') {
-                const res = await fetch('/assets', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': csrfToken
-                    },
-                    body: JSON.stringify(formData)
+        const action = async () => {
+            try {
+                let res;
+
+                if (mode === 'create') {
+                    res = await fetch('/assets', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': csrfToken },
+                        body: JSON.stringify(formData)
+                    });
+                } else {
+                    const id = formBien.dataset.id;
+                    res = await fetch(`/assets/${id}`, {
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': csrfToken },
+                        body: JSON.stringify(formData)
+                    });
+                }
+
+                const result = await res.json();
+
+                if (!result.ok) {
+                    // Si hay errores de validación
+                    if (res.status === 422 && result.errors) {
+                        let messages = Object.values(result.errors)
+                            .flat()
+                            .join('<br>'); // junta todos los errores
+                        showAlert(messages, "red", "Error de validación");
+                        return;
+                    }
+
+                    // Otros errores
+                    showAlert(result.message || 'Error en la operación.', "red", "Error");
+                    return;
+                }
+
+                showAlert(result.message || 'Operación exitosa.', "green", "Éxito", () => {
+                    bootstrap.Modal.getInstance(modalBien).hide();
+                    loadAssets(); // Refresca tabla
                 });
-                result = await res.json();
-                if (!res.ok) throw new Error(result.message || 'Error al crear bien');
-            } else if (mode === 'edit') {
-                const id = formBien.dataset.id;
-                const res = await fetch(`/assets/${id}`, {
-                    method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': csrfToken
-                    },
-                    body: JSON.stringify(formData)
-                });
-                result = await res.json();
-                if (!res.ok) throw new Error('Error al actualizar bien');
+
+            } catch (error) {
+                showAlert('Error al enviar el formulario: ' + error.message, "red", "Error");
             }
+        };
 
-            const modalInstance = bootstrap.Modal.getInstance(modalBien);
-            modalInstance.hide();
-
-            loadAssets();
-        } catch (error) {
-            console.error('Error al enviar formulario:', error);
-        }
+        if (mode === 'create') confirmStore(action);
+        else confirmUpdate(action);
     });
 });
 
@@ -379,15 +541,39 @@ document.addEventListener('DOMContentLoaded', () => {
 // Funciones auxiliares
 // ------------------------------
 function openModalForEdit(modalID){
-    const modal = new bootstrap.Modal(document.getElementById(modalID));
+    const modalEl = document.getElementById(modalID);
+    const modal = bootstrap.Modal.getOrCreateInstance(modalEl);
     modal.show();
 }
 
 function closeModal(btnCloseID, modalID, focusID){
     document.getElementById(btnCloseID).addEventListener('click', () => {
-        let focusIdFInal = '#${focusID}';
-        const modal = bootstrap.Modal.getInstance(document.getElementById(modalID));
-        moveFocus(focusIdFInal);
+        const modalEl = document.getElementById(modalID);
+        const modal = bootstrap.Modal.getOrCreateInstance(modalEl);
         modal.hide();
-    }
-)};
+        if(focusID) moveFocus(`#${focusID}`);
+    });
+};
+
+function closeModalDirect(modalID){
+    const modalEl = document.getElementById(modalID);
+    const modal = bootstrap.Modal.getOrCreateInstance(modalEl);
+    modal.hide();
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    const formBien = document.getElementById('formNuevoBien');
+
+    // Listener delegado para todos los inputs de texto y textarea, incluyendo dinámicos
+    formBien.addEventListener('input', e => {
+        const target = e.target;
+        if ((target.tagName === 'INPUT' && target.type === 'text') || target.tagName === 'TEXTAREA') {
+            const start = target.selectionStart;
+            const end = target.selectionEnd;
+            target.value = target.value.toUpperCase();
+            target.setSelectionRange(start, end); // mantener cursor
+        }
+    });
+});
+
+
