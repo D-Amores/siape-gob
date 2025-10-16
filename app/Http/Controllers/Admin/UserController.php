@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\StoreUserRequest;
 use App\Http\Requests\Admin\UpdateUserRequest;
 use App\Http\Requests\Admin\UserApiRequest;
+use Spatie\Permission\Models\Role;
 use App\Models\Personnel;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
@@ -33,8 +34,13 @@ class UserController extends Controller
                     $status = 200;
                     break;
                 case 'users_areas_personnel':
-                    $users = User::with('area', 'personnel')->get();
+                    $users = User::with('area', 'personnel', 'roles')->get();
                     $response = ['ok' => true, 'message' => 'Usuarios con áreas y personal obtenidos exitosamente.', 'data' => $users];
+                    $status = 200;
+                    break;
+                case 'roles':
+                    $roles = Role::all();
+                    $response = ['ok' => true, 'message' => 'Roles obtenidos exitosamente.', 'data' => $roles];
                     $status = 200;
                     break;
                 default:
@@ -50,7 +56,6 @@ class UserController extends Controller
             Log::error('Error al procesar la solicitud de usuarios: ' . $e->getMessage());
             $status = 500;
         }
-
         return response()->json($response, $status);
     }
     /**
