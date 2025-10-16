@@ -31,7 +31,9 @@
                     <table id="file_export" class="table table-hover w-100 table-striped table-bordered display">
                         <thead>
                             <tr>
-                                <th class="text-center">Asignación Pendientes</th>
+                                <th class="text-center">Recibe</th>
+                                <th class="text-center">Bien</th>
+                                <th class="text-center">Asigna</th>
                                 <th class="text-center" style="width: 150px;">Acciones</th>
                             </tr>
                         </thead>
@@ -40,7 +42,9 @@
                         </tbody>
                         <tfoot>
                             <tr>
-                                <th class="text-center">Asignación Pendientes</th>
+                                <th class="text-center">Recibe</th>
+                                <th class="text-center">Bien</th>
+                                <th class="text-center">Asigna</th>
                                 <th class="text-center">Acciones</th>
                             </tr>
                         </tfoot>
@@ -60,7 +64,7 @@
                     <table id="file_export2" class="table table-hover w-100 table-striped table-bordered display">
                         <thead>
                             <tr>
-                                <th class="text-center">Asignación Acceptadas</th>
+                                <th class="text-center">Asigna</th>
                                 <th class="text-center" style="width: 150px;">Acciones</th>
                             </tr>
                         </thead>
@@ -69,7 +73,7 @@
                         </tbody>
                         <tfoot>
                             <tr>
-                                <th class="text-center">Asignación Aceptadas</th>
+                                <th class="text-center">Asigna</th>
                                 <th class="text-center">Acciones</th>
                             </tr>
                         </tfoot>
