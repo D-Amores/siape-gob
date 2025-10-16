@@ -63,7 +63,7 @@ function loadUsersTable(data) {
                 }
             },
             {
-                data: "area.name",
+                data: "personnel.area.name",
                 defaultContent: "Sin área",
                 title: "Área",
                 render: (area) => `
