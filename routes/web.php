@@ -1,14 +1,14 @@
 <?php
 
+use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Assigner\AssetController;
 use App\Http\Controllers\Assigner\BrandController;
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Assigner\CategoryController;
 use App\Http\Controllers\Admin\PersonnelController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\AreaController;
 use App\Http\Controllers\Auth\LoginController;
 
-use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\PersonnelAssetController;
 use App\Http\Controllers\Admin\PersonnelAssetPendingController;
 
