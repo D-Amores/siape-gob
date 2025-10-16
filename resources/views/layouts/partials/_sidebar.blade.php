@@ -79,9 +79,18 @@
                                         <a class="sidebar-link" href="{{ route('personnel.index') }}"
                                             aria-expanded="false">
                                             <span>
-                                                <i class="ti ti-user"></i>
+                                                <i class="ti ti-id-badge"></i>
                                             </span>
                                             <span class="hide-menu">Personal</span>
+                                        </a>
+                                    </li>
+                                    <li class="sidebar-item">
+                                        <a class="sidebar-link" href="{{ route('users.index') }}"
+                                            aria-expanded="false">
+                                            <span>
+                                                <i class="ti ti-user"></i>
+                                            </span>
+                                            <span class="hide-menu">Usuarios</span>
                                         </a>
                                     </li>
                                 </ul>

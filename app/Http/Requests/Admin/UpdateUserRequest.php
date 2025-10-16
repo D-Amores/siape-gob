@@ -5,6 +5,7 @@ namespace App\Http\Requests\Admin;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Contracts\Validation\Validator;
+use App\Services\Tools;
 
 class UpdateUserRequest extends FormRequest
 {
@@ -62,6 +63,18 @@ class UpdateUserRequest extends FormRequest
 
     public function prepareForValidation(): void
     {
+        if ($this->has('password')) {
+            $this->merge([
+                'password' => (string) $this->input('password'),
+            ]);
+        }
+
+        if ($this->has('password_confirmation')) {
+            $this->merge([
+                'password_confirmation' => (string) $this->input('password_confirmation'),
+            ]);
+        }
+
         if ($this->has('username')) {
             $this->merge([
                 'username' => strtolower($this->username),

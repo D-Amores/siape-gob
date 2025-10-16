@@ -41,7 +41,7 @@ function loadUsersTable(data) {
                 data: null,
                 title: "Persona Asignada",
                 render: (row) => {
-                    const fullName = `${row.personnel?.middle_name ?? ''} ${row.personnel?.last_name ?? ''}`.trim();
+                    const fullName = `${row.personnel?.last_name ?? ''} ${row.personnel?.middle_name ?? ''}`.trim();
                     const displayName = `${row.personnel?.name ?? ''}`.trim();
 
                     return `

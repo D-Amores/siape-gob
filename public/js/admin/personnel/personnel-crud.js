@@ -2,9 +2,6 @@
 // VARIABLES GLOBALES
 // ===============================
 const vURIPersonnel = `${window.location.origin}/admin/personnel`;
-const spinnerPersonnel = document.getElementById('spinnerPersonnelCreate');
-const btnPersonnelCreate = document.getElementById('btnPersonnelCreate');
-
 
 // ===============================
 // FUNCIONES STORE, UPDATE, DELETE
@@ -78,7 +75,6 @@ async function updatePersonnel(personnelId, personnel) {
         }
 
     } catch (error) {
-        console.error('Error en updatePersonnel:', error);
         showAlert('Error al actualizar el personal. Intente nuevamente.', 'red', 'Error');
     }
     return isOk; // true si se actualizó, false si no
@@ -144,7 +140,6 @@ async function destroyPersonnel(personnelId) {
             showAlert(result.message || 'Error al eliminar el personal', 'red', 'Error', null, 2000);
         }
     } catch (error) {
-        console.error('Error en destroyPersonnel:', error);
         showAlert('Error al eliminar el personal. Intente nuevamente.', 'red', 'Error');
     }
 

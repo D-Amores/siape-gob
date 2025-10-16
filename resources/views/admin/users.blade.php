@@ -41,38 +41,6 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td scope="row">1</td>
-                                        <td>
-                                            <div class="d-flex align-items-center">
-                                                <img src="{{ asset('modernize/assets/images/profile/user-6.jpg') }}"
-                                                    class="rounded-circle" width="40" height="40">
-                                                <div class="ms-3">
-                                                    <h6 class="fs-4 fw-semibold mb-0">Christopher</h6>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div class="d-flex align-items-center">
-                                                <div class="ms-3">
-                                                    <h6 class="fs-4 fw-semibold mb-0">Christopher Jamil</h6>
-                                                    <span class="fw-normal">Morales Flores</span>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td>Recursos Humanos</td>
-                                        <td>
-                                            <span class="badge bg-primary-subtle text-primary">activo</span>
-                                        </td>
-                                        <td>
-                                            <div class="btn-group" role="group">
-                                                <button class="btn btn-sm btn-outline-success btn-edit" data-id="1"><i
-                                                        class="bx bx-edit"></i></button>
-                                                <button class="btn btn-sm btn-outline-danger btn-delete" data-id="1"><i
-                                                        class="bx bx-trash"></i></button>
-                                            </div>
-                                        </td>
-                                    </tr>
                                 </tbody>
                             </table>
                         </div>
@@ -219,7 +187,7 @@
                     </div>
                     <div class="modal-footer d-flex flex-row justify-content-md-end ps-1 justify-content-center">
                         <button type="button" class="btn btn-outline-secondary" id="btnCloseModalUserEdit">Cancelar</button>
-                        <button type="button" class="btn btn-primary" id="btnUserUpdate">
+                        <button type="button" class="btn btn-primary" id="btnUserEdit">
                             <span class="spinner-border spinner-border-sm me-2 d-none" id="userEditSpinner"
                                 role="status"></span>
                             <i class="bx bx-save d-none d-md-inline me-1"></i> Guardar Cambios
