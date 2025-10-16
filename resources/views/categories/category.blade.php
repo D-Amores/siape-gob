@@ -117,6 +117,13 @@
                                 Modifique el nombre de la categoría según sea necesario
                             </div>
                         </div>
+
+                        <div class="form-check form-switch mt-3">
+                            <input class="form-check-input" type="checkbox" id="specialCategoryEdit">
+                            <label class="form-check-label fw-semibold" for="specialCategoryEdit">
+                                Categoría Especial
+                            </label>
+                        </div>
                     </div>
 
                     <div class="modal-footer">
