@@ -155,9 +155,12 @@ document.addEventListener('click', function (e) {
         const button = e.target.closest('.btn-edit');
         const categoryId = button.getAttribute('data-category-id');
         const categoryName = button.getAttribute('data-category-name');
+        const special = button.getAttribute('data-category-special');
 
         editCategoryNameInput.value = categoryName;
         editCategoryIdInput.value = categoryId;
+
+        document.getElementById('specialCategoryEdit').checked = special == 1 ? true : false;
     }
 });
 
@@ -192,17 +195,19 @@ editCategoryForm.addEventListener('submit', async function (e) {
     const originalText = submitButton.innerHTML;
     submitButton.disabled = true;
     submitButton.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Actualizando...';
+    const specialValue = document.getElementById('specialCategoryEdit').checked ? 1 : 0;
 
     try {
         // NUEVO: Petición PUT para actualizar
         const response = await fetch(`/categories/${categoryId}`, {
-            method: 'PUT', // Usamos PUT para actualizar
+            method: 'PUT',
             headers: {
                 'X-CSRF-Token': csrfToken,
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                name: categoryName
+                name: categoryName,
+                special_specifications: specialValue
             })
         });
 
@@ -324,10 +329,8 @@ const updateCategoriesTable = (categories) => {
                     <i class="fas fa-plus"></i><br>
                     Agrega la primera categoría
                 </td>
-                <td class="text-center">
-                    ${category.special_specifications === 1
-                        ? '<span class="badge bg-dark text-white">Especial</span>'
-                        : '<span class="badge bg-primary text-white">Normal</span>'}
+                <td class="text-center text-muted py-4">
+                    <p>No hay categorías disponibles</p>
                 </td>
                 <td class="text-center text-muted py-4">
                     <p>No hay categorías disponibles</p>
@@ -346,7 +349,7 @@ const updateCategoriesTable = (categories) => {
                     </div>
                 </td>
                 <td class="text-center">
-                    ${category.special_specifications == 1
+                    ${category.special_specifications === 1
                                 ? '<span class="badge bg-success">Especial</span>'
                                 : '<span class="badge bg-secondary">Normal</span>'}
                 </td>

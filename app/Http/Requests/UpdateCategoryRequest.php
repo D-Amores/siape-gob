@@ -25,6 +25,7 @@ class UpdateCategoryRequest extends FormRequest
     {
         return [
             "name" => "sometimes|string|max:50|unique:categories,name," . $this->route('category')->id,
+            "special_specifications" => "sometimes|boolean"
         ];
     }
 
