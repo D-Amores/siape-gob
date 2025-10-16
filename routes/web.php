@@ -14,7 +14,7 @@ use App\Http\Controllers\Admin\PersonnelAssetPendingController;
 
 Route::get('/', function () {
     return view('assets.asset');
-})->name('assets.dashboard');
+})->name('dashboard');
 
 //Ruta de test
 //Route::get('personnel', [TestController::class, 'index'])->name('personnel.index');
