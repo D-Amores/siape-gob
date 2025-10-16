@@ -14,22 +14,19 @@
 @endsection
 
 @section('actions')
-    <button class="btn btn-primary btn-modal-bien"
-            data-bs-toggle="modal"
-            data-bs-target="#modalBien"
-            data-mode="create">
-        <i class="fas fa-plus me-1"></i> Agregar bien
+    <button class="btn btn-primary btn-modal-bien" data-bs-toggle="modal" data-bs-target="#modalBien" data-mode="create">
+        <i class="fas fa-plus-circle me-2"></i> Agregar bien
     </button>
 @endsection
 
 @section('content')
     <div class="container-fluid py-3">
         <div class="datatables">
-            <div class="card shadow-sm border-0 rounded-4">
-                <div class="card-body p-2">
+            <div class="card shadow-lg">
+                <div class="card-body">
                     <div class="table-responsive">
-                        <table id="file_export" class="table table-hover table-sm align-middle mb-0">
-                            <thead class="table-light text-uppercase text-muted small">
+                        <table id="file_export" class="table table-hover w-100 table-striped table-bordered display text-nowrap align-middle">
+                            <thead class>
                                 <tr>
                                     <th class="text-center py-1">N. de Inventario</th>
                                     <th class="py-1">Modelo</th>
@@ -41,17 +38,26 @@
                                 </tr>
                             </thead>
                             <tbody>
+
                             </tbody>
+                            <tfoot>
+                                <tr>
+                                    <th class="text-center py-1">N. de Inventario</th>
+                                    <th class="py-1">Modelo</th>
+                                    <th class="py-1">Serie</th>
+                                    <th class="py-1">Marca</th>
+                                    <th class="py-1">Categoría</th>
+                                    <th class="text-center py-1">Estado</th>
+                                    <th class="text-center py-1">Acciones</th>
+                                </tr>
+                            </tfoot>
                         </table>
                     </div>
                 </div>
 
                 <!-- Card Footer -->
                 <div class="card-footer bg-white border-top py-2">
-                    <div class="d-flex justify-content-between small text-muted">
-                        <div>
-                            <i class="fas fa-info-circle me-1"></i> Mostrando 5 marcas registradas
-                        </div>
+                    <div class="d-flex justify-content-center small text-muted">
                         <div>
                             Última actualización: {{ now()->format('d/m/Y H:i') }}
                         </div>
@@ -89,8 +95,10 @@
                                         </h6>
 
                                         <div class="form-floating mb-3">
-                                            <input type="text" class="form-control" id="numeroInventario" placeholder="Número de inventario" required>
-                                            <label for="numeroInventario"><i class="fas fa-barcode me-1 text-muted"></i> Número de inventario</label>
+                                            <input type="text" class="form-control" id="numeroInventario"
+                                                placeholder="Número de inventario" required>
+                                            <label for="numeroInventario"><i class="fas fa-barcode me-1 text-muted"></i>
+                                                Número de inventario</label>
                                         </div>
 
                                         <div class="form-floating mb-3">
@@ -102,12 +110,14 @@
 
                                         <div class="form-floating mb-3">
                                             <input type="text" class="form-control" id="modelo" placeholder="Modelo">
-                                            <label for="modelo"><i class="fas fa-laptop-code me-1 text-muted"></i> Modelo</label>
+                                            <label for="modelo"><i class="fas fa-laptop-code me-1 text-muted"></i>
+                                                Modelo</label>
                                         </div>
 
                                         <div class="form-floating mb-3">
                                             <input type="text" class="form-control" id="serie" placeholder="Serie">
-                                            <label for="serie"><i class="fas fa-hashtag me-1 text-muted"></i> Serie</label>
+                                            <label for="serie"><i class="fas fa-hashtag me-1 text-muted"></i>
+                                                Serie</label>
                                         </div>
 
                                         <div class="form-floating mb-3">
@@ -115,14 +125,16 @@
                                                 <option value="1" selected>Activo</option>
                                                 <option value="0">Inactivo</option>
                                             </select>
-                                            <label for="estado"><i class="fas fa-toggle-on me-1 text-muted"></i> Estado</label>
+                                            <label for="estado"><i class="fas fa-toggle-on me-1 text-muted"></i>
+                                                Estado</label>
                                         </div>
 
                                         <div class="form-floating">
                                             <select class="form-select" id="categoria" required>
                                                 <option value="" selected>Seleccione categoría</option>
                                             </select>
-                                            <label for="categoria"><i class="fas fa-layer-group me-1 text-muted"></i> Categoría</label>
+                                            <label for="categoria"><i class="fas fa-layer-group me-1 text-muted"></i>
+                                                Categoría</label>
                                         </div>
                                     </div>
                                 </div>
@@ -141,7 +153,8 @@
                                         </h6>
                                         <div class="form-floating">
                                             <textarea class="form-control" placeholder="Descripción" id="descripcion" style="height: 100px"></textarea>
-                                            <label for="descripcion"><i class="fas fa-pen me-1 text-muted"></i> Descripción</label>
+                                            <label for="descripcion"><i class="fas fa-pen me-1 text-muted"></i>
+                                                Descripción</label>
                                         </div>
                                     </div>
                                 </div>
@@ -166,7 +179,8 @@
     </div>
 
     <!-- Modal Detalles del Bien -->
-    <div class="modal fade" id="modalDetallesBien" tabindex="-1" aria-labelledby="modalDetallesBienLabel" aria-hidden="true">
+    <div class="modal fade" id="modalDetallesBien" tabindex="-1" aria-labelledby="modalDetallesBienLabel"
+        aria-hidden="true">
         <div class="modal-dialog modal-xl modal-dialog-centered">
             <div class="modal-content border-0 shadow rounded-4">
 
@@ -233,27 +247,28 @@
                                     <div class="row g-3">
                                         <div class="col-6">
                                             <div class="small text-muted">CPU</div>
-                                                <div id="detalle-cpu" class="fw-semibold"></div>
-                                            </div>
-                                            <div class="col-6">
-                                                <div class="small text-muted">Velocidad</div>
-                                                <div id="detalle-velocidad" class="fw-semibold"></div>
-                                            </div>
-                                            <div class="col-6">
-                                                <div class="small text-muted">Memoria</div>
-                                                <div id="detalle-memoria" class="fw-semibold"></div>
-                                            </div>
-                                            <div class="col-6">
-                                                <div class="small text-muted">Almacenamiento</div>
-                                                <div id="detalle-almacenamiento" class="fw-semibold"></div>
-                                            </div>
+                                            <div id="detalle-cpu" class="fw-semibold"></div>
                                         </div>
+                                        <div class="col-6">
+                                            <div class="small text-muted">Velocidad</div>
+                                            <div id="detalle-velocidad" class="fw-semibold"></div>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="small text-muted">Memoria</div>
+                                            <div id="detalle-memoria" class="fw-semibold"></div>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="small text-muted">Almacenamiento</div>
+                                            <div id="detalle-almacenamiento" class="fw-semibold"></div>
+                                        </div>
+                                    </div>
 
-                                        <hr class="my-4">
-                                        <h6 class="text-uppercase text-secondary fw-semibold mb-3">
-                                            <i class="fas fa-align-left me-2"></i>Descripción
-                                        </h6>
-                                    <div id="detalle-descripcion" class="p-3 bg-white border rounded text-secondary small" style="min-height: 80px;"></div>
+                                    <hr class="my-4">
+                                    <h6 class="text-uppercase text-secondary fw-semibold mb-3">
+                                        <i class="fas fa-align-left me-2"></i>Descripción
+                                    </h6>
+                                    <div id="detalle-descripcion" class="p-3 bg-white border rounded text-secondary small"
+                                        style="min-height: 80px;"></div>
                                 </div>
                             </div>
                         </div>
@@ -272,7 +287,8 @@
     </div>
 
     <!-- Modal Confirmación Eliminar -->
-    <div class="modal fade" id="modalConfirmDelete" tabindex="-1" aria-labelledby="modalConfirmDeleteLabel" aria-hidden="true">
+    <div class="modal fade" id="modalConfirmDelete" tabindex="-1" aria-labelledby="modalConfirmDeleteLabel"
+        aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content border-0 shadow rounded-4">
 
@@ -301,7 +317,6 @@
             </div>
         </div>
     </div>
-
 @endsection
 
 @section('scripts')
@@ -317,4 +332,7 @@
     <script src="{{ asset('modernize/assets/js/datatable/datatable-advanced.init.js') }}"></script>
     <script src="/js/helpers/alerts/alerts.js"></script>
     <script src="{{ asset('js/assets/assets.js') }}"></script>
+    <script>
+        const language = "{{ asset('cdn/datatables-language/es-MX.json') }}";
+    </script>
 @endsection
