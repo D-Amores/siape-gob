@@ -29,6 +29,7 @@
                             <thead>
                                 <tr>
                                     <th class="text-center">Categoria</th>
+                                    <th class="text-center" style="width: 150px;">Especial</th>
                                     <th class="text-center" style="width: 150px;">Acciones</th>
                                 </tr>
                             </thead>
@@ -38,6 +39,7 @@
                             <tfoot>
                                 <tr>
                                     <th class="text-center">Categoria</th>
+                                    <th class="text-center">Especial</th>
                                     <th class="text-center">Acciones</th>
                                 </tr>
                             </tfoot>
