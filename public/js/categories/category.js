@@ -324,6 +324,11 @@ const updateCategoriesTable = (categories) => {
                     <i class="fas fa-plus"></i><br>
                     Agrega la primera categoría
                 </td>
+                <td class="text-center">
+                    ${category.special_specifications === 1
+                        ? '<span class="badge bg-dark text-white">Especial</span>'
+                        : '<span class="badge bg-primary text-white">Normal</span>'}
+                </td>
                 <td class="text-center text-muted py-4">
                     <p>No hay categorías disponibles</p>
                 </td>
@@ -341,11 +346,17 @@ const updateCategoriesTable = (categories) => {
                     </div>
                 </td>
                 <td class="text-center">
+                    ${category.special_specifications == 1
+                                ? '<span class="badge bg-success">Especial</span>'
+                                : '<span class="badge bg-secondary">Normal</span>'}
+                </td>
+                <td class="text-center">
                     <div class="d-flex justify-content-center gap-2">
                         <button type="button"
                                 class="btn btn-outline-primary border-0 btn-edit"
                                 data-category-id="${category.id}"
                                 data-category-name="${category.name}"
+                                data-category-special="${category.special_specifications}"
                                 data-bs-toggle="modal"
                                 data-bs-target="#editCategoryModal"
                                 title="Editar">

@@ -113,7 +113,7 @@ class CategoryController extends Controller
     public function categoryApi()
     {
         try {
-            $categories = Category::select('id', 'name', 'created_at')
+            $categories = Category::select('id', 'name', 'special_specifications', 'created_at')
                 ->orderBy('name', 'asc')
                 ->get();
 
