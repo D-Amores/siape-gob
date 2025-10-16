@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Assigner;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Contracts\Validation\Validator;
 
-class UpdateBrandRequest extends FormRequest
+class StoreBrandRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,7 +24,7 @@ class UpdateBrandRequest extends FormRequest
     public function rules(): array
     {
         return [
-            "name" => "sometimes|string|max:50|unique:brands,name," . $this->route('brand')->id,
+            "name" => "required|string|max:50|unique:brands,name",
         ];
     }
 
@@ -62,4 +62,5 @@ class UpdateBrandRequest extends FormRequest
             'errors' => $validator->errors()
         ], 422));
     }
+
 }
