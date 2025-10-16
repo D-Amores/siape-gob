@@ -22,7 +22,11 @@
                         <table id="file_export" class="table table-hover w-100 table-striped table-bordered display">
                             <thead>
                                 <tr>
-                                    <th class="text-center">Categoria</th>
+                                    <th class="text-center">Fecha de Asignación</th>
+                                    <th class="text-center">Fecha de Confrimación</th>
+                                    <th class="text-center">Bien Asignado</th>
+                                    <th class="text-center">Lo asígna</th>
+                                    <th class="text-center">Asignado a</th>
                                     <th class="text-center" style="width: 150px;">Acciones</th>
                                 </tr>
                             </thead>
@@ -31,8 +35,12 @@
                             </tbody>
                             <tfoot>
                                 <tr>
-                                    <th class="text-center">Categoria</th>
-                                    <th class="text-center">Acciones</th>
+                                    <th class="text-center">Fecha de Asignación</th>
+                                    <th class="text-center">Fecha de Confrimación</th>
+                                    <th class="text-center">Bien Asignado</th>
+                                    <th class="text-center">Lo asígna</th>
+                                    <th class="text-center">Asignado a</th>
+                                    <th class="text-center" style="width: 150px;">Acciones</th>
                                 </tr>
                             </tfoot>
                         </table>
