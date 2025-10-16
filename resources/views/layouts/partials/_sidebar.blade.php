@@ -35,7 +35,7 @@
                                     <!-- Dashboard -->
                                     <!-- ---------------------------------- -->
                                     <li class="sidebar-item">
-                                        <a class="sidebar-link" href="#" id="get-url" aria-expanded="false">
+                                        <a class="sidebar-link" href="{{ route('assets.dashboard')}}" id="get-url" aria-expanded="false">
                                             <span>
                                                 <i class="ti ti-home"></i>
                                             </span>

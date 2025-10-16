@@ -151,41 +151,44 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Cargar datos con Fetch API
     fetch('/assets/api?option=table')
-    .then(response => response.json())
-    .then(json => {
+        .then(response => response.json())
+        .then(json => {
             if (!json.ok) {
                 showAlert('Error al cargar los activos: ' + (json.message || 'Desconocido'), "red", "Error");
                 return;
             }
 
-        // Inicializar DataTable con los datos obtenidos
-        const table = $('#file_export').DataTable({
-            processing: true,
-            serverSide: false,
-            responsive: true,
-            pageLength: 10,
-            lengthMenu: [10, 25, 50, 100],
-            order: [[0, 'asc']],
-            data: json.data,
-            columns: [
-                { data: 'inventory_number', className: 'text-center fw-medium' },
-                { data: 'model', className: 'fw-normal' },
-                { data: 'serial_number', className: 'fw-normal' },
-                { data: 'brand.name', className: 'fw-normal' },
-                { data: 'category.name', className: 'fw-normal' },
-                {
-                    data: 'is_active_label',
-                    className: 'text-center',
-                    render: function(data, type, row) {
-                        const badgeClass = row.is_active ? 'bg-success' : 'bg-danger';
-                        return `<span class="badge ${badgeClass} rounded-pill px-3 py-1">${data}</span>`;
-                    }
+            // Inicializar DataTable con los datos obtenidos
+            const table = $('#file_export').DataTable({
+                language: {
+                    url: language
                 },
-                {
-                    data: null,
-                    className: 'text-center',
-                    orderable: false,
-                    render: (data, type, row) => `
+                processing: true,
+                serverSide: false,
+                responsive: true,
+                pageLength: 10,
+                lengthMenu: [10, 25, 50, 100],
+                order: [[0, 'asc']],
+                data: json.data,
+                columns: [
+                    { data: 'inventory_number', className: 'text-center fw-medium' },
+                    { data: 'model', className: 'fw-normal' },
+                    { data: 'serial_number', className: 'fw-normal' },
+                    { data: 'brand.name', className: 'fw-normal' },
+                    { data: 'category.name', className: 'fw-normal' },
+                    {
+                        data: 'is_active_label',
+                        className: 'text-center',
+                        render: function (data, type, row) {
+                            const badgeClass = row.is_active ? 'bg-success' : 'bg-danger';
+                            return `<span class="badge ${badgeClass} rounded-pill px-3 py-1">${data}</span>`;
+                        }
+                    },
+                    {
+                        data: null,
+                        className: 'text-center',
+                        orderable: false,
+                        render: (data, type, row) => `
                         <button
                             class="btn btn-outline-info btn-sm mx-1 btn-ver"
                             title="Ver"
@@ -208,43 +211,43 @@ document.addEventListener('DOMContentLoaded', function () {
                             <i class="fas fa-trash"></i>
                         </button>
                     `
-                }
-            ],
-            dom: 'Bfrtip', // Posición de los botones
-            buttons: [
-                {
-                    extend: 'copyHtml5',
-                    text: '<i></i> Copiar',
-                    className: 'btn btn-secondary btn-sm'
-                },
-                {
-                    extend: 'excelHtml5',
-                    text: '<i></i> Excel',
-                    className: 'btn btn-success btn-sm'
-                },
-                {
-                    extend: 'csvHtml5',
-                    text: '<i></i> CSV',
-                    className: 'btn btn-info btn-sm'
-                },
-                {
-                    extend: 'pdfHtml5',
-                    text: '<i></i> PDF',
-                    className: 'btn btn-danger btn-sm',
-                    orientation: 'landscape',
-                    pageSize: 'A4'
-                },
-                {
-                    extend: 'print',
-                    text: '<i></i> Imprimir',
-                    className: 'btn btn-primary btn-sm'
-                }
-            ]
+                    }
+                ],
+                dom: 'Bfrtip', // Posición de los botones
+                buttons: [
+                    {
+                        extend: 'copyHtml5',
+                        text: '<i></i> Copiar',
+                        className: 'btn btn-secondary btn-sm'
+                    },
+                    {
+                        extend: 'excelHtml5',
+                        text: '<i></i> Excel',
+                        className: 'btn btn-success btn-sm'
+                    },
+                    {
+                        extend: 'csvHtml5',
+                        text: '<i></i> CSV',
+                        className: 'btn btn-info btn-sm'
+                    },
+                    {
+                        extend: 'pdfHtml5',
+                        text: '<i></i> PDF',
+                        className: 'btn btn-danger btn-sm',
+                        orientation: 'landscape',
+                        pageSize: 'A4'
+                    },
+                    {
+                        extend: 'print',
+                        text: '<i></i> Imprimir',
+                        className: 'btn btn-primary btn-sm'
+                    }
+                ]
+            });
+        })
+        .catch(error => {
+            showAlert('Error al cargar los activos: ' + error.message, "red", "Error de conexión");
         });
-    })
-    .catch(error => {
-        showAlert('Error al cargar los activos: ' + error.message, "red", "Error de conexión");
-    });
 });
 
 // ------------------------------
@@ -540,22 +543,22 @@ document.addEventListener('DOMContentLoaded', () => {
 // ------------------------------
 // Funciones auxiliares
 // ------------------------------
-function openModalForEdit(modalID){
+function openModalForEdit(modalID) {
     const modalEl = document.getElementById(modalID);
     const modal = bootstrap.Modal.getOrCreateInstance(modalEl);
     modal.show();
 }
 
-function closeModal(btnCloseID, modalID, focusID){
+function closeModal(btnCloseID, modalID, focusID) {
     document.getElementById(btnCloseID).addEventListener('click', () => {
         const modalEl = document.getElementById(modalID);
         const modal = bootstrap.Modal.getOrCreateInstance(modalEl);
         modal.hide();
-        if(focusID) moveFocus(`#${focusID}`);
+        if (focusID) moveFocus(`#${focusID}`);
     });
 };
 
-function closeModalDirect(modalID){
+function closeModalDirect(modalID) {
     const modalEl = document.getElementById(modalID);
     const modal = bootstrap.Modal.getOrCreateInstance(modalEl);
     modal.hide();

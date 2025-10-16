@@ -13,8 +13,8 @@ use App\Http\Controllers\PersonnelAssetController;
 use App\Http\Controllers\Admin\PersonnelAssetPendingController;
 
 Route::get('/', function () {
-    return view('layouts.layout');
-})->name('dashboard');
+    return view('assets.asset');
+})->name('assets.dashboard');
 
 //Ruta de test
 //Route::get('personnel', [TestController::class, 'index'])->name('personnel.index');

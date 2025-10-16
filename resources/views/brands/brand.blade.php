@@ -22,7 +22,6 @@
 @section('content')
     <div class="container-fluid">
         <div class="datatables">
-            <!-- Card con sombra más pronunciada -->
             <div class="card shadow-lg">
                 <div class="card-body">
                     <div class="table-responsive">
