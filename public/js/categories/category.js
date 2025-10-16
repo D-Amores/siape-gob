@@ -5,6 +5,7 @@ const categoryNameInput = document.getElementById('categoryName');
 const editCategoryForm = document.getElementById('editCategoryForm');
 const editCategoryNameInput = document.getElementById('editCategoryName');
 const editCategoryIdInput = document.getElementById('editCategoryId');
+const specialCategoryInput = document.getElementById('specialCategory');
 
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -23,6 +24,7 @@ categoryForm.addEventListener('submit', async function (e) {
     e.preventDefault();
 
     let categoryName = categoryNameInput.value.trim().toUpperCase();
+    let special = specialCategoryInput.checked ? 1 : 0;
 
     const validation = validateCategoryForm(categoryName);
 
@@ -58,7 +60,8 @@ categoryForm.addEventListener('submit', async function (e) {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                name: categoryName
+                name: categoryName,
+                special_specifications: special
             })
         });
 
