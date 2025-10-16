@@ -90,7 +90,7 @@ async function userCreate() {
 //Actualizar usuario
 async function userEdit() {
     if (!isFormValid('#userEditForm')) return;
-    
+
     const userForm = document.getElementById('userEditForm');
     const formData = new FormData(userForm);
     const spinnerUser = document.getElementById('userEditSpinner');
@@ -99,7 +99,7 @@ async function userEdit() {
     const data = {};
     let userId = null;
 
-    formData.forEach((value, key) => {  
+    formData.forEach((value, key) => {
         const trimmedValue = value.trim();
 
         if (key === "user_id") {
@@ -152,7 +152,7 @@ async function initAdminPanel() {
     openModal("btnOpenModalUserCreate", "modalUserCreate");
     closeModal('btnCloseModalUserCreate', 'modalUserCreate', 'btnOpenModalUserCreate');
     forceCloseModalWithRemoveId('btnCloseModalUserEdit', 'modalUserEdit', 'btnOpenModalUserEdit');
-    
+
     await loadUsers(); // Carga los usuarios
     await personnelToSelect(); // Carga los personales
 

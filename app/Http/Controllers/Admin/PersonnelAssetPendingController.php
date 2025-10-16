@@ -51,7 +51,6 @@ class PersonnelAssetPendingController extends Controller
                 'message' => 'Activo de personal pendiente creado exitosamente',
                 'data' => $personnelAssetPending
             ], 201);
-
         } catch (\Exception $e) {
             return response()->json([
                 'ok' => false,
@@ -82,7 +81,7 @@ class PersonnelAssetPendingController extends Controller
      */
     public function update(UpdatePersonnelAssetPendingRequest $request, PersonnelAssetPending $personnelAssetPending)
     {
-        $data = $request ->validated();
+        $data = $request->validated();
         try {
             $personnelAssetPending->update($data);
 
@@ -91,7 +90,6 @@ class PersonnelAssetPendingController extends Controller
                 'message' => 'Activo de personal pendiente actualizado exitosamente',
                 'data' => $personnelAssetPending
             ], 200);
-
         } catch (\Exception $e) {
             return response()->json([
                 'ok' => false,
@@ -113,11 +111,42 @@ class PersonnelAssetPendingController extends Controller
                 'ok' => true,
                 'message' => 'Activo de personal pendiente eliminado exitosamente'
             ], 200);
-
         } catch (\Exception $e) {
             return response()->json([
                 'ok' => false,
                 'message' => 'Error al eliminar el activo personal pendiente',
+                'error' => config('app.debug') ? $e->getMessage() : 'Error interno'
+            ], 500);
+        }
+    }
+
+    public function personnelAssetPendingApi()
+    {
+        try {
+            $assignments = PersonnelAssetPending::with(['asset', 'assigner', 'receiver'])
+                ->orderBy('assignment_date', 'desc')
+                ->get();
+
+            $data = $assignments->map(function ($item) {
+                return [
+                    'id' => $item->id,
+                    'assignment_date' => $item->assignment_date->format('Y-m-d'),
+                    'confirmation_date' => optional($item->confirmation_date)->format('Y-m-d'),
+                    'asset_id' => $item->asset->model ?? 'Sin nombre',
+                    'assigner_name' => $item->assigner->name ?? 'Desconocido',
+                    'receiver_name' => $item->receiver->name ?? 'Desconocido',
+                ];
+            });
+
+
+            return response()->json([
+                'ok' => true,
+                'data' => $data
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'ok' => false,
+                'message' => 'Error al obtener las asignaciones pendientes',
                 'error' => config('app.debug') ? $e->getMessage() : 'Error interno'
             ], 500);
         }

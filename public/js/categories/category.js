@@ -5,6 +5,7 @@ const categoryNameInput = document.getElementById('categoryName');
 const editCategoryForm = document.getElementById('editCategoryForm');
 const editCategoryNameInput = document.getElementById('editCategoryName');
 const editCategoryIdInput = document.getElementById('editCategoryId');
+const specialCategoryInput = document.getElementById('specialCategory');
 
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -23,6 +24,7 @@ categoryForm.addEventListener('submit', async function (e) {
     e.preventDefault();
 
     let categoryName = categoryNameInput.value.trim().toUpperCase();
+    let special = specialCategoryInput.checked ? 1 : 0;
 
     const validation = validateCategoryForm(categoryName);
 
@@ -58,7 +60,8 @@ categoryForm.addEventListener('submit', async function (e) {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                name: categoryName
+                name: categoryName,
+                special_specifications: special
             })
         });
 
@@ -152,9 +155,12 @@ document.addEventListener('click', function (e) {
         const button = e.target.closest('.btn-edit');
         const categoryId = button.getAttribute('data-category-id');
         const categoryName = button.getAttribute('data-category-name');
+        const special = button.getAttribute('data-category-special');
 
         editCategoryNameInput.value = categoryName;
         editCategoryIdInput.value = categoryId;
+
+        document.getElementById('specialCategoryEdit').checked = special == 1 ? true : false;
     }
 });
 
@@ -189,17 +195,19 @@ editCategoryForm.addEventListener('submit', async function (e) {
     const originalText = submitButton.innerHTML;
     submitButton.disabled = true;
     submitButton.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Actualizando...';
+    const specialValue = document.getElementById('specialCategoryEdit').checked ? 1 : 0;
 
     try {
         // NUEVO: Petición PUT para actualizar
         const response = await fetch(`/categories/${categoryId}`, {
-            method: 'PUT', // Usamos PUT para actualizar
+            method: 'PUT',
             headers: {
                 'X-CSRF-Token': csrfToken,
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                name: categoryName
+                name: categoryName,
+                special_specifications: specialValue
             })
         });
 
@@ -324,6 +332,9 @@ const updateCategoriesTable = (categories) => {
                 <td class="text-center text-muted py-4">
                     <p>No hay categorías disponibles</p>
                 </td>
+                <td class="text-center text-muted py-4">
+                    <p>No hay categorías disponibles</p>
+                </td>
             </tr>
         `;
     } else {
@@ -338,11 +349,17 @@ const updateCategoriesTable = (categories) => {
                     </div>
                 </td>
                 <td class="text-center">
+                    ${category.special_specifications === 1
+                                ? '<span class="badge bg-success">Especial</span>'
+                                : '<span class="badge bg-secondary">Normal</span>'}
+                </td>
+                <td class="text-center">
                     <div class="d-flex justify-content-center gap-2">
                         <button type="button"
                                 class="btn btn-outline-primary border-0 btn-edit"
                                 data-category-id="${category.id}"
                                 data-category-name="${category.name}"
+                                data-category-special="${category.special_specifications}"
                                 data-bs-toggle="modal"
                                 data-bs-target="#editCategoryModal"
                                 title="Editar">

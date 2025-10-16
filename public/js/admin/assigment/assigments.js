@@ -2,19 +2,19 @@
 document.addEventListener('DOMContentLoaded', function () {
     loadPersonnel();
     loadAssets();
-});
 
-$(document).ready(function() {
-    // Inicializar segunda tabla
     $('#file_export2').DataTable({
         dom: 'Bfrtip',
         buttons: [
             'copy', 'csv', 'excel', 'pdf', 'print'
         ]
     });
+
+    loadAssetPending();
 });
 
 const assignmentForm = document.getElementById('assignmentForm');
+const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
 assignmentForm.addEventListener('submit', async function (e) {
     e.preventDefault();
@@ -71,7 +71,7 @@ assignmentForm.addEventListener('submit', async function (e) {
             modal.hide();
             assignmentForm.reset();
 
-            // loadAssignments();
+            loadAssetPending();
         } else {
             $.alert({
                 title: 'Error',
@@ -96,3 +96,142 @@ assignmentForm.addEventListener('submit', async function (e) {
         submitButton.innerHTML = originalText;
     }
 });
+
+const loadAssetPending = async () => {
+
+    try {
+        const response = await fetch('/personnel-asset-pending/api', {
+            method: 'POST',
+            headers: {
+                'X-CSRF-Token': csrfToken,
+                'Content-Type': 'application/json'
+            }
+        });
+
+        const data = await response.json();
+
+        if (data.ok) {
+            updateAssetPendingTable(data.data);
+        } else {
+            console.error('❌ Error al cargar categorías:', data.message);
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'No se pudieron cargar las categorías. Revisa la consola.',
+                confirmButtonColor: '#d33'
+            });
+        }
+
+    } catch (error) {
+        console.error('❌ Error al cargar categorías:', error);
+        const errorMessage = error.message ? `Detalles: ${error.message}` : 'Revisa la consola para más detalles.';
+
+        $.alert({
+            title: 'Error',
+            content: errorMessage,
+            type: 'red',
+            theme: 'material',
+            backgroundDismiss: true,
+            buttons: {
+                ok: {
+                    text: 'Aceptar',
+                    btnClass: 'btn-red'
+                }
+            }
+        });
+
+    }
+}
+
+const updateAssetPendingTable = (assetPendings) => {
+    const table = document.getElementById('file_export');
+
+    if ($.fn.DataTable.isDataTable(table)) {
+        $(table).DataTable().destroy();
+    }
+
+    const tbody = table.querySelector('tbody');
+    tbody.innerHTML = '';
+
+    if (assetPendings.length === 0) {
+        tbody.innerHTML = `
+            <tr>
+                <td class="text-center text-muted py-4">
+                    <i class="fas fa-inbox fa-2x mb-2"></i><br>
+                    <i class="fas fa-plus"></i><br>
+                    Agrega la primera categoría
+                </td>
+                <td class="text-center text-muted py-4">
+                    <p>No hay categorías disponibles</p>
+                </td>
+                <td class="text-center text-muted py-4">
+                    <p>No hay categorías disponibles</p>
+                </td>
+                <td class="text-center text-muted py-4">
+                    <p>No hay categorías disponibles</p>
+                </td>
+            </tr>
+        `;
+    } else {
+        assetPendings.forEach(assetPending => {
+            const row = document.createElement('tr');
+            row.setAttribute('data-assetPending-id', assetPending.id);
+            row.innerHTML = `
+                    <td class="ps-4 text-center">
+                        <div class="d-flex align-items-center justify-content-center">
+                            <i class="fas fa-user text-muted me-2"></i>
+                            <span>${assetPending.receiver_name || '—'}</span>
+                        </div>
+                    </td>
+                    <td class="ps-4 text-center">
+                        <div class="d-flex align-items-center justify-content-center">
+                            <i class="fas fa-box text-muted me-2"></i>
+                            <span>${assetPending.asset_id || '—'}</span>
+                        </div>
+                    </td>
+                    <td class="ps-4 text-center">
+                        <div class="d-flex align-items-center justify-content-center">
+                            <i class="fas fa-user text-muted me-2"></i>
+                            <span>${assetPending.assigner_name || '—'}</span>
+                        </div>
+                    </td>
+                    <td class="text-center">
+                        <div class="d-flex justify-content-center gap-2">
+                            <button type="button"
+                                    class="btn btn-outline-primary border-0 btn-edit"
+                                    data-assignment-id="${assetPending.id}"
+                                    title="Editar">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button type="button"
+                                    class="btn btn-outline-danger border-0 btn-delete"
+                                    data-assignment-id="${assetPending.id}"
+                                    title="Eliminar">
+                                <i class="fas fa-trash-alt"></i>
+                            </button>
+                        </div>
+                    </td>
+                `;
+
+            tbody.appendChild(row);
+        });
+
+    }
+
+    $(table).DataTable({
+        language: {
+            url: language
+        },
+        responsive: true,
+        pageLength: 10,
+        order: [[0, 'asc']],
+        dom: 'Bfrtip',
+        buttons: [
+            'copy', 'csv', 'excel', 'pdf', 'print'
+        ],
+        columnDefs: [
+            { orderable: false, targets: 1 }
+        ]
+    });
+
+};
