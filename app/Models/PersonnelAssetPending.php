@@ -4,7 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Testing\Fluent\Concerns\Has;
 
 class PersonnelAssetPending extends Model
 {
@@ -24,4 +23,19 @@ class PersonnelAssetPending extends Model
         'assignment_date' => 'date',
         'confirmation_date' => 'date',
     ];
+
+    public function asset()
+    {
+        return $this->belongsTo(Asset::class, 'asset_id');
+    }
+
+    public function assigner()
+    {
+        return $this->belongsTo(Personnel::class, 'assigner_id');
+    }
+
+    public function receiver()
+    {
+        return $this->belongsTo(Personnel::class, 'receiver_id');
+    }
 }

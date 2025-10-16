@@ -39,6 +39,8 @@ Route::resource('personnel-asset-pending', PersonnelAssetPendingController::clas
 
 Route::post('brands/api', [BrandController::class, 'brandApi']);
 Route::post('categories/api', [CategoryController::class, 'categoryApi']);
+// Route::post('personnel-asset/api', [PersonnelAssetController::class, 'personnelAssetApi']);
+Route::post('personnel-asset-pending/api', [PersonnelAssetPendingController::class, 'personnelAssetPendingApi']);
 
 //RUTA PARA EL CRUD DE PERSONAL
 Route::resource('admin/personnel', PersonnelController::class)->only([
