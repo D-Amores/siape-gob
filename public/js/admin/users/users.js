@@ -29,6 +29,35 @@ async function personnelToSelect() {
         });
     });
 }
+
+//cargar datos en el select de roles
+async function rolesToSelect() {
+    const selects = document.getElementsByClassName('rolSelect');
+    const roles = await getRolApi();
+
+    if (!roles) {
+        showAlert('No se pudieron cargar los roles. Recargue la página e intente de nuevo.', 'red', 'Error');
+        return;
+    }
+
+    Array.from(selects).forEach(select => {
+        // Limpiar opciones
+        select.innerHTML = '<option value="" disabled selected>Seleccionar rol</option>';
+
+        // Llenar opciones
+        roles.forEach(rol => {
+            const rolName = [
+                capitalizeWords(rol.name ?? '')
+            ].filter(Boolean).join(' ');
+
+            const option = document.createElement('option');
+            option.value = rol.id;
+            option.textContent = rolName;
+
+            select.appendChild(option);
+        });
+    });
+}
 // Abrir modal de edición y cargar datos
 async function loadUserDataOnModalEdit(userId) {
     const user = await showUser(userId);
@@ -47,9 +76,20 @@ async function loadUserDataOnModalEdit(userId) {
         option.selected = option.value == (user.personnel_id || '');
     });
 
+    // Rol
+    const roleId = (user.roles && user.roles.length > 0) ? user.roles[0].id : '';
+    const roleSelect = document.getElementById('role_id_edit');
+    roleSelect.value = roleId;
+
+    // Asegurarte de marcar la opción como seleccionada (opcional)
+    Array.from(roleSelect.options).forEach(option => {
+        option.selected = option.value == roleId;
+    });
+
     dataOriginal = {
         username: user.username || '',
-        personnel_id: user.personnel_id || ''
+        personnel_id: user.personnel_id || '',
+        role_id: roleId || ''
     };
 
 }
@@ -155,6 +195,7 @@ async function initAdminPanel() {
 
     await loadUsers(); // Carga los usuarios
     await personnelToSelect(); // Carga los personales
+    await rolesToSelect(); // Carga los roles
 
     btnUserCreate.addEventListener('click', userCreate);
     btnUserEdit.addEventListener('click', userEdit);
@@ -163,9 +204,9 @@ async function initAdminPanel() {
         const btnEdit = e.target.closest('.btn-edit');
         if (btnEdit) {
             btnEdit.id = 'btnOpenModalUserEdit'
-            openModalForEdit("modalUserEdit");
             const userId = btnEdit.getAttribute('data-id');
             await loadUserDataOnModalEdit(userId);
+            openModalForEdit("modalUserEdit");
         }
 
         const btnDelete = e.target.closest('.btn-delete');

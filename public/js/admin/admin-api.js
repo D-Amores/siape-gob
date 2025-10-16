@@ -82,3 +82,29 @@ async function getUserApi() {
     }
     return [];
 }
+
+// Obtener roles desde la API de usuarios
+async function getRolApi() {
+    const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+    try {
+        const response = await fetch(vURIUserApi, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': csrfToken
+            },
+            body: JSON.stringify({ option: 'roles' })
+        });
+
+        if (!response.ok) throw new Error(`Error HTTP: ${response.status}`);
+
+        const result = await response.json();
+
+        if (result.ok) {
+            return result.data;
+        }
+    } catch (error) {
+        console.error('Error en obtener roles:', error);
+    }
+    return [];
+}

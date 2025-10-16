@@ -31,6 +31,7 @@ class UpdateUserRequest extends FormRequest
             //'is_active' => 'sometimes|boolean',
             //'area_id' => 'sometimes|exists:areas,id',
             'personnel_id' => 'sometimes|exists:personnel,id|unique:users,personnel_id,' . $this->route('user')->id,
+            'role_id' => 'sometimes|exists:roles,id',
         ];
     }
 
@@ -46,6 +47,8 @@ class UpdateUserRequest extends FormRequest
             //'area_id.exists' => 'El área seleccionada no es válida.',
             'personnel_id.exists' => 'El personal seleccionado no es válido.',
             'personnel_id.unique' => 'El personal ya tiene una cuenta de usuario asociada.',
+            'role_id.exists' => 'El rol seleccionado no existe en la base de datos.',
+            'role_id.required' => 'El rol es obligatorio.',
         ];
     }
 
@@ -58,6 +61,7 @@ class UpdateUserRequest extends FormRequest
             //'is_active' => 'estado activo',
             //'area_id' => 'área',
             'personnel_id' => 'personal',
+            'role_id' => 'rol',
         ];
     }
 
@@ -72,12 +76,6 @@ class UpdateUserRequest extends FormRequest
         if ($this->has('password_confirmation')) {
             $this->merge([
                 'password_confirmation' => (string) $this->input('password_confirmation'),
-            ]);
-        }
-
-        if ($this->has('username')) {
-            $this->merge([
-                'username' => strtolower($this->username),
             ]);
         }
     }

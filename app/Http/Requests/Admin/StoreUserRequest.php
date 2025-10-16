@@ -27,6 +27,7 @@ class StoreUserRequest extends FormRequest
             'username' => 'required|string|max:20|min:6|unique:users',
             'password' => 'required|string|min:8|confirmed',
             'personnel_id' => 'required|exists:personnel,id|unique:users,personnel_id',
+            'role_id' => 'required|exists:roles,id',
         ];
     }
 
@@ -43,6 +44,8 @@ class StoreUserRequest extends FormRequest
             'password.min' => 'La contraseña debe tener al menos 8 caracteres.',
             'password.confirmed' => 'La confirmación de la contraseña no coincide.',
             'personnel_id.unique' => 'El personal ya tiene una cuenta de usuario asociada.',
+            'role_id.required' => 'El rol es obligatorio.',
+            'role_id.exists' => 'El rol seleccionado no existe en la base de datos.',
         ];
     }
 
@@ -52,15 +55,16 @@ class StoreUserRequest extends FormRequest
             'username' => 'nombre de usuario',
             'password' => 'contraseña',
             'personnel_id' => 'ID de personal',
+            'role_id' => 'ID de rol',
         ];
     }
 
-    public function prepareForValidation(): void
-    {
-        $this->merge([
-            'username' => strtolower($this->username),
-        ]);
-    }
+    // public function prepareForValidation(): void
+    // {
+    //     $this->merge([
+    //         'username' => strtolower($this->username),
+    //     ]);
+    // }
 
     protected function failedValidation(Validator $validator)
     {

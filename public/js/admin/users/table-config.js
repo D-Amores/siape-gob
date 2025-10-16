@@ -77,6 +77,18 @@ function loadUsersTable(data) {
                 `
             },
             {
+                data: null,
+                title: "Rol",
+                render: (row) => {
+                    // Verifica si tiene roles asignados
+                    if (row.roles && row.roles.length > 0) {
+                        return row.roles.map(r => capitalizeWords(r.name)).join(', ');
+                    }
+                    return '—'; // Si no tiene roles
+                }
+            }
+            ,
+            {
                 data: "is_active",
                 title: "Estado",
                 render: (active) => `

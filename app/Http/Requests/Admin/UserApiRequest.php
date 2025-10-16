@@ -22,7 +22,7 @@ class UserApiRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'option' => 'required|string|in:users,users_areas,users_areas_personnel',
+            'option' => 'required|string|in:users,users_areas,users_areas_personnel,roles',
         ];
     }
 }
