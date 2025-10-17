@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Assigner;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Contracts\Validation\Validator;
 
-class UpdateCategoryRequest extends FormRequest
+class StoreBrandRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,25 +24,24 @@ class UpdateCategoryRequest extends FormRequest
     public function rules(): array
     {
         return [
-            "name" => "sometimes|string|max:50|unique:categories,name," . $this->route('category')->id,
-            "special_specifications" => "sometimes|boolean"
+            "name" => "required|string|max:50|unique:brands,name",
         ];
     }
 
     public function messages(): array
     {
         return [
-            'name.required' => 'El nombre de la categoría es obligatorio',
-            'name.string' => 'El nombre de la categoría debe ser una cadena de texto',
-            'name.max' => 'El nombre de la categoría no debe exceder 50 caracteres',
-            'name.unique' => 'Esta categoría ya existe',
+            'name.required' => 'El nombre de la marca es obligatorio',
+            'name.string' => 'El nombre de la marca debe ser una cadena de texto',
+            'name.max' => 'El nombre de la marca no debe exceder 50 caracteres',
+            'name.unique' => 'Esta marca ya existe',
         ];
     }
 
     public function attributes()
     {
         return [
-            'name' => 'nombre de la categoría',
+            'name' => 'nombre de la marca',
         ];
     }
 
@@ -59,8 +58,9 @@ class UpdateCategoryRequest extends FormRequest
     {
         throw new HttpResponseException(response()->json([
             'success' => false,
-            'message' => 'Error de validación',
+            'message' => 'Validation errors',
             'errors' => $validator->errors()
         ], 422));
     }
+
 }

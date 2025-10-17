@@ -35,7 +35,7 @@
                                     <!-- Dashboard -->
                                     <!-- ---------------------------------- -->
                                     <li class="sidebar-item">
-                                        <a class="sidebar-link" href="{{ route('dashboard') }}" id="get-url"
+                                        <a class="sidebar-link" href="{{ route('dashboard') }}" class="get-url"
                                             aria-expanded="false">
                                             <span>
                                                 <i class="ti ti-home"></i>
@@ -74,7 +74,7 @@
                                     @endhasanyrole
                                     @role('user')
                                         <li class="sidebar-item">
-                                            <a class="sidebar-link" href="{{ route('personnel-asset.index') }}"
+                                            <a class="sidebar-link" href=""
                                                 aria-expanded="false">
                                                 <span>
                                                     <i class="ti ti-arrows-exchange me-2"></i>
@@ -133,7 +133,7 @@
                     <h6 class="mb-0 fs-4 fw-semibold">Mathew</h6>
                     <span class="fs-2">Designer</span>
                 </div>
-                <button class="border-0 bg-transparent text-primary ms-auto" tabindex="0" type="button"
+                <button id="btnLogout" class="border-0 bg-transparent text-primary ms-auto" tabindex="0" type="button"
                     aria-label="logout" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="logout">
                     <i class="ti ti-power fs-6"></i>
                 </button>

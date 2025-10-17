@@ -1,19 +1,20 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Assigner;
 
-use App\Http\Requests\StoreCategoryRequest;
-use App\Http\Requests\UpdateCategoryRequest;
-use App\Models\Category;
+use App\Http\Requests\Assigner\StoreBrandRequest;
+use App\Http\Requests\Assigner\UpdateBrandRequest;
+use App\Models\Brand;
+use App\Http\Controllers\Controller;
 
-class CategoryController extends Controller
+class BrandController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        return view('categories.category');
+        return view('brands.brand');
     }
 
     /**
@@ -27,21 +28,22 @@ class CategoryController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreCategoryRequest $request)
+    public function store(StoreBrandRequest $request)
     {
         try {
-            $category = Category::create($request->validated());
-
+            $validatedData = $request->validated();
+            $validatedData['name'] = strtoupper($validatedData['name']);
+            $brand = Brand::create($validatedData);
             return response()->json([
                 'ok' => true,
-                'message' => 'Categoría creada exitosamente',
-                'data' => $category
+                'message' => 'Marca creada exitosamente',
+                'data' => $brand
             ], 201);
 
         } catch (\Exception $e) {
             return response()->json([
                 'ok' => false,
-                'message' => 'Error al crear la categoría',
+                'message' => 'Error al crear la marca',
                 'error' => config('app.debug') ? $e->getMessage() : 'Error interno'
             ], 500);
         }
@@ -50,7 +52,7 @@ class CategoryController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Category $category)
+    public function show(Brand $brand)
     {
         //
     }
@@ -58,7 +60,7 @@ class CategoryController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Category $category)
+    public function edit(Brand $brand)
     {
         //
     }
@@ -66,23 +68,20 @@ class CategoryController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateCategoryRequest $request, Category $category)
+    public function update(UpdateBrandRequest $request, Brand $brand)
     {
         $data = $request->validated();
-
         try {
-            $category->update($data);
-
+            $brand->update($data);
             return response()->json([
                 'ok' => true,
-                'message' => 'Categoría actualizada exitosamente',
-                'data' => $category
+                'message' => 'Marca actualizada exitosamente',
+                'data' => $brand
             ], 200);
-
         } catch (\Exception $e) {
             return response()->json([
                 'ok' => false,
-                'message' => 'Error al actualizar la categoría',
+                'message' => 'Error al actualizar la marca',
                 'error' => config('app.debug') ? $e->getMessage() : 'Error interno'
             ], 500);
         }
@@ -91,41 +90,39 @@ class CategoryController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Category $category)
+    public function destroy(Brand $brand)
     {
         try {
-            $category->delete();
-
+            $brand->delete();
             return response()->json([
                 'ok' => true,
-                'message' => 'Categoría eliminada exitosamente'
+                'message' => 'Marca eliminada exitosamente'
             ], 200);
-
         } catch (\Exception $e) {
             return response()->json([
                 'ok' => false,
-                'message' => 'Error al eliminar la categoría',
+                'message' => 'Error al eliminar la marca',
                 'error' => config('app.debug') ? $e->getMessage() : 'Error interno'
             ], 500);
         }
     }
 
-    public function categoryApi()
+    public function brandApi()
     {
         try {
-            $categories = Category::select('id', 'name', 'special_specifications', 'created_at')
+            $brands = Brand::select('id', 'name', 'created_at')
                 ->orderBy('name', 'asc')
                 ->get();
 
             return response()->json([
                 'ok' => true,
-                'data' => $categories
+                'data' => $brands
             ], 200);
 
         } catch (\Exception $e) {
             return response()->json([
                 'ok' => false,
-                'message' => 'Error al obtener las categorías',
+                'message' => 'Error al obtener las marcas',
                 'error' => config('app.debug') ? $e->getMessage() : 'Error interno'
             ], 500);
         }

@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Assigner;
 
-use App\Http\Requests\StoreAssetRequest;
-use App\Http\Requests\UpdateAssetRequest;
-use App\Http\Requests\AssetsApiRequest;
+use App\Http\Requests\Assigner\StoreAssetRequest;
+use App\Http\Requests\Assigner\UpdateAssetRequest;
+use App\Http\Requests\Assigner\AssetsApiRequest;
 use App\Models\Asset;
+use App\Http\Controllers\Controller;
 
 class AssetController extends Controller
 {
