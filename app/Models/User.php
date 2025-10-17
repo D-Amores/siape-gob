@@ -6,11 +6,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Spatie\Permission\Traits\HasRoles;
+use Illuminate\Support\Facades\Auth;
 
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable;
+    use HasFactory, Notifiable, HasRoles;
 
     /**
      * The attributes that are mass assignable.
@@ -34,6 +36,7 @@ class User extends Authenticatable
     protected $hidden = [
         'password',
         'remember_token',
+        'pivots',
     ];
 
     protected $appends = ['avatar_url'];
@@ -70,5 +73,13 @@ class User extends Authenticatable
         $defaultNumber = ($this->id % 7) + 1;
 
         return asset("storage/avatars/user-{$defaultNumber}.jpg");
+    }
+
+    public function scopeExcludeCurrent($query)
+    {
+        if (Auth::check()) {
+            return $query->where('id', '!=', Auth::id());
+        }
+        return $query;
     }
 }

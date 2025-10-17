@@ -35,71 +35,78 @@
                                     <!-- Dashboard -->
                                     <!-- ---------------------------------- -->
                                     <li class="sidebar-item">
-                                        <a class="sidebar-link" href="#" id="get-url" aria-expanded="false">
+                                        <a class="sidebar-link" href="{{ route('dashboard') }}" class="get-url"
+                                            aria-expanded="false">
                                             <span>
                                                 <i class="ti ti-home"></i>
                                             </span>
                                             <span class="hide-menu">Inicio</span>
                                         </a>
                                     </li>
-                                    <li class="sidebar-item">
-                                        <a class="sidebar-link" href="{{ route('categories.index') }}"
-                                            aria-expanded="false">
-                                            <span>
-                                                <i class="ti ti-category"></i>
-                                            </span>
-                                            <span class="hide-menu">Categorías</span>
-                                        </a>
-                                    </li>
-                                    <li class="sidebar-item">
-                                        <a class="sidebar-link" href="{{ route('brands.index') }}"
-                                            aria-expanded="false">
-                                            <span>
-                                                <i class="ti ti-tag"></i>
-                                            </span>
-                                            <span class="hide-menu">Marcas</span>
-                                        </a>
-                                    </li>
-                                    <li class="sidebar-item">
-                                        <a class="sidebar-link" href="{{ route('personnel-asset-pending.index') }}"
-                                            aria-expanded="false">
-                                            <span>
-                                                <i class="ti ti-arrow-right"></i>
-                                            </span>
-                                            <span class="hide-menu">Asignaciones</span>
-                                        </a>
-                                    </li>
-                                    <li class="sidebar-item">
-                                        <a class="sidebar-link" href="{{ route('personnel-asset.index') }}"
-                                            aria-expanded="false">
-                                            <span>
-                                                <i class="ti ti-arrows-exchange me-2"></i>
-                                            </span>
-                                            <span class="hide-menu">Aceptar Asignaciones</span>
-                                        </a>
-                                    </li>
-                                    <!-- ADMIN -->
-                                    <li class="nav-small-cap">
-                                        <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
-                                        <span class="hide-menu">Administración</span>
-                                    </li>
-                                    <li class="sidebar-item">
-                                        <a class="sidebar-link" href="{{ route('personnel.index') }}"
-                                            aria-expanded="false">
-                                            <span>
-                                                <i class="ti ti-id-badge"></i>
-                                            </span>
-                                            <span class="hide-menu">Personal</span>
-                                        </a>
-                                    </li>
-                                    <li class="sidebar-item">
-                                        <a class="sidebar-link" href="{{ route('users.index') }}" aria-expanded="false">
-                                            <span>
-                                                <i class="ti ti-user"></i>
-                                            </span>
-                                            <span class="hide-menu">Usuarios</span>
-                                        </a>
-                                    </li>
+                                    @hasanyrole('admin|assigner')
+                                        <li class="sidebar-item">
+                                            <a class="sidebar-link" href="{{ route('categories.index') }}"
+                                                aria-expanded="false">
+                                                <span>
+                                                    <i class="ti ti-category"></i>
+                                                </span>
+                                                <span class="hide-menu">Categorías</span>
+                                            </a>
+                                        </li>
+                                        <li class="sidebar-item">
+                                            <a class="sidebar-link" href="{{ route('brands.index') }}"
+                                                aria-expanded="false">
+                                                <span>
+                                                    <i class="ti ti-tag"></i>
+                                                </span>
+                                                <span class="hide-menu">Marcas</span>
+                                            </a>
+                                        </li>
+                                        <li class="sidebar-item">
+                                            <a class="sidebar-link" href="{{ route('personnel-asset-pending.index') }}"
+                                                aria-expanded="false">
+                                                <span>
+                                                    <i class="ti ti-arrow-right"></i>
+                                                </span>
+                                                <span class="hide-menu">Asignaciones</span>
+                                            </a>
+                                        </li>
+                                    @endhasanyrole
+                                    @role('user')
+                                        <li class="sidebar-item">
+                                            <a class="sidebar-link" href=""
+                                                aria-expanded="false">
+                                                <span>
+                                                    <i class="ti ti-arrows-exchange me-2"></i>
+                                                </span>
+                                                <span class="hide-menu">Aceptar Asignaciones</span>
+                                            </a>
+                                        </li>
+                                    @endrole
+                                    @role('admin')
+                                        <!-- ADMIN -->
+                                        <li class="nav-small-cap">
+                                            <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
+                                            <span class="hide-menu">Administración</span>
+                                        </li>
+                                        <li class="sidebar-item">
+                                            <a class="sidebar-link" href="{{ route('personnel.index') }}"
+                                                aria-expanded="false">
+                                                <span>
+                                                    <i class="ti ti-id-badge"></i>
+                                                </span>
+                                                <span class="hide-menu">Personal</span>
+                                            </a>
+                                        </li>
+                                        <li class="sidebar-item">
+                                            <a class="sidebar-link" href="{{ route('users.index') }}" aria-expanded="false">
+                                                <span>
+                                                    <i class="ti ti-user"></i>
+                                                </span>
+                                                <span class="hide-menu">Usuarios</span>
+                                            </a>
+                                        </li>
+                                    @endrole
                                 </ul>
                             </div>
                         </div>
@@ -126,7 +133,7 @@
                     <h6 class="mb-0 fs-4 fw-semibold">Mathew</h6>
                     <span class="fs-2">Designer</span>
                 </div>
-                <button class="border-0 bg-transparent text-primary ms-auto" tabindex="0" type="button"
+                <button id="btnLogout" class="border-0 bg-transparent text-primary ms-auto" tabindex="0" type="button"
                     aria-label="logout" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="logout">
                     <i class="ti ti-power fs-6"></i>
                 </button>

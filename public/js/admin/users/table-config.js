@@ -63,7 +63,7 @@ function loadUsersTable(data) {
                 }
             },
             {
-                data: "personnel.area.name",
+                data: "area.name",
                 defaultContent: "Sin área",
                 title: "Área",
                 render: (area) => `
@@ -76,6 +76,18 @@ function loadUsersTable(data) {
                     </div>
                 `
             },
+            {
+                data: null,
+                title: "Rol",
+                render: (row) => {
+                    // Verifica si tiene roles asignados
+                    if (row.roles && row.roles.length > 0) {
+                        return row.roles.map(r => capitalizeWords(r.name)).join(', ');
+                    }
+                    return '—'; // Si no tiene roles
+                }
+            }
+            ,
             {
                 data: "is_active",
                 title: "Estado",

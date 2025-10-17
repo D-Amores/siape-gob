@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 
 class Personnel extends Model
 {
@@ -66,6 +67,16 @@ class Personnel extends Model
     {
         return $query->with('user');
     }
+
+    public function scopeExcludeCurrent($query)
+    {
+        $user = Auth::user();
+        if ($user && $user->personnel_id) {
+            return $query->where('id', '!=', $user->personnel_id);
+        }
+        return $query;
+    }
+
 
     public function area()
     {
