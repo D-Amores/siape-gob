@@ -71,6 +71,15 @@
                                                 <span class="hide-menu">Asignaciones</span>
                                             </a>
                                         </li>
+                                        <li class="sidebar-item">
+                                            <a class="sidebar-link" href="{{ route('assets.index') }}"
+                                                aria-expanded="false">
+                                                <span>
+                                                    <i class="ti ti-package"></i>
+                                                </span>
+                                                <span class="hide-menu">Bienes</span>
+                                            </a>
+                                        </li>
                                     @endhasanyrole
                                     @role('user')
                                         <li class="sidebar-item">
