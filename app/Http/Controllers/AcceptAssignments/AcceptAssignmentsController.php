@@ -1,9 +1,10 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\AcceptAssignments;
 
+
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\PersonnelAssetPending;
 
 class AcceptAssignmentsController extends Controller
 {
@@ -12,7 +13,7 @@ class AcceptAssignmentsController extends Controller
      */
     public function index()
     {
-        //
+        return view('accept_assignments.accept_assignments');
     }
 
     /**

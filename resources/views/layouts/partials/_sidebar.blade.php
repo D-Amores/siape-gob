@@ -74,8 +74,7 @@
                                     @endhasanyrole
                                     @role('user')
                                         <li class="sidebar-item">
-                                            <a class="sidebar-link" href=""
-                                                aria-expanded="false">
+                                            <a class="sidebar-link" href="{{ route('accept-assignments.index') }}" aria-expanded="false">
                                                 <span>
                                                     <i class="ti ti-arrows-exchange me-2"></i>
                                                 </span>
