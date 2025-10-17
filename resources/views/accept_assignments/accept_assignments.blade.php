@@ -22,12 +22,13 @@
                         <h4 class="card-title mb-0">Asignaciones Pendientes</h4>
                     </div>
                     <div class="table-responsive">
-                        <table id="table_pendings_assigments" class="table table-hover w-100 table-striped table-bordered display">
+                        <table id="table_pendings_assigments_users" class="table table-hover w-100 table-striped table-bordered display">
                             <thead>
                                 <tr>
+                                    <th class="text-center">Asigna</th>
                                     <th class="text-center">Recibe</th>
                                     <th class="text-center">Bien</th>
-                                    <th class="text-center">Asigna</th>
+                                    <th class="text-center">Fecha de Asignación</th>
                                     <th class="text-center" style="width: 150px;">Acciones</th>
                                 </tr>
                             </thead>
@@ -36,9 +37,10 @@
                             </tbody>
                             <tfoot>
                                 <tr>
+                                    <th class="text-center">Asigna</th>
                                     <th class="text-center">Recibe</th>
                                     <th class="text-center">Bien</th>
-                                    <th class="text-center">Asigna</th>
+                                    <th class="text-center">Fecha de Asignación</th>
                                     <th class="text-center">Acciones</th>
                                 </tr>
                             </tfoot>
@@ -66,5 +68,7 @@
     <script>
         const language = "{{ asset('cdn/datatables-language/es-MX.json') }}";
     </script>
+
+    <script src="{{ asset('js/user/accept_assignments.js') }}"></script>
 
 @endsection
