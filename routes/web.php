@@ -53,6 +53,9 @@ Route::middleware('auth')->group(function () {
         // Ruta API para cargar asignaciones pendientes del usuario autenticado
         Route::post('accept-assignments/api', [AcceptAssignmentsController::class, 'pendingAssignmentsApi'])->name('accept-assignments.api');
 
+        // Ruta API para cargar bienes del usuario autenticado
+        Route::post('assets-unique-user/api', [AssetsUniqueUserController::class, 'assetsUniqueUsuarioAPi'])->name('assets-user.api');
+
     });
 
     Route::middleware('role:admin')->group(function () {
