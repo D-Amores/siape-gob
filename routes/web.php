@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Assigner\AssetController;
+use App\Http\Controllers\AcceptAssignments\AssetsUniqueUserController;
 use App\Http\Controllers\AcceptAssignments\AcceptAssignmentsController;
 use App\Http\Controllers\Assigner\BrandController;
 use App\Http\Controllers\Assigner\CategoryController;
@@ -47,6 +48,7 @@ Route::middleware('auth')->group(function () {
 
     Route::middleware('role:user')->group(function () {
         Route::resource('accept-assignments', AcceptAssignmentsController::class)->only(['index']);
+        Route::resource('assets-user', AssetsUniqueUserController::class)->only(['index']);
 
         // Ruta API para cargar asignaciones pendientes del usuario autenticado
         Route::post('accept-assignments/api', [AcceptAssignmentsController::class, 'pendingAssignmentsApi'])->name('accept-assignments.api');

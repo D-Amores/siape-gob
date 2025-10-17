@@ -74,6 +74,14 @@
                                     @endhasanyrole
                                     @role('user')
                                         <li class="sidebar-item">
+                                            <a class="sidebar-link" href="{{ route('assets-user.index') }}" aria-expanded="false">
+                                                <span>
+                                                    <i class="ti ti-package"></i>
+                                                </span>
+                                                <span class="hide-menu">Bienes</span>
+                                            </a>
+                                        </li>
+                                        <li class="sidebar-item">
                                             <a class="sidebar-link" href="{{ route('accept-assignments.index') }}" aria-expanded="false">
                                                 <span>
                                                     <i class="ti ti-arrows-exchange me-2"></i>

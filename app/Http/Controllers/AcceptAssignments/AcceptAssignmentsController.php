@@ -15,7 +15,7 @@ class AcceptAssignmentsController extends Controller
      */
     public function index()
     {
-        return view('accept_assignments.accept_assignments');
+        return view('user.accept_assignments');
     }
 
     /**
