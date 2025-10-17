@@ -1,47 +1,40 @@
-class DataTableManager {
-    constructor(selector, data, columns, options = {}) {
-        this.selector = selector;
-        this.data = data;
-        this.columns = columns;
-        this.options = options;
-        this.table = null;
-        this.init();
+let dataTable = null;
+
+
+/**
+ * Inicializa o actualiza la tabla de usuarios.
+ * @param {Array} data - Datos obtenidos del backend.
+ */
+function basicTableConfig(tableId = 'dataUsersTable', data = [], columns = [], tooltips = null) {
+    const tableSelector = `#${tableId}`;
+
+    if (dataTable) {
+        dataTable.clear().rows.add(data).draw();
+        return;
     }
 
-    init() {
-        if (this.table) {
-            this.updateData(this.data);
-            return;
-        }
+    dataTable = new DataTable(tableSelector, {
+        data: data,
+        columns: columns,
+        pagingType: 'simple_numbers',
+        destroy: true,
+        responsive: true,
+        pageLength: 30,
+        lengthChange: false,
+        info: false,
+        language: { url: languageDataTable }
+    });
 
-        const defaultOptions = {
-            data: this.data,
-            columns: this.columns,
-            destroy: true,
-            responsive: true,
-            pageLength: 10,
-            language: { url: window.languageDataTable },
-            drawCallback: () => this.activateTooltips(),
-            ...this.options, // permite sobrescribir config
+    if (tooltips) {
+        // ⚡ Reactivar tooltips en cada renderizado
+        const activateTooltips = () => {
+            document.querySelectorAll(tooltips).forEach((el) => {
+                new bootstrap.Tooltip(el);
+            });
         };
-
-        this.table = new DataTable(this.selector, defaultOptions);
-        this.activateTooltips();
+    
+        dataTable.on('draw', activateTooltips);
+        activateTooltips();
     }
 
-    updateData(newData) {
-        this.table.clear().rows.add(newData).draw();
-    }
-
-    activateTooltips() {
-        document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach((el) => {
-            new bootstrap.Tooltip(el);
-        });
-    }
-
-    getTable() {
-        return this.table;
-    }
 }
-
-export default DataTableManager;
