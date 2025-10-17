@@ -2,7 +2,7 @@ let dataOriginal = [];
 // Cargar datos en las tablas y selects, modales, etc.
 async function personnelToSelect() {
     const selects = document.getElementsByClassName('personnelSelect');
-    const personnels = await getPersonnelApi();
+    const personnels = await getPersonnelApi('winthout_user');
 
     if (!personnels) {
         showAlert('No se pudieron cargar los personales. Recargue la página e intente de nuevo.', 'red', 'Error');
@@ -119,6 +119,7 @@ async function userCreate() {
             closeModalForSuccess('modalUserCreate', 'btnOpenModalUserCreate');
             resetFormAndSelect(userForm);
             await loadUsers(); // Recargar tabla de usuarios
+            await personnelToSelect(); // Recargar select de personales
         }
         spinnerUser.classList.add('d-none');
         btnUserCreate.disabled = false;
@@ -167,6 +168,7 @@ async function userEdit() {
             closeModalForSuccess('modalUserEdit', 'btnOpenModalUserEdit');
             resetFormAndSelect(userForm);
             await loadUsers(); // Recargar tabla de usuarios
+            await personnelToSelect(); // Recargar select de personales
         }
         spinnerUser.classList.add('d-none');
         btnUserEdit.disabled = false;
@@ -179,6 +181,7 @@ async function userDelete(userId) {
         const isOk = await destroyUser(userId);
         if (isOk) {
             await loadUsers(); // recarga la tabla solo si la creación fue exitosa
+            await personnelToSelect(); // Recargar select de personales
         }
     });
 }
