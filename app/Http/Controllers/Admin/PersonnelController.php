@@ -22,11 +22,11 @@ class PersonnelController extends Controller
 
         switch ($option) {
             case 'area':
-                $data = Personnel::withArea()->get();
+                $data = Personnel::withArea()->excludeCurrent()->get();
                 break;
 
             case 'area_user':
-                $data = Personnel::withArea()->withUser()->get();
+                $data = Personnel::withArea()->withUser()->excludeCurrent()->get();
                 break;
 
             // Agregar más casos según sea necesario
