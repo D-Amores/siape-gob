@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Assigner\AssetController;
 use App\Http\Controllers\Assigner\BrandController;
 use App\Http\Controllers\Assigner\CategoryController;
@@ -19,9 +20,7 @@ Route::middleware('guest')->group(function () {
 });
 
 Route::middleware('auth')->group(function () {
-    Route::get('/', function () {
-            return view('assets.asset');
-        })->name('dashboard');
+    Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 
     // Logout route
     Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
@@ -30,16 +29,18 @@ Route::middleware('auth')->group(function () {
         Route::resource('assets', AssetController::class)->only(['index', 'store', 'update', 'destroy']);
         Route::resource('brands', BrandController::class)->only(['index', 'store', 'update', 'destroy']);
         Route::resource('categories', CategoryController::class)->only(['index', 'store', 'update', 'destroy']);
-        Route::resource('personnel-asset', PersonnelAssetController::class)->only(['index', 'store', 'update', 'destroy']);
         Route::resource('personnel-asset-pending', PersonnelAssetPendingController::class)->only(['index', 'store', 'update', 'destroy']);
-
+        
         Route::post('brands/api', [BrandController::class, 'brandApi']);
         Route::post('categories/api', [CategoryController::class, 'categoryApi']);
-        // Route::post('personnel-asset/api', [PersonnelAssetController::class, 'personnelAssetApi']);
         Route::post('personnel-asset-pending/api', [PersonnelAssetPendingController::class, 'personnelAssetPendingApi']);
         Route::post('select-assets/api', [AssetController::class, 'selectAssetsApi']);
         // Ruta para obtener assets para la tabla o detalles
         Route::get('assets/api', [AssetController::class, 'assetsApi'])->name('assets.api');
+
+        //RUTA QUE SE ELIMINARA YA QUE NO NOS SERVIRÁ
+        //Route::resource('personnel-asset', PersonnelAssetController::class)->only(['index', 'store', 'update', 'destroy']);
+        // Route::post('personnel-asset/api', [PersonnelAssetController::class, 'personnelAssetApi']);
     });
 
     Route::middleware('role:user')->group(function () {

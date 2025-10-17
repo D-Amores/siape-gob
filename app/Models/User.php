@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
+use Illuminate\Support\Facades\Auth;
 
 class User extends Authenticatable
 {
@@ -72,5 +73,13 @@ class User extends Authenticatable
         $defaultNumber = ($this->id % 7) + 1;
 
         return asset("storage/avatars/user-{$defaultNumber}.jpg");
+    }
+
+    public function scopeExcludeCurrent($query)
+    {
+        if (Auth::check()) {
+            return $query->where('id', '!=', Auth::id());
+        }
+        return $query;
     }
 }

@@ -58,7 +58,7 @@
                             <!-- Breadcrumb -->
                             <nav aria-label="breadcrumb">
                                 <ol class="breadcrumb mb-0 bg-transparent p-0">
-                                    <li class="breadcrumb-item"><a href="{{ url('/dashboard') }}">Dashboard</a></li>
+                                    <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
                                     <li class="breadcrumb-item active" aria-current="page">@yield('title')</li>
                                 </ol>
                             </nav>
@@ -108,6 +108,7 @@
     <!-- Select2 -->
     <script src="{{ asset('modernize/assets/libs/select2/dist/js/select2.min.js') }}"></script>
 
+    <script src="{{ asset('js/auth/logout.js') }}"></script>
     @yield('scripts')
 </body>
 

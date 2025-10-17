@@ -23,17 +23,17 @@ class UserController extends Controller
         try {
             switch ($data['option']) {
                 case 'users':
-                    $users = User::all();
+                    $users = User::excludeCurrent()->get();
                     $response = ['ok' => true, 'message' => 'Usuarios obtenidos exitosamente.', 'data' => $users];
                     $status = 200;
                     break;
                 case 'users_areas':
-                    $users = User::with('area')->get();
+                    $users = User::with('area')->excludeCurrent()->get();
                     $response = ['ok' => true, 'message' => 'Usuarios con áreas obtenidos exitosamente.', 'data' => $users];
                     $status = 200;
                     break;
                 case 'users_areas_personnel':
-                    $users = User::with('area', 'personnel', 'roles')->get();
+                    $users = User::with('area', 'personnel', 'roles')->excludeCurrent()->get();
                     $response = ['ok' => true, 'message' => 'Usuarios con áreas y personal obtenidos exitosamente.', 'data' => $users];
                     $status = 200;
                     break;
