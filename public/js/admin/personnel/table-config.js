@@ -1,20 +1,6 @@
-let personnelTable = null;
-
-/**
- * Inicializa o actualiza la tabla de personal.
- * @param {Array} data - Datos del personal obtenidos del backend.
- */
 function loadPersonnelTable(data) {
-    // Si ya existe la tabla, solo actualizamos los datos
-    if (personnelTable) {
-        personnelTable.clear().rows.add(data).draw();
-        return;
-    }
-
-    // Inicializar DataTable
-    personnelTable = new DataTable("#dataPersonnelTable", {
-        data: data,
-        columns: [
+    const tableSelector = "dataPersonnelTable";
+    columns = [
             {
                 data: null,
                 render: (d, t, r, meta) => meta.row + 1,
@@ -79,7 +65,7 @@ function loadPersonnelTable(data) {
                 data: "is_active",
                 title: "Estado",
                 render: (active) =>
-                    `<span class="badge ${active ? 'bg-success-subtle text-success' : 'bg-danger-subtle text-danger'}">
+                    `<span class="badge ${active ? 'bg-primary-subtle text-primary' : 'bg-danger-subtle text-danger'}">
                         ${active ? 'Activo' : 'Inactivo'}
                      </span>`
             },
@@ -87,29 +73,17 @@ function loadPersonnelTable(data) {
                 data: null,
                 title: "Acciones",
                 render: (row) => `
-                    <div class="btn-group" role="group">
-                        <button class="btn btn-sm btn-outline-primary btn-edit" data-id="${row.id}">
+                    <div class="d-flex justify-content-center gap-2" role="group">
+                        <button class="btn btn-sm btn-outline-primary border-0 btn-edit" data-id="${row.id}">
                             <i class="fas fa-edit"></i>
                         </button>
-                        <button class="btn btn-sm btn-outline-danger btn-delete" data-id="${row.id}">
+                        <button class="btn btn-sm btn-outline-danger border-0 btn-delete" data-id="${row.id}">
                             <i class="fas fa-trash-alt"></i>
                         </button>
                     </div>
                 `
             }
-        ],
-        destroy: true,
-        responsive: true,
-        pageLength: 10,
-        language: { url: languageDataTable }
-    });
-
-    // ⚡ Activar tooltips después de renderizar la tabla
-    const activateTooltips = () => {
-        const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
-        [...tooltipTriggerList].forEach((el) => new bootstrap.Tooltip(el));
-    };
-
-    personnelTable.on('draw', activateTooltips);
-    activateTooltips(); // Inicial para la primera carga
+        ];
+    const tooltips = '[data-bs-toggle="tooltip"]';
+    basicTableConfig(tableSelector, data, columns, tooltips);
 }

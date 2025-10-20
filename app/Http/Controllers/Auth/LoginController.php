@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Requests\Auth\LoginUserRequest;
 use Illuminate\Support\Facades\Auth;
+use App\Models\User;
 
 class LoginController extends Controller
 {
@@ -21,6 +22,12 @@ class LoginController extends Controller
     {
         $credentials = $request->only('username', 'password');
         $response = ['ok' => false, 'message' => 'Credenciales incorrectas'];
+
+        $user = User::where('username', $credentials['username'])->first();
+        if ($user && !$user->is_active) {
+            $response['message'] = 'La cuenta de usuario está inactiva. Por favor, contacte al administrador.';
+            return response()->json($response, 403);
+        }
         
         if (Auth::attempt($credentials, $request->boolean('remember'))) {
             $request->session()->regenerate();

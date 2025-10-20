@@ -1,22 +1,6 @@
-let usersTable = null;
-
-/**
- * Inicializa o actualiza la tabla de usuarios.
- * @param {Array} data - Datos de usuarios obtenidos del backend.
- */
 function loadUsersTable(data) {
-    const tableSelector = "#dataUsersTable";
-
-    // Si ya existe la tabla, actualizamos los datos
-    if (usersTable) {
-        usersTable.clear().rows.add(data).draw();
-        return;
-    }
-
-    // Inicializamos la DataTable sobre tu estructura existente
-    usersTable = new DataTable(tableSelector, {
-        data: data,
-        columns: [
+    const tableSelector = "dataUsersTable";
+    const columns = [
             {
                 data: null,
                 render: (d, t, r, meta) => meta.row + 1,
@@ -101,36 +85,18 @@ function loadUsersTable(data) {
                 data: null,
                 title: "Acciones",
                 render: (row) => `
-                    <div class="btn-group" role="group">
-                        <button class="btn btn-sm btn-outline-success btn-edit" data-id="${row.id}">
-                            <i class="bx bx-edit"></i>
+                    <div class="d-flex justify-content-center gap-2" role="group">
+                        <button class="btn btn-sm btn-outline-primary border-0 btn-edit" data-id="${row.id}">
+                            <i class="fas fa-edit"></i>
                         </button>
-                        <button class="btn btn-sm btn-outline-danger btn-delete" data-id="${row.id}">
-                            <i class="bx bx-trash"></i>
+                        <button class="btn btn-sm btn-outline-danger border-0 btn-delete" data-id="${row.id}">
+                            <i class="fas fa-trash-alt"></i>
                         </button>
                     </div>
                 `
             }
-        ],
-        destroy: true,
-        responsive: true,
-        pageLength: 10,
-        language: { url: languageDataTable }
-    });
+        ];
+    const tooltips = '[data-bs-toggle="tooltip"]';
 
-    // ⚡ Reactivar tooltips en cada renderizado
-    const activateTooltips = () => {
-        document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach((el) => {
-            new bootstrap.Tooltip(el);
-        });
-    };
-
-    usersTable.on('draw', activateTooltips);
-    activateTooltips();
+    basicTableConfig(tableSelector, data, columns, tooltips);
 }
-
-/**
- * Convierte la primera letra en mayúscula y el resto en minúsculas.
- * @param {string} text
- * @returns {string}
- */

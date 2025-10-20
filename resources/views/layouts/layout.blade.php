@@ -24,7 +24,11 @@
 
     <!-- Select2 -->
     <link href="{{ asset('modernize/assets/libs/select2/dist/css/select2.min.css') }}" rel="stylesheet" />
-    
+
+    <!-- DataTables -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.3.4/css/dataTables.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/responsive/3.0.7/css/responsive.dataTables.min.css">
+
     @yield('styles')
 </head>
 
@@ -97,7 +101,7 @@
     <script src="{{ asset('modernize/assets/libs/owl.carousel/dist/owl.carousel.min.js') }}"></script>
     {{-- <script src="{{ asset('modernize/assets/libs/apexcharts/dist/apexcharts.min.js') }}"></script> --}}
     {{-- <script src="{{ asset('modernize/assets/js/dashboards/dashboard.js') }}"></script> --}}
-    
+
     <!-- Jquery -->
     <script src="{{ asset('cdn/jquery/jquery-3.7.1.min.js') }}"></script>
     <script src="{{ asset('cdn/jquery-confirm-v3.3.4/jquery-confirm.min.js') }}"></script>
@@ -109,6 +113,10 @@
     <script src="{{ asset('modernize/assets/libs/select2/dist/js/select2.min.js') }}"></script>
 
     <script src="{{ asset('js/auth/logout.js') }}"></script>
+
+    <!-- DataTables -->
+    <script src="{{ asset('cdn/2.3.4/js/dataTables.min.js') }}"></script>
+    <script src="{{ asset('cdn/responsive/3.0.7/js/dataTables.responsive.min.js')}}"></script>
     @yield('scripts')
 </body>
 

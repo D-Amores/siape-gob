@@ -7,15 +7,15 @@ function showAlert(message, type = "blue", title = "Información", onOk = null, 
         autoClose: false,
         buttons: {
             ok: {
-                text: "OK",
-                btnClass: "btn-primary",
+                text: "Aceptar",
+                btnClass: "btn-info",
                 action: () => {
                     if (typeof onOk === "function") onOk();
                 },
             },
         },
     });
-
+s
     if (timeout && Number(timeout) > 0) {
         setTimeout(() => {
             try {
@@ -35,11 +35,19 @@ function confirmStore(functionToCall) {
         type: 'blue',
         theme: 'material',
         buttons: {
-            Cancelar: function() { },
-            Guardar: async function() {
-                if (typeof functionToCall === "function") {
-                    await functionToCall(); // soporta funciones async
-                }
+            Cancelar: { 
+                text: 'Cancelar',
+                btnClass: 'btn-danger',
+                action: function() { }
+            },
+            Guardar: {
+                text: 'Guardar',
+                btnClass: 'btn-primary',
+                action: async function() {
+                    if (typeof functionToCall === "function") {
+                        await functionToCall(); // soporta funciones async
+                    }
+                },
             }
         }
     });
@@ -52,11 +60,19 @@ function confirmUpdate(functionToCall) {
         type: 'blue',
         theme: 'material',
         buttons: {
-            Cancelar: function() { },
-            Actualizar: async function() {
-                if (typeof functionToCall === "function") {
-                    await functionToCall(); // soporta funciones async
-                }
+            Cancelar: {
+                text: 'Cancelar',
+                btnClass: 'btn-danger',
+                action: function() { }
+            },
+            Actualizar: {
+                text: 'Actualizar',
+                btnClass: 'btn-primary',
+                action: async function() {
+                    if (typeof functionToCall === "function") {
+                        await functionToCall(); // soporta funciones async
+                    }
+                },
             }
         }
     });
@@ -69,10 +85,18 @@ function confirmDestroy(functionToCall) {
         type: 'blue',
         theme: 'material',
         buttons: {
-            Cancelar: function() { },
-            Eliminar: async function() {
-                if (typeof functionToCall === "function") {
-                    await functionToCall(); // soporta funciones async
+            Cancelar: {
+                text: 'Cancelar',
+                btnClass: 'btn-danger',
+                action: function() { }
+            },
+            Eliminar: {
+                text: 'Eliminar',
+                btnClass: 'btn-primary',
+                action: async function() {
+                    if (typeof functionToCall === "function") {
+                        await functionToCall(); // soporta funciones async
+                    }
                 }
             }
         }

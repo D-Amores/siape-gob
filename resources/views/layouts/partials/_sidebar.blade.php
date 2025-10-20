@@ -135,12 +135,12 @@
         <div class="fixed-profile p-3 mx-4 mb-2 bg-secondary-subtle rounded mt-3">
             <div class="hstack gap-3">
                 <div class="john-img">
-                    <img src="{{ asset('modernize/assets/images/profile/user-1.jpg') }}" class="rounded-circle"
+                    <img src="{{auth()->user()->avatar_url}}" class="rounded-circle"
                         width="40" height="40" alt="modernize-img">
                 </div>
                 <div class="john-title">
-                    <h6 class="mb-0 fs-4 fw-semibold">Mathew</h6>
-                    <span class="fs-2">Designer</span>
+                    <h6 class="mb-0 fs-4 fw-semibold">{{auth()->user()->username}}</h6>
+                    <span class="fs-2">{{ auth()->user()->getRoleNames()->first() ?? 'Sin rol' }}</span>
                 </div>
                 <button id="btnLogout" class="border-0 bg-transparent text-primary ms-auto" tabindex="0" type="button"
                     aria-label="logout" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="logout">
