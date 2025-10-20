@@ -307,81 +307,57 @@ const loadBrands = async () => {
 }
 
 const updateBrandsTable = (brands) => {
-    const table = document.getElementById('file_export');
+    const tableId = 'file_export';
 
-    if ($.fn.DataTable.isDataTable(table)) {
-        $(table).DataTable().destroy();
-    }
-
-    const tbody = table.querySelector('tbody');
-    tbody.innerHTML = '';
-
-    if (brands.length === 0) {
-        tbody.innerHTML = `
-            <tr>
-                <td class="text-center text-muted py-4">
-                    <i class="fas fa-inbox fa-2x mb-2"></i><br>
-                    <i class="fas fa-plus"></i><br>
-                    Agrega la primera marca
-                </td>
-                <td class="text-center text-muted py-4">
-                    <p>No hay marcas disponibles</p>
-                </td>
-            </tr>
-        `;
-    } else {
-        brands.forEach(brand => {
-            const row = document.createElement('tr');
-            row.setAttribute('data-brand-id', brand.id);
-            row.innerHTML = `
-                <td class="ps-4">
-                    <div class="d-flex align-items-center">
-                        <i class="fas fa-tag text-muted me-3"></i>
-                        <span>${brand.name}</span>
-                    </div>
-                </td>
-                <td class="text-center">
-                    <div class="d-flex justify-content-center gap-2">
-                        <button type="button"
-                                class="btn btn-outline-primary border-0 btn-edit"
-                                data-brand-id="${brand.id}"
-                                data-brand-name="${brand.name}"
-                                data-bs-toggle="modal"
-                                data-bs-target="#editBrandModal"
-                                title="Editar">
-                            <i class="fas fa-edit"></i>
-                        </button>
-                        <button type="button"
-                                class="btn btn-outline-danger border-0 btn-delete"
-                                data-brand-id="${brand.id}"
-                                data-brand-name="${brand.name}"
-                                title="Eliminar">
-                            <i class="fas fa-trash-alt"></i>
-                        </button>
-                    </div>
-                </td>
-            `;
-            tbody.appendChild(row);
-        });
-    }
-
-    $(table).DataTable({
-        language: {
-            url: language
+    const columns = [
+        {
+            data: null,
+            render: (d, t, r, meta) => meta.row + 1,
+            title: "#"
         },
-        responsive: true,
-        pageLength: 10,
-        order: [[0, 'asc']],
-        dom: 'Bfrtip',  // ✅ Restauramos el dom para botones
-        buttons: [      // ✅ Restauramos todos los botones de exportación
-            'copy', 'csv', 'excel', 'pdf', 'print'
-        ],
-        columnDefs: [
-            { orderable: false, targets: 1 } // Desactivar ordenamiento en columna de acciones
-        ]
-    });
+        {
+            data: 'name',
+            title: 'Nombre',
+            render: (data) => `
+                <div class="d-flex align-items-center">
+                    <i class="fas fa-tag text-muted me-3"></i>
+                    <span>${data}</span>
+                </div>
+            `
+        },
+        {
+            data: null,
+            title: 'Acciones',
+            className: 'text-center',
+            orderable: false,
+            render: (data, type, row) => `
+                <div class="d-flex justify-content-center gap-2">
+                    <button type="button"
+                            class="btn btn-outline-primary border-0 btn-edit"
+                            data-brand-id="${row.id}"
+                            data-brand-name="${row.name}"
+                            data-bs-toggle="modal"
+                            data-bs-target="#editBrandModal"
+                            title="Editar">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                    <button type="button"
+                            class="btn btn-outline-danger border-0 btn-delete"
+                            data-brand-id="${row.id}"
+                            data-brand-name="${row.name}"
+                            title="Eliminar">
+                        <i class="fas fa-trash-alt"></i>
+                    </button>
+                </div>
+            `
+        }
+    ];
 
+    const tooltips = '[data-bs-toggle="tooltip"]';
+
+    bottomTableConfig(tableId, brands, columns, tooltips);
 };
+
 
 const deleteBrand = async (brandId) => {
     try {
