@@ -85,12 +85,12 @@ function loadUsersTable(data) {
                 data: null,
                 title: "Acciones",
                 render: (row) => `
-                    <div class="btn-group" role="group">
-                        <button class="btn btn-sm btn-outline-success btn-edit" data-id="${row.id}">
-                            <i class="bx bx-edit"></i>
+                    <div class="d-flex justify-content-center gap-2" role="group">
+                        <button class="btn btn-sm btn-outline-primary border-0 btn-edit" data-id="${row.id}">
+                            <i class="fas fa-edit"></i>
                         </button>
-                        <button class="btn btn-sm btn-outline-danger btn-delete" data-id="${row.id}">
-                            <i class="bx bx-trash"></i>
+                        <button class="btn btn-sm btn-outline-danger border-0 btn-delete" data-id="${row.id}">
+                            <i class="fas fa-trash-alt"></i>
                         </button>
                     </div>
                 `
