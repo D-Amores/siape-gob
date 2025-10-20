@@ -28,6 +28,7 @@
                         <table id="file_export" class="table table-hover w-100 table-striped table-bordered display">
                             <thead>
                                 <tr>
+                                    <th scope="col">#</th>
                                     <th scope="col">Categoria</th>
                                     <th scope="col" style="width: 150px;">Especial</th>
                                     <th scope="col" style="width: 150px;">Acciones</th>

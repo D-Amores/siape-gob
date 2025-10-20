@@ -317,9 +317,14 @@ const updateCategoriesTable = (categories) => {
 
     const columns = [
         {
+            data: null,
+            render: (d, t, r, meta) => meta.row + 1,
+            title: "#"
+        },
+        {
             data: 'name',
             title: 'Nombre',
-            render: function(data, type, row) {
+            render: function (data, type, row) {
                 return `
                     <div class="d-flex align-items-center">
                         <i class="fas fa-tag text-muted me-3"></i>
@@ -332,7 +337,7 @@ const updateCategoriesTable = (categories) => {
             data: 'special_specifications',
             title: 'Tipo',
             className: 'text-center',
-            render: function(data, type, row) {
+            render: function (data, type, row) {
                 return data === 1
                     ? '<span class="badge bg-success">Especial</span>'
                     : '<span class="badge bg-secondary">Normal</span>';
@@ -343,7 +348,7 @@ const updateCategoriesTable = (categories) => {
             title: 'Acciones',
             className: 'text-center',
             orderable: false,
-            render: function(data, type, row) {
+            render: function (data, type, row) {
                 return `
                     <div class="d-flex justify-content-center gap-2">
                         <button type="button"
