@@ -65,7 +65,7 @@ function loadPersonnelTable(data) {
                 data: "is_active",
                 title: "Estado",
                 render: (active) =>
-                    `<span class="badge ${active ? 'bg-success-subtle text-success' : 'bg-danger-subtle text-danger'}">
+                    `<span class="badge ${active ? 'bg-primary-subtle text-primary' : 'bg-danger-subtle text-danger'}">
                         ${active ? 'Activo' : 'Inactivo'}
                      </span>`
             },
