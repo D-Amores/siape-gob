@@ -312,54 +312,45 @@ const loadCategories = async () => {
 }
 
 const updateCategoriesTable = (categories) => {
-    const table = document.getElementById('file_export');
 
-    if ($.fn.DataTable.isDataTable(table)) {
-        $(table).DataTable().destroy();
-    }
+    const tableSelector = 'file_export';
 
-    const tbody = table.querySelector('tbody');
-    tbody.innerHTML = '';
-
-    if (categories.length === 0) {
-        tbody.innerHTML = `
-            <tr>
-                <td class="text-center text-muted py-4">
-                    <i class="fas fa-inbox fa-2x mb-2"></i><br>
-                    <i class="fas fa-plus"></i><br>
-                    Agrega la primera categoría
-                </td>
-                <td class="text-center text-muted py-4">
-                    <p>No hay categorías disponibles</p>
-                </td>
-                <td class="text-center text-muted py-4">
-                    <p>No hay categorías disponibles</p>
-                </td>
-            </tr>
-        `;
-    } else {
-        categories.forEach(category => {
-            const row = document.createElement('tr');
-            row.setAttribute('data-category-id', category.id);
-            row.innerHTML = `
-                <td class="ps-4">
+    const columns = [
+        {
+            data: 'name',
+            title: 'Nombre',
+            render: function(data, type, row) {
+                return `
                     <div class="d-flex align-items-center">
                         <i class="fas fa-tag text-muted me-3"></i>
-                        <span>${category.name}</span>
+                        <span>${data}</span>
                     </div>
-                </td>
-                <td class="text-center">
-                    ${category.special_specifications === 1
-                                ? '<span class="badge bg-success">Especial</span>'
-                                : '<span class="badge bg-secondary">Normal</span>'}
-                </td>
-                <td class="text-center">
+                `;
+            }
+        },
+        {
+            data: 'special_specifications',
+            title: 'Tipo',
+            className: 'text-center',
+            render: function(data, type, row) {
+                return data === 1
+                    ? '<span class="badge bg-success">Especial</span>'
+                    : '<span class="badge bg-secondary">Normal</span>';
+            }
+        },
+        {
+            data: null,
+            title: 'Acciones',
+            className: 'text-center',
+            orderable: false,
+            render: function(data, type, row) {
+                return `
                     <div class="d-flex justify-content-center gap-2">
                         <button type="button"
                                 class="btn btn-outline-primary border-0 btn-edit"
-                                data-category-id="${category.id}"
-                                data-category-name="${category.name}"
-                                data-category-special="${category.special_specifications}"
+                                data-category-id="${row.id}"
+                                data-category-name="${row.name}"
+                                data-category-special="${row.special_specifications}"
                                 data-bs-toggle="modal"
                                 data-bs-target="#editCategoryModal"
                                 title="Editar">
@@ -367,34 +358,19 @@ const updateCategoriesTable = (categories) => {
                         </button>
                         <button type="button"
                                 class="btn btn-outline-danger border-0 btn-delete"
-                                data-category-id="${category.id}"
-                                data-category-name="${category.name}"
+                                data-category-id="${row.id}"
+                                data-category-name="${row.name}"
                                 title="Eliminar">
                             <i class="fas fa-trash-alt"></i>
                         </button>
                     </div>
-                </td>
-            `;
-            tbody.appendChild(row);
-        });
-    }
+                `;
+            }
+        }
+    ];
+    const tooltips = '[data-bs-toggle="tooltip"]';
 
-    $(table).DataTable({
-        language: {
-            url: language
-        },
-        responsive: true,
-        pageLength: 10,
-        order: [[0, 'asc']],
-        dom: 'Bfrtip',
-        buttons: [
-            'copy', 'csv', 'excel', 'pdf', 'print'
-        ],
-        columnDefs: [
-            { orderable: false, targets: 1 } // Desactivar ordenamiento en columna de acciones
-        ]
-    });
-
+    bottomTableConfig(tableSelector, categories, columns, tooltips);
 };
 
 const deleteCategory = async (categoryId) => {

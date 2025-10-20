@@ -1,7 +1,7 @@
 @extends('layouts.layout')
 
 @section('styles')
-    <link rel="stylesheet" href="{{ asset('modernize/assets/libs/datatables.net-bs5/css/dataTables.bootstrap5.min.css') }}">
+    {{-- <link rel="stylesheet" href="{{ asset('modernize/assets/libs/datatables.net-bs5/css/dataTables.bootstrap5.min.css') }}"> --}}
     <link rel="stylesheet" href="{{ asset('cdn/buttons/2.4.2/css/buttons.dataTables.min.css') }}">
 @endsection
 
@@ -28,21 +28,14 @@
                         <table id="file_export" class="table table-hover w-100 table-striped table-bordered display">
                             <thead>
                                 <tr>
-                                    <th class="text-center">Categoria</th>
-                                    <th class="text-center" style="width: 150px;">Especial</th>
-                                    <th class="text-center" style="width: 150px;">Acciones</th>
+                                    <th scope="col">Categoria</th>
+                                    <th scope="col" style="width: 150px;">Especial</th>
+                                    <th scope="col" style="width: 150px;">Acciones</th>
                                 </tr>
                             </thead>
                             <tbody>
 
                             </tbody>
-                            <tfoot>
-                                <tr>
-                                    <th class="text-center">Categoria</th>
-                                    <th class="text-center">Especial</th>
-                                    <th class="text-center">Acciones</th>
-                                </tr>
-                            </tfoot>
                         </table>
                     </div>
                 </div>
@@ -141,18 +134,20 @@
 @endsection
 
 @section('scripts')
-    <script src="{{ asset('modernize/assets/libs/datatables.net/js/jquery.dataTables.min.js') }}"></script>
 
-    <script src="{{ asset('cdn/buttons/2.4.2/js/dataTables.buttons.min.js') }}"></script>
-    <script src="{{ asset('cdn/ajax/libs/jszip/3.10.1/jszip.min.js') }}"></script>
-    <script src="{{ asset('cdn/ajax/libs/pdfmake/0.1.53/pdfmake.min.js') }}"></script>
-    <script src="{{ asset('cdn/ajax/libs/pdfmake/0.1.53/vfs_fonts.js') }}"></script>
-    <script src="{{ asset('cdn/buttons/2.4.2/js/buttons.html5.min.js') }}"></script>
-    <script src="{{ asset('cdn/buttons/2.4.2/js/buttons.print.min.js') }}"></script>
+    <script src="https://cdn.datatables.net/buttons/3.0.2/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/3.0.2/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/3.0.2/js/buttons.print.min.js"></script>
 
-    <script src="{{ asset('modernize/assets/js/datatable/datatable-advanced.init.js') }}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+
+    <script src="{{ asset('js/helpers/tools/datatable-manager.js') }}"></script>
     <script src="{{ asset('js/categories/category.js') }}"></script>
+
     <script>
-        const language = "{{ asset('cdn/datatables-language/es-MX.json') }}";
+        const languageDataTable = "{{ asset('cdn/datatables-language/es-MX.json') }}";
     </script>
 @endsection
+
