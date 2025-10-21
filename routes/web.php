@@ -56,6 +56,9 @@ Route::middleware('auth')->group(function () {
         // Ruta API para cargar bienes del usuario autenticado
         Route::post('assets-unique-user/api', [AssetsUniqueUserController::class, 'assetsUniqueUsuarioAPi'])->name('assets-user.api');
 
+        // Ruta API para aceptar los bienes asignados al usuario
+        Route::post('accept-assignments/accept', [AcceptAssignmentsController::class, 'acceptAssignmentApi'])->name('accept-assignments.accept');
+
     });
 
     Route::middleware('role:admin')->group(function () {

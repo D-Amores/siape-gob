@@ -22,7 +22,7 @@ class AcceptAssignmentsApiRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'id' => 'required|integer|exists:personnel_assets_pending,id'
         ];
     }
 }
