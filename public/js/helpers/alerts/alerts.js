@@ -15,7 +15,6 @@ function showAlert(message, type = "blue", title = "Información", onOk = null, 
             },
         },
     });
-s
     if (timeout && Number(timeout) > 0) {
         setTimeout(() => {
             try {

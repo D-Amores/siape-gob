@@ -164,20 +164,22 @@
 @endsection
 
 @section('scripts')
-    <script src="{{ asset('modernize/assets/libs/datatables.net/js/jquery.dataTables.min.js') }}"></script>
 
-    <script src="{{ asset('cdn/buttons/2.4.2/js/dataTables.buttons.min.js') }}"></script>
-    <script src="{{ asset('cdn/ajax/libs/jszip/3.10.1/jszip.min.js') }}"></script>
-    <script src="{{ asset('cdn/ajax/libs/pdfmake/0.1.53/pdfmake.min.js') }}"></script>
-    <script src="{{ asset('cdn/ajax/libs/pdfmake/0.1.53/vfs_fonts.js') }}"></script>
-    <script src="{{ asset('cdn/buttons/2.4.2/js/buttons.html5.min.js') }}"></script>
-    <script src="{{ asset('cdn/buttons/2.4.2/js/buttons.print.min.js') }}"></script>
+    <script src="{{ asset('cdn/buttons/3.0.2/js/dataTables.buttons.min.js')}}"></script>
+    <script src="{{ asset('cdn/buttons/3.0.2/js/buttons.html5.min.js')}}"></script>
+    <script src="{{ asset('cdn/buttons/3.0.2/js/buttons.print.min.js')}}"></script>
 
-    <script src="{{ asset('modernize/assets/js/datatable/datatable-advanced.init.js') }}"></script>
+
+    <script src="{{ asset('cdn/ajax/libs/jszip/3.10.1/jszip.min.js')}}"></script>
+    <script src="{{ asset('cdn/ajax/libs/pdfmake/0.2.7/pdfmake.min.js')}}"></script>
+    <script src="{{ asset('cdn/ajax/libs/pdfmake/0.2.7/vfs_fonts.js')}}"></script>
+
+    <script src="{{ asset('js/helpers/tools/datatable-manager.js') }}"></script>
+    <script src="{{ asset('js/helpers/alerts/alerts.js') }}"></script>
+
     <script>
-        const language = "{{ asset('cdn/datatables-language/es-MX.json') }}";
+        const languageDataTable = "{{ asset('cdn/datatables-language/es-MX.json') }}";
     </script>
-
     <script src="{{ asset('js/user/assets_unique_user.js') }}"></script>
 
 

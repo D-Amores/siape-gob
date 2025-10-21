@@ -1,6 +1,4 @@
 async function loadPendingAssignments(token) {
-    const table = $('#table_pendings_assigments_users').DataTable();
-
     try {
         const res = await fetch('/accept-assignments/api', {
             method: 'POST',
@@ -16,77 +14,95 @@ async function loadPendingAssignments(token) {
 
         if (!data.ok) {
             console.error(data.message);
-            table.clear().draw();
+            // Actualiza la tabla con datos vacíos
+            basicTableConfig('table_pendings_assigments_users', []);
             return;
         }
 
-        table.clear();
-        table.rows.add(data.data);
-        table.draw();
+        // Inicializa o actualiza la tabla con los datos recibidos
+        basicTableConfig('table_pendings_assigments_users', data.data, [
+            { data: 'assigner_name', className: 'text-center', title: 'Asignador' },
+            { data: 'receiver_name', className: 'text-center', title: 'Receptor' },
+            { data: 'asset_name', className: 'text-center', title: 'Bien' },
+            { data: 'assignment_date', className: 'text-center', title: 'Fecha' },
+            {
+                data: 'id',
+                className: 'text-center',
+                title: 'Acción',
+                render: (id) => `
+                    <button class="btn btn-success btn-sm accept-btn" data-id="${id}">
+                        <i class="fas fa-check me-1"></i> Aceptar
+                    </button>`
+            }
+        ], '[data-bs-toggle="tooltip"]');
+
     } catch (err) {
         console.error('Error al cargar asignaciones pendientes', err);
-        table.clear().draw();
+        // Vacía la tabla en caso de error
+        basicTableConfig('table_pendings_assigments_users', []);// Muestra alerta con el error
+        showAlert(
+            'Ocurrió un error al cargar las asignaciones pendientes. Intenta nuevamente.',
+            'red',            
+            'Error',           
+            null,             
+            5000               
+        );
     }
 }
 
 document.addEventListener('DOMContentLoaded', async function () {
     const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-
-    $('#table_pendings_assigments_users').DataTable({
-        data: [],
-        columns: [
-            { data: 'assigner_name', className: 'text-center' },
-            { data: 'receiver_name', className: 'text-center' },
-            { data: 'asset_name', className: 'text-center' },
-            { data: 'assignment_date', className: 'text-center' },
-            {
-                data: 'id',
-                className: 'text-center',
-                render: function (id) {
-                    return `<button class="btn btn-success btn-sm accept-btn" data-id="${id}">
-                                <i class="fas fa-check me-1"></i> Aceptar
-                            </button>`;
-                }
-            }
-        ],
-        language: { url: language },
-        dom: 'Bfrtip',
-        buttons: ['copy', 'csv', 'excel', 'pdf', 'print']
-    });
-
-    // Cargar datos al inicio
     await loadPendingAssignments(token);
 });
 
+
 // Listener de botones
-$('#table_pendings_assigments_users').on('click', '.accept-btn', async function () {
+$('#table_pendings_assigments_users').on('click', '.accept-btn', function () {
     const id = $(this).data('id');
     const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
-    if (!confirm('¿Seguro que deseas aceptar este bien?')) return;
-
-    try {
-        const res = await fetch('/accept-assignments/accept', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': token,
-                'Accept': 'application/json'
+    $.confirm({
+        title: 'Confirmar acción',
+        content: '¿Está seguro de aceptar este bien asignado? Esta acción no podrá ser revertida.',
+        type: 'blue',
+        theme: 'material',
+        buttons: {
+            Cancelar: { 
+                text: 'Cancelar',
+                btnClass: 'btn-danger',
+                action: function() { }
             },
-            body: JSON.stringify({ id })
-        });
+            Aceptar: {
+                text: 'Aceptar',
+                btnClass: 'btn-primary',
+                action: async function() {
+                    try {
+                        const res = await fetch('/accept-assignments/accept', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRF-TOKEN': token,
+                                'Accept': 'application/json'
+                            },
+                            body: JSON.stringify({ id })
+                        });
 
-        const data = await res.json();
+                        const data = await res.json();
 
-        if (!data.ok) {
-            alert(data.message || 'Error al aceptar asignación');
-            return;
+                        if (!data.ok) {
+                            showAlert(data.message || 'Error al aceptar asignación', 'red', 'Error');
+                            return;
+                        }
+
+                        showAlert('Asignación aceptada correctamente.', 'green', 'Éxito', async () => {
+                            await loadPendingAssignments(token);
+                        });
+                    } catch (err) {
+                        console.error('Error al aceptar asignación', err);
+                        showAlert('Error al aceptar asignación.', 'red', 'Error');
+                    }
+                },
+            }
         }
-
-        alert('Asignación aceptada correctamente.');
-        await loadPendingAssignments(token);
-    } catch (err) {
-        console.error('Error al aceptar asignación', err);
-        alert('Error al aceptar asignación.');
-    }
+    });
 });
