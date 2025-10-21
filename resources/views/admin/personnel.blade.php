@@ -1,8 +1,8 @@
 @extends('layouts.layout')
 
 @section('styles')
-    <link rel="stylesheet" href="{{ asset('modernize/assets/libs/datatables.net-bs5/css/dataTables.bootstrap5.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('cdn/buttons/2.4.2/css/buttons.dataTables.min.css') }}">
+    {{-- <link rel="stylesheet" href="{{ asset('modernize/assets/libs/datatables.net-bs5/css/dataTables.bootstrap5.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('cdn/buttons/2.4.2/css/buttons.dataTables.min.css') }}"> --}}
 
 @endsection
 @section('title', 'Panel de Administración')
@@ -28,7 +28,7 @@
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
-                            <table id="dataPersonnelTable" class="table table-hover text-nowrap table-bordered align-middle">
+                            <table id="dataPersonnelTable" class="table table-hover w-100 table-striped table-bordered display align-middle">
                                 <thead class="text-dark fs-4">
                                     <tr>
                                         <th scope="col">#</th>
@@ -53,8 +53,8 @@
     <!-- Modal Crear Personal -->
     <div class="modal fade" id="modalPersonnelCreate" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
         <div class="modal-dialog modal-dialog-centered modal-lg">
-            <div class="modal-content border border-primary border-2 shadow">
-                <div class="modal-header bg-primary text-white">
+            <div class="modal-content">
+                <div class="modal-header">
                     <h5 class="modal-title">
                         <i class="bx bx-user-plus me-2"></i>
                         Crear Nuevo Personal
@@ -238,8 +238,8 @@
     <script>
         const languageDataTable = '{{ asset('cdn/datatables-language/es-MX.json') }}';
     </script>
-    <script src="{{ asset('modernize/assets/libs/datatables.net/js/jquery.dataTables.min.js') }}"></script>
-    <script src="{{ asset('modernize/assets/js/datatable/datatable-advanced.init.js') }}"></script>
+    {{-- <script src="{{ asset('modernize/assets/libs/datatables.net/js/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ asset('modernize/assets/js/datatable/datatable-advanced.init.js') }}"></script> --}}
 
     <!-- Helpers -->
     <script src="{{ asset('js/helpers/tools/utils.js') }}"></script>
@@ -250,6 +250,7 @@
     <script src="{{ asset('js/admin/admin-api.js') }}"></script>
 
     <!-- Configuración de la tabla -->
+    <script src="{{ asset('js/helpers/tools/datatable-manager.js') }}"></script>
     <script src="{{ asset('js/admin/personnel/table-config.js') }}"></script>
 
     <!-- Scripts para manejar personal -->

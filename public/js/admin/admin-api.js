@@ -8,7 +8,7 @@ const vURIUserApi = `${window.location.origin}/admin/users/api`;
 // ===============================
 // FUNCIONES API
 // ===============================
-async function getPersonnelApi() {
+async function getPersonnelApi(consultOption = 'area') {
     const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
     try {
         const response = await fetch(vURIPersonnelApi, {
@@ -17,7 +17,7 @@ async function getPersonnelApi() {
                 'Content-Type': 'application/json',
                 'X-CSRF-TOKEN': csrfToken
             },
-            body: JSON.stringify({ option: 'area' })
+            body: JSON.stringify({ option: consultOption })
         });
 
         if (!response.ok) throw new Error(`Error HTTP: ${response.status}`);

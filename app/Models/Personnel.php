@@ -77,6 +77,11 @@ class Personnel extends Model
         return $query;
     }
 
+    public function scopeWithoutUser($query)
+    {
+        return $query->whereDoesntHave('user');
+    }
+
 
     public function area()
     {
