@@ -161,7 +161,7 @@ document.addEventListener('DOMContentLoaded', function () {
             // Inicializar DataTable con los datos obtenidos
             const table = $('#file_export').DataTable({
                 language: {
-                    url: language
+                    url: languageDataTable 
                 },
                 processing: true,
                 serverSide: false,
