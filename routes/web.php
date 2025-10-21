@@ -11,7 +11,7 @@ use App\Http\Controllers\Admin\AreaController;
 use App\Http\Controllers\Auth\LoginController;
 
 use App\Http\Controllers\PersonnelAssetController;
-use App\Http\Controllers\Admin\PersonnelAssetPendingController;
+use App\Http\Controllers\Assigner\PersonnelAssetPendingController;
 
 Route::middleware('guest')->group(function () {
     // Login routes
