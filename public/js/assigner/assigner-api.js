@@ -1,6 +1,6 @@
 const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 const urlApiAssetPending = window.location.origin + '/personnel-asset-pending/api';
-const urlAssetApi = window.location.origin + '/select-assets/api';
+const urlAssetApi = window.location.origin + '/assets/api';
 const vURIPersonnelApi = `${window.location.origin}/admin/personnel/api`;
 
 
@@ -30,7 +30,7 @@ async function getAssetPending(option = null) {
     return [];
 }
 
-async function getAsset(option = 'all') {
+async function getAssetApi(option = 'available') {
     try{
         const response = await fetch(urlAssetApi, {
             method: 'POST',

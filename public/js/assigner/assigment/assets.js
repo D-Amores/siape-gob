@@ -1,7 +1,7 @@
 // load-assets.js
 async function loadAssets() {
     try {
-        const data = await getAsset('all');
+        const data = await getAssetApi('available');
         const assetSelect = document.getElementById('assignedAsset');
 
         assetSelect.innerHTML = '<option value="">Seleccione un bien...</option>';
