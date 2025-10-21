@@ -6,11 +6,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Spatie\Permission\Traits\HasRoles;
+use Illuminate\Support\Facades\Auth;
 
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable;
+    use HasFactory, Notifiable, HasRoles;
 
     /**
      * The attributes that are mass assignable.
@@ -20,6 +22,8 @@ class User extends Authenticatable
     protected $fillable = [
         'username',
         'password',
+        'profile_picture',
+        'is_active',
         'area_id',
         'personnel_id',
     ];
@@ -32,7 +36,10 @@ class User extends Authenticatable
     protected $hidden = [
         'password',
         'remember_token',
+        'pivots',
     ];
+
+    protected $appends = ['avatar_url'];
 
     /**
      * Get the attributes that should be cast.
@@ -54,5 +61,25 @@ class User extends Authenticatable
     public function area()
     {
         return $this->belongsTo(Area::class);
+    }
+
+    public function getAvatarUrlAttribute(): string
+    {
+        if ($this->profile_picture) {
+            return asset('storage/' . $this->profile_picture);
+        }
+
+        // Generar número entre 1 y 7 (basado en el id)
+        $defaultNumber = ($this->id % 7) + 1;
+
+        return asset("storage/avatars/user-{$defaultNumber}.jpg");
+    }
+
+    public function scopeExcludeCurrent($query)
+    {
+        if (Auth::check()) {
+            return $query->where('id', '!=', Auth::id());
+        }
+        return $query;
     }
 }
