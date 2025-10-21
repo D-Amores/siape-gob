@@ -150,7 +150,14 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     // Cargar datos con Fetch API
-    fetch('/assets/api?option=table')
+    fetch('/assets/api', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': csrfToken
+            },
+            body: JSON.stringify({ option: 'table' }) // aquí va tu "option"
+        })
         .then(response => response.json())
         .then(json => {
             if (!json.ok) {
@@ -248,7 +255,7 @@ document.addEventListener('DOMContentLoaded', function () {
         .catch(error => {
             showAlert('Error al cargar los activos: ' + error.message, "red", "Error de conexión");
         });
-});
+    });
 
 // ------------------------------
 // Evento delegado: Ver detalles
@@ -261,7 +268,14 @@ document.querySelector('#file_export tbody').addEventListener('click', async (ev
     if (!id) return;
 
     try {
-        const response = await fetch('/assets/api?option=details');
+        const response = await fetch('/assets/api', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': csrfToken
+            },
+            body: JSON.stringify({ option: 'details' })
+        });
         const result = await response.json();
         if (!result.ok) {
             showAlert(result.message || 'Error al cargar detalles del activo.', "red", "Error");
@@ -432,7 +446,14 @@ document.addEventListener('DOMContentLoaded', () => {
             formBien.dataset.mode = 'edit';
             formBien.dataset.id = id;
 
-            fetch('/assets/api?option=details')
+            fetch('/assets/api', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken
+                },
+                body: JSON.stringify({ option: 'details' })
+            })
                 .then(res => res.json())
                 .then(async result => {
                     if (!result.ok) return;

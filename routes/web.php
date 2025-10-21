@@ -39,7 +39,7 @@ Route::middleware('auth')->group(function () {
         Route::post('select-assets/api', [AssetController::class, 'selectAssetsApi']);
         Route::post('admin/personnel/api', [PersonnelController::class, 'personnelApi']);
         // Ruta para obtener assets para la tabla o detalles
-        Route::get('assets/api', [AssetController::class, 'assetsApi'])->name('assets.api');
+        Route::post('assets/api', [AssetController::class, 'assetsApi'])->name('assets.api');
 
         //RUTA QUE SE ELIMINARA YA QUE NO NOS SERVIRÁ
         //Route::resource('personnel-asset', PersonnelAssetController::class)->only(['index', 'store', 'update', 'destroy']);
