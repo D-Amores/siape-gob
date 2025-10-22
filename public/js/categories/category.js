@@ -7,7 +7,6 @@ const editCategoryNameInput = document.getElementById('editCategoryName');
 const editCategoryIdInput = document.getElementById('editCategoryId');
 const specialCategoryInput = document.getElementById('specialCategory');
 
-
 document.addEventListener('DOMContentLoaded', function () {
     loadCategories();
 
@@ -53,7 +52,7 @@ categoryForm.addEventListener('submit', async function (e) {
     submitButton.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Guardando...';
 
     try {
-        const response = await fetch('categories', {
+        const response = await fetch(baseUrl, {
             method: 'POST',
             headers: {
                 'X-CSRF-Token': csrfToken,
@@ -199,7 +198,7 @@ editCategoryForm.addEventListener('submit', async function (e) {
 
     try {
         // NUEVO: Petición PUT para actualizar
-        const response = await fetch(`/categories/${categoryId}`, {
+        const response = await fetch(`${baseUrl}/${categoryId}`, {
             method: 'PUT',
             headers: {
                 'X-CSRF-Token': csrfToken,
@@ -278,7 +277,7 @@ editCategoryForm.addEventListener('submit', async function (e) {
 const loadCategories = async () => {
 
     try {
-        const response = await fetch('/categories/api', {
+        const response = await fetch(UrlLoad, {
             method: 'POST',
             headers: {
                 'X-CSRF-Token': csrfToken,
@@ -380,7 +379,7 @@ const updateCategoriesTable = (categories) => {
 
 const deleteCategory = async (categoryId) => {
     try {
-        const response = await fetch(`categories/${categoryId}`, {
+        const response = await fetch(`${baseUrl}/${categoryId}`, {
             method: 'DELETE',
             headers: {
                 'X-CSRF-Token': csrfToken,

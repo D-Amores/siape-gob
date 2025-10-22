@@ -1,27 +1,12 @@
 // load-assets.js
 async function loadAssets() {
     try {
-        const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-        const url = "/select-assets/api";
-
-        const response = await fetch(url, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-                'X-CSRF-TOKEN': csrfToken
-            },
-            body: JSON.stringify({
-                option: 'all'
-            })
-        });
-
-        const data = await response.json();
+        const data = await getAssetApi('available');
         const assetSelect = document.getElementById('assignedAsset');
 
         assetSelect.innerHTML = '<option value="">Seleccione un bien...</option>';
 
-        data.data.forEach(asset => {
+        data.forEach(asset => {
             const option = document.createElement('option');
             option.value = asset.id;
             option.textContent = asset.text;

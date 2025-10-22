@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\Assigner;
 
 use App\Models\PersonnelAssetPending;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Admin\StorePersonnelAssetPendingRequest;
-use App\Http\Requests\Admin\UpdatePersonnelAssetPendingRequest;
+use App\Http\Requests\Assigner\StorePersonnelAssetPendingRequest;
+use App\Http\Requests\Assigner\UpdatePersonnelAssetPendingRequest;
 use Illuminate\Support\Facades\Auth;
 
 class PersonnelAssetPendingController extends Controller
@@ -15,7 +15,7 @@ class PersonnelAssetPendingController extends Controller
      */
     public function index()
     {
-        return view('admin.assigments');
+        return view('assigner.assigments');
     }
 
     /**
@@ -41,6 +41,18 @@ class PersonnelAssetPendingController extends Controller
             }
 
             $validatedData = $request->validated();
+
+            // ✅ Verificar si el asset ya está asignado a otra persona
+            $assetAssigned = PersonnelAssetPending::where('asset_id', $validatedData['asset_id'])
+                ->whereNull('confirmation_date') // opcional, depende de tu lógica
+                ->exists();
+
+            if ($assetAssigned) {
+                return response()->json([
+                    'ok' => false,
+                    'message' => 'Este activo ya está asignado a otra persona.'
+                ], 409);
+            }
 
             $validatedData['assigner_id'] = $user->personnel_id;
 
