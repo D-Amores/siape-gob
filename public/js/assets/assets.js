@@ -38,9 +38,11 @@ const camposGenericos = `
             </div>
         </div>
     </div>
-`
+`;
 
-
+// ------------------------------
+// Detecta la categoria 
+// ------------------------------
 if (categoriaSelect) {
     categoriaSelect.addEventListener('change', () => {
         const categoriaId = parseInt(categoriaSelect.value);
@@ -48,23 +50,22 @@ if (categoriaSelect) {
 
         if (!categoriaId) return;
 
-        // Buscar la categoría seleccionada
         const categoriaSeleccionada = categoriasGlobales.find(cat => cat.id === categoriaId);
-
-        // Si tiene marcado special_specifications = true, mostrar los campos
         if (categoriaSeleccionada && categoriaSeleccionada.special_specifications) {
             camposDinamicos.innerHTML = camposGenericos;
         }
     });
 }
 
-
 // ------------------------------
 // Cargar categorías dinámicamente
 // ------------------------------
 async function cargarCategorias(selectedId = null) {
+    
     const categoriaSelect = document.getElementById('categoria');
-    if (!categoriaSelect) return;
+    if (!categoriaSelect) {
+        return;
+    }
 
     try {
         const res = await fetch('/categories/api', {
@@ -82,13 +83,11 @@ async function cargarCategorias(selectedId = null) {
             return;
         }
 
-        // Guardar las categorías globalmente
         categoriasGlobales = json.data;
 
-        // Limpiar select
         categoriaSelect.innerHTML = `<option value="" selected>Seleccione categoría</option>`;
 
-        // Insertar opciones dinámicamente
+        let optionsCount = 0;
         json.data.forEach(cat => {
             const option = document.createElement('option');
             option.value = cat.id;
@@ -97,9 +96,11 @@ async function cargarCategorias(selectedId = null) {
                 option.selected = true;
             }
             categoriaSelect.appendChild(option);
+            optionsCount++;
         });
 
     } catch (error) {
+        console.error('Error en cargarCategorias:', error);
         showAlert('Error en la carga de categorías: ' + error.message, "red", "Error");
     }
 }
@@ -108,7 +109,13 @@ async function cargarCategorias(selectedId = null) {
 // Cargar marcas dinámicamente
 // ------------------------------
 async function cargarMarcas(selectedId = null) {
+    
     try {
+        const marcaSelect = document.getElementById('marca');
+        if (!marcaSelect) {
+            return;
+        }
+
         const res = await fetch('/brands/api', {
             method: 'POST',
             headers: {
@@ -116,34 +123,43 @@ async function cargarMarcas(selectedId = null) {
                 'X-CSRF-TOKEN': csrfToken
             }
         });
+
         const json = await res.json();
 
         if (!json.ok) {
+            console.error('Error en respuesta JSON:', json.message);
             showAlert(json.message || 'Error al cargar marcas', "red", "Error");
             return;
         }
 
-        const marcaSelect = document.getElementById('marca');
         marcaSelect.innerHTML = '<option value="">Seleccione marca</option>';
+
+        let optionsCount = 0;
         json.data.forEach(m => {
             const option = document.createElement('option');
             option.value = m.id;
             option.textContent = m.name;
-            if (selectedId && selectedId == m.id) option.selected = true;
+            if (selectedId && selectedId == m.id) {
+                option.selected = true;
+            }
             marcaSelect.appendChild(option);
+            optionsCount++;
         });
+
     } catch (error) {
+        console.error('Error en cargarMarcas:', error);
         showAlert('Error al cargar las marcas: ' + error.message, "red", "Error");
     }
 }
 
-
-
 // ------------------------------
-// Inicialización de DataTable
+// DOMContentLoaded
 // ------------------------------
 document.addEventListener('DOMContentLoaded', function () {
-    // Cargar datos con Fetch API
+
+    // ------------------------------
+    // Inicialización de DataTable
+    // ------------------------------
     fetch('/assets/api', {
         method: 'POST',
         headers: {
@@ -159,7 +175,6 @@ document.addEventListener('DOMContentLoaded', function () {
             return;
         }
 
-        // Inicializar DataTable con los datos obtenidos
         const columns = [
             { data: 'inventory_number', className: 'text-center fw-medium', title: 'N° Inventario' },
             { data: 'model', className: 'fw-normal', title: 'Modelo' },
@@ -207,140 +222,29 @@ document.addEventListener('DOMContentLoaded', function () {
     .catch(error => {
         showAlert('Error al cargar los activos: ' + error.message, "red", "Error de conexión");
     });
-});
 
-// ------------------------------
-// Evento delegado: Ver detalles
-// ------------------------------
-document.querySelector('#file_export tbody').addEventListener('click', async (event) => {
-    const button = event.target.closest('.btn-ver');
-    if (!button) return;
-
-    const id = button.dataset.id;
-    if (!id) return;
-
-    try {
-        const response = await fetch('/assets/api', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': csrfToken
-            },
-            body: JSON.stringify({ option: 'details' })
-        });
-        const result = await response.json();
-        if (!result.ok) {
-            showAlert(result.message || 'Error al cargar detalles del activo.', "red", "Error");
-            return;
-        }
-
-        const asset = result.data.find(a => a.id == id);
-        if (!asset) {
-            showAlert('No se encontró la información del activo.', "orange", "Advertencia");
-            return;
-        }
-
-        const modal = document.getElementById('modalDetallesBien');
-
-        function formatDate(isoString) {
-            if (!isoString) return '—';
-            const date = new Date(isoString);
-            return date.toLocaleString('es-MX', {
-                year: 'numeric',
-                month: '2-digit',
-                day: '2-digit',
-                hour: '2-digit',
-                minute: '2-digit',
-            });
-        }
-
-        modal.querySelectorAll('span[id^="detalle-"]').forEach(span => span.textContent = '...');
-        modal.querySelector('#detalle-descripcion').textContent = '';
-
-        modal.querySelector('#detalle-inventario').textContent = asset.inventory_number ?? '—';
-        modal.querySelector('#detalle-modelo').textContent = asset.model ?? '—';
-        modal.querySelector('#detalle-serie').textContent = asset.serial_number ?? '—';
-        modal.querySelector('#detalle-marca').textContent = asset.brand?.name ?? '—';
-        modal.querySelector('#detalle-categoria').textContent = asset.category?.name ?? '—';
-
-        const estadoSpan = modal.querySelector('#detalle-estado');
-        estadoSpan.textContent = asset.is_active_label;
-        estadoSpan.classList.remove('bg-success', 'bg-danger');
-        estadoSpan.classList.add(asset.is_active ? 'bg-success' : 'bg-danger');
-
-        modal.querySelector('#detalle-creado').textContent = formatDate(asset.created_at);
-        modal.querySelector('#detalle-cpu').textContent = asset.cpu ?? '—';
-        modal.querySelector('#detalle-velocidad').textContent = asset.speed ?? '—';
-        modal.querySelector('#detalle-memoria').textContent = asset.memory ?? '—';
-        modal.querySelector('#detalle-almacenamiento').textContent = asset.storage ?? '—';
-        modal.querySelector('#detalle-descripcion').textContent = asset.description ?? '—';
-
-        openModalForEdit('modalDetallesBien');
-    } catch (error) {
-        showAlert('Error al cargar los detalles: ' + error.message, "red", "Error");
-    }
-});
-
-
-// ------------------------------
-// Eliminar bien
-// ------------------------------
-document.addEventListener('click', (e) => {
-    const deleteButton = e.target.closest('.btn-delete-asset');
-    if (!deleteButton) return;
-
-    assetIdToDelete = deleteButton.dataset.id;
-    if (!assetIdToDelete) return;
-
-    const modalDelete = new bootstrap.Modal(document.getElementById('modalConfirmDelete'));
-    modalDelete.show();
-});
-
-// Botón Confirmar Eliminación
-document.getElementById('confirmDeleteBtn').addEventListener('click', async () => {
-    if (!assetIdToDelete) return;
-
-    try {
-        const response = await fetch(`/assets/${assetIdToDelete}`, {
-            method: 'DELETE',
-            headers: {
-                'X-CSRF-TOKEN': csrfToken
-            }
-        });
-
-        const result = await response.json();
-
-        if (!result.ok) {
-            showAlert(result.message || 'Error al eliminar el activo', "red", "Error");
-            return;
-        }
-
-        // Cerrar modal
-        closeModal('modalConfirmDelete')
-
-        showAlert(result.message || 'Activo eliminado correctamente.', "green", "Éxito", () => {
-            const table = $('#file_export').DataTable();
-            const row = document.querySelector(`.btn-delete-asset[data-id="${assetIdToDelete}"]`).closest('tr');
-            table.row(row).remove().draw();
-
-            assetIdToDelete = null;
-        });
-
-    } catch (error) {
-        showAlert('Ocurrió un error al eliminar el activo: ' + error.message, "red", "Error inesperado");
-    }
-});
-
-
-// ------------------------------
-// Modal para crear/editar bien
-// ------------------------------
-document.addEventListener('DOMContentLoaded', () => {
+    // ------------------------------
+    // Variables del modal
+    // ------------------------------
     const modalBien = document.getElementById('modalBien');
     const modalTitle = document.getElementById('modalBienTitulo');
     const formBien = document.getElementById('formNuevoBien');
-    const btnSubmit = modalBien.querySelector('button[type="submit"]');
+    const btnSubmit = modalBien ? modalBien.querySelector('button[type="submit"]') : null;
     const tableBody = document.querySelector('#file_export tbody');
+
+    if (!modalBien) {
+        return;
+    }
+
+    // ------------------------------
+    // CONFIGURACIÓN DE BOTONES DE CIERRE DEL MODAL
+    // ------------------------------
+
+    // Botón de cerrar en el header del modal (la X)
+    closeModal('btnCerrarModalBien', 'modalBien', 'focusAfterSave');
+
+    // Botón "Cerrar" en el footer del modal  
+    closeModal('btnCerrarFooter', 'modalBien', 'focusAfterSave');
 
     // ------------------------------
     // Cargar tabla
@@ -385,13 +289,14 @@ document.addEventListener('DOMContentLoaded', () => {
     // ------------------------------
     // Abrir modal según modo
     // ------------------------------
-    document.getElementById('file_export').addEventListener('click', async e => {
+    document.addEventListener('click', async e => {
         const btn = e.target.closest('.btn-modal-bien');
         if (!btn) return;
 
         const mode = btn.dataset.mode;
         const id = btn.dataset.id || null;
-        formBien.reset();
+        
+        if (formBien) formBien.reset();
 
         if (mode === 'create') {
             modalTitle.textContent = 'Nuevo Bien';
@@ -401,12 +306,17 @@ document.addEventListener('DOMContentLoaded', () => {
             formBien.dataset.mode = 'create';
             delete formBien.dataset.id;
 
-            await Promise.all([
-                cargarCategorias(),
-                cargarMarcas()
-            ]);
-
-            openModalForEdit('modalBien');
+            try {
+                await Promise.all([
+                    cargarCategorias(), 
+                    cargarMarcas() 
+                ]);
+                openModalForEdit('modalBien');
+            } catch (error) {
+                console.error('Error en Promise.all:', error);
+                showAlert('Error al cargar los datos del formulario', 'red', 'Error');
+                return;
+            }
         }
 
         if (mode === 'edit') {
@@ -435,6 +345,7 @@ document.addEventListener('DOMContentLoaded', () => {
             .then(async result => {
 
                 if (!result.ok) {
+                    console.error('Error en respuesta de details');
                     return;
                 }
                 const asset = Array.isArray(result.data) 
@@ -442,6 +353,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     : result.data;
                     
                 if (!asset) {
+                    console.error('Asset no encontrado');
                     return;
                 }
 
@@ -453,10 +365,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 document.getElementById('categoria').value = asset.category_id ?? '';
                 document.getElementById('descripcion').value = asset.description ?? '';
 
-                await Promise.all([
-                    cargarCategorias(asset.category_id),
-                    cargarMarcas(asset.brand_id)
-                ]);
+                try {
+                    await Promise.all([
+                        cargarCategorias(asset.category_id), 
+                        cargarMarcas(asset.brand_id)
+                    ]);
+                } catch (error) {
+                    console.error('Error cargando datos:', error);
+                    showAlert('Error al cargar los datos del formulario', 'red', 'Error');
+                    return;
+                }
 
                 const categoriaSeleccionada = categoriasGlobales.find(cat => cat.id === asset.category_id);
                 if (categoriaSeleccionada && categoriaSeleccionada.special_specifications) {
@@ -473,6 +391,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 openModalForEdit('modalBien');
             })
             .catch(err => {
+                console.error('Error en fetch details:', err);
                 showAlert(
                     "Error al obtener datos del fetch.",
                     "red",
@@ -487,89 +406,197 @@ document.addEventListener('DOMContentLoaded', () => {
     // ------------------------------
     // Envío del formulario
     // ------------------------------
-    formBien.addEventListener('submit', async e => {
-        e.preventDefault();
-        const mode = formBien.dataset.mode;
+    if (formBien) {
+        formBien.addEventListener('submit', async e => {
+            e.preventDefault();
+            const mode = formBien.dataset.mode;
 
-        const formData = {
-            inventory_number: document.getElementById('numeroInventario').value,
-            brand_id: document.getElementById('marca').value,
-            model: document.getElementById('modelo').value,
-            serial_number: document.getElementById('serie').value,
-            is_active: document.getElementById('estado').value === '1',
-            category_id: document.getElementById('categoria').value,
-            description: document.getElementById('descripcion').value,
-            cpu: document.getElementById('procesador')?.value || null,
-            speed: document.getElementById('velocidad')?.value || null,
-            memory: document.getElementById('memoria')?.value || null,
-            storage: document.getElementById('almacenamiento')?.value || null
-        };
+            const formData = {
+                inventory_number: document.getElementById('numeroInventario').value,
+                brand_id: document.getElementById('marca').value,
+                model: document.getElementById('modelo').value,
+                serial_number: document.getElementById('serie').value,
+                is_active: document.getElementById('estado').value === '1',
+                category_id: document.getElementById('categoria').value,
+                description: document.getElementById('descripcion').value,
+                cpu: document.getElementById('procesador')?.value || null,
+                speed: document.getElementById('velocidad')?.value || null,
+                memory: document.getElementById('memoria')?.value || null,
+                storage: document.getElementById('almacenamiento')?.value || null
+            };
 
-        const action = async () => {
-            try {
-                let res;
+            const action = async () => {
+                try {
+                    let res;
 
-                if (mode === 'create') {
-                    res = await fetch('/assets', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': csrfToken },
-                        body: JSON.stringify(formData)
-                    });
-                } else {
-                    const id = formBien.dataset.id;
-                    res = await fetch(`/assets/${id}`, {
-                        method: 'PUT',
-                        headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': csrfToken },
-                        body: JSON.stringify(formData)
-                    });
-                }
+                    if (mode === 'create') {
+                        res = await fetch('/assets', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': csrfToken },
+                            body: JSON.stringify(formData)
+                        });
+                    } else {
+                        const id = formBien.dataset.id;
+                        res = await fetch(`/assets/${id}`, {
+                            method: 'PUT',
+                            headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': csrfToken },
+                            body: JSON.stringify(formData)
+                        });
+                    }
 
-                const result = await res.json();
+                    const result = await res.json();
 
-                if (!result.ok) {
-                    // Si hay errores de validación
-                    if (res.status === 422 && result.errors) {
-                        let messages = Object.values(result.errors)
-                            .flat()
-                            .join('<br>'); // junta todos los errores
-                        showAlert(messages, "red", "Error de validación");
+                    if (!result.ok) {
+                        if (res.status === 422 && result.errors) {
+                            let messages = Object.values(result.errors)
+                                .flat()
+                                .join('<br>');
+                            showAlert(messages, "red", "Error de validación");
+                            return;
+                        }
+
+                        showAlert(result.message || 'Error en la operación.', "red", "Error");
                         return;
                     }
 
-                    // Otros errores
-                    showAlert(result.message || 'Error en la operación.', "red", "Error");
+                    showAlert(result.message || 'Operación exitosa.', "green", "Éxito", () => {
+                        closeModalForSuccess('modalBien', 'focusAfterSave');
+                        loadAssets();
+                    });
+
+                } catch (error) {
+                    showAlert('Error al enviar el formulario: ' + error.message, "red", "Error");
+                }
+            };
+
+            if (mode === 'create') confirmStore(action);
+            else confirmUpdate(action);
+        });
+    }
+
+    // ------------------------------
+    // Transforma a mayúscula todos los inputs
+    // ------------------------------
+    if (formBien) {
+        formBien.addEventListener('input', e => {
+            const target = e.target;
+            if ((target.tagName === 'INPUT' && target.type === 'text') || target.tagName === 'TEXTAREA') {
+                const start = target.selectionStart;
+                const end = target.selectionEnd;
+                target.value = target.value.toUpperCase();
+                target.setSelectionRange(start, end);
+            }
+        });
+    }
+
+    // ------------------------------
+    // Evento delegado: Ver detalles
+    // ------------------------------
+    document.querySelector('#file_export tbody').addEventListener('click', async (event) => {
+        const button = event.target.closest('.btn-ver');
+        if (!button) return;
+
+        const id = button.dataset.id;
+        if (!id) return;
+
+        try {
+            const response = await fetch('/assets/api', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken
+                },
+                body: JSON.stringify({ option: 'details' })
+            });
+            const result = await response.json();
+            if (!result.ok) {
+                showAlert(result.message || 'Error al cargar detalles del activo.', "red", "Error");
+                return;
+            }
+
+            const asset = result.data.find(a => a.id == id);
+            if (!asset) {
+                showAlert('No se encontró la información del activo.', "orange", "Advertencia");
+                return;
+            }
+
+            const modal = document.getElementById('modalDetallesBien');
+
+            function formatDate(isoString) {
+                if (!isoString) return '—';
+                const date = new Date(isoString);
+                return date.toLocaleString('es-MX', {
+                    year: 'numeric',
+                    month: '2-digit',
+                    day: '2-digit',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                });
+            }
+
+            modal.querySelectorAll('span[id^="detalle-"]').forEach(span => span.textContent = '...');
+            modal.querySelector('#detalle-descripcion').textContent = '';
+
+            modal.querySelector('#detalle-inventario').textContent = asset.inventory_number ?? '—';
+            modal.querySelector('#detalle-modelo').textContent = asset.model ?? '—';
+            modal.querySelector('#detalle-serie').textContent = asset.serial_number ?? '—';
+            modal.querySelector('#detalle-marca').textContent = asset.brand?.name ?? '—';
+            modal.querySelector('#detalle-categoria').textContent = asset.category?.name ?? '—';
+
+            const estadoSpan = modal.querySelector('#detalle-estado');
+            estadoSpan.textContent = asset.is_active_label;
+            estadoSpan.classList.remove('bg-success', 'bg-danger');
+            estadoSpan.classList.add(asset.is_active ? 'bg-success' : 'bg-danger');
+
+            modal.querySelector('#detalle-creado').textContent = formatDate(asset.created_at);
+            modal.querySelector('#detalle-cpu').textContent = asset.cpu ?? '—';
+            modal.querySelector('#detalle-velocidad').textContent = asset.speed ?? '—';
+            modal.querySelector('#detalle-memoria').textContent = asset.memory ?? '—';
+            modal.querySelector('#detalle-almacenamiento').textContent = asset.storage ?? '—';
+            modal.querySelector('#detalle-descripcion').textContent = asset.description ?? '—';
+
+            openModalForEdit('modalDetallesBien');
+        } catch (error) {
+            showAlert('Error al cargar los detalles: ' + error.message, "red", "Error");
+        }
+    });
+
+    // ------------------------------
+    // Eliminar bien
+    // ------------------------------
+    document.addEventListener('click', (e) => {
+        const deleteButton = e.target.closest('.btn-delete-asset');
+        if (!deleteButton) return;
+
+        const assetIdToDelete = deleteButton.dataset.id;
+        if (!assetIdToDelete) return;
+
+        // Llamar a la función confirmDestroy con la función de eliminación
+        confirmDestroy(async function() {
+            try {
+                const response = await fetch(`/assets/${assetIdToDelete}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'X-CSRF-TOKEN': csrfToken
+                    }
+                });
+
+                const result = await response.json();
+
+                if (!result.ok) {
+                    showAlert(result.message || 'Error al eliminar el activo', "red", "Error");
                     return;
                 }
 
-                showAlert(result.message || 'Operación exitosa.', "green", "Éxito", () => {
-                    bootstrap.Modal.getInstance(modalBien).hide();
-                    loadAssets(); // Refresca tabla
+                showAlert(result.message || 'Activo eliminado correctamente.', "green", "Éxito", () => {
+                    const table = $('#file_export').DataTable();
+                    const row = document.querySelector(`.btn-delete-asset[data-id="${assetIdToDelete}"]`).closest('tr');
+                    table.row(row).remove().draw();
                 });
 
             } catch (error) {
-                showAlert('Error al enviar el formulario: ' + error.message, "red", "Error");
+                showAlert('Ocurrió un error al eliminar el activo: ' + error.message, "red", "Error inesperado");
             }
-        };
-
-        if (mode === 'create') confirmStore(action);
-        else confirmUpdate(action);
+        });
     });
 });
-
-
-document.addEventListener('DOMContentLoaded', () => {
-    const formBien = document.getElementById('formNuevoBien');
-
-    // Listener delegado para todos los inputs de texto y textarea, incluyendo dinámicos
-    formBien.addEventListener('input', e => {
-        const target = e.target;
-        if ((target.tagName === 'INPUT' && target.type === 'text') || target.tagName === 'TEXTAREA') {
-            const start = target.selectionStart;
-            const end = target.selectionEnd;
-            target.value = target.value.toUpperCase();
-            target.setSelectionRange(start, end); // mantener cursor
-        }
-    });
-});
-
-

@@ -14,7 +14,7 @@
 @endsection
 
 @section('actions')
-    <button class="btn btn-primary btn-modal-bien" data-bs-toggle="modal" data-bs-target="#modalBien" data-mode="create">
+    <button class="btn btn-primary btn-modal-bien" data-mode="create">
         <i class="fas fa-plus-circle me-2"></i> Agregar bien
     </button>
 @endsection
@@ -78,7 +78,7 @@
                     <h5 class="modal-title fw-bold text-primary" id="modalBienLabel">
                         <i class="fas fa-laptop me-2"></i><span id="modalBienTitulo">Nuevo Bien</span>
                     </h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                    <button type="button" class="btn-close" id="btnCerrarModalBien" data-bs-dismiss="modal" aria-label="Cerrar"></button>
                 </div>
 
                 <!-- Body -->
@@ -166,7 +166,7 @@
 
                 <!-- Footer -->
                 <div class="modal-footer border-0">
-                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                    <button type="button" class="btn btn-outline-secondary" id="btnCerrarFooter" data-bs-dismiss="modal">
                         <i class="fas fa-times me-1"></i> Cerrar
                     </button>
                     <button type="submit" form="formNuevoBien" class="btn btn-primary">
@@ -177,6 +177,9 @@
             </div>
         </div>
     </div>
+
+    <!-- Elemento para el foco después de guardar -->
+    <div id="focusAfterSave" tabindex="-1" style="position: absolute; left: -9999px;"></div>
 
     <!-- Modal Detalles del Bien -->
     <div class="modal fade" id="modalDetallesBien" tabindex="-1" aria-labelledby="modalDetallesBienLabel"
@@ -286,37 +289,6 @@
         </div>
     </div>
 
-    <!-- Modal Confirmación Eliminar -->
-    <div class="modal fade" id="modalConfirmDelete" tabindex="-1" aria-labelledby="modalConfirmDeleteLabel"
-        aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content border-0 shadow rounded-4">
-
-                <!-- Encabezado -->
-                <div class="modal-header bg-light border-0">
-                    <h5 class="modal-title fw-bold text-primary" id="modalConfirmDeleteLabel">
-                        <i class="fas fa-exclamation-triangle me-2"></i>Confirmación
-                    </h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
-                </div>
-
-                <!-- Cuerpo -->
-                <div class="modal-body py-4 px-4 d-flex align-items-center">
-                    <i class="fas fa-trash-alt fa-2x text-danger me-3"></i>
-                    <span id="modalConfirmDeleteMessage" class="text-secondary">
-                        ¿Estás seguro de eliminar este activo? Esta acción no se puede deshacer.
-                    </span>
-                </div>
-
-                <!-- Footer -->
-                <div class="modal-footer border-0">
-                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="button" class="btn btn-primary" id="confirmDeleteBtn">Eliminar</button>
-                </div>
-
-            </div>
-        </div>
-    </div>
 @endsection
 
 @section('scripts')
