@@ -237,6 +237,14 @@
 @section('scripts')
     <script>
         const languageDataTable = '{{ asset('cdn/datatables-language/es-MX.json') }}';
+
+        //Api uris
+        const vURIPersonnelApi = `${BASE_URL}/admin/personnel/api`;
+        const vURIAreaApi = `${BASE_URL}/admin/areas/api`;
+        const vURIUserApi = `${BASE_URL}/admin/users/api`;
+
+        //Personnel uris
+        const vURIPersonnel = `${BASE_URL}/admin/personnel`;
     </script>
     {{-- <script src="{{ asset('modernize/assets/libs/datatables.net/js/jquery.dataTables.min.js') }}"></script>
     <script src="{{ asset('modernize/assets/js/datatable/datatable-advanced.init.js') }}"></script> --}}

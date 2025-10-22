@@ -1,9 +1,4 @@
 // ===============================
-// VARIABLES GLOBALES
-// ===============================
-const vURIPersonnel = `${window.location.origin}/admin/personnel`;
-
-// ===============================
 // FUNCIONES STORE, UPDATE, DELETE
 // ===============================
 async function storePersonnel(personnel) {

@@ -1,11 +1,4 @@
 // ===============================
-// VARIABLES GLOBALES
-// ===============================
-const vURIPersonnelApi = `${window.location.origin}/admin/personnel/api`;
-const vURIAreaApi = `${window.location.origin}/admin/areas/api`;
-const vURIUserApi = `${window.location.origin}/admin/users/api`;
-
-// ===============================
 // FUNCIONES API
 // ===============================
 async function getPersonnelApi(consultOption = 'area') {
