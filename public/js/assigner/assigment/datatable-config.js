@@ -46,14 +46,8 @@ function loadAssetsPending(assetPendings) {
             render: (row) => `
                 <div class="d-flex justify-content-center gap-2">
                     <button type="button"
-                            class="btn btn-outline-primary border-0 btn-edit"
-                            data-assignment-id="${row.id}"
-                            title="Editar">
-                        <i class="fas fa-edit"></i>
-                    </button>
-                    <button type="button"
                             class="btn btn-outline-danger border-0 btn-delete"
-                            data-assignment-id="${row.id}"
+                            data-id="${row.id}"
                             title="Eliminar">
                         <i class="fas fa-trash-alt"></i>
                     </button>

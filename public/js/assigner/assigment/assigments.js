@@ -2,20 +2,36 @@
 document.addEventListener('DOMContentLoaded', function () {
     loadPersonnel();
     loadAssets();
-
-    $('#file_export2').DataTable({
-        dom: 'Bfrtip',
-        buttons: [
-            'copy', 'csv', 'excel', 'pdf', 'print'
-        ]
-    });
-
     loadAssetPending();
+
+    const userTableTbody = document.querySelector('#file_export tbody');
+
+    openModal("btnOpenModalAddAssignment", "addAssignmentModal");
+    closeModal('btnCloseModalAddAssignment', 'addAssignmentModal', 'btnOpenModalAddAssignment');
+    //forceCloseModalWithRemoveId('btnCloseModalAssignmentEdit', 'modalAssignmentEdit', 'btnOpenModalAssignmentEdit');
+
+    userTableTbody.addEventListener('click', async (e)=>{
+        const btnDelete = e.target.closest('.btn-delete');
+        if (btnDelete) {
+            const assignmentId = btnDelete.getAttribute('data-id');
+            await assignmentDelete(assignmentId);
+        }
+    });
 });
 
-const assignmentForm = document.getElementById('assignmentForm');
-//const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+//funcion para eliminar
+async function assignmentDelete(assignmentId) {
+    confirmDestroy(async () => {
+        const isOk = await destroyAssignedAsset(assignmentId);
+        if (isOk) {
+            await loadAssets();
+            await loadAssetPending(); // recarga la tabla solo si la creación fue exitosa
+        }
+    });
+}
 
+//SOlo se usa esta logica, es codigo de otro desarrollador, no es mia, pero por el momento lo dejo asi, mas adelante lo optimizo
+const assignmentForm = document.getElementById('assignmentForm');
 assignmentForm.addEventListener('submit', async function (e) {
     e.preventDefault();
 
@@ -24,13 +40,11 @@ assignmentForm.addEventListener('submit', async function (e) {
     const assetSelect = document.getElementById('assignedAsset');
 
     if (!personnelSelect.value || !assetSelect.value) {
-        $.alert({
-            title: 'Error',
-            content: 'Debes seleccionar personal y un bien para la asignación.',
-            type: 'red',
-            theme: 'material',
-            buttons: { ok: { text: 'Aceptar', btnClass: 'btn-red' } }
-        });
+        showAlert(
+            'Debes seleccionar personal y un bien para la asignación.',
+            'red',
+            'Error'
+        );
         return;
     }
 
@@ -45,58 +59,40 @@ assignmentForm.addEventListener('submit', async function (e) {
         const data = Object.fromEntries(formData.entries());
         data.assignment_date = new Date().toISOString().slice(0, 10);
 
-        const response = await fetch('/personnel-asset-pending', {
-            method: 'POST',
-            headers: {
-                'X-CSRF-TOKEN': csrfToken,
-                'Content-Type': 'application/json',
-                'Accept': 'application/json'
-            },
-            body: JSON.stringify(data)
-        });
-
-        const result = await response.json();
+        const result = await assignedAsset(data);
 
         if (result.ok) {
-            $.alert({
-                title: 'Éxito',
-                content: 'La asignación se ha guardado correctamente.',
-                type: 'green',
-                theme: 'material',
-                backgroundDismiss: true,
-                buttons: { ok: { text: 'Aceptar', btnClass: 'btn-green' } }
-            });
-
-            const modal = bootstrap.Modal.getInstance(document.getElementById('addAssignmentModal'));
-            modal.hide();
+            showAlert(
+                'La asignación se ha guardado correctamente.',
+                'green',
+                'Éxito'
+            );
+            closeModalForSuccess('addAssignmentModal', 'btnOpenModalAddAssignment');
             assignmentForm.reset();
-
-            loadAssetPending();
+            await loadAssetPending();
+            await loadAssets();
         } else {
-            $.alert({
-                title: 'Error',
-                content: result.message || 'Ocurrió un error al guardar la asignación.',
-                type: 'red',
-                theme: 'material',
-                buttons: { ok: { text: 'Aceptar', btnClass: 'btn-red' } }
-            });
+            showAlert(
+                result.message || 'Ocurrió un error al guardar la asignación.',
+                'red',
+                'Error'
+            );
         }
 
     } catch (error) {
         console.error('❌ Error al guardar la asignación:', error);
-        $.alert({
-            title: 'Error',
-            content: 'Ocurrió un error al guardar la asignación. Revisa la consola para más detalles.',
-            type: 'red',
-            theme: 'material',
-            buttons: { ok: { text: 'Aceptar', btnClass: 'btn-red' } }
-        });
+        showAlert(
+            'Ocurrió un error al guardar la asignación. Revisa la consola para más detalles.',
+            'red',
+            'Error'
+        );
     } finally {
         submitButton.disabled = false;
         submitButton.innerHTML = originalText;
     }
 });
 
+//También se usa esta logica, es codigo de otro desarrollador, lo optimice un poco, pero deje la estructura base para no romper nada
 const loadAssetPending = async () => {
     const data = await getAssetPending();
     if (data){
@@ -104,6 +100,7 @@ const loadAssetPending = async () => {
     }
 }
 
+//También se usa esta logica, es codigo de otro desarrollador, lo optimice un poco, pero deje la estructura base para no romper nada
 const updateAssetPendingTable = (assetPendings) => {
     loadAssetsPending(assetPendings);
 };
