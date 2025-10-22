@@ -42,7 +42,7 @@
 @endsection
 @section('scripts')
 <script>
-    const vURI = window.location.origin + '/login';
+    const vURI = `${BASE_URL}/login`;
 </script>
 <script src="{{ asset('js/auth/login.js') }}"></script>
 @endsection
