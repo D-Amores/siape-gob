@@ -182,6 +182,18 @@
 @endsection
 
 @section('scripts')
+    <script>
+        const languageDataTable = '{{ asset('cdn/datatables-language/es-MX.json') }}';
+
+        //Api uris
+        const urlApiAssetPending = `${BASE_URL}/personnel-asset-pending/api`;
+        const urlAssetApi = `${BASE_URL}/assets/api`;
+        const vURIPersonnelApi = `${BASE_URL}/admin/personnel/api`;
+
+        //Assignment uris
+        const URIAssignedAsset = `${BASE_URL}/personnel-asset-pending`;
+    </script>
+    
     <script src="{{ asset('cdn/buttons/3.0.2/js/dataTables.buttons.min.js') }}"></script>
     <script src="{{ asset('cdn/buttons/3.0.2/js/buttons.html5.min.js') }}"></script>
     <script src="{{ asset('cdn/buttons/3.0.2/js/buttons.print.min.js') }}"></script>
@@ -196,9 +208,7 @@
 
     <script src="{{ asset('js/assigner/assigner-api.js') }}"></script>
 
-    <script>
-        const languageDataTable = "{{ asset('cdn/datatables-language/es-MX.json') }}";
-    </script>
+
     <script src="{{ asset('js/assigner/assigment/datatable-config.js') }}"></script>
     <script src="{{ asset('js/assigner/assigment/assets.js') }}"></script>
     <script src="{{ asset('js/assigner/assigment/personnel.js') }}"></script>

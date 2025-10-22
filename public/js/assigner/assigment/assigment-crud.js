@@ -1,4 +1,3 @@
-const URIAssignedAsset = `${window.location.origin}/personnel-asset-pending`;
 async function assignedAsset(dataObject) {
     const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
     const response = await fetch(URIAssignedAsset, {
