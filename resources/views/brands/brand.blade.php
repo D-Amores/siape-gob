@@ -119,20 +119,21 @@
 @endsection
 
 @section('scripts')
+    <script src="{{ asset('cdn/buttons/3.0.2/js/dataTables.buttons.min.js') }}"></script>
+    <script src="{{ asset('cdn/buttons/3.0.2/js/buttons.html5.min.js') }}"></script>
+    <script src="{{ asset('cdn/buttons/3.0.2/js/buttons.print.min.js') }}"></script>
 
-    <script src="{{ asset('cdn/buttons/3.0.2/js/dataTables.buttons.min.js')}}"></script>
-    <script src="{{ asset('cdn/buttons/3.0.2/js/buttons.html5.min.js')}}"></script>
-    <script src="{{ asset('cdn/buttons/3.0.2/js/buttons.print.min.js')}}"></script>
-
-    <script src="{{ asset('cdn/ajax/libs/jszip/3.10.1/jszip.min.js')}}"></script>
-    <script src="{{ asset('cdn/ajax/libs/pdfmake/0.2.7/pdfmake.min.js')}}"></script>
-    <script src="{{ asset('cdn/ajax/libs/pdfmake/0.2.7/vfs_fonts.js')}}"></script>
+    <script src="{{ asset('cdn/ajax/libs/jszip/3.10.1/jszip.min.js') }}"></script>
+    <script src="{{ asset('cdn/ajax/libs/pdfmake/0.2.7/pdfmake.min.js') }}"></script>
+    <script src="{{ asset('cdn/ajax/libs/pdfmake/0.2.7/vfs_fonts.js') }}"></script>
 
     <script src="{{ asset('js/helpers/tools/datatable-manager.js') }}"></script>
     <script src="{{ asset('js/brands/brand.js') }}"></script>
 
     <script>
         const languageDataTable = "{{ asset('cdn/datatables-language/es-MX.json') }}";
+
+        const baseUrl = `brands`;
+        const ApiUrl = `brands/api`;
     </script>
 @endsection
-
