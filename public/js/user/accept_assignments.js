@@ -61,48 +61,32 @@ $('#table_pendings_assigments_users').on('click', '.accept-btn', function () {
     const id = $(this).data('id');
     const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
-    $.confirm({
-        title: 'Confirmar acción',
-        content: '¿Está seguro de aceptar este bien asignado? Esta acción no podrá ser revertida.',
-        type: 'blue',
-        theme: 'material',
-        buttons: {
-            Cancelar: { 
-                text: 'Cancelar',
-                btnClass: 'btn-danger',
-                action: function() { }
-            },
-            Aceptar: {
-                text: 'Aceptar',
-                btnClass: 'btn-primary',
-                action: async function() {
-                    try {
-                        const res = await fetch('/accept-assignments/accept', {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json',
-                                'X-CSRF-TOKEN': token,
-                                'Accept': 'application/json'
-                            },
-                            body: JSON.stringify({ id })
-                        });
+    confirmStore(
+        async () =>{
+            try {
+                const res = await fetch('/accept-assignments/accept', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': token,
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify({ id })
+                });
+                const data = await res.json();
 
-                        const data = await res.json();
+                if (!data.ok) {
+                    showAlert(data.message || 'Error al aceptar asignación', 'red', 'Error');
+                    return;
+                }
 
-                        if (!data.ok) {
-                            showAlert(data.message || 'Error al aceptar asignación', 'red', 'Error');
-                            return;
-                        }
-
-                        showAlert('Asignación aceptada correctamente.', 'green', 'Éxito', async () => {
-                            await loadPendingAssignments(token);
-                        });
-                    } catch (err) {
-                        console.error('Error al aceptar asignación', err);
-                        showAlert('Error al aceptar asignación.', 'red', 'Error');
-                    }
-                },
+                showAlert('Asignación aceptada correctamente.', 'green', 'Éxito', async () => {
+                    await loadPendingAssignments(token);
+                });
+            } catch (err) {
+                console.error('Error al aceptar asignación', err);
+                showAlert('Error al aceptar asignación.', 'red', 'Error');
             }
-        }
-    });
+        }, "¿Está seguro de aceptar este bien asignado? Esta acción no podrá ser revertida."
+    )
 });
