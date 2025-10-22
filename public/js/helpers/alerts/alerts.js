@@ -15,7 +15,7 @@ function showAlert(message, type = "blue", title = "Información", onOk = null, 
             },
         },
     });
-s
+
     if (timeout && Number(timeout) > 0) {
         setTimeout(() => {
             try {
@@ -28,10 +28,10 @@ s
     return jc;
 }
 
-function confirmStore(functionToCall) {
+function confirmStore(functionToCall, message='¿Está seguro de guardar el registro? Esta acción no podrá ser revertida.') {
     $.confirm({
         title: 'Confirmar acción',
-        content: '¿Está seguro de guardar el registro? Esta acción no podrá ser revertida.',
+        content: message,
         type: 'blue',
         theme: 'material',
         buttons: {
@@ -53,10 +53,10 @@ function confirmStore(functionToCall) {
     });
 }
 
-function confirmUpdate(functionToCall) {
+function confirmUpdate(functionToCall, message='¿Está seguro de actualizar el registro? Esta acción no podrá ser revertida.') {
     $.confirm({
         title: 'Confirmar acción',
-        content: '¿Está seguro de actualizar el registro? Esta acción no podrá ser revertida.',
+        content: message,
         type: 'blue',
         theme: 'material',
         buttons: {
@@ -78,10 +78,10 @@ function confirmUpdate(functionToCall) {
     });
 }
 
-function confirmDestroy(functionToCall) {
+function confirmDestroy(functionToCall, message='¿Está seguro de eliminar el registro? Esta acción no podrá ser revertida.') {
     $.confirm({
         title: 'Confirmar acción',
-        content: '¿Está seguro de eliminar el registro? Esta acción no podrá ser revertida.',
+        content: message,
         type: 'blue',
         theme: 'material',
         buttons: {

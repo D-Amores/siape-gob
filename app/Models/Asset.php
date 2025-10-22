@@ -47,4 +47,35 @@ class Asset extends Model
     {
         return (bool) $this->is_active;
     }
+
+    /**
+     * Scope para obtener solo los assets pendientes asignados.
+     */
+    public function scopeAssigned($query)
+    {
+        return $query->whereHas('personnelAssets', function($q){
+            $q->whereNull('confirmation_date');
+        });
+    }
+
+    /**
+     * Scope para obtener IDs de assets ya asignados.
+     */
+    public function scopeAssignedAssetIds($query)
+    {
+        return \App\Models\PersonnelAssetPending::whereNull('confirmation_date')
+            ->pluck('asset_id')
+            ->toArray();
+    }
+
+    /**
+     * Scope para obtener solo los assets que NO están asignados (disponibles)
+     */
+    public function scopeAvailable($query)
+    {
+        $assignedIds = \App\Models\PersonnelAssetPending::whereNull('confirmation_date')
+            ->pluck('asset_id');
+
+        return $query->whereNotIn('id', $assignedIds);
+    }
 }

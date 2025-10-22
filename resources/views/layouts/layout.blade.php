@@ -117,6 +117,9 @@
     <!-- DataTables -->
     <script src="{{ asset('cdn/2.3.4/js/dataTables.min.js') }}"></script>
     <script src="{{ asset('cdn/responsive/3.0.7/js/dataTables.responsive.min.js')}}"></script>
+    <script>
+        const BASE_URL = "{{ url('/') }}";
+    </script>
     @yield('scripts')
 </body>
 

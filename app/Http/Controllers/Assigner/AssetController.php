@@ -23,7 +23,7 @@ class AssetController extends Controller
      */
     public function assetsApi(AssetsApiRequest $request)
     {
-        $option = $request->query('option');
+        $option = $request->input('option');
 
         $data = null;
 
@@ -38,6 +38,19 @@ class AssetController extends Controller
                 // Todos los campos, incluyendo relaciones y posibles datos nulos
                 $data = Asset::with(['brand', 'category', 'personnelAssets'])->get();
                 break;
+            case 'available':
+                // Activos que no están asignados (disponibles)
+                $data = Asset::available()
+                    ->orderBy('inventory_number', 'asc')
+                    ->get(['id', 'inventory_number', 'model'])
+                    ->map(function ($asset) {
+                        return [
+                            'id' => $asset->id,
+                            'text' => "{$asset->model} - {$asset->inventory_number}",
+                        ];
+                    });
+
+                break;
 
             default:
                 return response()->json([
@@ -46,10 +59,13 @@ class AssetController extends Controller
                 ], 422);
         }
 
-        $data = $data->map(function($asset) {
-            $asset->is_active_label = $asset->isActive() ? 'Activo' : 'Inactivo';
-            return $asset;
-        });
+
+        if ($option !== 'available') {
+            $data = $data->map(function($asset) {
+                $asset->is_active_label = $asset->isActive() ? 'Activo' : 'Inactivo';
+                return $asset;
+            });
+        }
 
         return response()->json([
             'ok' => true,

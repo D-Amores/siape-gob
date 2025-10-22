@@ -22,7 +22,7 @@ class AssetsApiRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'option' => 'required|string|in:table,details',
+            'option' => 'required|string|in:table,details,available',
         ];
     }
 }
