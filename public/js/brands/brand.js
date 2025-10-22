@@ -51,7 +51,7 @@ brandForm.addEventListener('submit', async function (e) {
     submitButton.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Guardando...';
 
     try {
-        const response = await fetch('brands', {
+        const response = await fetch(baseUrl, {
             method: 'POST',
             headers: {
                 'X-CSRF-Token': csrfToken,
@@ -195,7 +195,7 @@ editBrandForm.addEventListener('submit', async function (e) {
 
     try {
         // NUEVO: Petición PUT para actualizar
-        const response = await fetch(`/brands/${brandId}`, {
+        const response = await fetch(`${baseUrl}/${brandId}`, {
             method: 'PUT', // Usamos PUT para actualizar
             headers: {
                 'X-CSRF-Token': csrfToken,
@@ -273,7 +273,7 @@ editBrandForm.addEventListener('submit', async function (e) {
 const loadBrands = async () => {
 
     try {
-        const response = await fetch('/brands/api', {
+        const response = await fetch(ApiUrl, {
             method: 'POST',
             headers: {
                 'X-CSRF-Token': csrfToken,
@@ -361,7 +361,7 @@ const updateBrandsTable = (brands) => {
 
 const deleteBrand = async (brandId) => {
     try {
-        const response = await fetch(`brands/${brandId}`, {
+        const response = await fetch(`${baseUrl}/${brandId}`, {
             method: 'DELETE',
             headers: {
                 'X-CSRF-Token': csrfToken,
