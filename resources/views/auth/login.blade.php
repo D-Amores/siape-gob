@@ -42,7 +42,8 @@
 @endsection
 @section('scripts')
 <script>
-    const vURI = `${BASE_URL}/login`;
+    const loginURI = `${BASE_URL}/login`;
+    const logoutURI = `${BASE_URL}/logout`;
 </script>
 <script src="{{ asset('js/auth/login.js') }}"></script>
 @endsection
