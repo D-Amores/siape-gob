@@ -162,30 +162,4 @@ class AssetController extends Controller
             ], 500);
         }
     }
-
-    public function selectAssetsApi()
-    {
-        try {
-            $assets = Asset::select('id', 'inventory_number', 'model')
-                ->orderBy('inventory_number', 'asc')
-                ->get()
-                ->map(function ($asset) {
-                    return [
-                        'id' => $asset->id,
-                        'text' => "{$asset->model} - {$asset->inventory_number}"
-                    ];
-                });
-
-            return response()->json([
-                'ok' => true,
-                'data' => $assets
-            ], 200);
-        } catch (\Exception $e) {
-            return response()->json([
-                'ok' => false,
-                'message' => 'Error al obtener los bienes (assets)',
-                'error' => config('app.debug') ? $e->getMessage() : 'Error interno del servidor'
-            ], 500);
-        }
-    }
 }

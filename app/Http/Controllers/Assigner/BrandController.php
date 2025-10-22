@@ -92,19 +92,23 @@ class BrandController extends Controller
      */
     public function destroy(Brand $brand)
     {
+        $response = ['ok' => false, 'message' => ''];
+        $status = 400;
+        // if ($brand->assets()->exists()) {
+        //     $response['message'] = 'La marca no se puede eliminar porque tiene activos asociados.';
+        //     return response()->json($response, 422);
+        // }
         try {
             $brand->delete();
-            return response()->json([
+            $response = [
                 'ok' => true,
                 'message' => 'Marca eliminada exitosamente'
-            ], 200);
+            ];
+            $status = 200;
         } catch (\Exception $e) {
-            return response()->json([
-                'ok' => false,
-                'message' => 'Error al eliminar la marca',
-                'error' => config('app.debug') ? $e->getMessage() : 'Error interno'
-            ], 500);
+            $response['message'] = 'Error al eliminar la marca';
         }
+        return response()->json($response, $status);
     }
 
     public function brandApi()

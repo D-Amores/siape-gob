@@ -119,6 +119,8 @@
     <script src="{{ asset('cdn/responsive/3.0.7/js/dataTables.responsive.min.js')}}"></script>
     <script>
         const BASE_URL = "{{ url('/') }}";
+        const logoutURI = `${BASE_URL}/logout`;
+        const loginURL = `${BASE_URL}/login`;
     </script>
     @yield('scripts')
 </body>

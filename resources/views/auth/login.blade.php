@@ -43,7 +43,6 @@
 @section('scripts')
 <script>
     const loginURI = `${BASE_URL}/login`;
-    const logoutURI = `${BASE_URL}/logout`;
 </script>
 <script src="{{ asset('js/auth/login.js') }}"></script>
 @endsection
