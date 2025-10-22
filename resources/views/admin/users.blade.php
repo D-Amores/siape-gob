@@ -1,7 +1,6 @@
 @extends('layouts.layout')
 
 @section('styles')
-    {{-- <link rel="stylesheet" href="{{ asset('modernize/assets/libs/datatables.net-bs5/css/dataTables.bootstrap5.min.css') }}"> --}}
     <link rel="stylesheet" href="{{ asset('cdn/buttons/2.4.2/css/buttons.dataTables.min.css') }}">
 @endsection
 @section('title', 'Panel de Administración')
@@ -208,13 +207,21 @@
 @endsection
 
 @section('scripts')
-<script>
-    const languageDataTable = '{{ asset('cdn/datatables-language/es-MX.json') }}';
-    </script>
-    {{-- <script src="{{ asset('modernize/assets/libs/datatables.net/js/jquery.dataTables.min.js') }}"></script> --}}
-    {{-- <script src="{{ asset('modernize/assets/js/datatable/datatable-advanced.init.js') }}"></script> --}}
-    {{-- <script src="{{ asset('cdn/buttons/2.4.2/js/dataTables.buttons.min.js') }}"></script> --}}
+    <script>
+        const languageDataTable = '{{ asset('cdn/datatables-language/es-MX.json') }}';
 
+        //Api uris
+        const vURIPersonnelApi = `${BASE_URL}/admin/personnel/api`;
+        const vURIAreaApi = `${BASE_URL}/admin/areas/api`;
+        const vURIUserApi = `${BASE_URL}/admin/users/api`;
+
+        //Personnel uris
+        const vURIPersonnel = `${BASE_URL}/admin/personnel`;
+
+        //User uris
+        const vURIUsers = `${BASE_URL}/admin/users`;
+    </script>
+    
     <!-- Helpers -->
     <script src="{{ asset('js/helpers/tools/utils.js') }}"></script>
     <script src="{{ asset('js/helpers/modals/modal-actions.js') }}"></script>
