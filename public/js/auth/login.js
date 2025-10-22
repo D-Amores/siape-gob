@@ -1,10 +1,7 @@
 async function loginUser(data) {
     const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-
-    console.log('CSRF Token:', csrfToken);
     try {
-        console.log('Enviando datos de login:', data);
-        const response = await fetch(vURI, {
+        const response = await fetch(loginURI, {
             method: 'POST',
             headers: {
                 'X-CSRF-TOKEN': csrfToken,
@@ -21,8 +18,6 @@ async function loginUser(data) {
         alertBox.classList.add('d-none');
         alertBox.textContent = '';
         if (response.ok) {
-            console.log('Login successful:', result.message);
-            console.log('Redirecting to:', result.location);
             window.location.href = result.location;
         }
         if (!response.ok) {
@@ -39,7 +34,9 @@ async function loginUser(data) {
             alertBox.classList.remove('d-none');
         }
     } catch (error) {
-        console.error('Error de conexión:', error);
+        const alertBox = document.getElementById('alert');
+        alertBox.textContent = 'Error de conexión. Por favor, inténtelo de nuevo más tarde.';
+        alertBox.classList.remove('d-none');
     }
 }
 
