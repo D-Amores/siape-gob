@@ -58,6 +58,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 is_active: document.getElementById('estado').value === '1',
                 category_id: document.getElementById('categoria').value,
                 description: document.getElementById('descripcion').value,
+                type: document.getElementById('tipo').value || null,
                 cpu: document.getElementById('procesador')?.value || null,
                 speed: document.getElementById('velocidad')?.value || null,
                 memory: document.getElementById('memoria')?.value || null,

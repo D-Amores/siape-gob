@@ -31,7 +31,7 @@ class AssetController extends Controller
             case 'table':
                 // Solo los campos necesarios para la tabla principal + relaciones básicas
                 $data = Asset::with(['brand', 'category'])
-                    ->get(['id', 'inventory_number', 'model', 'serial_number', 'brand_id', 'category_id', 'is_active']);
+                    ->get(['id', 'inventory_number', 'model', 'serial_number', 'brand_id', 'category_id', 'is_active', 'type']);
                 break;
 
             case 'details':
@@ -46,7 +46,7 @@ class AssetController extends Controller
                     ->map(function ($asset) {
                         return [
                             'id' => $asset->id,
-                            'text' => "{$asset->model} - {$asset->inventory_number}",
+                            'text' => "{$asset->model} - {$asset->inventory_number}" . ($asset->type ? " ({$asset->type})" : ''),
                         ];
                     });
 

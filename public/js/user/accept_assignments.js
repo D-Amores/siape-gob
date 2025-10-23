@@ -82,6 +82,10 @@ $('#table_pendings_assigments_users').on('click', '.accept-btn', function () {
 
                 showAlert('Asignación aceptada correctamente.', 'green', 'Éxito', async () => {
                     await loadPendingAssignments(token);
+
+                    if (data.pdfUrl) {
+                        window.location.href = data.pdfUrl; 
+                    }
                 });
             } catch (err) {
                 console.error('Error al aceptar asignación', err);

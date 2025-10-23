@@ -98,6 +98,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 document.getElementById('estado').value = asset.is_active ? '1' : '0';
                 document.getElementById('categoria').value = asset.category_id ?? '';
                 document.getElementById('descripcion').value = asset.description ?? '';
+                document.getElementById('tipo').value = asset.type ?? '';
 
                 try {
                     await Promise.all([
@@ -202,6 +203,7 @@ document.addEventListener('DOMContentLoaded', function () {
             modal.querySelector('#detalle-memoria').textContent = asset.memory ?? '—';
             modal.querySelector('#detalle-almacenamiento').textContent = asset.storage ?? '—';
             modal.querySelector('#detalle-descripcion').textContent = asset.description ?? '—';
+            modal.querySelector('#detalle-tipo').textContent = asset.type ?? '—';
 
             openModalForEdit('modalDetallesBien');
         } catch (error) {

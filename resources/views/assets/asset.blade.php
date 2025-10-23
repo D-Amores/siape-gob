@@ -156,6 +156,19 @@
                                             <label for="descripcion"><i class="fas fa-pen me-1 text-muted"></i>
                                                 Descripción</label>
                                         </div>
+                                        <h6 class="text-uppercase text-secondary fw-semibold mt-4 mb-3">
+                                            <i class="fas fa-align-left me-2"></i>Tipo
+                                        </h6>
+                                        <div class="form-floating">
+                                            <select class="form-select" id="tipo">
+                                                <option value="">Seleccione tipo</option>
+                                                <option value="Interno">Interno</option>
+                                                <option value="Patrimonio">Patrimonio</option>
+                                                <option value="Otro">Otro</option>
+                                            </select>
+                                            <label for="tipo"><i class="fas fa-layer-group me-1 text-muted"></i>
+                                                Tipo</label>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -226,6 +239,10 @@
                                         <div class="col-6">
                                             <div class="small text-muted">Categoría</div>
                                             <div id="detalle-categoria" class="fw-semibold"></div>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="small text-muted">Tipo</div>
+                                            <div id="detalle-tipo" class="fw-semibold"></div>
                                         </div>
                                         <div class="col-6">
                                             <div class="small text-muted">Estado</div>
@@ -315,7 +332,11 @@
         //Api uris
         const vURIAssetsTableApi = `${BASE_URL}/assets/api`;
         const vURIAssetsApi = `${BASE_URL}/assets`;
+
+        // Categories uris
         const vURICategoriesApi = `${BASE_URL}/categories/api`;
+        
+        // Brands uris
         const vURIBrandssApi = `${BASE_URL}/brands/api`;
 
         const languageDataTable = "{{ asset('cdn/datatables-language/es-MX.json') }}";

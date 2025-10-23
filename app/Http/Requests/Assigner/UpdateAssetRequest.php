@@ -32,6 +32,7 @@ class UpdateAssetRequest extends FormRequest
             'memory' => 'sometimes|string|max:100',
             'storage' => 'sometimes|string|max:100',
             'description' => 'sometimes|nullable|string',
+            'type' => 'sometimes|nullable|string|max:100',
             'brand_id' => 'sometimes|exists:brands,id',
             'category_id' => 'sometimes|exists:categories,id',
             'is_active' => 'sometimes|boolean',
@@ -76,6 +77,7 @@ class UpdateAssetRequest extends FormRequest
             'memory' => 'memoria',
             'storage' => 'almacenamiento',
             'description' => 'descripción',
+            'type' => 'type',
             'brand_id' => 'marca',
             'category_id' => 'categoría',
         ];
@@ -115,6 +117,10 @@ class UpdateAssetRequest extends FormRequest
 
         if ($this->has('description')) {
             $data['description'] = trim($this->description ?? '');
+        }
+
+        if ($this->has('type')) {
+            $data['type'] = $this->type ? trim($this->type) : null;
         }
 
         if ($this->has('is_active')) {
