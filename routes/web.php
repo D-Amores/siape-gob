@@ -7,11 +7,11 @@ use App\Http\Controllers\AcceptAssignments\AssetsUniqueUserController;
 use App\Http\Controllers\AcceptAssignments\AcceptAssignmentsController;
 use App\Http\Controllers\Assigner\BrandController;
 use App\Http\Controllers\Assigner\CategoryController;
+use App\Http\Controllers\Assigner\AssetAcceptedController;
 use App\Http\Controllers\Admin\PersonnelController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\AreaController;
 use App\Http\Controllers\Auth\LoginController;
-use App\Http\Controllers\PersonnelAssetController;
 use App\Http\Controllers\Assigner\PersonnelAssetPendingController;
 
 Route::middleware('guest')->group(function () {
@@ -33,9 +33,9 @@ Route::middleware('auth')->group(function () {
 
         Route::post('brands/api', [BrandController::class, 'brandApi']);
         Route::post('categories/api', [CategoryController::class, 'categoryApi']);
-        Route::post('personnel-asset-pending/api', [PersonnelAssetPendingController::class, 'personnelAssetPendingApi']);
-        Route::post('select-assets/api', [AssetController::class, 'selectAssetsApi']);
         Route::post('assets/api', [AssetController::class, 'assetsApi'])->name('assets.api');
+        Route::post('assignments/api', [AssetAcceptedController::class, 'acceptAssetApi']);
+        Route::post('admin/personnel/api', [PersonnelController::class, 'personnelApi']);
     });
 
     Route::middleware('role:user')->group(function () {
@@ -63,7 +63,7 @@ Route::middleware('auth')->group(function () {
             'index', 'show', 'store', 'update', 'destroy'
         ]);
         Route::post('admin/areas/api', [AreaController::class, 'areaApi']);
-        Route::post('admin/personnel/api', [PersonnelController::class, 'personnelApi']);
+
     });
 });
 

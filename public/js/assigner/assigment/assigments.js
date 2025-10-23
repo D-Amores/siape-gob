@@ -94,7 +94,7 @@ assignmentForm.addEventListener('submit', async function (e) {
 
 //También se usa esta logica, es codigo de otro desarrollador, lo optimice un poco, pero deje la estructura base para no romper nada
 const loadAssetPending = async () => {
-    const data = await getAssetPending();
+    const data = await getAssetPending('pending');
     if (data){
         updateAssetPendingTable(data);
     }

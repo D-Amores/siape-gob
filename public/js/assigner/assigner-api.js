@@ -1,5 +1,5 @@
 const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-async function getAssetPending(option = null) {
+async function getAssetPending(option = 'pending') {
     try{
         const response = await fetch(urlApiAssetPending, {
             method: 'POST',
@@ -7,9 +7,7 @@ async function getAssetPending(option = null) {
                 'X-CSRF-Token': csrfToken,
                 'Content-Type': 'application/json'
             },
-            if (option) {
-                body: JSON.stringify({ option })
-            }
+            body: JSON.stringify({ option })
         });
         if (!response.ok) throw new Error(`Error HTTP: ${response.status}`);
 

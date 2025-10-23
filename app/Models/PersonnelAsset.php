@@ -49,4 +49,17 @@ class PersonnelAsset extends Model
     {
         return $this->belongsTo(Personnel::class, 'receiver_id');
     }
+
+    public function scopeAcceptedWithRelations($query)
+    {
+        return $query->with([
+            'asset.brand',
+            'asset.category',
+            'assigner.area',
+            'receiver.area'
+        ])
+        ->whereNotNull('confirmation_date')
+        ->orderBy('confirmation_date', 'desc');
+    }
+
 }
