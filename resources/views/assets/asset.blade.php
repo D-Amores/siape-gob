@@ -312,6 +312,12 @@
     <script src="{{ asset('js/assets/datatable.js') }}"></script>
 
     <script>
+        //Api uris
+        const vURIAssetsTableApi = `${BASE_URL}/assets/api`;
+        const vURIAssetsApi = `${BASE_URL}/assets`;
+        const vURICategoriesApi = `${BASE_URL}/categories/api`;
+        const vURIBrandssApi = `${BASE_URL}/brands/api`;
+
         const languageDataTable = "{{ asset('cdn/datatables-language/es-MX.json') }}";
     </script>
 @endsection

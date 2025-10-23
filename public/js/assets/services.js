@@ -9,7 +9,7 @@ async function cargarCategorias(selectedId = null) {
     }
 
     try {
-        const res = await fetch('/categories/api', {
+        const res = await fetch(vURICategoriesApi, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -57,7 +57,7 @@ async function cargarMarcas(selectedId = null) {
             return;
         }
 
-        const res = await fetch('/brands/api', {
+        const res = await fetch(vURIBrandssApi, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

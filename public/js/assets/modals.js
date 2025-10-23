@@ -62,7 +62,7 @@ document.addEventListener('DOMContentLoaded', function () {
             formBien.dataset.mode = 'edit';
             formBien.dataset.id = id;
 
-            fetch('/assets/api', {
+            fetch(vURIAssetsTableApi, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -148,7 +148,7 @@ document.addEventListener('DOMContentLoaded', function () {
         if (!id) return;
 
         try {
-            const response = await fetch('/assets/api', {
+            const response = await fetch(vURIAssetsTableApi, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -222,7 +222,7 @@ document.addEventListener('DOMContentLoaded', function () {
         // Llamar a la función confirmDestroy con la función de eliminación
         confirmDestroy(async function() {
             try {
-                const response = await fetch(`/assets/${assetIdToDelete}`, {
+                const response = await fetch(`${vURIAssetsApi}/${assetIdToDelete}`, {
                     method: 'DELETE',
                     headers: {
                         'X-CSRF-TOKEN': csrfToken
