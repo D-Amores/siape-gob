@@ -1,6 +1,6 @@
 async function loadPendingAssignments(token) {
     try {
-        const res = await fetch('/accept-assignments/api', {
+        const res = await fetch(vURIAcceptAssignmentsTableApi, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -64,7 +64,7 @@ $('#table_pendings_assigments_users').on('click', '.accept-btn', function () {
     confirmStore(
         async () =>{
             try {
-                const res = await fetch('/accept-assignments/accept', {
+                const res = await fetch(vURIAcceptActionApi, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
