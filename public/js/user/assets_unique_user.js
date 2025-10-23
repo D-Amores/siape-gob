@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', async function () {
     // Cargar bienes del usuario
     async function loadAssetsUniqueUser() {
         try {
-            const res = await fetch('/assets-unique-user/api', {
+            const res = await fetch(vURIUniqueAssetsTableApi, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

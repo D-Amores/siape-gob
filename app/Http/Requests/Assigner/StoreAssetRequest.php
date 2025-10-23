@@ -34,6 +34,7 @@ class StoreAssetRequest extends FormRequest
             'memory' => self::SOMETIMES_STRING_MAX_100,
             'storage' => self::SOMETIMES_STRING_MAX_100,
             'description' => 'nullable|string',
+            'type' => 'nullable|string|max:100',
             'brand_id' => 'required|exists:brands,id',
             'category_id' => 'required|exists:categories,id',
             'is_active' => 'required|boolean',
@@ -84,6 +85,7 @@ class StoreAssetRequest extends FormRequest
             'memory' => 'memoria',
             'storage' => 'almacenamiento',
             'description' => 'descripción',
+            'type' => 'type',
             'brand_id' => 'marca',
             'category_id' => 'categoría',
         ];
@@ -100,6 +102,7 @@ class StoreAssetRequest extends FormRequest
             'memory' => trim($this->memory),
             'storage' => trim($this->storage),
             'description' => trim($this->description ?? ''),
+            'type' => $this->type ? trim($this->type) : null,
             'is_active' => $this->filled('is_active') ? (bool) $this->is_active : true,
         ]);
     }

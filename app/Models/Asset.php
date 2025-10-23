@@ -18,6 +18,7 @@ class Asset extends Model
         'memory',
         'storage',
         'description',
+        'type',
         'brand_id',
         'category_id',
         'is_active',

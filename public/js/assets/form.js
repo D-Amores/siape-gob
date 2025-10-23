@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', function () {
         if ($.fn.DataTable.isDataTable('#file_export')) {
             const table = $('#file_export').DataTable();
 
-            fetch('/assets/api', {  
+            fetch(vURIAssetsTableApi, {  
                 method: 'POST',   
                 headers: {
                     'Content-Type': 'application/json',
@@ -58,6 +58,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 is_active: document.getElementById('estado').value === '1',
                 category_id: document.getElementById('categoria').value,
                 description: document.getElementById('descripcion').value,
+                type: document.getElementById('tipo').value || null,
                 cpu: document.getElementById('procesador')?.value || null,
                 speed: document.getElementById('velocidad')?.value || null,
                 memory: document.getElementById('memoria')?.value || null,
@@ -69,14 +70,14 @@ document.addEventListener('DOMContentLoaded', function () {
                     let res;
 
                     if (mode === 'create') {
-                        res = await fetch('/assets', {
+                        res = await fetch(vURIAssetsApi, {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': csrfToken },
                             body: JSON.stringify(formData)
                         });
                     } else {
                         const id = formBien.dataset.id;
-                        res = await fetch(`/assets/${id}`, {
+                        res = await fetch(`${vURIAssetsApi}/${id}`, {
                             method: 'PUT',
                             headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': csrfToken },
                             body: JSON.stringify(formData)

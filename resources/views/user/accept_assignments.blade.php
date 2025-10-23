@@ -68,9 +68,15 @@
     <script src="{{ asset('js/helpers/tools/datatable-manager.js') }}"></script>
     <script src="{{ asset('js/helpers/alerts/alerts.js') }}"></script>
 
+    <script src="{{ asset('js/user/accept_assignments.js') }}"></script>
+
     <script>
+        
+        //Api uris
+        const vURIAcceptAssignmentsTableApi = `${BASE_URL}/accept-assignments/api`;
+        const vURIAcceptActionApi = `${BASE_URL}/accept-assignments/accept`;
+
         const languageDataTable = "{{ asset('cdn/datatables-language/es-MX.json') }}";
     </script>
-    <script src="{{ asset('js/user/accept_assignments.js') }}"></script>
 
 @endsection

@@ -5,6 +5,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Assigner\AssetController;
 use App\Http\Controllers\AcceptAssignments\AssetsUniqueUserController;
 use App\Http\Controllers\AcceptAssignments\AcceptAssignmentsController;
+use App\Http\Controllers\AcceptAssignments\AcceptAssignmentController;
 use App\Http\Controllers\Assigner\BrandController;
 use App\Http\Controllers\Assigner\CategoryController;
 use App\Http\Controllers\Admin\PersonnelController;
@@ -30,7 +31,8 @@ Route::middleware('auth')->group(function () {
         Route::resource('brands', BrandController::class)->only(['index', 'store', 'update', 'destroy']);
         Route::resource('categories', CategoryController::class)->only(['index', 'store', 'update', 'destroy']);
         Route::resource('personnel-asset-pending', PersonnelAssetPendingController::class)->only(['index', 'store', 'update', 'destroy']);
-
+        
+        Route::post('admin/personnel/api', [PersonnelController::class, 'personnelApi']); // Temporal no es mi ruta (iba en middleware('role:admin') )
         Route::post('brands/api', [BrandController::class, 'brandApi']);
         Route::post('categories/api', [CategoryController::class, 'categoryApi']);
         Route::post('personnel-asset-pending/api', [PersonnelAssetPendingController::class, 'personnelAssetPendingApi']);
@@ -49,7 +51,8 @@ Route::middleware('auth')->group(function () {
         Route::post('assets-unique-user/api', [AssetsUniqueUserController::class, 'assetsUniqueUsuarioAPi'])->name('assets-user.api');
 
         // Ruta API para aceptar los bienes asignados al usuario
-        Route::post('accept-assignments/accept', [AcceptAssignmentsController::class, 'acceptAssignmentApi'])->name('accept-assignments.accept');
+        Route::post('accept-assignments/accept', [AcceptAssignmentController::class, 'accept'])->name('accept-assignments.accept');
+        Route::get('/accept-assignments/pdf/{id}', [AcceptAssignmentController::class, 'generatePdf'])->name('accept-assignments.pdf');
 
     });
 
@@ -63,7 +66,6 @@ Route::middleware('auth')->group(function () {
             'index', 'show', 'store', 'update', 'destroy'
         ]);
         Route::post('admin/areas/api', [AreaController::class, 'areaApi']);
-        Route::post('admin/personnel/api', [PersonnelController::class, 'personnelApi']);
     });
 });
 

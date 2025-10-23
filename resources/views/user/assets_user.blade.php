@@ -177,10 +177,17 @@
     <script src="{{ asset('js/helpers/tools/datatable-manager.js') }}"></script>
     <script src="{{ asset('js/helpers/alerts/alerts.js') }}"></script>
 
+    
+    <script src="{{ asset('js/user/assets_unique_user.js') }}"></script>
+
     <script>
+        
+        //Api uris
+        const vURIUniqueAssetsTableApi = `${BASE_URL}/assets-unique-user/api`;
+        const vURIAcceptActionApi = `${BASE_URL}/accept-assignments/accept`;
+
         const languageDataTable = "{{ asset('cdn/datatables-language/es-MX.json') }}";
     </script>
-    <script src="{{ asset('js/user/assets_unique_user.js') }}"></script>
 
 
 @endsection

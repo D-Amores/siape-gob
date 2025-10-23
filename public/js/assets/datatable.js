@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // ------------------------------
     // Inicialización de DataTable
     // ------------------------------
-    fetch('/assets/api', {
+    fetch(vURIAssetsTableApi, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
