@@ -305,7 +305,11 @@
     <script src="/js/helpers/alerts/alerts.js"></script>
     <script src="/js/helpers/modals/modal-actions.js"></script>
     
-    <script src="{{ asset('js/assets/assets.js') }}"></script>
+    <script src="{{ asset('js/assets/utils.js') }}"></script>
+    <script src="{{ asset('js/assets/services.js') }}"></script>
+    <script src="{{ asset('js/assets/form.js') }}"></script>
+    <script src="{{ asset('js/assets/modals.js') }}"></script>
+    <script src="{{ asset('js/assets/datatable.js') }}"></script>
 
     <script>
         const languageDataTable = "{{ asset('cdn/datatables-language/es-MX.json') }}";

@@ -10,6 +10,7 @@ use App\Models\PersonnelAssetPending;
 use App\Http\Requests\User\AcceptAssignmentsApiRequest;
 use App\Models\PersonnelAsset;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class AcceptAssignmentsController extends Controller
 {
@@ -139,7 +140,7 @@ class AcceptAssignmentsController extends Controller
 
                     $pending->delete();
                 } catch (\Exception $e) {
-                    \Log::error('Error al aceptar asignación: '.$e->getMessage(), [
+                    Log::error('Error al aceptar asignación: '.$e->getMessage(), [
                         'pending_id' => $pending->id,
                         'pending' => $pending->toArray()
                     ]);
