@@ -133,7 +133,7 @@
     <script>
         const languageDataTable = "{{ asset('cdn/datatables-language/es-MX.json') }}";
 
-        const baseUrl = `brands`;
-        const ApiUrl = `brands/api`;
+        const baseUrl = `${BASE_URL}/brands`;
+        const ApiUrl = `${BASE_URL}/brands/api`;
     </script>
 @endsection

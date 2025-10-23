@@ -29,13 +29,12 @@ async function logoutUser() {
                 'Accept': 'application/json',
                 'X-CSRF-TOKEN': csrfToken
             },
-            credentials: 'same-origin'
+            credentials: 'same-origin',
         });
 
         if (response.ok) {
             const data = await response.json();
-            console.log('Logout successful:', data.message);
-            window.location.href = loginURI;
+            window.location.href = loginURL;
         } else {
             const errorData = await response.json();
             console.error('Error logging out:', response.status, errorData);
