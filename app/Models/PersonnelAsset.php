@@ -15,7 +15,7 @@ class PersonnelAsset extends Model
     protected $fillable = [
         'assignment_date',
         'confirmation_date',
-        'pac_acceptance_doc',
+        'path_acceptance_doc',
         'asset_id',
         'assigner_id',
         'receiver_id',

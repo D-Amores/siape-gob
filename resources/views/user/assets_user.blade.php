@@ -2,7 +2,7 @@
 
 @section('styles')
     <link rel="stylesheet" href="{{ asset('modernize/assets/libs/datatables.net-bs5/css/dataTables.bootstrap5.min.css') }}">
-    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.2/css/buttons.dataTables.min.css">
+    <link rel="stylesheet" href="{{ asset('cdn/buttons/2.4.2/css/buttons.dataTables.min.css') }}">
 @endsection
 
 @section('title')
@@ -10,13 +10,7 @@
 @endsection
 
 @section('subtitle')
-    Aquí puedes administrar tus Bienes.
-@endsection
-
-@section('actions')
-    <button class="btn btn-primary btn-modal-bien" data-mode="create">
-        <i class="fas fa-plus-circle me-2"></i> Agregar bien
-    </button>
+    Aquí puedes ver todos tus bienes.
 @endsection
 
 @section('content')
@@ -25,7 +19,7 @@
             <div class="card shadow-lg">
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table id="file_export" class="table table-hover w-100 table-striped table-bordered display text-nowrap align-middle">
+                        <table id="assets_unique_user" class="table table-hover w-100 table-striped table-bordered display text-nowrap align-middle">
                             <thead class>
                                 <tr>
                                     <th class="text-center py-1">N. de Inventario</th>
@@ -54,135 +48,12 @@
                         </table>
                     </div>
                 </div>
-
-                <!-- Card Footer -->
-                <div class="card-footer bg-white border-top py-2">
-                    <div class="d-flex justify-content-center small text-muted">
-                        <div>
-                            Última actualización: {{ now()->format('d/m/Y H:i') }}
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
     </div>
-    <div class="dark-transparent sidebartoggler"></div>
-
-    <!-- Modal: Nuevo Bien -->
-    <div class="modal fade" id="modalBien" tabindex="-1" aria-labelledby="modalNuevoBienLabel" aria-hidden="true">
-        <div class="modal-dialog modal-xl modal-dialog-centered">
-            <div class="modal-content border-0 shadow rounded-4">
-
-                <!-- Header -->
-                <div class="modal-header bg-light border-0">
-                    <h5 class="modal-title fw-bold text-primary" id="modalBienLabel">
-                        <i class="fas fa-laptop me-2"></i><span id="modalBienTitulo">Nuevo Bien</span>
-                    </h5>
-                    <button type="button" class="btn-close" id="btnCerrarModalBien" data-bs-dismiss="modal" aria-label="Cerrar"></button>
-                </div>
-
-                <!-- Body -->
-                <div class="modal-body py-4 px-4">
-                    <form id="formNuevoBien">
-                        <div class="row g-4">
-
-                            <!-- Columna Izquierda -->
-                            <div class="col-md-6">
-                                <div class="card h-100 border-0 bg-light-subtle">
-                                    <div class="card-body">
-                                        <h6 class="text-uppercase text-secondary fw-semibold mb-3">
-                                            <i class="fas fa-info-circle me-2"></i>Información General
-                                        </h6>
-
-                                        <div class="form-floating mb-3">
-                                            <input type="text" class="form-control" id="numeroInventario"
-                                                placeholder="Número de inventario" required>
-                                            <label for="numeroInventario"><i class="fas fa-barcode me-1 text-muted"></i>
-                                                Número de inventario</label>
-                                        </div>
-
-                                        <div class="form-floating mb-3">
-                                            <select class="form-select" id="marca" required>
-                                                <option value="" selected>Seleccione marca</option>
-                                            </select>
-                                            <label for="marca"><i class="fas fa-tag me-1 text-muted"></i> Marca</label>
-                                        </div>
-
-                                        <div class="form-floating mb-3">
-                                            <input type="text" class="form-control" id="modelo" placeholder="Modelo">
-                                            <label for="modelo"><i class="fas fa-laptop-code me-1 text-muted"></i>
-                                                Modelo</label>
-                                        </div>
-
-                                        <div class="form-floating mb-3">
-                                            <input type="text" class="form-control" id="serie" placeholder="Serie">
-                                            <label for="serie"><i class="fas fa-hashtag me-1 text-muted"></i>
-                                                Serie</label>
-                                        </div>
-
-                                        <div class="form-floating mb-3">
-                                            <select class="form-select" id="estado" required>
-                                                <option value="1" selected>Activo</option>
-                                                <option value="0">Inactivo</option>
-                                            </select>
-                                            <label for="estado"><i class="fas fa-toggle-on me-1 text-muted"></i>
-                                                Estado</label>
-                                        </div>
-
-                                        <div class="form-floating">
-                                            <select class="form-select" id="categoria" required>
-                                                <option value="" selected>Seleccione categoría</option>
-                                            </select>
-                                            <label for="categoria"><i class="fas fa-layer-group me-1 text-muted"></i>
-                                                Categoría</label>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Columna Derecha -->
-                            <div class="col-md-6">
-                                <div class="card h-100 border-0 bg-light-subtle">
-                                    <div class="card-body">
-
-                                        <!-- Campos dinámicos -->
-                                        <div id="camposDinamicos"></div>
-
-                                        <h6 class="text-uppercase text-secondary fw-semibold mt-4 mb-3">
-                                            <i class="fas fa-align-left me-2"></i>Descripción
-                                        </h6>
-                                        <div class="form-floating">
-                                            <textarea class="form-control" placeholder="Descripción" id="descripcion" style="height: 100px"></textarea>
-                                            <label for="descripcion"><i class="fas fa-pen me-1 text-muted"></i>
-                                                Descripción</label>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                        </div>
-                    </form>
-                </div>
-
-                <!-- Footer -->
-                <div class="modal-footer border-0">
-                    <button type="button" class="btn btn-outline-secondary" id="btnCerrarFooter" data-bs-dismiss="modal">
-                        <i class="fas fa-times me-1"></i> Cerrar
-                    </button>
-                    <button type="submit" form="formNuevoBien" class="btn btn-primary">
-                        <i class="fas fa-plus me-1"></i> Guardar
-                    </button>
-                </div>
-
-            </div>
-        </div>
-    </div>
-
-    <!-- Elemento para el foco después de guardar -->
-    <div id="focusAfterSave" tabindex="-1" style="position: absolute; left: -9999px;"></div>
 
     <!-- Modal Detalles del Bien -->
-    <div class="modal fade" id="modalDetallesBien" tabindex="-1" aria-labelledby="modalDetallesBienLabel"
+    <div class="modal fade" id="modalDetallesUnicoUsuario" tabindex="-1" aria-labelledby="modalDetallesBienLabel"
         aria-hidden="true">
         <div class="modal-dialog modal-xl modal-dialog-centered">
             <div class="modal-content border-0 shadow rounded-4">
@@ -289,6 +160,7 @@
         </div>
     </div>
 
+    <div class="dark-transparent sidebartoggler"></div>
 @endsection
 
 @section('scripts')
@@ -297,21 +169,18 @@
     <script src="{{ asset('cdn/buttons/3.0.2/js/buttons.html5.min.js')}}"></script>
     <script src="{{ asset('cdn/buttons/3.0.2/js/buttons.print.min.js')}}"></script>
 
+
     <script src="{{ asset('cdn/ajax/libs/jszip/3.10.1/jszip.min.js')}}"></script>
     <script src="{{ asset('cdn/ajax/libs/pdfmake/0.2.7/pdfmake.min.js')}}"></script>
     <script src="{{ asset('cdn/ajax/libs/pdfmake/0.2.7/vfs_fonts.js')}}"></script>
 
     <script src="{{ asset('js/helpers/tools/datatable-manager.js') }}"></script>
-    <script src="/js/helpers/alerts/alerts.js"></script>
-    <script src="/js/helpers/modals/modal-actions.js"></script>
-    
-    <script src="{{ asset('js/assets/utils.js') }}"></script>
-    <script src="{{ asset('js/assets/services.js') }}"></script>
-    <script src="{{ asset('js/assets/form.js') }}"></script>
-    <script src="{{ asset('js/assets/modals.js') }}"></script>
-    <script src="{{ asset('js/assets/datatable.js') }}"></script>
+    <script src="{{ asset('js/helpers/alerts/alerts.js') }}"></script>
 
     <script>
         const languageDataTable = "{{ asset('cdn/datatables-language/es-MX.json') }}";
     </script>
+    <script src="{{ asset('js/user/assets_unique_user.js') }}"></script>
+
+
 @endsection

@@ -3,6 +3,8 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Assigner\AssetController;
+use App\Http\Controllers\AcceptAssignments\AssetsUniqueUserController;
+use App\Http\Controllers\AcceptAssignments\AcceptAssignmentsController;
 use App\Http\Controllers\Assigner\BrandController;
 use App\Http\Controllers\Assigner\CategoryController;
 use App\Http\Controllers\Admin\PersonnelController;
@@ -28,7 +30,7 @@ Route::middleware('auth')->group(function () {
         Route::resource('brands', BrandController::class)->only(['index', 'store', 'update', 'destroy']);
         Route::resource('categories', CategoryController::class)->only(['index', 'store', 'update', 'destroy']);
         Route::resource('personnel-asset-pending', PersonnelAssetPendingController::class)->only(['index', 'store', 'update', 'destroy']);
-        
+
         Route::post('brands/api', [BrandController::class, 'brandApi']);
         Route::post('categories/api', [CategoryController::class, 'categoryApi']);
         Route::post('personnel-asset-pending/api', [PersonnelAssetPendingController::class, 'personnelAssetPendingApi']);
@@ -37,9 +39,18 @@ Route::middleware('auth')->group(function () {
     });
 
     Route::middleware('role:user')->group(function () {
-        Route::get('my', function () {
-            return ('Hola Mundo');
-        });
+        Route::resource('accept-assignments', AcceptAssignmentsController::class)->only(['index']);
+        Route::resource('assets-user', AssetsUniqueUserController::class)->only(['index']);
+
+        // Ruta API para cargar asignaciones pendientes del usuario autenticado
+        Route::post('accept-assignments/api', [AcceptAssignmentsController::class, 'pendingAssignmentsApi'])->name('accept-assignments.api');
+
+        // Ruta API para cargar bienes del usuario autenticado
+        Route::post('assets-unique-user/api', [AssetsUniqueUserController::class, 'assetsUniqueUsuarioAPi'])->name('assets-user.api');
+
+        // Ruta API para aceptar los bienes asignados al usuario
+        Route::post('accept-assignments/accept', [AcceptAssignmentsController::class, 'acceptAssignmentApi'])->name('accept-assignments.accept');
+
     });
 
     Route::middleware('role:admin')->group(function () {

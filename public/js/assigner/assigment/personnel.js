@@ -1,4 +1,6 @@
 // load-personnel.js
+
+// Función para cargar el personal
 async function loadPersonnel() {
     try {
         const data = await getPersonnelApi();
