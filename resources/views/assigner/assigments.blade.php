@@ -27,7 +27,7 @@
                         <h4 class="card-title mb-0">Asignaciones Pendientes</h4>
                     </div>
                     <div class="table-responsive">
-                        <table id="file_export" class="table table-hover w-100 table-striped table-bordered display">
+                        <table id="file_export" class="table table-hover w-100 table-striped table-bordered">
                             <thead>
                                 <tr>
                                     <th class="text-center">#</th>
@@ -62,7 +62,7 @@
                         <h4 class="card-title mb-0">Asignaciones Aceptadas</h4>
                     </div>
                     <div class="table-responsive">
-                        <table id="file_export2" class="table table-hover w-100 table-striped table-bordered display">
+                        <table id="file_export2" class="table table-hover w-100 table-striped table-bordered">
                             <thead>
                                 <tr>
                                     <th class="text-center">Asigna</th>
@@ -193,7 +193,7 @@
         //Assignment uris
         const URIAssignedAsset = `${BASE_URL}/personnel-asset-pending`;
     </script>
-    
+
     <script src="{{ asset('cdn/buttons/3.0.2/js/dataTables.buttons.min.js') }}"></script>
     <script src="{{ asset('cdn/buttons/3.0.2/js/buttons.html5.min.js') }}"></script>
     <script src="{{ asset('cdn/buttons/3.0.2/js/buttons.print.min.js') }}"></script>
