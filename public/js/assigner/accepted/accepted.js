@@ -1,4 +1,6 @@
 async function startApp() {
+    const acceptedTableData = await acceptAssetApi('accepted');
+    loadAssetsAccepted(acceptedTableData);
     
 }
 

@@ -9,7 +9,7 @@ use App\Models\PersonnelAssetPending;
 
 class AssetAcceptedController extends Controller
 {
-    public function acceptAssetApi(AssetAcceptedApiRequest $request)
+    public function assignmentsAssetApi(AssetAcceptedApiRequest $request)
     {
         $response = [
             'ok' => false,

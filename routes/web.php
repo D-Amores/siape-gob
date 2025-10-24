@@ -34,7 +34,7 @@ Route::middleware('auth')->group(function () {
         Route::post('brands/api', [BrandController::class, 'brandApi']);
         Route::post('categories/api', [CategoryController::class, 'categoryApi']);
         Route::post('assets/api', [AssetController::class, 'assetsApi'])->name('assets.api');
-        Route::post('assignments/api', [AssetAcceptedController::class, 'acceptAssetApi']);
+        Route::post('assignments/api', [AssetAcceptedController::class, 'assignmentsAssetApi']);
         Route::post('admin/personnel/api', [PersonnelController::class, 'personnelApi']);
     });
 

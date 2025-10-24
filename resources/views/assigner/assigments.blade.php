@@ -27,7 +27,7 @@
                         <h4 class="card-title mb-0">Asignaciones Pendientes</h4>
                     </div>
                     <div class="table-responsive">
-                        <table id="file_export" class="table table-hover w-100 table-striped table-bordered display">
+                        <table id="file_export" class="table table-hover w-100 table-striped table-bordered">
                             <thead>
                                 <tr>
                                     <th class="text-center">#</th>
@@ -62,6 +62,7 @@
                                     <th>Marca</th>
                                     <th>Asignado por</th>
                                     <th>Asignado a</th>
+                                    <th>Con Área</th>
                                     <th>Fecha Asignación</th>
                                     <th>Fecha Aceptación</th>
                                     <th>Documento</th>
@@ -172,7 +173,7 @@
         const languageDataTable = '{{ asset('cdn/datatables-language/es-MX.json') }}';
 
         //Api uris
-        const urlApiAssetPending = `${BASE_URL}/assignments/api`;
+        const urlAssignmentApi = `${BASE_URL}/assignments/api`;
         const urlAssetApi = `${BASE_URL}/assets/api`;
         const vURIPersonnelApi = `${BASE_URL}/admin/personnel/api`;
 
@@ -203,4 +204,5 @@
 
     <!-- Accepted Assignments Config -->
     <script src="{{ asset('js/assigner/accepted/table-config.js') }}"></script>
+    <script src="{{ asset('js/assigner/accepted/accepted.js') }}"></script>
 @endsection

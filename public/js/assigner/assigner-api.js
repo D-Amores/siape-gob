@@ -1,7 +1,7 @@
 const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 async function getAssetPending(option = 'pending') {
     try{
-        const response = await fetch(urlApiAssetPending, {
+        const response = await fetch(urlAssignmentApi, {
             method: 'POST',
             headers: {
                 'X-CSRF-Token': csrfToken,
@@ -73,6 +73,33 @@ async function getPersonnelApi(consultOption = 'area') {
         }
     } catch (error) {
         console.error('Error en obtener datos:', error);
+    }
+    return [];
+}
+
+async function acceptAssetApi(option = 'accepted') {
+    try {
+        const response = await fetch(urlAssignmentApi, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-Token': csrfToken
+            },
+            body: JSON.stringify({
+                option: option,
+            })
+        });
+
+        if (!response.ok) throw new Error(`Error HTTP: ${response.status}`);
+
+        const result = await response.json();
+
+        if(result.ok) {
+            return result.data;
+        }
+        
+    } catch (error) {
+        console.error('Error en aceptar asignación:', error);
     }
     return [];
 }

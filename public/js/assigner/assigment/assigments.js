@@ -1,8 +1,8 @@
 // Inicializar cuando el DOM esté listo
-document.addEventListener('DOMContentLoaded', function () {
-    loadPersonnel();
-    loadAssets();
-    loadAssetPending();
+document.addEventListener('DOMContentLoaded', async function () {
+    await loadPersonnel();
+    await loadAssets();
+    await loadAssetPending();
 
     const userTableTbody = document.querySelector('#file_export tbody');
 

@@ -53,7 +53,7 @@ class Asset extends Model
      */
     public function scopeAssigned($query)
     {
-        return $query->whereHas('personnelAssets', function($q){
+        return $query->whereHas('personnelAssets', function ($q) {
             $q->whereNull('confirmation_date');
         });
     }
@@ -73,9 +73,12 @@ class Asset extends Model
      */
     public function scopeAvailable($query)
     {
-        $assignedIds = \App\Models\PersonnelAssetPending::whereNull('confirmation_date')
-            ->pluck('asset_id');
-
-        return $query->whereNotIn('id', $assignedIds);
+        return $query->whereNotIn('id', function ($sub) {
+            $sub->select('asset_id')->from('personnel_assets');
+        })
+        ->whereNotIn('id', function ($sub) {
+            $sub->select('asset_id')->from('personnel_assets_pending');
+        })
+        ->where('is_active', true);
     }
 }
