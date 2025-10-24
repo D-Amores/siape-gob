@@ -131,36 +131,4 @@ class PersonnelAssetPendingController extends Controller
             ], 500);
         }
     }
-
-    public function personnelAssetPendingApi()
-    {
-        try {
-            $assignments = PersonnelAssetPending::with(['asset', 'assigner', 'receiver'])
-                ->orderBy('assignment_date', 'desc')
-                ->get();
-
-            $data = $assignments->map(function ($item) {
-                return [
-                    'id' => $item->id,
-                    'assignment_date' => $item->assignment_date->format('Y-m-d'),
-                    'confirmation_date' => optional($item->confirmation_date)->format('Y-m-d'),
-                    'asset_id' => $item->asset->model ?? 'Sin nombre',
-                    'assigner_name' => $item->assigner->name ?? 'Desconocido',
-                    'receiver_name' => $item->receiver->name ?? 'Desconocido',
-                ];
-            });
-
-
-            return response()->json([
-                'ok' => true,
-                'data' => $data
-            ], 200);
-        } catch (\Exception $e) {
-            return response()->json([
-                'ok' => false,
-                'message' => 'Error al obtener las asignaciones pendientes',
-                'error' => config('app.debug') ? $e->getMessage() : 'Error interno'
-            ], 500);
-        }
-    }
 }
