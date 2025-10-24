@@ -126,7 +126,7 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
-        $user->load('roles');
+        $user->load('roles', 'personnel');
         return response()->json([
             'ok' => true, 
             'message' => 'Usuario obtenido exitosamente.', 

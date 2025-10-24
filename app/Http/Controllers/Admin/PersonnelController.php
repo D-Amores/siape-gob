@@ -28,8 +28,11 @@ class PersonnelController extends Controller
             case 'area_user':
                 $data = Personnel::withArea()->withUser()->excludeCurrent()->get();
                 break;
-            case 'winthout_user':
+            case 'personnel_without_user_assignment':
                 $data = Personnel::withoutUser()->withArea()->excludeCurrent()->get();
+                break;
+            case 'personnel_with_user_assignment':
+                $data = Personnel::withArea()->excludeCurrent()->get();
                 break;
 
             // Agregar más casos según sea necesario
