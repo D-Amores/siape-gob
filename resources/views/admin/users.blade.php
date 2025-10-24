@@ -107,7 +107,7 @@
                                 <select class="form-select rolSelect" id="role_id" name="role_id" required>
                                     <option value="">Seleccionar rol...</option>
                                 </select>
-                            </div> 
+                            </div>
                         </div>
 
                         {{-- <div class="alert alert-info mt-3">
@@ -181,7 +181,7 @@
                                 <select class="form-select rolSelect" id="role_id_edit" name="role_id" required>
                                     <option value="">Seleccionar rol...</option>
                                 </select>
-                            </div> 
+                            </div>
                         </div>
 
                         <div class="alert alert-info mt-3">
@@ -221,7 +221,7 @@
         //User uris
         const vURIUsers = `${BASE_URL}/admin/users`;
     </script>
-    
+
     <!-- Helpers -->
     <script src="{{ asset('js/helpers/tools/utils.js') }}"></script>
     <script src="{{ asset('js/helpers/modals/modal-actions.js') }}"></script>

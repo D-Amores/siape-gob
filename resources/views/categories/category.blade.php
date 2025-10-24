@@ -25,7 +25,7 @@
             <div class="card shadow-lg">
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table id="file_export" class="table table-hover w-100 table-striped table-bordered display">
+                        <table id="file_export" class="table table-hover w-100 table-striped table-bordered">
                             <thead>
                                 <tr>
                                     <th scope="col">#</th>
