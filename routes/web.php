@@ -5,7 +5,6 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Assigner\AssetController;
 use App\Http\Controllers\AcceptAssignments\AssetsUniqueUserController;
 use App\Http\Controllers\AcceptAssignments\AcceptAssignmentsController;
-use App\Http\Controllers\AcceptAssignments\AcceptAssignmentController;
 use App\Http\Controllers\Assigner\BrandController;
 use App\Http\Controllers\Assigner\CategoryController;
 use App\Http\Controllers\Admin\PersonnelController;
@@ -51,8 +50,8 @@ Route::middleware('auth')->group(function () {
         Route::post('assets-unique-user/api', [AssetsUniqueUserController::class, 'assetsUniqueUsuarioAPi'])->name('assets-user.api');
 
         // Ruta API para aceptar los bienes asignados al usuario
-        Route::post('accept-assignments/accept', [AcceptAssignmentController::class, 'accept'])->name('accept-assignments.accept');
-        Route::get('/accept-assignments/pdf/{id}', [AcceptAssignmentController::class, 'generatePdf'])->name('accept-assignments.pdf');
+        Route::post('accept-assignments/accept', [AcceptAssignmentsController::class, 'acceptAssignmentApi'])->name('accept-assignments.accept');
+        Route::get('accept-assignments/pdf/{id}', [AcceptAssignmentsController::class, 'generatePdf'])->name('accept-assignments.pdf');
 
     });
 

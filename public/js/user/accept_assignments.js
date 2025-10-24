@@ -82,9 +82,10 @@ $('#table_pendings_assigments_users').on('click', '.accept-btn', function () {
 
                 showAlert('Asignación aceptada correctamente.', 'green', 'Éxito', async () => {
                     await loadPendingAssignments(token);
-
+                    
                     if (data.pdfUrl) {
-                        window.location.href = data.pdfUrl; 
+                        // Abrir el PDF en una nueva pestaña para descarga
+                        window.open(data.pdfUrl, '_blank');
                     }
                 });
             } catch (err) {
