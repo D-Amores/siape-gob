@@ -26,7 +26,7 @@
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
-                            <table id="dataUsersTable" class="table table-hover w-100 table-striped table-bordered display align-middle">
+                            <table id="dataUsersTable" class="table table-hover w-100 table-striped table-bordered align-middle">
                                 <thead class="text-dark fs-4">
                                     <tr>
                                         <th scope="col">#</th>

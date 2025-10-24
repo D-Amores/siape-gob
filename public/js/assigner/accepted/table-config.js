@@ -1,5 +1,4 @@
 function loadAssetsAccepted(assetPendings) {
-    console.log('Accepted Assignments Data:', assetPendings); // Verifica los datos recibidos
     const tableId = "accepted_assignments";
 
     const columns = [
