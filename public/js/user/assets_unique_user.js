@@ -149,16 +149,28 @@ document.addEventListener('DOMContentLoaded', async function () {
         const documentoElement = document.getElementById('detalle-documento');
         const btnDescargar = document.getElementById('btn-descargar-documento');
         
-        if (assetDetails.path_acceptance_doc && assetDetails.path_acceptance_doc !== 'No disponible') {
+        if (assetDetails.path_acceptance_doc && assetDetails.path_acceptance_doc !== 'No disponible' && assetDetails.path_acceptance_doc.toLowerCase() !== 'pending') {
+            // Caso: Documento disponible -> Descargar
             documentoElement.textContent = 'Documento disponible';
             btnDescargar.disabled = false;
+            btnDescargar.innerHTML = '<i class="fas fa-download me-1"></i> Descargar Documento';
             btnDescargar.onclick = function() {
-                // Aquí puedes implementar la descarga del documento
-                window.open(`${BASE_URL}/download-document/${assignmentId}`, '_blank');
+                window.open(`${vURIDownloadDocument}/${assignmentId}`, '_blank');
+            };
+        } else if (assetDetails.path_acceptance_doc && assetDetails.path_acceptance_doc.toLowerCase() === 'pending') {
+            // Caso: Pendiente -> Subir documento
+            documentoElement.textContent = 'Documento pendiente';
+            btnDescargar.disabled = false;
+            btnDescargar.innerHTML = '<i class="fas fa-upload me-1"></i> Subir documento de aceptación';
+            btnDescargar.onclick = function() {
+                // Aquí puedes implementar la lógica para subir documento
+                openUploadModal(assignmentId);
             };
         } else {
+            // Caso: No disponible
             documentoElement.textContent = 'No disponible';
             btnDescargar.disabled = true;
+            btnDescargar.innerHTML = '<i class="fas fa-download me-1"></i> Descargar Documento';
         }
 
         // Mostrar el modal
@@ -174,6 +186,82 @@ document.addEventListener('DOMContentLoaded', async function () {
             showAssetDetails(assignmentId);
         }
     });
+
+    // Función para abrir el selector de archivos
+    function openUploadModal(assignmentId) {
+        const fileInput = document.createElement('input');
+        fileInput.type = 'file';
+        fileInput.accept = '.pdf,.doc,.docx,.jpg,.jpeg,.png';
+        fileInput.style.display = 'none';
+        
+        fileInput.onchange = async (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                await handleFileUpload(assignmentId, file);
+            }
+        };
+        
+        document.body.appendChild(fileInput);
+        fileInput.click();
+        document.body.removeChild(fileInput);
+    }
+
+    // Función para manejar la subida del archivo
+    async function handleFileUpload(assignmentId, file) {
+        const formData = new FormData();
+        formData.append('acceptance_document', file);
+        
+        try {
+            // Mostrar loading
+            const btnDescargar = document.getElementById('btn-descargar-documento');
+            const originalText = btnDescargar.innerHTML;
+            btnDescargar.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i> Subiendo...';
+            btnDescargar.disabled = true;
+
+            const response = await fetch(`${vURIAssetsDetails}/${assignmentId}/upload-document`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': token
+                },
+                body: formData
+            });
+
+            const data = await response.json();
+
+            if (data.ok) {
+                showAlert('Documento subido correctamente', 'green', 'Éxito');
+                
+                // Actualizar la interfaz
+                document.getElementById('detalle-documento').textContent = 'Documento disponible';
+                document.getElementById('detalle-fecha-confirmacion').textContent = new Date().toLocaleDateString('es-MX');
+                
+                // Cambiar el botón a "Descargar Documento"
+                btnDescargar.innerHTML = '<i class="fas fa-download me-1"></i> Descargar Documento';
+                btnDescargar.disabled = false;
+                btnDescargar.onclick = function() {
+                    window.open(`${vURIDownloadDocument}/${assignmentId}`, '_blank');
+                };
+                
+                // Actualizar el estado de la asignación
+                const estadoAsignacion = document.getElementById('detalle-estado-asignacion');
+                estadoAsignacion.textContent = 'Confirmada';
+                estadoAsignacion.className = 'badge rounded-pill px-3 py-2 bg-success';
+                
+            } else {
+                showAlert(data.message || 'Error al subir el documento', 'red', 'Error');
+                btnDescargar.innerHTML = originalText;
+                btnDescargar.disabled = false;
+            }
+
+        } catch (error) {
+            console.error('Error:', error);
+            showAlert('Error al subir el documento', 'red', 'Error');
+            
+            const btnDescargar = document.getElementById('btn-descargar-documento');
+            btnDescargar.innerHTML = '<i class="fas fa-upload me-1"></i> Subir documento de aceptación';
+            btnDescargar.disabled = false;
+        }
+    }
 
     await loadAssetsUniqueUser();
 });

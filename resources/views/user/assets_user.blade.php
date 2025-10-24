@@ -241,6 +241,7 @@
         const vURIUniqueAssetsTableApi = `${BASE_URL}/assets-unique-user/api`;
         const vURIAcceptActionApi = `${BASE_URL}/accept-assignments/accept`;
         const vURIAssetsDetails = `${BASE_URL}/assets-unique-user`;
+        const vURIDownloadDocument = `${BASE_URL}/download-document`;
 
         const languageDataTable = "{{ asset('cdn/datatables-language/es-MX.json') }}";
     </script>
