@@ -4,111 +4,84 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Classes\clsImprimir;
-use App\Models\clsDLRtec;
+use App\Models\Asset;
+use App\Models\PersonnelAsset;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 
 class FormatoController extends Controller
 {
-    private $route='impresion';
-    public function __construct() { } 
+    private $route = 'impresion';
 
-    public function reporte_colegio()
+    public function __construct() { }
+
+    public function pdfAsignacion($id)
     {  
-        $vhtml ='';
-        $clsImprimir=new clsImprimir;
+        $user = Auth::user();
 
-        $vhtml.='<p style="text-align: center; font-size: 13px; line-height: 150%">';
-        $vhtml.='   <b>REPORTE RTECS REGISTRADOR POR COLEGIOS<b>';
-        $vhtml.='</p>';
+        // Traer la asignación con sus relaciones
+        $personnelAsset = PersonnelAsset::with(['asset', 'asset.brand', 'asset.category', 'assigner', 'receiver'])
+            ->find($id);
 
-        $vi=1;
-        $_MDL_User=User::queryToDB([])->get();
-        foreach($_MDL_User as $data) {
-            
-            if ( $data->id != 1 && $data->id != 2 && $data->id != 18 ) {
-                $vhtml.='<p style="text-align: justify; font-size: 13px; line-height: 150%">';
-                $vhtml.='   <b>'. $vi .'.- '. $data->name .'</b>';
-                $vhtml.='</p>';
-
-                $_MDL_Rtec=clsDLRtec::queryToDB(['id_users'=> $data->id])->get();
-                if ( count($_MDL_Rtec) > 0 ) {
-                    $vi_tabla=1;
-                    // $vhtml.='<table  style="width: 100%; font-size: 10px;">';
-                    // $vhtml.='	<thead>';
-                    // $vhtml.='	    <tr>';
-                    // $vhtml.='	        <th>#</th>';
-                    // $vhtml.='	        <th>Folio</th>';
-                    // $vhtml.='	        <th>Estatus</th>';
-                    // $vhtml.='	        <th>Nombre RTEC</th>';
-                    // $vhtml.='	        <th>Teléfono</th>';
-                    // $vhtml.='	    </tr>';
-                    // $vhtml.='	</thead>';
-                    // $vhtml.='	<tbody>';
-                    // foreach($_MDL_Rtec as $data_rtec) {
-                    //     $vhtml.='    <tr>';
-                    //     $vhtml.='        <td>'. ($vi_tabla + 1) .'</td>';
-                    //     $vhtml.='        <td>'. $data_rtec->folio .'</td>';
-                    //     $vhtml.='        <td>'. $data_rtec->status .'</td>';
-                    //     $vhtml.='        <td>'. $data_rtec->nombre .'</td>';
-                    //     $vhtml.='        <td>'. $data_rtec->telefono .'</td>';
-                    //     $vhtml.='    </tr>';
-                    // }
-                    // $vhtml.='   </tbody>';
-                    // $vhtml.='</table>';
-
-                    $vhtml .= '<table style="width: 100%; font-size: 10px; border-collapse: collapse;">';
-                    $vhtml .= '    <thead style="background-color: #f2f2f2;">';
-                    $vhtml .= '        <tr>';
-                    $vhtml .= '            <th style="border: 1px solid #000;">#</th>';
-                    $vhtml .= '            <th style="border: 1px solid #000;">Folio</th>';
-                    $vhtml .= '            <th style="border: 1px solid #000;">Estatus</th>';
-                    $vhtml .= '            <th style="border: 1px solid #000;">Nombre RTEC</th>';
-                    $vhtml .= '            <th style="border: 1px solid #000;">Teléfono</th>';
-                    $vhtml .= '        </tr>';
-                    $vhtml .= '    </thead>';
-                    $vhtml .= '    <tbody>';
-                    foreach ($_MDL_Rtec as $data_rtec) {
-                        $vhtml .= '        <tr>';
-                        $vhtml .= '            <td style="border: 1px solid #000;">' . ($vi_tabla++) . '</td>';
-                        $vhtml .= '            <td style="border: 1px solid #000;">' . $data_rtec->folio . '</td>';
-                        $vhtml .= '            <td style="border: 1px solid #000;">' . $data_rtec->status . '</td>';
-                        $vhtml .= '            <td style="border: 1px solid #000;">' . $data_rtec->nombre . '</td>';
-                        $vhtml .= '            <td style="border: 1px solid #000;">' . $data_rtec->telefono . '</td>';
-                        $vhtml .= '        </tr>';
-                    }
-                    $vhtml .= '    </tbody>';
-                    $vhtml .='</table>';
-                
-                }
-                else {
-                    $vhtml.='<p style="text-align: justify; font-size: 13px; ">';
-                    $vhtml.='   Actualmente no hay información registrada.';
-                    $vhtml.='</p>';
-                }
-                $vi++;
-            }  
+        if (!$personnelAsset) {
+            abort(404, 'Asignación no encontrada.');
         }
 
-        // $vhtml.='<h3 style="text-align: justify; line-height: 180%">';
-        // $vhtml.='   Estimado/a: C. '. $vflInvitado->nombre;
-        // $vhtml.='</h3>';
+        // Verificar que el usuario que aceptó sea el que descarga
+        if ($personnelAsset->receiver_id !== $user->personnel_id) {
+            abort(403, 'No tienes permisos para generar este PDF.');
+        }
 
-        // $vhtml.='<p style="text-align: justify; font-size: 14px; line-height: 180%">';
-        // $vhtml.='   Es un honor para mí invitarles al evento <b>Apertura de Auditorías Colmena en municipios</b>, que se celebrará el <b>';
-        // $vhtml.='   10 de Septiembre de 2024</b> a las 10:00 horas en <b>Expo Convenciones Chiapas</>,  ubicado en Blvd. Los Castillos N° 410, Villa Montes Azules';
-        // $vhtml.='   (A un costado del Hotel Hilton Garden Inn).';
-        // $vhtml.='</p>';
+        $asset = $personnelAsset->asset;
 
-        // $vhtml.='<p style="text-align: justify; font-size: 14px; line-height: 180%">';
-        // $vhtml.='   Su presencia será muy valiosa para nosotros, agradeceríamos mucho contar con su participación para enriquecer las discusiones y contribuir';
-        // $vhtml.='   al éxito del evento.';
-        // $vhtml.='</p>';
+        $vhtml = '<h2 style="text-align: center;">Detalle del Activo Asignado</h2>';
 
-        
-        
-        $nombre_archivo=strtolower('reporte_'. strtr('rtecs_colegios', " ", "_"));
+        // Información general del activo
+        $vhtml .= '<h4>Información General</h4>';
+        $vhtml .= '<table style="width: 100%; font-size: 12px; border-collapse: collapse;">';
+        $vhtml .= '<tr><td>Inventario:</td><td>' . $asset->inventory_number . '</td></tr>';
+        $vhtml .= '<tr><td>Modelo:</td><td>' . $asset->model . '</td></tr>';
+        $vhtml .= '<tr><td>Serie:</td><td>' . $asset->serial_number . '</td></tr>';
+        $vhtml .= '<tr><td>Marca:</td><td>' . $asset->brand->name . '</td></tr>';
+        $vhtml .= '<tr><td>Categoría:</td><td>' . $asset->category->name . '</td></tr>';
+        $vhtml .= '<tr><td>Tipo:</td><td>' . ($asset->type ?? '—') . '</td></tr>';
+        $vhtml .= '<tr><td>Creado:</td><td>' . $asset->created_at->format('d/m/Y') . '</td></tr>';
+        $vhtml .= '</table>';
 
-        return $clsImprimir->invitacionPDF($vhtml, 'I', $nombre_archivo);  
+        // Estado del bien
+        $vhtml .= '<h4>Estado del Activo</h4>';
+        $vhtml .= '<p>' . $asset->status . '</p>';
+
+        // Especificaciones técnicas
+        $vhtml .= '<h4>Especificaciones Técnicas</h4>';
+        $vhtml .= '<table style="width: 100%; font-size: 12px; border-collapse: collapse;">';
+        $vhtml .= '<tr><td>CPU:</td><td>' . ($asset->cpu ?? '—') . '</td></tr>';
+        $vhtml .= '<tr><td>Velocidad:</td><td>' . ($asset->speed ?? '—') . '</td></tr>';
+        $vhtml .= '<tr><td>Memoria:</td><td>' . ($asset->memory ?? '—') . '</td></tr>';
+        $vhtml .= '<tr><td>Almacenamiento:</td><td>' . ($asset->storage ?? '—') . '</td></tr>';
+        $vhtml .= '</table>';
+
+        // Descripción
+        $descripcion = $asset->description ?: 'Sin descripción disponible';
+        $vhtml .= '<h4>Descripción</h4>';
+        $vhtml .= '<p>' . $descripcion . '</p>';
+
+        // Información de la asignación
+        $vhtml .= '<h4>Información de la Asignación</h4>';
+        $vhtml .= '<table style="width: 100%; font-size: 12px; border-collapse: collapse;">';
+        $vhtml .= '<tr><td>Fecha de Asignación:</td><td>' . $personnelAsset->assignment_date->format('d/m/Y') . '</td></tr>';
+        $vhtml .= '<tr><td>Fecha de Confirmación:</td><td>' . ($personnelAsset->confirmation_date ? $personnelAsset->confirmation_date->format('d/m/Y') : 'Pendiente') . '</td></tr>';
+        $vhtml .= '<tr><td>Asignador:</td><td>' . $personnelAsset->assigner->name . '</td></tr>';
+        $vhtml .= '<tr><td>Receptor:</td><td>' . $personnelAsset->receiver->name . '</td></tr>';
+        $vhtml .= '</table>';
+
+        $vhtml .= '<p>Estado de la asignación: ' . 
+            ($personnelAsset->confirmation_date ? 'Confirmada' : 'Pendiente') . 
+        '</p>';
+
+        $nombre_archivo = 'detalle_asignacion_' . $asset->inventory_number;
+
+        $clsImprimir = new clsImprimir();
+        return $clsImprimir->invitacionPDF($vhtml, 'I', 'detalle_asignacion_' . $asset->inventory_number);
     }
 }
-

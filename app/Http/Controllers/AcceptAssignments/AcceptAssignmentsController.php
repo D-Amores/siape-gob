@@ -146,74 +146,23 @@ class AcceptAssignmentsController extends Controller
                 $pending->delete();
             });
 
-            // Generar URL para descargar el PDF (sin guardar)
-            $pdfUrl = route('accept-assignments.pdf', ['id' => $personnelAsset->id]);
+            // Generar PDF usando el FormatoController
+            $pdfController = app(\App\Http\Controllers\FormatoController::class);
+            $pdfResponse = $pdfController->pdfAsignacion($personnelAsset->id);
 
             return response()->json([
                 'ok' => true,
                 'message' => 'Asignación aceptada correctamente.',
-                'pdfUrl' => $pdfUrl
+                'pdfHtml' => $pdfResponse->getContent() 
             ], 200);
 
-        } catch (\Exception $e) {
+            } catch (\Exception $e) {
             Log::error('Error al aceptar asignación: ' . $e->getMessage());
             return response()->json([
                 'ok' => false,
                 'message' => 'Error al aceptar la asignación: ' . $e->getMessage(),
                 'error' => config('app.debug') ? $e->getMessage() : 'Error interno'
             ], 500);
-        }
-    }
-
-    public function generatePdf($id)
-    {
-        try {
-            $user = Auth::user();
-            $personnelAsset = PersonnelAsset::with(['assigner', 'receiver', 'asset'])->find($id);
-
-            if (!$personnelAsset) {
-                abort(404, 'Asignación no encontrada');
-            }
-
-            // Verificar que el usuario tiene permisos para ver este PDF
-            if ($personnelAsset->receiver_id !== $user->personnel_id) {
-                abort(403, 'No tienes permiso para ver este documento');
-            }
-
-            // Configurar mPDF
-            $mpdf = new Mpdf([
-                'mode' => 'utf-8',
-                'format' => 'A4',
-                'default_font' => 'dejavusans',
-                'margin_left' => 10,
-                'margin_right' => 10,
-                'margin_top' => 15,
-                'margin_bottom' => 15,
-                'margin_header' => 5,
-                'margin_footer' => 5,
-            ]);
-
-            // Generar HTML del PDF
-            $html = view('pdf.assignment_acceptance', [
-                'assignment' => $personnelAsset
-            ])->render();
-
-            $mpdf->WriteHTML($html);
-
-            $filename = 'acta_aceptacion_' . $personnelAsset->id . '_' . date('Y-m-d') . '.pdf';
-
-            // Devolver el PDF directamente sin guardar
-            return response($mpdf->Output($filename, 'S'), 200, [
-                'Content-Type' => 'application/pdf',
-                'Content-Disposition' => 'attachment; filename="' . $filename . '"',
-                'Cache-Control' => 'no-cache, no-store, must-revalidate',
-                'Pragma' => 'no-cache',
-                'Expires' => '0'
-            ]);
-
-        } catch (\Exception $e) {
-            Log::error('Error generando PDF: ' . $e->getMessage());
-            abort(500, 'Error al generar el PDF');
         }
     }
 }
