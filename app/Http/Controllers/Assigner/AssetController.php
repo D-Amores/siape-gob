@@ -35,8 +35,24 @@ class AssetController extends Controller
                 break;
 
             case 'details':
-                // Todos los campos, incluyendo relaciones y posibles datos nulos
-                $data = Asset::with(['brand', 'category', 'personnelAssets'])->get();
+                $assetId = $request->input('id');
+
+                if (!$assetId) {
+                    return response()->json([
+                        'ok' => false,
+                        'message' => 'ID del activo requerido para detalles.'
+                    ], 422);
+                }
+
+                $data = Asset::with(['brand', 'category', 'personnelAssets'])
+                            ->find($assetId);
+
+                if (!$data) {
+                    return response()->json([
+                        'ok' => false,
+                        'message' => 'Activo no encontrado.'
+                    ], 404);
+                }
                 break;
             case 'available':
                 // Activos que no están asignados (disponibles)
@@ -49,7 +65,6 @@ class AssetController extends Controller
                             'text' => "{$asset->model} - {$asset->inventory_number}" . ($asset->type ? " ({$asset->type})" : ''),
                         ];
                     });
-
                 break;
 
             default:
@@ -59,6 +74,22 @@ class AssetController extends Controller
                 ], 422);
         }
 
+        // Agregar label de estado para table y details
+        if ($option !== 'available') {
+            if ($data instanceof \Illuminate\Database\Eloquent\Collection) {
+                $data = $data->map(function($asset) {
+                    $asset->is_active_label = $asset->isActive() ? 'Activo' : 'Inactivo';
+                    return $asset;
+                });
+            } else {
+                $data->is_active_label = $data->isActive() ? 'Activo' : 'Inactivo';
+            }
+        }
+
+        return response()->json([
+            'ok' => true,
+            'data' => $data,
+        ]);
 
         if ($option !== 'available') {
             $data = $data->map(function($asset) {
