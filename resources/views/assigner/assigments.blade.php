@@ -58,14 +58,14 @@
                                 <tr class="text-center">
                                     <th>#</th>
                                     <th>Activo</th>
-                                    <th>Categoría</th>
-                                    <th>Marca</th>
+                                    <!-- <th>Categoría</th> -->
+                                    <!-- <th>Marca</th> -->
                                     <th>Asignado por</th>
                                     <th>Asignado a</th>
                                     <th>Con Área</th>
                                     <th>Fecha Asignación</th>
                                     <th>Fecha Aceptación</th>
-                                    <th>Documento</th>
+                                    <th>Acciones</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -176,8 +176,9 @@
         const urlAssignmentApi = `${BASE_URL}/assignments/api`;
         const urlAssetApi = `${BASE_URL}/assets/api`;
         const vURIPersonnelApi = `${BASE_URL}/admin/personnel/api`;
-
+        
         //Assignment uris
+        const URIUnassignedAsset = `${BASE_URL}/assets/unassigned`;
         const URIAssignedAsset = `${BASE_URL}/personnel-asset-pending`;
     </script>
 
@@ -204,5 +205,6 @@
 
     <!-- Accepted Assignments Config -->
     <script src="{{ asset('js/assigner/accepted/table-config.js') }}"></script>
+    <script src="{{ asset('js/assigner/accepted/accepted-crud.js') }}"></script>
     <script src="{{ asset('js/assigner/accepted/accepted.js') }}"></script>
 @endsection

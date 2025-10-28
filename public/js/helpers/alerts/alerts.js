@@ -78,7 +78,7 @@ function confirmUpdate(functionToCall, message='¿Está seguro de actualizar el 
     });
 }
 
-function confirmDestroy(functionToCall, message='¿Está seguro de eliminar el registro? Esta acción no podrá ser revertida.') {
+function confirmDestroy(functionToCall, message='¿Está seguro de eliminar el registro? Esta acción no podrá ser revertida.', btnText='Eliminar') {
     $.confirm({
         title: 'Confirmar acción',
         content: message,
@@ -91,7 +91,7 @@ function confirmDestroy(functionToCall, message='¿Está seguro de eliminar el r
                 action: function() { }
             },
             Eliminar: {
-                text: 'Eliminar',
+                text: btnText,
                 btnClass: 'btn-primary',
                 action: async function() {
                     if (typeof functionToCall === "function") {

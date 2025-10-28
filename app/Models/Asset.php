@@ -75,7 +75,9 @@ class Asset extends Model
     public function scopeAvailable($query)
     {
         return $query->whereNotIn('id', function ($sub) {
-            $sub->select('asset_id')->from('personnel_assets');
+            $sub->select('asset_id')
+            ->from('personnel_assets')
+            ->whereNull('unassignment_date');
         })
         ->whereNotIn('id', function ($sub) {
             $sub->select('asset_id')->from('personnel_assets_pending');
