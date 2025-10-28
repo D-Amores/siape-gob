@@ -8,7 +8,7 @@ use App\Http\Requests\Admin\PersonnelApiRequest;
 use App\Http\Controllers\Controller;
 use App\Models\Personnel;
 use Illuminate\Support\Facades\Log;
-
+use Illuminate\Database\QueryException;
 class PersonnelController extends Controller
 {
     /**
@@ -164,7 +164,11 @@ class PersonnelController extends Controller
             $personnel->delete();
             $response['ok'] = true;
             $response['message'] = 'Personal eliminado con éxito.';
-        } catch (\Exception $e) {
+        }catch (QueryException $e) {
+            Log::error('Error de clave foránea al eliminar el personal: ' . $e->getMessage());
+            $response['message'] = 'No se puede eliminar el personal porque está relacionado con otros registros.';
+            $status = 400;
+        }catch (\Exception $e) {
             $response['message'] = 'Error al eliminar el personal.';
             if(config('app.debug')) {
                 $response['errors'][] = $e->getMessage();
