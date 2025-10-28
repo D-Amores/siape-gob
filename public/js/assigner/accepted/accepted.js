@@ -12,6 +12,9 @@ async function startApp() {
             confirmDestroy(
                 async () => {
                     await unassignAsset(assetId);
+                    const acceptedTableData = await acceptAssetApi('accepted');
+                    loadAssetsAccepted(acceptedTableData);
+                    await loadAssets();
                 }, 
                 '¿Está seguro de desasignar este activo? Esta acción no podrá ser revertida.',
                 'Desasignar'

@@ -62,6 +62,7 @@ class PersonnelAsset extends Model
             'receiver.area'
         ])
         ->whereNotNull('confirmation_date')
+        ->whereNull('unassignment_date')
         ->orderBy('confirmation_date', 'desc');
     }
 
