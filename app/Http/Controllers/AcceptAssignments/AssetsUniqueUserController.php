@@ -253,6 +253,7 @@ class AssetsUniqueUserController extends Controller
             // Obtener todos los bienes aceptados del usuario
             $assets = PersonnelAsset::with(['asset.brand', 'asset.category'])
                 ->where('receiver_id', $user->personnel_id)
+                ->where('status', 'assigned') 
                 ->orderBy('assignment_date', 'desc')
                 ->get();
 

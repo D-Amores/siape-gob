@@ -45,7 +45,7 @@ class FormatoController extends Controller
         $vhtml .= '<tr><td>Marca:</td><td>' . $asset->brand->name . '</td></tr>';
         $vhtml .= '<tr><td>Categoría:</td><td>' . $asset->category->name . '</td></tr>';
         $vhtml .= '<tr><td>Tipo:</td><td>' . ($asset->type ?? '—') . '</td></tr>';
-        $vhtml .= '<tr><td>Creado:</td><td>' . $asset->created_at->format('d/m/Y') . '</td></tr>';
+        $vhtml .= '<tr><td>Creado:</td><td>' . ($asset->created_at ? $asset->created_at->format('d/m/Y') : 'Sin fecha') . '</td></tr>';
         $vhtml .= '</table>';
 
         // Estado del bien
@@ -69,7 +69,7 @@ class FormatoController extends Controller
         // Información de la asignación
         $vhtml .= '<h4>Información de la Asignación</h4>';
         $vhtml .= '<table style="width: 100%; font-size: 12px; border-collapse: collapse;">';
-        $vhtml .= '<tr><td>Fecha de Asignación:</td><td>' . $personnelAsset->assignment_date->format('d/m/Y') . '</td></tr>';
+        $vhtml .= '<tr><td>Fecha de Asignación:</td><td>' . ($personnelAsset->assignment_date ? $personnelAsset->assignment_date->format('d/m/Y') : 'Sin fecha') . '</td></tr>';
         $vhtml .= '<tr><td>Fecha de Confirmación:</td><td>' . ($personnelAsset->confirmation_date ? $personnelAsset->confirmation_date->format('d/m/Y') : 'Pendiente') . '</td></tr>';
         $vhtml .= '<tr><td>Asignador:</td><td>' . $personnelAsset->assigner->name . '</td></tr>';
         $vhtml .= '<tr><td>Receptor:</td><td>' . $personnelAsset->receiver->name . '</td></tr>';
