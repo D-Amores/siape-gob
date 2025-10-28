@@ -125,27 +125,13 @@ document.addEventListener('click', function (e) {
         const button = e.target.closest('.btn-delete');
         const brandId = button.getAttribute('data-brand-id');
         const brandName = button.getAttribute('data-brand-name');
-
-        $.confirm({
-            title: 'Confirmar eliminación',
-            content: `¿Estás seguro de que deseas eliminar la marca "<strong>${brandName}</strong>"?`,
-            type: 'red',
-            theme: 'material',
-            backgroundDismiss: true,
-            buttons: {
-                confirm: {
-                    text: 'Eliminar',
-                    btnClass: 'btn-red',
-                    action: function () {
-                        deleteBrand(brandId);
-                    }
-                },
-                cancel: {
-                    text: 'Cancelar',
-                    btnClass: 'btn-default'
-                }
-            }
-        });
+        confirmDestroy(
+            () => {
+                deleteBrand(brandId);
+            },
+            `¿Estás seguro de que deseas eliminar la marca "<strong>${brandName}</strong>"? Esta acción no podrá ser revertida.`,
+            'Eliminar'
+        );
     }
 
     if (e.target.closest('.btn-edit')) {

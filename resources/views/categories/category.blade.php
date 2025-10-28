@@ -145,6 +145,7 @@
     <script src="{{ asset('cdn/ajax/libs/pdfmake/0.2.7/vfs_fonts.js') }}"></script>
 
     <script src="{{ asset('js/helpers/tools/datatable-manager.js') }}"></script>
+        <script src="{{ asset('js/helpers/alerts/alerts.js') }}"></script>
     <script src="{{ asset('js/categories/category.js') }}"></script>
 
     <script>
