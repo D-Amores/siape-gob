@@ -9,6 +9,7 @@ use App\Http\Controllers\AcceptAssignments\AcceptAssignmentController;
 use App\Http\Controllers\Assigner\BrandController;
 use App\Http\Controllers\Assigner\CategoryController;
 use App\Http\Controllers\Assigner\AssetAcceptedController;
+use App\Http\Controllers\Assigner\AssetUnassigedController;
 use App\Http\Controllers\Admin\PersonnelController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\AreaController;
@@ -36,6 +37,7 @@ Route::middleware('auth')->group(function () {
         Route::post('brands/api', [BrandController::class, 'brandApi']);
         Route::post('categories/api', [CategoryController::class, 'categoryApi']);
         Route::post('assets/api', [AssetController::class, 'assetsApi'])->name('assets.api');
+        Route::delete('assets/unassigned/{personnelAsset}', [AssetUnassigedController::class, 'destroy']);
         Route::post('assignments/api', [AssetAcceptedController::class, 'assignmentsAssetApi']);
         Route::post('admin/personnel/api', [PersonnelController::class, 'personnelApi']);
     });
@@ -68,4 +70,5 @@ Route::middleware('auth')->group(function () {
         Route::post('admin/areas/api', [AreaController::class, 'areaApi']);
     });
 });
+
 

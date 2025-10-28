@@ -16,6 +16,8 @@ class PersonnelAsset extends Model
         'assignment_date',
         'confirmation_date',
         'path_acceptance_doc',
+        'status',
+        'unassignment_date',
         'asset_id',
         'assigner_id',
         'receiver_id',
@@ -24,6 +26,7 @@ class PersonnelAsset extends Model
     protected $casts = [
         'assignment_date' => 'date',
         'confirmation_date' => 'date',
+        'unassignment_date' => 'date',
     ];
 
     /**
