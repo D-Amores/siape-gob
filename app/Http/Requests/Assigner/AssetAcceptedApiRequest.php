@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Admin;
+namespace App\Http\Requests\Assigner;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class PersonnelApiRequest extends FormRequest
+class AssetAcceptedApiRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,7 +22,7 @@ class PersonnelApiRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'option' => 'required|string|in:area,area_user,personnel_without_user_assignment,personnel_with_user_assignment',
+            'option' => 'required|string|in:accepted,pending',
         ];
     }
 }

@@ -27,7 +27,7 @@
                         <h4 class="card-title mb-0">Asignaciones Pendientes</h4>
                     </div>
                     <div class="table-responsive">
-                        <table id="file_export" class="table table-hover w-100 table-striped table-bordered display">
+                        <table id="file_export" class="table table-hover w-100 table-striped table-bordered">
                             <thead>
                                 <tr>
                                     <th class="text-center">#</th>
@@ -40,15 +40,6 @@
                             <tbody>
                                 <!-- Contenido de la primera tabla -->
                             </tbody>
-                            <tfoot>
-                                <tr>
-                                    <th class="text-center">#</th>
-                                    <th class="text-center">Recibe</th>
-                                    <th class="text-center">Bien</th>
-                                    <th class="text-center">Asigna</th>
-                                    <th class="text-center">Acciones</th>
-                                </tr>
-                            </tfoot>
                         </table>
                     </div>
                 </div>
@@ -62,30 +53,26 @@
                         <h4 class="card-title mb-0">Asignaciones Aceptadas</h4>
                     </div>
                     <div class="table-responsive">
-                        <table id="file_export2" class="table table-hover w-100 table-striped table-bordered display">
+                        <table id="accepted_assignments" class="table table-hover w-100 table-striped table-bordered">
                             <thead>
-                                <tr>
-                                    <th class="text-center">Asigna</th>
-                                    <th class="text-center" style="width: 150px;">Acciones</th>
+                                <tr class="text-center">
+                                    <th>#</th>
+                                    <th>Activo</th>
+                                    <th>Categoría</th>
+                                    <th>Marca</th>
+                                    <th>Asignado por</th>
+                                    <th>Asignado a</th>
+                                    <th>Con Área</th>
+                                    <th>Fecha Asignación</th>
+                                    <th>Fecha Aceptación</th>
+                                    <th>Documento</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td colspan="2" class="text-center py-5">
-                                        <i class="fas fa-tools fa-2x text-muted mb-2"></i><br>
-                                        <span class="text-muted fw-semibold">Esta sección aún está en construcción 🚧</span>
-                                    </td>
-                                </tr>
+                                <!-- Aquí irá tu contenido dinámico -->
                             </tbody>
-                            <tfoot>
-                                <tr>
-                                    <th class="text-center">Asigna</th>
-                                    <th class="text-center">Acciones</th>
-                                </tr>
-                            </tfoot>
                         </table>
                     </div>
-
                 </div>
             </div>
         </div>
@@ -186,14 +173,14 @@
         const languageDataTable = '{{ asset('cdn/datatables-language/es-MX.json') }}';
 
         //Api uris
-        const urlApiAssetPending = `${BASE_URL}/personnel-asset-pending/api`;
+        const urlAssignmentApi = `${BASE_URL}/assignments/api`;
         const urlAssetApi = `${BASE_URL}/assets/api`;
         const vURIPersonnelApi = `${BASE_URL}/admin/personnel/api`;
 
         //Assignment uris
         const URIAssignedAsset = `${BASE_URL}/personnel-asset-pending`;
     </script>
-    
+
     <script src="{{ asset('cdn/buttons/3.0.2/js/dataTables.buttons.min.js') }}"></script>
     <script src="{{ asset('cdn/buttons/3.0.2/js/buttons.html5.min.js') }}"></script>
     <script src="{{ asset('cdn/buttons/3.0.2/js/buttons.print.min.js') }}"></script>
@@ -208,10 +195,14 @@
 
     <script src="{{ asset('js/assigner/assigner-api.js') }}"></script>
 
-
+    <!-- Assigment Config -->
     <script src="{{ asset('js/assigner/assigment/datatable-config.js') }}"></script>
     <script src="{{ asset('js/assigner/assigment/assets.js') }}"></script>
     <script src="{{ asset('js/assigner/assigment/personnel.js') }}"></script>
     <script src="{{ asset('js/assigner/assigment/assigment-crud.js') }}"></script>
     <script src="{{ asset('js/assigner/assigment/assigments.js') }}"></script>
+
+    <!-- Accepted Assignments Config -->
+    <script src="{{ asset('js/assigner/accepted/table-config.js') }}"></script>
+    <script src="{{ asset('js/assigner/accepted/accepted.js') }}"></script>
 @endsection

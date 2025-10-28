@@ -25,7 +25,7 @@
             <div class="card shadow-lg">
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table id="file_export" class="table table-hover w-100 table-striped table-bordered display text-nowrap align-middle">
+                        <table id="file_export" class="table table-hover w-100 table-striped table-bordered text-nowrap align-middle">
                             <thead class>
                                 <tr>
                                     <th class="text-center py-1">N. de Inventario</th>
@@ -321,7 +321,7 @@
     <script src="{{ asset('js/helpers/tools/datatable-manager.js') }}"></script>
     <script src="{{ asset('js/helpers/alerts/alerts.js') }}"></script>
     <script src="{{ asset('js/helpers/modals/modal-actions.js') }}"></script>
-    
+
     <script src="{{ asset('js/assets/utils.js') }}"></script>
     <script src="{{ asset('js/assets/services.js') }}"></script>
     <script src="{{ asset('js/assets/form.js') }}"></script>
@@ -335,7 +335,7 @@
 
         // Categories uris
         const vURICategoriesApi = `${BASE_URL}/categories/api`;
-        
+
         // Brands uris
         const vURIBrandssApi = `${BASE_URL}/brands/api`;
 
