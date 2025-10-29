@@ -9,8 +9,6 @@ use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Log;
 use App\Models\Asset;
 use App\Http\Controllers\Controller;
-use Illuminate\Database\QueryException;
-use Illuminate\Support\Facades\Log;
 
 class AssetController extends Controller
 {
