@@ -55,10 +55,11 @@ Route::middleware('auth')->group(function () {
         Route::post('/assets-unique-user/{id}/upload-document', [AssetsUniqueUserController::class, 'update'])->name('assets-unique-user.upload-document');
         Route::get('download-document/{assignmentId}', [AssetsUniqueUserController::class, 'downloadDocument'])->name('assets-unique-user.download');
         Route::get('/pdf/asignacion/{id}', [FormatoController::class, 'pdfAsignacion'])->name('pdf.asignacion');
+        
         // Ruta API para aceptar los bienes asignados al usuario
         Route::post('accept-assignments/accept', [AcceptAssignmentsController::class, 'acceptAssignmentApi'])->name('accept-assignments.accept');
         Route::get('accept-assignments/pdf/{id}', [AcceptAssignmentsController::class, 'generatePdf'])->name('accept-assignments.pdf');
-
+        Route::get('accept-assignments/pdf/{id}', [AcceptAssignmentsController::class, 'downloadAssignmentPdf'])->name('assignment.pdf.download')->middleware(['auth', 'role:user']);
     });
 
     Route::middleware('role:admin')->group(function () {

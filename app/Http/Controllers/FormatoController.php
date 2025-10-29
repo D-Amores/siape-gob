@@ -34,50 +34,62 @@ class FormatoController extends Controller
 
         $asset = $personnelAsset->asset;
 
-        $vhtml = '<h2 style="text-align: center;">Detalle del Activo Asignado</h2>';
+        // Construir nombres completos
+        $assigner_name = optional($personnelAsset->assigner)
+            ? trim("{$personnelAsset->assigner->last_name} {$personnelAsset->assigner->middle_name} {$personnelAsset->assigner->name}")
+            : 'Desconocido';
 
-        // Información general del activo
-        $vhtml .= '<h4>Información General</h4>';
-        $vhtml .= '<table style="width: 100%; font-size: 12px; border-collapse: collapse;">';
-        $vhtml .= '<tr><td>Inventario:</td><td>' . $asset->inventory_number . '</td></tr>';
-        $vhtml .= '<tr><td>Modelo:</td><td>' . $asset->model . '</td></tr>';
-        $vhtml .= '<tr><td>Serie:</td><td>' . $asset->serial_number . '</td></tr>';
-        $vhtml .= '<tr><td>Marca:</td><td>' . $asset->brand->name . '</td></tr>';
-        $vhtml .= '<tr><td>Categoría:</td><td>' . $asset->category->name . '</td></tr>';
-        $vhtml .= '<tr><td>Tipo:</td><td>' . ($asset->type ?? '—') . '</td></tr>';
-        $vhtml .= '<tr><td>Creado:</td><td>' . ($asset->created_at ? $asset->created_at->format('d/m/Y') : 'Sin fecha') . '</td></tr>';
-        $vhtml .= '</table>';
+        $receiver_name = $personnelAsset->receiver
+            ? trim("{$personnelAsset->receiver->last_name} {$personnelAsset->receiver->middle_name} {$personnelAsset->receiver->name}")
+            : 'Desconocido';
 
-        // Estado del bien
-        $vhtml .= '<h4>Estado del Activo</h4>';
-        $vhtml .= '<p>' . $asset->status . '</p>';
+        $vhtml = '
+        <div class="titulo2">Detalle del Activo Asignado</div>
+        <div class="subtitulo">Sistema de Inventario y Asignación de Personal y Equipos</div>
 
-        // Especificaciones técnicas
-        $vhtml .= '<h4>Especificaciones Técnicas</h4>';
-        $vhtml .= '<table style="width: 100%; font-size: 12px; border-collapse: collapse;">';
-        $vhtml .= '<tr><td>CPU:</td><td>' . ($asset->cpu ?? '—') . '</td></tr>';
-        $vhtml .= '<tr><td>Velocidad:</td><td>' . ($asset->speed ?? '—') . '</td></tr>';
-        $vhtml .= '<tr><td>Memoria:</td><td>' . ($asset->memory ?? '—') . '</td></tr>';
-        $vhtml .= '<tr><td>Almacenamiento:</td><td>' . ($asset->storage ?? '—') . '</td></tr>';
-        $vhtml .= '</table>';
+        <br>
 
-        // Descripción
-        $descripcion = $asset->description ?: 'Sin descripción disponible';
-        $vhtml .= '<h4>Descripción</h4>';
-        $vhtml .= '<p>' . $descripcion . '</p>';
+        <table class="table_dts_dec">
+            <tr class="variable"><td colspan="2" class="td_dec titulo_modulos">INFORMACIÓN GENERAL</td></tr>
+            <tr><td class="td_dec td_infor">Inventario</td><td class="td_dec">'.htmlspecialchars($asset->inventory_number).'</td></tr>
+            <tr><td class="td_dec td_infor">Modelo</td><td class="td_dec">'.htmlspecialchars($asset->model).'</td></tr>
+            <tr><td class="td_dec td_infor">Serie</td><td class="td_dec">'.htmlspecialchars($asset->serial_number).'</td></tr>
+            <tr><td class="td_dec td_infor">Marca</td><td class="td_dec">'.htmlspecialchars($asset->brand->name ?? "—").'</td></tr>
+            <tr><td class="td_dec td_infor">Categoría</td><td class="td_dec">'.htmlspecialchars($asset->category->name ?? "—").'</td></tr>
+            <tr><td class="td_dec td_infor">Tipo</td><td class="td_dec">'.htmlspecialchars($asset->type ?? "—").'</td></tr>
+            <tr><td class="td_dec td_infor">Fecha de Registro</td><td class="td_dec">'.($asset->created_at ? $asset->created_at->format("d/m/Y") : "Sin fecha").'</td></tr>
+        </table>
 
-        // Información de la asignación
-        $vhtml .= '<h4>Información de la Asignación</h4>';
-        $vhtml .= '<table style="width: 100%; font-size: 12px; border-collapse: collapse;">';
-        $vhtml .= '<tr><td>Fecha de Asignación:</td><td>' . ($personnelAsset->assignment_date ? $personnelAsset->assignment_date->format('d/m/Y') : 'Sin fecha') . '</td></tr>';
-        $vhtml .= '<tr><td>Fecha de Confirmación:</td><td>' . ($personnelAsset->confirmation_date ? $personnelAsset->confirmation_date->format('d/m/Y') : 'Pendiente') . '</td></tr>';
-        $vhtml .= '<tr><td>Asignador:</td><td>' . $personnelAsset->assigner->name . '</td></tr>';
-        $vhtml .= '<tr><td>Receptor:</td><td>' . $personnelAsset->receiver->name . '</td></tr>';
-        $vhtml .= '</table>';
+        <table class="table_dts_dec">
+            <tr class="variable"><td colspan="2" class="td_dec titulo_modulos">ESPECIFICACIONES TÉCNICAS</td></tr>
+            <tr><td class="td_dec td_infor">CPU</td><td class="td_dec">'.htmlspecialchars($asset->cpu ?? "—").'</td></tr>
+            <tr><td class="td_dec td_infor">Velocidad</td><td class="td_dec">'.htmlspecialchars($asset->speed ?? "—").'</td></tr>
+            <tr><td class="td_dec td_infor">Memoria</td><td class="td_dec">'.htmlspecialchars($asset->memory ?? "—").'</td></tr>
+            <tr><td class="td_dec td_infor">Almacenamiento</td><td class="td_dec">'.htmlspecialchars($asset->storage ?? "—").'</td></tr>
+        </table>
 
-        $vhtml .= '<p>Estado de la asignación: ' . 
-            ($personnelAsset->confirmation_date ? 'Confirmada' : 'Pendiente') . 
-        '</p>';
+        <table class="table_dts_dec">
+            <tr class="variable"><td colspan="2" class="td_dec titulo_modulos">DESCRIPCIÓN</td></tr>
+            <tr><td colspan="2" class="td_dec">'.nl2br(htmlspecialchars($asset->description ?: "Sin descripción disponible")).'</td></tr>
+        </table>
+
+        <table class="table_dts_dec">
+            <tr class="variable"><td colspan="2" class="td_dec titulo_modulos">INFORMACIÓN DE LA ASIGNACIÓN</td></tr>
+            <tr><td class="td_dec td_infor">Fecha de Asignación</td><td class="td_dec">'.($personnelAsset->assignment_date ? $personnelAsset->assignment_date->format("d/m/Y") : "Sin fecha").'</td></tr>
+            <tr><td class="td_dec td_infor">Fecha de Confirmación</td><td class="td_dec">'.($personnelAsset->confirmation_date ? $personnelAsset->confirmation_date->format("d/m/Y") : "Pendiente").'</td></tr>
+            <tr><td class="td_dec td_infor">Asignador</td><td class="td_dec">'.htmlspecialchars($assigner_name).'</td></tr>
+            <tr><td class="td_dec td_infor">Receptor</td><td class="td_dec">'.htmlspecialchars($receiver_name).'</td></tr>
+            <tr><td class="td_dec td_infor">Estado de la Asignación</td><td class="td_dec">'.($personnelAsset->confirmation_date ? "✔ Confirmada" : "Pendiente de confirmación").'</td></tr>
+        </table>
+
+        <br><br>
+
+        <div class="firma-container">
+            <div class="firma-linea"></div>
+            <div class="firma-nombre">'.htmlspecialchars($receiver_name).'</div>
+            <div class="firma-cargo">Receptor del Activo</div>
+        </div>
+        ';
 
         $nombre_archivo = 'detalle_asignacion_' . $asset->inventory_number;
 

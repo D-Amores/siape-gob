@@ -83,7 +83,7 @@ class AcceptAssignmentsController extends Controller
                     'asset_name' => $item->asset->model ?? 'Sin nombre',
                     'assigner_name' => $item->assigner->name ?? 'Desconocido',
                     'receiver_name' => $item->receiver->name ?? 'Desconocido',
-                    'assignment_date' => $item->assignment_date->format('Y-m-d'),
+                    'assignment_date' => $item->assignment_date ? $item->assignment_date->format('Y-m-d') : 'Sin fecha',
                 ];
             });
 
@@ -147,22 +147,42 @@ class AcceptAssignmentsController extends Controller
             });
 
             // Generar PDF usando el FormatoController
-            $pdfController = app(\App\Http\Controllers\FormatoController::class);
-            $pdfResponse = $pdfController->pdfAsignacion($personnelAsset->id);
+            $pdfUrl = route('assignment.pdf.download', $personnelAsset->id);
 
             return response()->json([
                 'ok' => true,
                 'message' => 'Asignación aceptada correctamente.',
-                'pdfHtml' => $pdfResponse->getContent() 
+                'pdfUrl' => $pdfUrl
             ], 200);
 
-            } catch (\Exception $e) {
+        } catch (\Exception $e) {
             Log::error('Error al aceptar asignación: ' . $e->getMessage());
             return response()->json([
                 'ok' => false,
-                'message' => 'Error al aceptar la asignación: ' . $e->getMessage(),
+                'message' => 'Error al aceptar la asignación.',
                 'error' => config('app.debug') ? $e->getMessage() : 'Error interno'
             ], 500);
+        }
+    }
+
+    public function downloadAssignmentPdf($id)
+    {
+        try {
+            $user = Auth::user();
+            $personnelAsset = PersonnelAsset::with(['asset', 'assigner', 'receiver'])
+                ->findOrFail($id);
+
+            // Verificar que el usuario tiene permiso para ver este PDF
+            if ($personnelAsset->receiver_id !== $user->personnel_id) {
+                abort(403, 'No tienes permisos para ver este documento.');
+            }
+
+            $pdfController = app(\App\Http\Controllers\FormatoController::class);
+            return $pdfController->pdfAsignacion($personnelAsset->id);
+
+        } catch (\Exception $e) {
+            Log::error('Error al generar PDF: ' . $e->getMessage());
+            abort(404, 'Documento no encontrado.');
         }
     }
 }

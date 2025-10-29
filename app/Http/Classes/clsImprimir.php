@@ -8,7 +8,7 @@
 
         public function __construct()
         {
-            $this->left_logo= public_path()."/tools/img/SAyBG.png";
+            $this->left_logo= public_path()."/css/img/SAyBG.png";
         }
 	
         private function encabezado($titulo="")
@@ -24,8 +24,7 @@
                             Coordinación de Verificación de la Supervisión Externa de la Obra Pública Estatal
                         </td>                                       
                     </tr>
-                </table>
-                <p style="text-align: center;"><i>"2025, Año de Rosario Castellanos Figueroa"</i></p>';
+                </table>';
         
             return $html;
         }
@@ -61,7 +60,7 @@
 
             $html=$contenido;
 
-            $stylesheet=file_get_contents(public_path()."/tools/css/print.css");                
+            $stylesheet=file_get_contents(public_path()."/css/print.css");                
             $mpdf->SetProtection(array('print'));
             $mpdf->SetTitle("Acuse Invitación");
             $mpdf->SetAuthor("Secretaría de la Honestidad y Función Pública");
