@@ -118,21 +118,12 @@ async function destroyPersonnel(personnelId) {
             }
         });
 
-        if (!response.ok) {
-            if (response.status === 404) {
-                showAlert('El personal no fue encontrado.', 'red', 'Error', null, 2000);
-                return false;
-            } else {
-                throw new Error(`Error HTTP: ${response.status}`);
-            }
-        }
-
         const result = await response.json();
         if (result.ok) {
             showAlert(result.message || 'Personal eliminado exitosamente', 'green', 'Éxito', null, 2000);
             isOk = true;
         } else {
-            showAlert(result.message || 'Error al eliminar el personal', 'red', 'Error', null, 2000);
+            showAlert(result.message || 'Error al eliminar el personal', 'red', 'Error', null, 3000);
         }
     } catch (error) {
         showAlert('Error al eliminar el personal. Intente nuevamente.', 'red', 'Error');

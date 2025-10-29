@@ -9,17 +9,11 @@ use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Log;
 use App\Models\Asset;
 use App\Http\Controllers\Controller;
+use Illuminate\Database\QueryException;
+use Illuminate\Support\Facades\Log;
 
 class AssetController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        return view('assets.asset');
-    }
-
     /**
      * Handle the incoming request for assets API.
      */
@@ -105,6 +99,15 @@ class AssetController extends Controller
             'data' => $data,
         ]);
     }
+
+    /**
+     * Display a listing of the resource.
+     */
+    public function index()
+    {
+        return view('assets.asset');
+    }
+
 
     /**
      * Show the form for creating a new resource.
@@ -194,6 +197,7 @@ class AssetController extends Controller
                 'message' => 'No se puede eliminar el activo porque está relacionado con otros registros.'
             ], 400);
         } catch (\Throwable $e) {
+            Log::error($e);
             return response()->json([
                 'ok' => false,
                 'message' => 'Error al eliminar el activo',

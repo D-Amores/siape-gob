@@ -128,26 +128,13 @@ document.addEventListener('click', function (e) {
         const categoryId = button.getAttribute('data-category-id');
         const categoryName = button.getAttribute('data-category-name');
 
-        $.confirm({
-            title: 'Confirmar eliminación',
-            content: `¿Estás seguro de que deseas eliminar la categoría "<strong>${categoryName}</strong>"?`,
-            type: 'red',
-            theme: 'material',
-            backgroundDismiss: true,
-            buttons: {
-                confirm: {
-                    text: 'Eliminar',
-                    btnClass: 'btn-red',
-                    action: function () {
-                        deleteCategory(categoryId);
-                    }
-                },
-                cancel: {
-                    text: 'Cancelar',
-                    btnClass: 'btn-default'
-                }
-            }
-        });
+        confirmDestroy(
+            () => {
+                deleteCategory(categoryId);
+            },
+            `¿Estás seguro de que deseas eliminar la categoría "<strong>${categoryName}</strong>"? Esta acción no podrá ser revertida.`,
+            'Eliminar'
+        );
     }
 
     if (e.target.closest('.btn-edit')) {
@@ -404,6 +391,9 @@ const deleteCategory = async (categoryId) => {
                 }
             });
             loadCategories();
+        }
+        else {
+            showAlert(data.message || 'Ocurrió un error al eliminar la categoría.', 'red', 'Error', null, 0);
         }
     } catch (error) {
         console.error('❌ Error al eliminar la categoría:', error);

@@ -28,18 +28,7 @@ brandForm.addEventListener('submit', async function (e) {
 
     if (!validation.isValid) {
         const errorMessage = validation.errors.join('<br>• ');
-        $.alert({
-            title: 'Errores en el formulario',
-            content: `• ${errorMessage}`,
-            type: 'red',
-            theme: 'material',
-            buttons: {
-                ok: {
-                    text: 'Corregir',
-                    btnClass: 'btn-red'
-                }
-            }
-        });
+        showAlert('• ' + errorMessage, 'red', 'Errores en el formulario', null, 3000);
         return;
     }
 
@@ -65,55 +54,17 @@ brandForm.addEventListener('submit', async function (e) {
         const data = await response.json();
 
         if (data.ok) {
-            $.alert({
-                title: 'Éxito',
-                content: 'La marca se ha guardado correctamente.',
-                type: 'green',
-                theme: 'material',
-                backgroundDismiss: true,
-                buttons: {
-                    ok: {
-                        text: 'Aceptar',
-                        btnClass: 'btn-green'
-                    }
-                }
-            });
+            showAlert('La marca se ha guardado correctamente.', 'green', 'Éxito', null, 3000);
             const modal = bootstrap.Modal.getInstance(document.getElementById('addBrandModal'));
             modal.hide();
             brandForm.reset();
             loadBrands();
         } else {
             let errorMessage = 'Ocurrió un error al guardar la marca.';
-
-            $.alert({
-                title: 'Error',
-                content: errorMessage,
-                type: 'red',
-                theme: 'material',
-                backgroundDismiss: true,
-                buttons: {
-                    ok: {
-                        text: 'Aceptar',
-                        btnClass: 'btn-red'
-                    }
-                }
-            });
+            showAlert(errorMessage, 'red', 'Error', null, 0);
         }
     } catch (error) {
-        console.error('❌ Error al guardar la marca:', error);
-        $.alert({
-            title: 'Error',
-            content: 'Ocurrió un error al guardar la marca. Revisa la consola para más detalles.',
-            type: 'red',
-            theme: 'material',
-            backgroundDismiss: true,
-            buttons: {
-                ok: {
-                    text: 'Aceptar',
-                    btnClass: 'btn-red'
-                }
-            }
-        });
+        showAlert('Ocurrió un error al guardar la marca. Revisa la consola para más detalles.', 'red', 'Error', null, 0);
     } finally {
         submitButton.disabled = false;
         submitButton.innerHTML = originalText;
@@ -125,27 +76,13 @@ document.addEventListener('click', function (e) {
         const button = e.target.closest('.btn-delete');
         const brandId = button.getAttribute('data-brand-id');
         const brandName = button.getAttribute('data-brand-name');
-
-        $.confirm({
-            title: 'Confirmar eliminación',
-            content: `¿Estás seguro de que deseas eliminar la marca "<strong>${brandName}</strong>"?`,
-            type: 'red',
-            theme: 'material',
-            backgroundDismiss: true,
-            buttons: {
-                confirm: {
-                    text: 'Eliminar',
-                    btnClass: 'btn-red',
-                    action: function () {
-                        deleteBrand(brandId);
-                    }
-                },
-                cancel: {
-                    text: 'Cancelar',
-                    btnClass: 'btn-default'
-                }
-            }
-        });
+        confirmDestroy(
+            () => {
+                deleteBrand(brandId);
+            },
+            `¿Estás seguro de que deseas eliminar la marca "<strong>${brandName}</strong>"? Esta acción no podrá ser revertida.`,
+            'Eliminar'
+        );
     }
 
     if (e.target.closest('.btn-edit')) {
@@ -171,18 +108,7 @@ editBrandForm.addEventListener('submit', async function (e) {
 
     if (!validation.isValid) {
         const errorMessage = validation.errors.join('<br>• ');
-        $.alert({
-            title: 'Errores en el formulario',
-            content: `• ${errorMessage}`,
-            type: 'red',
-            theme: 'material',
-            buttons: {
-                ok: {
-                    text: 'Corregir',
-                    btnClass: 'btn-red'
-                }
-            }
-        });
+        showAlert('• ' + errorMessage, 'red', 'Errores en el formulario', null, 3000);
         return;
     }
 
@@ -209,19 +135,7 @@ editBrandForm.addEventListener('submit', async function (e) {
         const data = await response.json();
 
         if (data.ok) {
-            $.alert({
-                title: 'Éxito',
-                content: 'La marca se ha actualizado correctamente.',
-                type: 'green',
-                theme: 'material',
-                backgroundDismiss: true,
-                buttons: {
-                    ok: {
-                        text: 'Aceptar',
-                        btnClass: 'btn-green'
-                    }
-                }
-            });
+            showAlert('La marca se ha actualizado correctamente.', 'green', 'Éxito', null, 3000);
 
             const modal = bootstrap.Modal.getInstance(document.getElementById('editBrandModal'));
             modal.hide();
@@ -235,35 +149,11 @@ editBrandForm.addEventListener('submit', async function (e) {
                 errorMessage = data.message;
             }
 
-            $.alert({
-                title: 'Error',
-                content: errorMessage,
-                type: 'red',
-                theme: 'material',
-                backgroundDismiss: true,
-                buttons: {
-                    ok: {
-                        text: 'Aceptar',
-                        btnClass: 'btn-red'
-                    }
-                }
-            });
+            showAlert(errorMessage, 'red', 'Error', null, 0);
         }
     } catch (error) {
-        console.error('❌ Error al actualizar la marca:', error);
-        $.alert({
-            title: 'Error',
-            content: 'Ocurrió un error al actualizar la marca. Revisa la consola para más detalles.',
-            type: 'red',
-            theme: 'material',
-            backgroundDismiss: true,
-            buttons: {
-                ok: {
-                    text: 'Aceptar',
-                    btnClass: 'btn-red'
-                }
-            }
-        });
+        console.log(error);        
+        showAlert('Ocurrió un error al actualizar la marca. Revisa la consola para más detalles.', 'red', 'Error', null, 0);
     } finally {
         submitButton.disabled = false;
         submitButton.innerHTML = originalText;
@@ -372,20 +262,10 @@ const deleteBrand = async (brandId) => {
         const data = await response.json();
 
         if (data.ok) {
-            $.alert({
-                title: 'Éxito',
-                content: 'La marca se ha eliminado correctamente.',
-                type: 'green',
-                theme: 'material',
-                backgroundDismiss: true,
-                buttons: {
-                    ok: {
-                        text: 'Aceptar',
-                        btnClass: 'btn-green'
-                    }
-                }
-            });
+            showAlert('La marca ha sido eliminada.', 'green', 'Éxito', null, 2000);
             loadBrands();
+        } else {
+            showAlert(data.message || 'Ocurrió un error al eliminar la marca.', 'red', 'Error');
         }
     } catch (error) {
         console.error('❌ Error al eliminar la marca:', error);

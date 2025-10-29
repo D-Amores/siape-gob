@@ -6,6 +6,8 @@ use App\Http\Requests\Assigner\StoreCategoryRequest;
 use App\Http\Requests\Assigner\UpdateCategoryRequest;
 use App\Models\Category;
 use App\Http\Controllers\Controller;
+use Illuminate\Database\QueryException;
+use Illuminate\Support\Facades\Log;
 
 class CategoryController extends Controller
 {
@@ -94,21 +96,27 @@ class CategoryController extends Controller
      */
     public function destroy(Category $category)
     {
+        $response = ['ok' => false, 'message' => ''];
+        $status = 500;
         try {
             $category->delete();
-
-            return response()->json([
+            $response = [
                 'ok' => true,
                 'message' => 'Categoría eliminada exitosamente'
-            ], 200);
+            ];
+            $status = 200;
 
-        } catch (\Exception $e) {
-            return response()->json([
-                'ok' => false,
-                'message' => 'Error al eliminar la categoría',
-                'error' => config('app.debug') ? $e->getMessage() : 'Error interno'
-            ], 500);
+        }catch (QueryException $e) {
+            Log::error('Error de clave foránea al eliminar la categoría: '.$e);
+            $response['message'] = 'No se puede eliminar la categoría porque está relacionada con otros registros.';
+            $status = 400;
+            
+        }catch (\Exception $e) {
+            Log::error('Error al eliminar la categoría: '.$e);
+            $response['message'] = 'Error al eliminar la categoría';
+            $status = 500;
         }
+        return response()->json($response, $status);
     }
 
     public function categoryApi()

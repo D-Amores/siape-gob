@@ -87,12 +87,12 @@ function confirmDestroy(functionToCall, message='¿Está seguro de eliminar el r
         buttons: {
             Cancelar: {
                 text: 'Cancelar',
-                btnClass: 'btn-danger',
+                btnClass: 'btn-primary',
                 action: function() { }
             },
             Eliminar: {
                 text: btnText,
-                btnClass: 'btn-primary',
+                btnClass: 'btn-danger',
                 action: async function() {
                     if (typeof functionToCall === "function") {
                         await functionToCall(); // soporta funciones async
