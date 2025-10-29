@@ -29,7 +29,7 @@ class AssetAcceptedController extends Controller
                     $data = $assignments->map(function ($item) {
                         return [
                             'id' => $item->id,
-                            'assignment_date' => $item->assignment_date->format('Y-m-d'),
+                            'assignment_date' => $item->assignment_date ? $item->assignment_date->format('Y-m-d') : 'Sin fecha',
                             'confirmation_date' => optional($item->confirmation_date)->format('Y-m-d'),
                             'asset_id' => $item->asset->model ?? 'Sin nombre',
                             'assigner_name' => $item->assigner->name ?? 'Desconocido',

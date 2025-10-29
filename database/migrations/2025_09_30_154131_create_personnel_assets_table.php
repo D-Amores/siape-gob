@@ -18,9 +18,9 @@ return new class extends Migration
             $table->string('path_acceptance_doc');
             $table->enum('status', ['assigned', 'unassigned'])->default('assigned');
             $table->date('unassignment_date')->nullable();
-            $table->foreignId('asset_id')->constrained('assets')->restrictOnDelete();
-            $table->foreignId('assigner_id')->constrained('personnel', 'id')->restrictOnDelete();
-            $table->foreignId('receiver_id')->constrained('personnel', 'id')->restrictOnDelete();
+            $table->foreignId('asset_id')->constrained('assets')->onDelete('restrict');
+            $table->foreignId('assigner_id')->constrained('personnel', 'id')->onDelete('restrict');
+            $table->foreignId('receiver_id')->constrained('personnel', 'id')->onDelete('restrict');
             $table->timestamps();
         });
     }

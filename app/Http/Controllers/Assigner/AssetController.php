@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Assigner;
 use App\Http\Requests\Assigner\StoreAssetRequest;
 use App\Http\Requests\Assigner\UpdateAssetRequest;
 use App\Http\Requests\Assigner\AssetsApiRequest;
+use Illuminate\Database\QueryException;
+use Illuminate\Support\Facades\Log;
 use App\Models\Asset;
 use App\Http\Controllers\Controller;
 use Illuminate\Database\QueryException;
@@ -29,8 +31,24 @@ class AssetController extends Controller
                 break;
 
             case 'details':
-                // Todos los campos, incluyendo relaciones y posibles datos nulos
-                $data = Asset::with(['brand', 'category', 'personnelAssets'])->get();
+                $assetId = $request->input('id');
+
+                if (!$assetId) {
+                    return response()->json([
+                        'ok' => false,
+                        'message' => 'ID del activo requerido para detalles.'
+                    ], 422);
+                }
+
+                $data = Asset::with(['brand', 'category', 'personnelAssets'])
+                            ->find($assetId);
+
+                if (!$data) {
+                    return response()->json([
+                        'ok' => false,
+                        'message' => 'Activo no encontrado.'
+                    ], 404);
+                }
                 break;
             case 'available':
                 // Activos que no están asignados (disponibles)
@@ -43,7 +61,6 @@ class AssetController extends Controller
                             'text' => "{$asset->model} - {$asset->inventory_number}" . ($asset->type ? " ({$asset->type})" : ''),
                         ];
                     });
-
                 break;
 
             default:
@@ -53,6 +70,22 @@ class AssetController extends Controller
                 ], 422);
         }
 
+        // Agregar label de estado para table y details
+        if ($option !== 'available') {
+            if ($data instanceof \Illuminate\Database\Eloquent\Collection) {
+                $data = $data->map(function($asset) {
+                    $asset->is_active_label = $asset->isActive() ? 'Activo' : 'Inactivo';
+                    return $asset;
+                });
+            } else {
+                $data->is_active_label = $data->isActive() ? 'Activo' : 'Inactivo';
+            }
+        }
+
+        return response()->json([
+            'ok' => true,
+            'data' => $data,
+        ]);
 
         if ($option !== 'available') {
             $data = $data->map(function($asset) {
@@ -157,12 +190,11 @@ class AssetController extends Controller
                 'ok' => true,
                 'message' => 'Activo eliminado exitosamente'
             ], 200);
-        }catch (QueryException $e) {
-            Log::error($e);
-            // Manejar errores de clave foránea u otros errores de base de datos
+        } catch (QueryException $e) {
+            Log::error('Error de clave foránea al eliminar el activo: ' . $e->getMessage());
             return response()->json([
                 'ok' => false,
-                'message' => 'No se puede eliminar el activo porque está relacionado con otros registros.',
+                'message' => 'No se puede eliminar el activo porque está relacionado con otros registros.'
             ], 400);
         } catch (\Throwable $e) {
             Log::error($e);
