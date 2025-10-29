@@ -7,17 +7,11 @@ use App\Http\Requests\Assigner\UpdateAssetRequest;
 use App\Http\Requests\Assigner\AssetsApiRequest;
 use App\Models\Asset;
 use App\Http\Controllers\Controller;
+use Illuminate\Database\QueryException;
+use Illuminate\Support\Facades\Log;
 
 class AssetController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        return view('assets.asset');
-    }
-
     /**
      * Handle the incoming request for assets API.
      */
@@ -72,6 +66,15 @@ class AssetController extends Controller
             'data' => $data,
         ]);
     }
+
+    /**
+     * Display a listing of the resource.
+     */
+    public function index()
+    {
+        return view('assets.asset');
+    }
+
 
     /**
      * Show the form for creating a new resource.
@@ -154,7 +157,15 @@ class AssetController extends Controller
                 'ok' => true,
                 'message' => 'Activo eliminado exitosamente'
             ], 200);
+        }catch (QueryException $e) {
+            Log::error($e);
+            // Manejar errores de clave foránea u otros errores de base de datos
+            return response()->json([
+                'ok' => false,
+                'message' => 'No se puede eliminar el activo porque está relacionado con otros registros.',
+            ], 400);
         } catch (\Throwable $e) {
+            Log::error($e);
             return response()->json([
                 'ok' => false,
                 'message' => 'Error al eliminar el activo',

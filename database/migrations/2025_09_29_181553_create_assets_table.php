@@ -22,9 +22,9 @@ return new class extends Migration
             $table->string('storage')->nullable()->comment('Ej: 512GB SSD');
             $table->text('description')->nullable();
             $table->text('type')->nullable();
-            $table->foreignId('brand_id')->constrained('brands')->onDelete('cascade');
-            $table->foreignId('category_id')->constrained('categories')->onDelete('cascade');
             $table->boolean('is_active')->default(true)->comment('Activo o inactivo');
+            $table->foreignId('brand_id')->constrained('brands')->restrictOnDelete();
+            $table->foreignId('category_id')->constrained('categories')->restrictOnDelete();
             $table->timestamps();
 
             $table->index('brand_id');

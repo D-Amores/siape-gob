@@ -392,6 +392,9 @@ const deleteCategory = async (categoryId) => {
             });
             loadCategories();
         }
+        else {
+            showAlert(data.message || 'Ocurrió un error al eliminar la categoría.', 'red', 'Error', null, 0);
+        }
     } catch (error) {
         console.error('❌ Error al eliminar la categoría:', error);
         $.alert({
