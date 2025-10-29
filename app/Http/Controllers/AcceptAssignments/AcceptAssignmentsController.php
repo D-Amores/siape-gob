@@ -177,8 +177,7 @@ class AcceptAssignmentsController extends Controller
                 abort(403, 'No tienes permisos para ver este documento.');
             }
 
-            $pdfController = app(\App\Http\Controllers\FormatoController::class);
-            return $pdfController->pdfAsignacion($personnelAsset->id);
+            return redirect()->route('pdf.asignacion', ['id' => $personnelAsset->id]);
 
         } catch (\Exception $e) {
             Log::error('Error al generar PDF: ' . $e->getMessage());

@@ -49,17 +49,25 @@ Route::middleware('auth')->group(function () {
         // Ruta API para cargar asignaciones pendientes del usuario autenticado
         Route::post('accept-assignments/api', [AcceptAssignmentsController::class, 'pendingAssignmentsApi'])->name('accept-assignments.api');
 
-        // Ruta API para cargar bienes del usuario autenticado | Generar PDF | Subir documento de aceptación | Descargar documento
+        // Ruta API para cargar bienes del usuario autenticado 
         Route::post('assets-unique-user/api', [AssetsUniqueUserController::class, 'assetsUniqueUsuarioAPi'])->name('assets-user.api');
+        
+        // Ruta API para mostar el activo en el modal ver
         Route::post('/assets-unique-user/{id}', [AssetsUniqueUserController::class, 'show'])->name('assets-unique-user.show');
+
+        // Ruta API para Subir documento de aceptación
         Route::post('/assets-unique-user/{id}/upload-document', [AssetsUniqueUserController::class, 'update'])->name('assets-unique-user.upload-document');
+        
+        // Ruta API para Descargar documento de aceptación desde el modulo bienes asignados
         Route::get('download-document/{assignmentId}', [AssetsUniqueUserController::class, 'downloadDocument'])->name('assets-unique-user.download');
+        
+        // Rutas API para usar la generacion del pdf al aceptar una asignación
+        Route::get('accept-assignments/pdf/{id}', [AcceptAssignmentsController::class, 'downloadAssignmentPdf'])->name('assignment.pdf.download');
         Route::get('/pdf/asignacion/{id}', [FormatoController::class, 'pdfAsignacion'])->name('pdf.asignacion');
         
         // Ruta API para aceptar los bienes asignados al usuario
         Route::post('accept-assignments/accept', [AcceptAssignmentsController::class, 'acceptAssignmentApi'])->name('accept-assignments.accept');
-        Route::get('accept-assignments/pdf/{id}', [AcceptAssignmentsController::class, 'generatePdf'])->name('accept-assignments.pdf');
-        Route::get('accept-assignments/pdf/{id}', [AcceptAssignmentsController::class, 'downloadAssignmentPdf'])->name('assignment.pdf.download')->middleware(['auth', 'role:user']);
+        
     });
 
     Route::middleware('role:admin')->group(function () {
