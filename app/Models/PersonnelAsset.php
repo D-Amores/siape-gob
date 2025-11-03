@@ -16,6 +16,7 @@ class PersonnelAsset extends Model
         'assignment_date',
         'confirmation_date',
         'path_acceptance_doc',
+        'path_respaldo_acceptance',
         'status',
         'unassignment_date',
         'asset_id',

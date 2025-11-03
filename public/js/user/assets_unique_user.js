@@ -148,27 +148,59 @@ document.addEventListener('DOMContentLoaded', async function () {
         // Documentación
         const documentoElement = document.getElementById('detalle-documento');
         const btnDescargar = document.getElementById('btn-descargar-documento');
+        const btnDescargarRespaldo = document.getElementById('btn-descargar-respaldo');
         
-        if (assetDetails.path_acceptance_doc && assetDetails.path_acceptance_doc !== 'No disponible' && assetDetails.path_acceptance_doc.toLowerCase() !== 'pending') {
-            // Caso: Documento disponible -> Descargar
-            documentoElement.textContent = 'Documento disponible';
+        // Ocultar ambos botones inicialmente
+        btnDescargar.style.display = 'none';
+        btnDescargarRespaldo.style.display = 'none';
+        
+        if (assetDetails.path_acceptance_doc && 
+            assetDetails.path_acceptance_doc !== 'No disponible' && 
+            assetDetails.path_acceptance_doc.toLowerCase() !== 'pending') {
+            
+            documentoElement.textContent = 'Documento de aceptación disponible';
+
+            // Mostrar solo botón de descargar documento de aceptación
+            btnDescargar.style.display = 'inline-block';
             btnDescargar.disabled = false;
-            btnDescargar.innerHTML = '<i class="fas fa-download me-1"></i> Descargar Documento';
+            btnDescargar.innerHTML = '<i class="fas fa-download me-1"></i> Descargar Documento de Aceptación';
             btnDescargar.onclick = function() {
                 window.open(`${vURIDownloadDocument}/${assignmentId}`, '_blank');
             };
-        } else if (assetDetails.path_acceptance_doc && assetDetails.path_acceptance_doc.toLowerCase() === 'pending') {
-            // Caso: Pendiente -> Subir documento
-            documentoElement.textContent = 'Documento pendiente';
+
+        } 
+        // Caso: Pendiente -> Subir documento
+        else if (assetDetails.path_acceptance_doc && 
+            assetDetails.path_acceptance_doc.toLowerCase() === 'pending') {
+            
+            documentoElement.textContent = 'Documento pendiente de carga';
+            
+            // Botón para subir documento
+            btnDescargar.style.display = 'inline-block';
             btnDescargar.disabled = false;
             btnDescargar.innerHTML = '<i class="fas fa-upload me-1"></i> Subir documento de aceptación';
             btnDescargar.onclick = function() {
-                // Aquí puedes implementar la lógica para subir documento
                 openUploadModal(assignmentId);
             };
-        } else {
-            // Caso: No disponible
+            
+            // Botón para descargar documento de respaldo (si existe)
+            if (assetDetails.path_respaldo_acceptance && 
+                assetDetails.path_respaldo_acceptance !== 'No disponible' &&
+                assetDetails.path_respaldo_acceptance !== 'Firmado') {
+                
+                btnDescargarRespaldo.style.display = 'inline-block';
+                btnDescargarRespaldo.disabled = false;
+                btnDescargarRespaldo.innerHTML = '<i class="fas fa-file-pdf me-1"></i> Descargar Documento Generado';
+                btnDescargarRespaldo.onclick = function() {
+                    const url = `${vURIDownloadRespaldoDocument}/${assignmentId}`;
+                    window.open(url, '_blank');
+                };
+            }
+        } 
+        // Caso: No disponible
+        else {
             documentoElement.textContent = 'No disponible';
+            btnDescargar.style.display = 'inline-block';
             btnDescargar.disabled = true;
             btnDescargar.innerHTML = '<i class="fas fa-download me-1"></i> Descargar Documento';
         }
@@ -214,6 +246,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         try {
             // Mostrar loading
             const btnDescargar = document.getElementById('btn-descargar-documento');
+            const btnDescargarRespaldo = document.getElementById('btn-descargar-respaldo');
             const originalText = btnDescargar.innerHTML;
             btnDescargar.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i> Subiendo...';
             btnDescargar.disabled = true;
@@ -232,15 +265,18 @@ document.addEventListener('DOMContentLoaded', async function () {
                 showAlert('Documento subido correctamente', 'green', 'Éxito');
                 
                 // Actualizar la interfaz
-                document.getElementById('detalle-documento').textContent = 'Documento disponible';
+                document.getElementById('detalle-documento').textContent = 'Documento de aceptación disponible';
                 document.getElementById('detalle-fecha-confirmacion').textContent = new Date().toLocaleDateString('es-MX');
                 
-                // Cambiar el botón a "Descargar Documento"
-                btnDescargar.innerHTML = '<i class="fas fa-download me-1"></i> Descargar Documento';
+                // Cambiar el botón a "Descargar Documento de Aceptación"
+                btnDescargar.innerHTML = '<i class="fas fa-download me-1"></i> Descargar Documento de Aceptación';
                 btnDescargar.disabled = false;
                 btnDescargar.onclick = function() {
                     window.open(`${vURIDownloadDocument}/${assignmentId}`, '_blank');
                 };
+                
+                // Ocultar el botón de descargar respaldo
+                btnDescargarRespaldo.style.display = 'none';
                 
                 // Actualizar el estado de la asignación
                 const estadoAsignacion = document.getElementById('detalle-estado-asignacion');

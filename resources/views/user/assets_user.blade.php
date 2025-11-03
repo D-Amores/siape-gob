@@ -192,9 +192,13 @@
                                             <div class="small text-muted">Documento de Aceptación</div>
                                             <div id="detalle-documento" class="fw-semibold">—</div>
                                         </div>
-                                        <div class="col-12 mt-2">
-                                            <button id="btn-descargar-documento" class="btn btn-outline-primary btn-sm w-100" disabled>
+                                        <div class="col-12 mt-3 d-flex flex-column gap-2">
+                                            <button id="btn-descargar-documento" class="btn btn-outline-primary btn-sm" disabled>
                                                 <i class="fas fa-download me-1"></i> Descargar Documento
+                                            </button>
+
+                                            <button id="btn-descargar-respaldo" class="btn btn-outline-secondary btn-sm" style="display: none;">
+                                                <i class="fas fa-file-pdf me-1"></i> Descargar Documento Generado
                                             </button>
                                         </div>
                                     </div>
@@ -242,7 +246,7 @@
         const vURIAcceptActionApi = `${BASE_URL}/accept-assignments/accept`;
         const vURIAssetsDetails = `${BASE_URL}/assets-unique-user`;
         const vURIDownloadDocument = `${BASE_URL}/download-document`;
-
+        const vURIDownloadRespaldoDocument = `${BASE_URL}/assets-user/download-respaldo-document`;
         const languageDataTable = "{{ asset('cdn/datatables-language/es-MX.json') }}";
     </script>
 

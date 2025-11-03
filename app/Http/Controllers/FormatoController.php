@@ -8,6 +8,9 @@ use App\Models\Asset;
 use App\Models\PersonnelAsset;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Storage;
 
 class FormatoController extends Controller
 {
@@ -94,6 +97,94 @@ class FormatoController extends Controller
         $nombre_archivo = 'detalle_asignacion_' . $asset->inventory_number;
 
         $clsImprimir = new clsImprimir();
-        return $clsImprimir->invitacionPDF($vhtml, 'I', 'detalle_asignacion_' . $asset->inventory_number);
+        
+        
+        // Generar el PDF y obtener el contenido
+        $pdfContent = $clsImprimir->generarPDF($vhtml, 'detalle_asignacion_' . $asset->inventory_number);
+        
+        // Guardar respaldo del PDF
+        $this->guardarRespaldoPDF($pdfContent, $personnelAsset, $asset, $receiver_name);
+
+        return $clsImprimir->descargarPDF($pdfContent, 'detalle_asignacion_' . $asset->inventory_number);
+    }
+
+    /**
+     * Guarda el PDF en la carpeta de respaldo
+     */
+    private function guardarRespaldoPDF($pdfContent, $personnelAsset, $asset, $receiverName)
+    {
+        try {
+            // Verificar si ya existe un documento de respaldo y eliminarlo
+            if ($personnelAsset->path_respaldo_acceptance && 
+                $personnelAsset->path_respaldo_acceptance !== 'No disponible' &&
+                $personnelAsset->path_respaldo_acceptance !== 'Firmado') {
+                
+                if (Storage::disk('public')->exists($personnelAsset->path_respaldo_acceptance)) {
+                    Storage::disk('public')->delete($personnelAsset->path_respaldo_acceptance);
+                }
+            }
+
+            // Generar la estructura de carpetas
+            $monthYear = Carbon::now()->locale('es')->translatedFormat('F-Y');
+            $monthYear = $this->sanitizeFolderName($monthYear);
+
+            // Sanitizar el nombre de la carpeta del usuario
+            $userFolder = $this->sanitizeFolderName($receiverName);
+            
+            // Ruta base de almacenamiento para respaldos
+            $basePath = "RESPALDO/{$monthYear}/{$userFolder}";
+            
+            // Generar nombre único para el archivo
+            $fileName = 'respaldo_asignacion_' . $personnelAsset->id . '_' . $this->sanitizeFileName($asset->inventory_number) . '_' . time() . '.pdf';
+            
+            // Guardar el archivo
+            $filePath = Storage::disk('public')->put($basePath . '/' . $fileName, $pdfContent);
+
+            if ($filePath) {
+                // Actualizar la asignación con la ruta del documento de respaldo
+                $personnelAsset->update([
+                    'path_respaldo_acceptance' => $basePath . '/' . $fileName
+                ]);
+            }
+
+            return $filePath;
+
+        } catch (\Exception $e) {
+            Log::error('Error al guardar respaldo PDF: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Sanitiza el nombre de la carpeta reemplazando espacios y caracteres especiales
+     */
+    private function sanitizeFolderName($name)
+    {
+        // Reemplazar espacios por guiones bajos
+        $name = preg_replace('/\s+/', '_', $name);
+        
+        // Eliminar caracteres especiales excepto guiones bajos
+        $name = preg_replace('/[^a-zA-Z0-9_-]/', '', $name);
+        
+        // Limitar la longitud
+        $name = substr($name, 0, 100);
+        
+        return $name;
+    }
+
+    /**
+     * Sanitiza el nombre del archivo
+     */
+    private function sanitizeFileName($name)
+    {
+        // Reemplazar espacios por guiones bajos
+        $name = preg_replace('/\s+/', '_', $name);
+        
+        // Eliminar caracteres especiales excepto guiones bajos y puntos
+        $name = preg_replace('/[^a-zA-Z0-9._-]/', '', $name);
+        
+        // Limitar la longitud
+        $name = substr($name, 0, 50);
+        
+        return $name;
     }
 }
