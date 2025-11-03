@@ -55,6 +55,9 @@ Route::middleware('auth')->group(function () {
         // Ruta API para mostar el activo en el modal ver
         Route::post('/assets-unique-user/{id}', [AssetsUniqueUserController::class, 'show'])->name('assets-unique-user.show');
 
+        // Ruta para descargar documento de respaldo
+        Route::get('/assets-user/download-respaldo-document/{assignmentId}', [AssetsUniqueUserController::class, 'downloadRespaldoDocument'])->name('assets-user.download-respaldo-document');
+
         // Ruta API para Subir documento de aceptación
         Route::post('/assets-unique-user/{id}/upload-document', [AssetsUniqueUserController::class, 'update'])->name('assets-unique-user.upload-document');
         

@@ -96,7 +96,8 @@ class AssetsUniqueUserController extends Controller
                 'receiver_name' => $personnelAsset->receiver?->name
                     ? trim("{$personnelAsset->receiver?->last_name} {$personnelAsset->receiver?->middle_name} {$personnelAsset->receiver?->name} ")
                     : 'Desconocido',
-                'path_acceptance_doc' => $personnelAsset->path_acceptance_doc ?? 'No disponible'
+                'path_acceptance_doc' => $personnelAsset->path_acceptance_doc ?? 'No disponible',
+                'path_respaldo_acceptance' => $personnelAsset->path_respaldo_acceptance ?? 'No disponible'
             ];
 
             return response()->json([
@@ -145,20 +146,29 @@ class AssetsUniqueUserController extends Controller
                 'acceptance_document' => 'required|file|mimes:pdf,doc,docx,jpg,jpeg,png|max:10240' // 10MB máximo
             ]);
 
+            // ELIMINAR DOCUMENTO DE RESPALDO ANTES DE SUBIR EL NUEVO
+            if ($personnelAsset->path_respaldo_acceptance && 
+                $personnelAsset->path_respaldo_acceptance !== 'No disponible' &&
+                $personnelAsset->path_respaldo_acceptance !== 'Firmado') {
+                
+                // Verificar que el archivo exista físicamente antes de eliminarlo
+                if (Storage::disk('public')->exists($personnelAsset->path_respaldo_acceptance)) {
+                    Storage::disk('public')->delete($personnelAsset->path_respaldo_acceptance);
+                }
+            }
+
             // Obtener el archivo
             $file = $request->file('acceptance_document');
             
             // Generar la estructura de carpetas
-            $monthYear = Carbon::now()->locale('es')->translatedFormat('F-Y'); // ejemplo: "octubre-2024"
-
-            // Sanitizar también el nombre de la carpeta del mes
+            $monthYear = Carbon::now()->locale('es')->translatedFormat('F-Y');
             $monthYear = $this->sanitizeFolderName($monthYear);
         
             // Obtener el nombre del receptor
             $receiver = $personnelAsset->receiver;
             $userFolder = trim("{$receiver->last_name} {$receiver->middle_name} {$receiver->name}");
         
-            // Sanitizar el nombre de la carpeta: reemplazar espacios por guiones bajos y eliminar caracteres problemáticos
+            // Sanitizar el nombre de la carpeta
             $userFolder = $this->sanitizeFolderName($userFolder);
             
             // Ruta base de almacenamiento
@@ -170,11 +180,16 @@ class AssetsUniqueUserController extends Controller
             $fileName = 'doc_aceptacion_' . $personnelAsset->id . '_' . $sanitizedFileName . '_' . time() . '.' . $file->getClientOriginalExtension();
             
             // Guardar el archivo
-            $filePath = $file->storeAs($basePath, $fileName, 'public');
+            $filePath = Storage::disk('public')->putFileAs(
+                $basePath, 
+                $file, 
+                $fileName
+            );
 
-            // Actualizar la asignación con la nueva ruta del documento
+            // ACTUALIZAR EL REGISTRO EXISTENTE 
             $personnelAsset->update([
                 'path_acceptance_doc' => $filePath,
+                'path_respaldo_acceptance' => 'Firmado', // Marcar como firmado
                 'confirmation_date' => Carbon::now()
             ]);
 
@@ -279,6 +294,67 @@ class AssetsUniqueUserController extends Controller
             return response()->json([
                 'ok' => false,
                 'message' => 'Error al obtener bienes del usuario.',
+                'error' => config('app.debug') ? $e->getMessage() : 'Error interno'
+            ], 500);
+        }
+    }
+
+    /**
+     * Descargar documento de respaldo de aceptación
+     */
+    public function downloadRespaldoDocument($assignmentId)
+    {
+        try {
+            $user = Auth::user();
+
+            if (!$user || !$user->personnel_id) {
+                return response()->json([
+                    'ok' => false,
+                    'message' => 'Usuario no válido o sin personal asignado.'
+                ], 403);
+            }
+
+            // Buscar la asignación específica del usuario
+            $personnelAsset = PersonnelAsset::where('id', $assignmentId)
+                ->where('receiver_id', $user->personnel_id)
+                ->first();
+
+            if (!$personnelAsset) {
+                return response()->json([
+                    'ok' => false,
+                    'message' => 'Asignación no encontrada o no autorizada.'
+                ], 404);
+            }
+
+            // Verificar que exista el documento de respaldo y que no esté marcado como "Firmado"
+            if (!$personnelAsset->path_respaldo_acceptance || 
+                $personnelAsset->path_respaldo_acceptance === 'No disponible' ||
+                $personnelAsset->path_respaldo_acceptance === 'Firmado') {
+                return response()->json([
+                    'ok' => false,
+                    'message' => 'Documento de respaldo no disponible para descarga.'
+                ], 404);
+            }
+
+            // Verificar que el archivo exista físicamente
+            if (!Storage::disk('public')->exists($personnelAsset->path_respaldo_acceptance)) {
+                return response()->json([
+                    'ok' => false,
+                    'message' => 'El archivo de respaldo no existe en el servidor.'
+                ], 404);
+            }
+
+            // Obtener el nombre del archivo para la descarga
+            $downloadName = 'documento_respaldo_aceptacion_' . $personnelAsset->id . '.pdf';
+
+            /** @var \Illuminate\Filesystem\FilesystemAdapter $disk */
+            $disk = Storage::disk('public');
+            return $disk->download($personnelAsset->path_respaldo_acceptance, $downloadName);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'ok' => false,
+                'message' => 'Error al descargar el documento de respaldo.',
                 'error' => config('app.debug') ? $e->getMessage() : 'Error interno'
             ], 500);
         }

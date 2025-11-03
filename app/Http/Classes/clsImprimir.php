@@ -44,8 +44,11 @@
                 </table>';
             return $html;
         }
-    
-        public function invitacionPDF($contenido, $mode, $nameFile='reporte_rtec')
+
+        /**
+         * Genera el PDF y retorna el contenido como string
+         */
+        public function generarPDF($contenido, $nameFile='reporte_rtec')
         {
             $mpdf = new \Mpdf\Mpdf([     
                 'tempDir' => public_path()."/pdf/tmp",     
@@ -58,21 +61,31 @@
                 'format' => 'Letter'
             ]);
 
-            $html=$contenido;
+            $html = $contenido;
 
-            $stylesheet=file_get_contents(public_path()."/css/print.css");                
+            $stylesheet = file_get_contents(public_path()."/css/print.css");                
             $mpdf->SetProtection(array('print'));
             $mpdf->SetTitle("Acuse Invitación");
             $mpdf->SetAuthor("Secretaría de la Honestidad y Función Pública");
             $mpdf->SetDisplayMode('fullpage');
             $mpdf->SetHTMLHeader($this->encabezado());
             $mpdf->SetHTMLFooter($this->pie());
-            $mpdf->WriteHTML($stylesheet,1);
+            $mpdf->WriteHTML($stylesheet, 1);
             $mpdf->WriteHTML($html);
 
-            $pdf=$mpdf->Output($nameFile, $mode);     
-            if ( $mode == 'D' ) $pdf= $pdf->setContentType('application/pdf');
-            return $pdf;      
+            // Retornar el contenido del PDF como string
+            return $mpdf->Output('', 'S');
+        }
+
+        /**
+         * Descarga el PDF al navegador
+         */
+        public function descargarPDF($pdfContent, $nameFile = 'reporte_rtec')
+        {
+            return response($pdfContent)
+                ->header('Content-Type', 'application/pdf')
+                ->header('Content-Disposition', 'attachment; filename="' . $nameFile . '.pdf"')
+                ->header('Content-Length', strlen($pdfContent));
         }
     }
 ?>
