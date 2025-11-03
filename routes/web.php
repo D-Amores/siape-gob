@@ -2,19 +2,20 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\Assigner\AssetController;
 use App\Http\Controllers\AcceptAssignments\AssetsUniqueUserController;
 use App\Http\Controllers\AcceptAssignments\AcceptAssignmentsController;
 use App\Http\Controllers\AcceptAssignments\AcceptAssignmentController;
+use App\Http\Controllers\Assigner\AssetController;
 use App\Http\Controllers\Assigner\BrandController;
 use App\Http\Controllers\Assigner\CategoryController;
 use App\Http\Controllers\Assigner\AssetAcceptedController;
 use App\Http\Controllers\Assigner\AssetUnassigedController;
+use App\Http\Controllers\Assigner\PersonnelAssetPendingController;
 use App\Http\Controllers\Admin\PersonnelController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\AreaController;
 use App\Http\Controllers\Auth\LoginController;
-use App\Http\Controllers\Assigner\PersonnelAssetPendingController;
+use App\Http\Controllers\Historic\HistoricController;
 
 Route::middleware('guest')->group(function () {
     // Login routes
@@ -24,6 +25,7 @@ Route::middleware('guest')->group(function () {
 
 Route::middleware('auth')->group(function () {
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('history', [HistoricController::class, 'index']);
     // Logout route
     Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
@@ -40,6 +42,7 @@ Route::middleware('auth')->group(function () {
         Route::delete('assets/unassigned/{personnelAsset}', [AssetUnassigedController::class, 'destroy']);
         Route::post('assignments/api', [AssetAcceptedController::class, 'assignmentsAssetApi']);
         Route::post('admin/personnel/api', [PersonnelController::class, 'personnelApi']);
+        Route::post('historic/api',[HistoricController::class, 'historicApi']);
     });
 
     Route::middleware('role:user')->group(function () {

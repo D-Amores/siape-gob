@@ -66,4 +66,16 @@ class PersonnelAsset extends Model
         ->orderBy('confirmation_date', 'desc');
     }
 
+    public function scopeHistoricWithRelations($query)
+    {
+        return $query->with([
+            'asset.brand',
+            'asset.category',
+            'assigner.area',
+            'receiver.area'
+        ])
+        ->whereNotNull('confirmation_date')
+        ->whereNotNull('unassignment_date')
+        ->orderBy('unassignment_date', 'desc');
+    }
 }
