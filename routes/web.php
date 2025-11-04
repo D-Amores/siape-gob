@@ -25,7 +25,7 @@ Route::middleware('guest')->group(function () {
 
 Route::middleware('auth')->group(function () {
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
-    Route::get('history', [HistoricController::class, 'index']);
+    Route::get('history', [HistoricController::class, 'index'])->name('historic.index');
     Route::post('historic/api',[HistoricController::class, 'historicApi']);
     // Logout route
     Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
