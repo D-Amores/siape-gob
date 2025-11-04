@@ -1,6 +1,6 @@
 async function startApp(){
     const data = await getHistoricApi();
-    console.log('data: ', data);
+    loadHistoricTable(data);
 }
 
 document.addEventListener('DOMContentLoaded', function() {

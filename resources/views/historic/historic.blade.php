@@ -30,8 +30,8 @@
                                 <th>Asignación</th>
                                 <th>Confirmación</th>
                                 <th>Desasigna</th>
-                                <th>Estado</th>
-                                <th>Acción</th>
+                                {{-- <th>Estado</th>
+                                <th>Acción</th> --}}
                             </tr>
                         </thead>
                         <tbody>
@@ -47,6 +47,7 @@
 @section('scripts')
     <script>
         const vHistoricApi = `${BASE_URL}/historic/api`;
+        const languageDataTable = "{{ asset('cdn/datatables-language/es-MX.json') }}";
     </script>
 
     <script src="{{ asset('cdn/buttons/3.0.2/js/dataTables.buttons.min.js') }}"></script>
@@ -61,6 +62,7 @@
     
     <!-- Datatables -->
     <script src="{{ asset('js/helpers/tools/datatable-manager.js') }}"></script>
+    <script src="{{ asset('js/historic/table-config.js') }}"></script>
 
     <!-- Historic JS -->
     <script src="{{ asset('js/historic/historic-api.js') }}"></script>

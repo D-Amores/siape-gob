@@ -26,6 +26,7 @@ Route::middleware('guest')->group(function () {
 Route::middleware('auth')->group(function () {
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('history', [HistoricController::class, 'index']);
+    Route::post('historic/api',[HistoricController::class, 'historicApi']);
     // Logout route
     Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
@@ -42,7 +43,6 @@ Route::middleware('auth')->group(function () {
         Route::delete('assets/unassigned/{personnelAsset}', [AssetUnassigedController::class, 'destroy']);
         Route::post('assignments/api', [AssetAcceptedController::class, 'assignmentsAssetApi']);
         Route::post('admin/personnel/api', [PersonnelController::class, 'personnelApi']);
-        Route::post('historic/api',[HistoricController::class, 'historicApi']);
     });
 
     Route::middleware('role:user')->group(function () {
