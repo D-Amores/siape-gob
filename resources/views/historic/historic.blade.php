@@ -16,8 +16,17 @@
     <div class="container-fluid">
         <div class="card shadow-lg">
             <div class="card-body">
+                <div id="loading-spinner" class="text-center my-5">
+                    <div class="spinner-grow text-primary mb-3" style="width: 3rem; height: 3rem;" role="status"></div>
+                    <div class="progress w-50 mx-auto" style="height: 8px;">
+                        <div class="progress-bar progress-bar-striped progress-bar-animated bg-primary" style="width: 75%">
+                        </div>
+                    </div>
+                    <div class="mt-3 text-muted fw-semibold">Cargando tabla...</div>
+                </div>
+
                 {{-- ✅ Hacemos la tabla 100% responsive con Bootstrap --}}
-                <div class="table-responsive">
+                <div class="table-responsive d-none" id="table-container">
                     <table id="historic" class="table table-hover table-striped table-bordered align-middle text-center">
                         <thead>
                             <tr>
@@ -59,7 +68,8 @@
 
     <!-- Helpers -->
     <script src="{{ asset('js/helpers/alerts/alerts.js') }}"></script>
-    
+    <script src="{{ asset('js/helpers/tools/utils.js') }}"></script>
+
     <!-- Datatables -->
     <script src="{{ asset('js/helpers/tools/datatable-manager.js') }}"></script>
     <script src="{{ asset('js/historic/table-config.js') }}"></script>
