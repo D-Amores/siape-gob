@@ -70,40 +70,44 @@
                 <div class="modal-body py-4 px-4">
                     <div class="row g-4 align-items-stretch">
 
-                        <!-- Columna izquierda -->
-                        <div class="col-md-6">
+                        <!-- Columna izquierda - Información General -->
+                        <div class="col-md-4">
                             <div class="card h-100 border-0 bg-light-subtle">
                                 <div class="card-body">
                                     <h6 class="text-uppercase text-secondary fw-semibold mb-3">
                                         <i class="fas fa-info-circle me-2"></i>Información General
                                     </h6>
                                     <div class="row g-3">
-                                        <div class="col-6">
-                                            <div class="small text-muted">Inventario</div>
-                                            <div id="detalle-inventario" class="fw-semibold"></div>
-                                        </div>
-                                        <div class="col-6">
-                                            <div class="small text-muted">Modelo</div>
-                                            <div id="detalle-modelo" class="fw-semibold"></div>
-                                        </div>
-                                        <div class="col-6">
-                                            <div class="small text-muted">Serie</div>
-                                            <div id="detalle-serie" class="fw-semibold"></div>
-                                        </div>
-                                        <div class="col-6">
-                                            <div class="small text-muted">Marca</div>
-                                            <div id="detalle-marca" class="fw-semibold"></div>
-                                        </div>
-                                        <div class="col-6">
-                                            <div class="small text-muted">Categoría</div>
-                                            <div id="detalle-categoria" class="fw-semibold"></div>
-                                        </div>
-                                        <div class="col-6">
-                                            <div class="small text-muted">Estado</div>
-                                            <span id="detalle-estado" class="badge rounded-pill px-3 py-2"></span>
+                                        <div class="col-12">
+                                            <div class="small text-muted">Número de Inventario</div>
+                                            <div id="detalle-inventario" class="fw-semibold">—</div>
                                         </div>
                                         <div class="col-12">
-                                            <div class="small text-muted">Creado el</div>
+                                            <div class="small text-muted">Modelo</div>
+                                            <div id="detalle-modelo" class="fw-semibold">—</div>
+                                        </div>
+                                        <div class="col-12">
+                                            <div class="small text-muted">Número de Serie</div>
+                                            <div id="detalle-serie" class="fw-semibold">—</div>
+                                        </div>
+                                        <div class="col-12">
+                                            <div class="small text-muted">Marca</div>
+                                            <div id="detalle-marca" class="fw-semibold">—</div>
+                                        </div>
+                                        <div class="col-12">
+                                            <div class="small text-muted">Categoría</div>
+                                            <div id="detalle-categoria" class="fw-semibold">—</div>
+                                        </div>
+                                        <div class="col-12">
+                                            <div class="small text-muted">Estado del Bien</div>
+                                            <span id="detalle-estado" class="badge rounded-pill px-3 py-2">—</span>
+                                        </div>
+                                        <div class="col-12">
+                                            <div class="small text-muted">Tipo</div>
+                                            <div id="detalle-tipo" class="fw-semibold">—</div>
+                                        </div>
+                                        <div class="col-12">
+                                            <div class="small text-muted">Registrado el</div>
                                             <div id="detalle-creado" class="fw-semibold">—</div>
                                         </div>
                                     </div>
@@ -111,29 +115,29 @@
                             </div>
                         </div>
 
-                        <!-- Columna derecha -->
-                        <div class="col-md-6">
+                        <!-- Columna central - Especificaciones Técnicas -->
+                        <div class="col-md-4">
                             <div class="card h-100 border-0 bg-light-subtle">
                                 <div class="card-body">
                                     <h6 class="text-uppercase text-secondary fw-semibold mb-3">
                                         <i class="fas fa-microchip me-2"></i>Especificaciones Técnicas
                                     </h6>
                                     <div class="row g-3">
-                                        <div class="col-6">
-                                            <div class="small text-muted">CPU</div>
-                                            <div id="detalle-cpu" class="fw-semibold"></div>
+                                        <div class="col-12">
+                                            <div class="small text-muted">Procesador (CPU)</div>
+                                            <div id="detalle-cpu" class="fw-semibold">—</div>
                                         </div>
-                                        <div class="col-6">
-                                            <div class="small text-muted">Velocidad</div>
-                                            <div id="detalle-velocidad" class="fw-semibold"></div>
+                                        <div class="col-12">
+                                            <div class="small text-muted">Velocidad del Procesador</div>
+                                            <div id="detalle-velocidad" class="fw-semibold">—</div>
                                         </div>
-                                        <div class="col-6">
-                                            <div class="small text-muted">Memoria</div>
-                                            <div id="detalle-memoria" class="fw-semibold"></div>
+                                        <div class="col-12">
+                                            <div class="small text-muted">Memoria RAM</div>
+                                            <div id="detalle-memoria" class="fw-semibold">—</div>
                                         </div>
-                                        <div class="col-6">
+                                        <div class="col-12">
                                             <div class="small text-muted">Almacenamiento</div>
-                                            <div id="detalle-almacenamiento" class="fw-semibold"></div>
+                                            <div id="detalle-almacenamiento" class="fw-semibold">—</div>
                                         </div>
                                     </div>
 
@@ -142,7 +146,62 @@
                                         <i class="fas fa-align-left me-2"></i>Descripción
                                     </h6>
                                     <div id="detalle-descripcion" class="p-3 bg-white border rounded text-secondary small"
-                                        style="min-height: 80px;"></div>
+                                        style="min-height: 100px;">
+                                        Sin descripción disponible
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Columna derecha - Información de la Asignación -->
+                        <div class="col-md-4">
+                            <div class="card h-100 border-0 bg-light-subtle">
+                                <div class="card-body">
+                                    <h6 class="text-uppercase text-secondary fw-semibold mb-3">
+                                        <i class="fas fa-user-check me-2"></i>Información de Asignación
+                                    </h6>
+                                    <div class="row g-3">
+                                        <div class="col-12">
+                                            <div class="small text-muted">Fecha de Asignación</div>
+                                            <div id="detalle-fecha-asignacion" class="fw-semibold">—</div>
+                                        </div>
+                                        <div class="col-12">
+                                            <div class="small text-muted">Fecha de Confirmación</div>
+                                            <div id="detalle-fecha-confirmacion" class="fw-semibold">—</div>
+                                        </div>
+                                        <div class="col-12">
+                                            <div class="small text-muted">Asignado por</div>
+                                            <div id="detalle-asignador" class="fw-semibold">—</div>
+                                        </div>
+                                        <div class="col-12">
+                                            <div class="small text-muted">Asignado a</div>
+                                            <div id="detalle-receptor" class="fw-semibold">—</div>
+                                        </div>
+                                        <div class="col-12">
+                                            <div class="small text-muted">Estado de la Asignación</div>
+                                            <span id="detalle-estado-asignacion" class="badge rounded-pill px-3 py-2">—</span>
+                                        </div>
+                                    </div>
+
+                                    <hr class="my-4">
+                                    <h6 class="text-uppercase text-secondary fw-semibold mb-3">
+                                        <i class="fas fa-file-contract me-2"></i>Documentación
+                                    </h6>
+                                    <div class="row g-2">
+                                        <div class="col-12">
+                                            <div class="small text-muted">Documento de Aceptación</div>
+                                            <div id="detalle-documento" class="fw-semibold">—</div>
+                                        </div>
+                                        <div class="col-12 mt-3 d-flex flex-column gap-2">
+                                            <button id="btn-descargar-documento" class="btn btn-outline-primary btn-sm" disabled>
+                                                <i class="fas fa-download me-1"></i> Descargar Documento
+                                            </button>
+
+                                            <button id="btn-descargar-respaldo" class="btn btn-outline-secondary btn-sm" style="display: none;">
+                                                <i class="fas fa-file-pdf me-1"></i> Descargar Documento Generado
+                                            </button>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -185,7 +244,9 @@
         //Api uris
         const vURIUniqueAssetsTableApi = `${BASE_URL}/assets-unique-user/api`;
         const vURIAcceptActionApi = `${BASE_URL}/accept-assignments/accept`;
-
+        const vURIAssetsDetails = `${BASE_URL}/assets-unique-user`;
+        const vURIDownloadDocument = `${BASE_URL}/download-document`;
+        const vURIDownloadRespaldoDocument = `${BASE_URL}/assets-user/download-respaldo-document`;
         const languageDataTable = "{{ asset('cdn/datatables-language/es-MX.json') }}";
     </script>
 

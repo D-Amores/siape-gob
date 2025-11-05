@@ -73,6 +73,15 @@ $('#table_pendings_assigments_users').on('click', '.accept-btn', function () {
                     },
                     body: JSON.stringify({ id })
                 });
+
+                // Verificar si la respuesta es JSON válido
+                const contentType = res.headers.get('content-type');
+                if (!contentType || !contentType.includes('application/json')) {
+                    const text = await res.text();
+                    console.error('Respuesta no JSON:', text.substring(0, 200));
+                    throw new Error('El servidor devolvió una respuesta inválida');
+                }
+
                 const data = await res.json();
 
                 if (!data.ok) {
@@ -82,9 +91,10 @@ $('#table_pendings_assigments_users').on('click', '.accept-btn', function () {
 
                 showAlert('Asignación aceptada correctamente.', 'green', 'Éxito', async () => {
                     await loadPendingAssignments(token);
-
+                    
                     if (data.pdfUrl) {
-                        window.location.href = data.pdfUrl; 
+                        // Abrir el PDF en una nueva pestaña para descarga
+                        window.open(data.pdfUrl, '_blank');
                     }
                 });
             } catch (err) {

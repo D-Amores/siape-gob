@@ -11,6 +11,9 @@ use App\Http\Requests\User\AcceptAssignmentsApiRequest;
 use App\Models\PersonnelAsset;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Carbon\Carbon;
+use Mpdf\Mpdf;
+use Mpdf\Output\Destination;
 
 class AcceptAssignmentsController extends Controller
 {
@@ -80,7 +83,7 @@ class AcceptAssignmentsController extends Controller
                     'asset_name' => $item->asset->model ?? 'Sin nombre',
                     'assigner_name' => $item->assigner->name ?? 'Desconocido',
                     'receiver_name' => $item->receiver->name ?? 'Desconocido',
-                    'assignment_date' => $item->assignment_date->format('Y-m-d'),
+                    'assignment_date' => $item->assignment_date ? $item->assignment_date->format('Y-m-d') : 'Sin fecha',
                 ];
             });
 
@@ -118,7 +121,6 @@ class AcceptAssignmentsController extends Controller
                 ], 404);
             }
 
-            // Verificamos que el bien pendiente pertenezca al usuario autenticado
             if ($pending->receiver_id !== $user->personnel_id) {
                 return response()->json([
                     'ok' => false,
@@ -126,39 +128,60 @@ class AcceptAssignmentsController extends Controller
                 ], 403);
             }
 
-            // Transacción para mover el registro
-            DB::transaction(function () use ($pending) {
-                try {
-                    PersonnelAsset::create([
-                        'assignment_date' => $pending->assignment_date,
-                        'confirmation_date' => now(),
-                        'asset_id' => $pending->asset_id,
-                        'assigner_id' => $pending->assigner_id,
-                        'receiver_id' => $pending->receiver_id,
-                        'path_acceptance_doc' => 'x',
-                    ]);
+            /** @var \App\Models\PersonnelAsset|null $personnelAsset */
+            $personnelAsset = null;
 
-                    $pending->delete();
-                } catch (\Exception $e) {
-                    Log::error('Error al aceptar asignación: '.$e->getMessage(), [
-                        'pending_id' => $pending->id,
-                        'pending' => $pending->toArray()
-                    ]);
-                    throw $e; // relanzamos para que el catch exterior lo capture
-                }
+            DB::transaction(function () use ($pending, &$personnelAsset) {
+                // Crear registro en PersonnelAsset sin path de PDF
+                $personnelAsset = PersonnelAsset::create([
+                    'assignment_date' => $pending->assignment_date,
+                    'confirmation_date' => Carbon::now(),
+                    'asset_id' => $pending->asset_id,
+                    'assigner_id' => $pending->assigner_id,
+                    'receiver_id' => $pending->receiver_id,
+                    'path_acceptance_doc' => 'pending',
+                ]);
+
+                // Eliminar registro pendiente
+                $pending->delete();
             });
+
+            // Generar PDF usando el FormatoController
+            $pdfUrl = route('assignment.pdf.download', $personnelAsset->id);
 
             return response()->json([
                 'ok' => true,
-                'message' => 'Asignación aceptada correctamente.'
+                'message' => 'Asignación aceptada correctamente.',
+                'pdfUrl' => $pdfUrl
             ], 200);
 
         } catch (\Exception $e) {
+            Log::error('Error al aceptar asignación: ' . $e->getMessage());
             return response()->json([
                 'ok' => false,
                 'message' => 'Error al aceptar la asignación.',
                 'error' => config('app.debug') ? $e->getMessage() : 'Error interno'
             ], 500);
+        }
+    }
+
+    public function downloadAssignmentPdf($id)
+    {
+        try {
+            $user = Auth::user();
+            $personnelAsset = PersonnelAsset::with(['asset', 'assigner', 'receiver'])
+                ->findOrFail($id);
+
+            // Verificar que el usuario tiene permiso para ver este PDF
+            if ($personnelAsset->receiver_id !== $user->personnel_id) {
+                abort(403, 'No tienes permisos para ver este documento.');
+            }
+
+            return redirect()->route('pdf.asignacion', ['id' => $personnelAsset->id]);
+
+        } catch (\Exception $e) {
+            Log::error('Error al generar PDF: ' . $e->getMessage());
+            abort(404, 'Documento no encontrado.');
         }
     }
 }

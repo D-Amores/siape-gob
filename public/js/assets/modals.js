@@ -155,7 +155,10 @@ document.addEventListener('DOMContentLoaded', function () {
                     'Content-Type': 'application/json',
                     'X-CSRF-TOKEN': csrfToken
                 },
-                body: JSON.stringify({ option: 'details' })
+                body: JSON.stringify({ 
+                    option: 'details',
+                    id: id 
+                })
             });
             const result = await response.json();
             if (!result.ok) {
@@ -163,7 +166,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 return;
             }
 
-            const asset = result.data.find(a => a.id == id);
+            const asset = result.data;
             if (!asset) {
                 showAlert('No se encontró la información del activo.', "orange", "Advertencia");
                 return;
