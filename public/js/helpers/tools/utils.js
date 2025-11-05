@@ -56,3 +56,22 @@ function getChangedData(original, current) {
 
     return changed;
 }
+
+//Agregar animacion para la carga de la tabla
+function showLoadingAnimation(spinnerId, tableContainerId) {
+    const spinner = document.getElementById(spinnerId);
+    const tableContainer = document.getElementById(tableContainerId);
+
+    // Mostrar spinner
+    spinner.classList.remove("d-none");
+    tableContainer.classList.add("d-none");
+}
+
+function hideLoadingAnimation(spinnerId, tableContainerId) {
+    const spinner = document.getElementById(spinnerId);
+    const tableContainer = document.getElementById(tableContainerId);
+
+    // Ocultar spinner
+    spinner.classList.add("d-none");
+    tableContainer.classList.remove("d-none");
+}
