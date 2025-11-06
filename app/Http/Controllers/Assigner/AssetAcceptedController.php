@@ -55,7 +55,7 @@ class AssetAcceptedController extends Controller
                             ],
                             'receiver' => [
                                 'name' => "{$assignment->receiver->name} {$assignment->receiver->last_name}",
-                                'area' => $assignment->receiver->area->name ?? 'Sin área',
+                                'area' => $assignment->receiver->area_name ?? 'Sin área',
                             ],
                             'assigner' => "{$assignment->assigner->name} {$assignment->assigner->last_name}",
                             'assignment_date' => optional($assignment->assignment_date)->format('Y-m-d'),

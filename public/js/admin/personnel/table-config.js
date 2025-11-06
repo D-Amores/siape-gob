@@ -47,16 +47,16 @@ function loadPersonnelTable(data) {
 
             // 🏢 Área con truncado + tooltip
             {
-                data: "area.name",
+                data: "area_name",
                 defaultContent: "Sin área",
                 title: "Área",
-                render: (area) => `
+                render: (area_name) => `
                     <div class="text-truncate"
                          style="max-width: 120px; cursor: pointer;"
-                         title="${capitalizeWords(area ?? 'Sin área')}"
+                         title="${capitalizeWords(area_name ?? 'Sin área')}"
                          data-bs-toggle="tooltip"
                          data-bs-placement="top">
-                        ${capitalizeWords(area ?? 'Sin área')}
+                        ${capitalizeWords(area_name ?? 'Sin área')}
                     </div>
                 `
             },

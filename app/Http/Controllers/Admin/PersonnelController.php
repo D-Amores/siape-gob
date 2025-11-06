@@ -22,17 +22,17 @@ class PersonnelController extends Controller
 
         switch ($option) {
             case 'area':
-                $data = Personnel::withArea()->excludeCurrent()->get();
+                $data = Personnel::excludeCurrent()->get();
                 break;
 
             case 'area_user':
-                $data = Personnel::withArea()->withUser()->excludeCurrent()->get();
+                $data = Personnel::withUser()->excludeCurrent()->get();
                 break;
             case 'personnel_without_user_assignment':
-                $data = Personnel::withoutUser()->withArea()->excludeCurrent()->get();
+                $data = Personnel::withoutUser()->excludeCurrent()->get();
                 break;
             case 'personnel_with_user_assignment':
-                $data = Personnel::withArea()->excludeCurrent()->get();
+                $data = Personnel::excludeCurrent()->get();
                 break;
 
             // Agregar más casos según sea necesario
@@ -85,7 +85,9 @@ class PersonnelController extends Controller
                 'middle_name' => $data['middle_name'] ?? null,
                 'phone' => $data['phone'] ?? null,
                 'email' => $data['email'],
+                'curp' => $data['curp'],
                 'area_id' => $data['area_id'],
+                'area_name' => $data['area_name'],
             ]);
             $response['ok'] = true;
             $response['message'] = 'Personal registrado con éxito.';
@@ -106,7 +108,6 @@ class PersonnelController extends Controller
      */
     public function show(Personnel $personnel)
     {
-        $personnel->load('area');
         return response()->json([
             'ok' => true,
             'message' => 'Personal encontrado con éxito.',

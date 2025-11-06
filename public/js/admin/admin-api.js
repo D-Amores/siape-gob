@@ -26,31 +26,6 @@ async function getPersonnelApi(consultOption = 'area') {
     return [];
 }
 
-async function getAreaApi() {
-    const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
-    try {
-        const response = await fetch(vURIAreaApi, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': csrfToken
-            },
-            body: JSON.stringify({ option: 'area' })
-        });
-
-        if (!response.ok) throw new Error(`Error HTTP: ${response.status}`);
-
-        const result = await response.json();
-
-        if (result.ok) {
-            return result.data;
-        }
-    } catch (error) {
-        console.error('Error en obtener areas:', error);
-    }
-    return [];
-}
-
 async function getUserApi() {
     const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
     try {

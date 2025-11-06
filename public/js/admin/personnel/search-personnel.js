@@ -67,11 +67,12 @@ searchResults.addEventListener('click', (e) => {
   document.getElementById('middle_name').value = apellidoMaterno;
   document.getElementById('email').value = person.correo ?? '';
   document.getElementById('phone').value = person.telefono ?? '';
+  document.getElementById('area_name').value = person.area ?? '';
+  document.getElementById('area_id').value = person.id_area ?? '';
+  document.getElementById('curp').value = person.curp ?? '';
 
   // Cerrar la lista
   searchResults.style.display = 'none';
   searchInput.value = person.persona;
-
-  console.log({ nombre, apellidoPaterno, apellidoMaterno });
 });
 

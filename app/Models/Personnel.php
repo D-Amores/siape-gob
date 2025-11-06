@@ -18,8 +18,10 @@ class Personnel extends Model
         'middle_name',
         'phone',
         'email',
+        'curp',
         'is_active',
-        'area_id'
+        'area_id',
+        'area_name'
     ];
     /**
      * Get the attributes that should be cast.

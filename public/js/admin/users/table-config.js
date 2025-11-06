@@ -47,16 +47,16 @@ function loadUsersTable(data) {
                 }
             },
             {
-                data: "area.name",
+                data: "personnel.area_name",
                 defaultContent: "Sin área",
                 title: "Área",
-                render: (area) => `
+                render: (area_name) => `
                     <div class="text-truncate"
                          style="max-width: 140px; cursor: pointer;"
-                         title="${capitalizeWords(area ?? 'Sin área')}"
+                         title="${capitalizeWords(area_name ?? 'Sin área')}"
                          data-bs-toggle="tooltip"
                          data-bs-placement="top">
-                        ${capitalizeWords(area ?? 'Sin área')}
+                        ${capitalizeWords(area_name ?? 'Sin área')}
                     </div>
                 `
             },

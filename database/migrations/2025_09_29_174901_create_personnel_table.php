@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('middle_name')->nullable();
             $table->string('phone')->nullable();
             $table->string('email')->unique();
+            $table->string('curp')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->boolean('is_active')->default(true);
             $table->string('area_name')->nullable();

@@ -1,24 +1,4 @@
 let dataOriginal = [];
-// Cargar datos en las tablas y selects, modales, etc.
-async function areasToSelect() {
-    const selects = document.getElementsByClassName('areaSelect');
-    const areas = await getAreaApi();
-
-    Array.from(selects).forEach(select => {
-        // Limpiar opciones
-        select.innerHTML = '<option value="" disabled selected>Seleccionar área</option>';
-
-        // Llenar opciones
-        areas.forEach(area => {
-            const option = document.createElement('option');
-            option.value = area.id;
-            option.textContent = area.name;
-
-            select.appendChild(option);
-        });
-    });
-}
-
 // Cargar personal
 async function loadPersonnel() {
     data = await getPersonnelApi();
@@ -39,6 +19,8 @@ async function loadPersonnelDataOnModalEdit(personnelId) {
     document.getElementById('middle_name_edit').value = personnel.middle_name || '';
     document.getElementById('phone_edit').value = personnel.phone || '';
     document.getElementById('email_edit').value = personnel.email || '';
+    //document.getElementById('area_id_edit').value = personnel.area_id || '';
+    //document.getElementById('area_name_edit').value = personnel.area_name || '';
 
     // Estado (is_active)
     const isActiveSelect = document.getElementById('is_active_edit');
@@ -46,11 +28,6 @@ async function loadPersonnelDataOnModalEdit(personnelId) {
         option.selected = option.value == (personnel.is_active ? '1' : '0');
     });
 
-    // Área
-    const areaSelect = document.getElementById('area_id_edit');
-    Array.from(areaSelect.options).forEach(option => {
-        option.selected = option.value == (personnel.area?.id || '');
-    });
     // Guardamos los datos originales para comparar después
     dataOriginal = {
         name: personnel.name || '',
@@ -59,7 +36,8 @@ async function loadPersonnelDataOnModalEdit(personnelId) {
         phone: personnel.phone || '',
         email: personnel.email || '',
         is_active: personnel.is_active ? '1' : '0',
-        area_id: personnel.area_id || ''
+        //area_id: personnel.area_id || '',
+        //area_name: personnel.area_name || ''
     };
 }
 
@@ -159,10 +137,8 @@ async function initAdminPanel() {
     forceCloseModalWithRemoveId('btnCloseModalPersonnelEdit', 'modalPersonnelEdit', 'btnOpenModalPersonnelEdit');
     
     await loadPersonnel(); // Carga el personal
-    await areasToSelect(); // Carga las áreas
     const dataExamples = await getExternalDataPersonnelApi('Roberto'); // Carga los usuarios para asignar al personal si es necesario
 
-    console.log('Datos de ejemplo desde API externa:', dataExamples);   
     btnPersonnelCreate.addEventListener('click', personnelCreate);
     btnPersonnelEdit.addEventListener('click', personnelUpdate);
 
