@@ -24,7 +24,7 @@ class User extends Authenticatable
         'password',
         'profile_picture',
         'is_active',
-        'area_id',
+        //'area_id',
         'personnel_id',
     ];
 
@@ -58,10 +58,10 @@ class User extends Authenticatable
         return $this->belongsTo(Personnel::class);
     }
 
-    public function area()
-    {
-        return $this->belongsTo(Area::class);
-    }
+    // public function area()
+    // {
+    //     return $this->belongsTo(Area::class);
+    // }
 
     public function getAvatarUrlAttribute(): string
     {

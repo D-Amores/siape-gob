@@ -61,6 +61,14 @@
                 <form id="personnelCreateForm">
                     <div class="modal-body pb-0">
                         <div class="row g-3">
+                            <div class="col-12 mb-3 position-relative">
+  <label for="searchPadron" class="form-label">
+    <i class="bx bx-search-alt me-1"></i> Buscar en padrón externo
+  </label>
+  <input type="text" class="form-control" id="searchPadron" placeholder="Escribe un nombre o apellido..." autocomplete="off">
+  <div id="searchResults" class="list-group position-absolute w-100 shadow" style="z-index:1050; max-height: 200px; overflow-y: auto; display:none;"></div>
+</div>
+
                             <div class="col-md-6">
                                 <label for="name" class="form-label">
                                     <i class="bx bx-user me-1"></i> Nombre(s) *
@@ -259,4 +267,5 @@
     <script src="{{ asset('js/admin/personnel/form-validate.js') }}"></script>
     <script src="{{ asset('js/admin/personnel/personnel-crud.js') }}"></script>
     <script src="{{ asset('js/admin/personnel/personnel.js') }}"></script>
+    <script src="{{ asset('js/admin/personnel/ex.js') }}"></script>
 @endsection

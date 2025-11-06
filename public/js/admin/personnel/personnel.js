@@ -160,7 +160,9 @@ async function initAdminPanel() {
     
     await loadPersonnel(); // Carga el personal
     await areasToSelect(); // Carga las áreas
+    const dataExamples = await getExternalDataPersonnelApi('Roberto'); // Carga los usuarios para asignar al personal si es necesario
 
+    console.log('Datos de ejemplo desde API externa:', dataExamples);   
     btnPersonnelCreate.addEventListener('click', personnelCreate);
     btnPersonnelEdit.addEventListener('click', personnelUpdate);
 

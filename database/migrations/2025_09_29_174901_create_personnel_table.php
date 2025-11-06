@@ -20,7 +20,9 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->boolean('is_active')->default(true);
-            $table->foreignId('area_id')->constrained('areas')->onDelete('cascade');
+            $table->string('area_name')->nullable();
+            $table->integer('area_id')->nullable();
+            //$table->foreignId('area_id')->constrained('areas')->onDelete('cascade');
             $table->timestamps();
         });
     }
