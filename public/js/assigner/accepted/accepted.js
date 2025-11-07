@@ -5,7 +5,6 @@ async function startApp() {
     loadAssetsAccepted(acceptedTableData);
 
     assignedTableTbody.addEventListener('click', async (e)=>{
-        console.log('click detected');
         const btnUnassign = e.target.closest('.btn-unassign');
         if (btnUnassign) {
             const assetId = btnUnassign.getAttribute('data-id');

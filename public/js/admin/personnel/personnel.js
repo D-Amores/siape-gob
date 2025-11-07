@@ -137,8 +137,6 @@ async function initAdminPanel() {
     forceCloseModalWithRemoveId('btnCloseModalPersonnelEdit', 'modalPersonnelEdit', 'btnOpenModalPersonnelEdit');
     
     await loadPersonnel(); // Carga el personal
-    const dataExamples = await getExternalDataPersonnelApi('Roberto'); // Carga los usuarios para asignar al personal si es necesario
-
     btnPersonnelCreate.addEventListener('click', personnelCreate);
     btnPersonnelEdit.addEventListener('click', personnelUpdate);
 

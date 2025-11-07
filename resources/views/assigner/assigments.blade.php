@@ -16,6 +16,9 @@
     <button type="button" class="btn btn-primary" id="btnOpenModalAddAssignment">
         <i class="fas fa-plus-circle me-2"></i> Agregar Asignación
     </button>
+    <a href="{{ route('assignments.index') }}" class="btn btn-outline-primary">
+        <i class="fas fa-arrow-right me-2"></i> Bienes Aceptados
+    </a>
 @endsection
 
 @section('content')
@@ -39,37 +42,6 @@
                             </thead>
                             <tbody>
                                 <!-- Contenido de la primera tabla -->
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="datatables mt-4">
-            <div class="card shadow-lg">
-                <div class="card-body">
-                    <div class="mb-2">
-                        <h4 class="card-title mb-0">Asignaciones Aceptadas</h4>
-                    </div>
-                    <div class="table-responsive">
-                        <table id="accepted_assignments" class="table table-hover w-100 table-striped table-bordered">
-                            <thead>
-                                <tr class="text-center">
-                                    <th>#</th>
-                                    <th>Activo</th>
-                                    <!-- <th>Categoría</th> -->
-                                    <!-- <th>Marca</th> -->
-                                    <th>Asignado por</th>
-                                    <th>Asignado a</th>
-                                    <th>Con Área</th>
-                                    <th>Fecha Asignación</th>
-                                    <th>Fecha Aceptación</th>
-                                    <th>Acciones</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <!-- Aquí irá tu contenido dinámico -->
                             </tbody>
                         </table>
                     </div>
@@ -202,9 +174,4 @@
     <script src="{{ asset('js/assigner/assigment/personnel.js') }}"></script>
     <script src="{{ asset('js/assigner/assigment/assigment-crud.js') }}"></script>
     <script src="{{ asset('js/assigner/assigment/assigments.js') }}"></script>
-
-    <!-- Accepted Assignments Config -->
-    <script src="{{ asset('js/assigner/accepted/table-config.js') }}"></script>
-    <script src="{{ asset('js/assigner/accepted/accepted-crud.js') }}"></script>
-    <script src="{{ asset('js/assigner/accepted/accepted.js') }}"></script>
 @endsection

@@ -9,12 +9,12 @@ function loadAssetsAccepted(assetPendings) {
             render: (data, type, row, meta) => meta.row + 1 // contador visual
         },
         { 
-            data: 'asset.inventory_number', 
+            data: 'asset.serial_number', 
             title: 'Activo', 
             className: 'text-center',
             render: (data, type, row) => {
                 const model = row.asset?.model ?? '—';
-                return `<strong>${data} - </strong><small>${model}</small>`;
+                return `<strong>${model} - </strong><small>${data}</small>`;
             }
         },
         // { 

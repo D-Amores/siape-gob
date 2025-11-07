@@ -35,6 +35,7 @@ Route::middleware('auth')->group(function () {
         Route::resource('brands', BrandController::class)->only(['index', 'store', 'update', 'destroy']);
         Route::resource('categories', CategoryController::class)->only(['index', 'store', 'update', 'destroy']);
         Route::resource('personnel-asset-pending', PersonnelAssetPendingController::class)->only(['index', 'store', 'update', 'destroy']);
+        Route::get('assignments', [AssetAcceptedController::class, 'index'])->name('assignments.index');
         
         Route::post('admin/personnel/api', [PersonnelController::class, 'personnelApi']); // Temporal no es mi ruta (iba en middleware('role:admin') )
         Route::post('brands/api', [BrandController::class, 'brandApi']);
