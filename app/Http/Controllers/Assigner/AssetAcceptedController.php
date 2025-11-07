@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Assigner\AssetAcceptedApiRequest;
 use App\Models\PersonnelAsset;
 use App\Models\PersonnelAssetPending;
+use Illuminate\Support\Facades\Log;
 
 class AssetAcceptedController extends Controller
 {
@@ -48,8 +49,8 @@ class AssetAcceptedController extends Controller
                         return [
                             'id' => $assignment->id,
                             'asset' => [
-                                'inventory_number' => $assignment->asset->inventory_number,
                                 'model' => $assignment->asset->model,
+                                'serial_number' => $assignment->asset->serial_number,
                                 'brand' => $assignment->asset->brand->name ?? 'Sin marca',
                                 'category' => $assignment->asset->category->name ?? 'Sin categoría',
                             ],
@@ -79,10 +80,13 @@ class AssetAcceptedController extends Controller
             }
         } catch (\Throwable $e) {
             $response['message'] = 'Error al procesar la solicitud.';
-            if (config('app.debug')) {
-                $response['error'] = $e->getMessage();
-            }
+            Log::error("AssetAcceptedController@assignmentsAssetApi: {$e->getMessage()}");
         }
         return response()->json($response, $status);
+    }
+
+    public function index()
+    {
+        return view('assigner.accepted');
     }
 }

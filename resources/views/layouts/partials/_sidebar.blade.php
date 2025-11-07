@@ -80,6 +80,15 @@
                                             <span class="hide-menu">Asignaciones</span>
                                         </a>
                                     </li>
+                                    <li class="sidebar-item">
+                                        <a class="sidebar-link" href="{{ route('assignments.index') }}"
+                                            aria-expanded="false">
+                                            <span>
+                                                <i class="ti ti-arrow-left"></i>
+                                            </span>
+                                            <span class="hide-menu">Aceptadas</span>
+                                        </a>
+                                    </li>
                                     @endhasanyrole
                                     @role('user')
                                     <li class="sidebar-item">
