@@ -23,6 +23,7 @@ return new class extends Migration
             $table->text('description')->nullable();
             $table->text('type')->nullable();
             $table->boolean('is_active')->default(true)->comment('Activo o inactivo');
+            $table->foreignId('status_id')->constrained('statuses')->restrictOnDelete();
             $table->foreignId('brand_id')->constrained('brands')->restrictOnDelete();
             $table->foreignId('category_id')->constrained('categories')->restrictOnDelete();
             $table->timestamps();
