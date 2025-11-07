@@ -24,8 +24,8 @@ class AssetController extends Controller
         switch ($option) {
             case 'table':
                 // Solo los campos necesarios para la tabla principal + relaciones básicas
-                $data = Asset::with(['brand', 'category'])
-                    ->get(['id', 'inventory_number', 'model', 'serial_number', 'brand_id', 'category_id', 'is_active', 'type']);
+                $data = Asset::with(['brand', 'category', 'status'])
+                    ->get(['id', 'inventory_number', 'model', 'serial_number', 'brand_id', 'category_id', 'status_id', 'is_active', 'type']);
                 break;
 
             case 'details':

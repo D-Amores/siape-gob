@@ -25,7 +25,8 @@
             <div class="card shadow-lg">
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table id="file_export" class="table table-hover w-100 table-striped table-bordered text-nowrap align-middle">
+                        <table id="file_export"
+                            class="table table-hover w-100 table-striped table-bordered text-nowrap align-middle">
                             <thead class>
                                 <tr>
                                     <th class="text-center py-1">N. de Inventario</th>
@@ -33,6 +34,7 @@
                                     <th class="py-1">Serie</th>
                                     <th class="py-1">Marca</th>
                                     <th class="py-1">Categoría</th>
+                                    <th class="text-center py-1">Condición</th>
                                     <th class="text-center py-1">Estado</th>
                                     <th class="text-center py-1">Acciones</th>
                                 </tr>
@@ -47,6 +49,7 @@
                                     <th class="py-1">Serie</th>
                                     <th class="py-1">Marca</th>
                                     <th class="py-1">Categoría</th>
+                                    <th class="text-center py-1">Condición</th>
                                     <th class="text-center py-1">Estado</th>
                                     <th class="text-center py-1">Acciones</th>
                                 </tr>
@@ -78,7 +81,8 @@
                     <h5 class="modal-title fw-bold text-primary" id="modalBienLabel">
                         <i class="fas fa-laptop me-2"></i><span id="modalBienTitulo">Nuevo Bien</span>
                     </h5>
-                    <button type="button" class="btn-close" id="btnCerrarModalBien" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                    <button type="button" class="btn-close" id="btnCerrarModalBien" data-bs-dismiss="modal"
+                        aria-label="Cerrar"></button>
                 </div>
 
                 <!-- Body -->
@@ -179,7 +183,8 @@
 
                 <!-- Footer -->
                 <div class="modal-footer border-0">
-                    <button type="button" class="btn btn-outline-secondary" id="btnCerrarFooter" data-bs-dismiss="modal">
+                    <button type="button" class="btn btn-outline-secondary" id="btnCerrarFooter"
+                        data-bs-dismiss="modal">
                         <i class="fas fa-times me-1"></i> Cerrar
                     </button>
                     <button type="submit" form="formNuevoBien" class="btn btn-primary">
@@ -245,6 +250,10 @@
                                             <div id="detalle-tipo" class="fw-semibold"></div>
                                         </div>
                                         <div class="col-6">
+                                            <div class="small text-muted">Condición</div>
+                                            <div id="detalle-condicion" class="fw-semibold"></div>
+                                        </div>
+                                        <div class="col-6">
                                             <div class="small text-muted">Estado</div>
                                             <span id="detalle-estado" class="badge rounded-pill px-3 py-2"></span>
                                         </div>
@@ -305,18 +314,16 @@
             </div>
         </div>
     </div>
-
 @endsection
 
 @section('scripts')
+    <script src="{{ asset('cdn/buttons/3.0.2/js/dataTables.buttons.min.js') }}"></script>
+    <script src="{{ asset('cdn/buttons/3.0.2/js/buttons.html5.min.js') }}"></script>
+    <script src="{{ asset('cdn/buttons/3.0.2/js/buttons.print.min.js') }}"></script>
 
-    <script src="{{ asset('cdn/buttons/3.0.2/js/dataTables.buttons.min.js')}}"></script>
-    <script src="{{ asset('cdn/buttons/3.0.2/js/buttons.html5.min.js')}}"></script>
-    <script src="{{ asset('cdn/buttons/3.0.2/js/buttons.print.min.js')}}"></script>
-
-    <script src="{{ asset('cdn/ajax/libs/jszip/3.10.1/jszip.min.js')}}"></script>
-    <script src="{{ asset('cdn/ajax/libs/pdfmake/0.2.7/pdfmake.min.js')}}"></script>
-    <script src="{{ asset('cdn/ajax/libs/pdfmake/0.2.7/vfs_fonts.js')}}"></script>
+    <script src="{{ asset('cdn/ajax/libs/jszip/3.10.1/jszip.min.js') }}"></script>
+    <script src="{{ asset('cdn/ajax/libs/pdfmake/0.2.7/pdfmake.min.js') }}"></script>
+    <script src="{{ asset('cdn/ajax/libs/pdfmake/0.2.7/vfs_fonts.js') }}"></script>
 
     <script src="{{ asset('js/helpers/tools/datatable-manager.js') }}"></script>
     <script src="{{ asset('js/helpers/alerts/alerts.js') }}"></script>

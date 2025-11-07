@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', function () {
             'Content-Type': 'application/json',
             'X-CSRF-TOKEN': csrfToken
         },
-        body: JSON.stringify({ option: 'table' }) 
+        body: JSON.stringify({ option: 'table' })
     })
     .then(response => response.json())
     .then(json => {
@@ -26,6 +26,7 @@ document.addEventListener('DOMContentLoaded', function () {
             { data: 'serial_number', className: 'fw-normal', title: 'N° Serie' },
             { data: 'brand.name', className: 'fw-normal', title: 'Marca' },
             { data: 'category.name', className: 'fw-normal', title: 'Categoría' },
+            { data: 'status.name', className: 'fw-normal', title: 'Condición' },
             {
                 data: 'is_active_label',
                 className: 'text-center',
