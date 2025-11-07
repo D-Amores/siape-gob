@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\AcceptAssignments\AssetsUniqueUserController;
 use App\Http\Controllers\AcceptAssignments\AcceptAssignmentsController;
-use App\Http\Controllers\Assigner\AssetController;
+use App\Http\Controllers\Asset\AssetController;
 use App\Http\Controllers\Assigner\BrandController;
 use App\Http\Controllers\Assigner\CategoryController;
 use App\Http\Controllers\Assigner\AssetAcceptedController;
@@ -25,8 +25,13 @@ Route::middleware('guest')->group(function () {
 
 Route::middleware('auth')->group(function () {
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
+
+    // Historic routes
     Route::get('history', [HistoricController::class, 'index'])->name('historic.index');
     Route::post('historic/api',[HistoricController::class, 'historicApi']);
+
+    //Service routes
+
     // Logout route
     Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 

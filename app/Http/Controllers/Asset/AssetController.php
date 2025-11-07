@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Controllers\Assigner;
+namespace App\Http\Controllers\Asset;
 
-use App\Http\Requests\Assigner\StoreAssetRequest;
-use App\Http\Requests\Assigner\UpdateAssetRequest;
-use App\Http\Requests\Assigner\AssetsApiRequest;
+use App\Http\Requests\Asset\StoreAssetRequest;
+use App\Http\Requests\Asset\UpdateAssetRequest;
+use App\Http\Requests\Asset\AssetsApiRequest;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Log;
 use App\Models\Asset;

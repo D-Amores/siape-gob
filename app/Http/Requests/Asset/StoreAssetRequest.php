@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests\Assigner;
+namespace App\Http\Requests\Asset;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
