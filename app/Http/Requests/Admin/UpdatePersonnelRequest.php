@@ -31,7 +31,7 @@ class UpdatePersonnelRequest extends FormRequest
             'phone' => 'nullable|string|max:10|min:10',
             'email' => 'sometimes|required|email|unique:personnel,email,' . $this->getPersonnelId(),
             'is_active' => 'sometimes|boolean',
-            'area_id' => 'sometimes|required|exists:areas,id',
+            //'area_id' => 'sometimes|required|exists:areas,id',
         ];
     }
 
@@ -46,8 +46,8 @@ class UpdatePersonnelRequest extends FormRequest
             'phone.max' => 'El teléfono no debe ser mayor a 10 caracteres.',
             'phone.min' => 'El teléfono no debe ser menor a 10 caracteres.',
             'is_active.boolean' => 'El campo activo debe ser verdadero o falso, activo o inactivo.',
-            'area_id.required' => 'El área es obligatoria.',
-            'area_id.exists' => 'El área seleccionada no es válida.',
+            //'area_id.required' => 'El área es obligatoria.',
+            //'area_id.exists' => 'El área seleccionada no es válida.',
         ];
     }
 
@@ -60,7 +60,7 @@ class UpdatePersonnelRequest extends FormRequest
             'phone' => 'teléfono',
             'email' => 'correo electrónico',
             'is_active' => 'estado',
-            'area_id' => 'área',
+            //'area_id' => 'área',
         ];
     }
 

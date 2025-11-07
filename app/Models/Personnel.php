@@ -18,8 +18,10 @@ class Personnel extends Model
         'middle_name',
         'phone',
         'email',
+        'curp',
         'is_active',
-        'area_id'
+        'area_id',
+        'area_name'
     ];
     /**
      * Get the attributes that should be cast.
@@ -58,10 +60,10 @@ class Personnel extends Model
     /**
      * Scopes for querying personnel with specific relationships.
      */
-    public function scopeWithArea($query)
-    {
-        return $query->with('area');
-    }
+    // public function scopeWithArea($query)
+    // {
+    //     return $query->with('area');
+    // }
 
     public function scopeWithUser($query)
     {
@@ -83,10 +85,10 @@ class Personnel extends Model
     }
 
 
-    public function area()
-    {
-        return $this->belongsTo(Area::class);
-    }
+    // public function area()
+    // {
+    //     return $this->belongsTo(Area::class);
+    // }
 
     public function user()
     {
@@ -129,7 +131,7 @@ class Personnel extends Model
 
          $this->user->update([
             'is_active' => false,
-            'area_id' => null,
+            //'area_id' => null,
         ]);
     }
 

@@ -28,12 +28,12 @@ class UserController extends Controller
                     $status = 200;
                     break;
                 case 'users_areas':
-                    $users = User::with('area')->excludeCurrent()->get();
+                    $users = User::with('personnel')->excludeCurrent()->get();
                     $response = ['ok' => true, 'message' => 'Usuarios con áreas obtenidos exitosamente.', 'data' => $users];
                     $status = 200;
                     break;
                 case 'users_areas_personnel':
-                    $users = User::with('area', 'personnel', 'roles')->excludeCurrent()->get();
+                    $users = User::with('personnel', 'roles')->excludeCurrent()->get();
                     $response = ['ok' => true, 'message' => 'Usuarios con áreas y personal obtenidos exitosamente.', 'data' => $users];
                     $status = 200;
                     break;
@@ -95,7 +95,7 @@ class UserController extends Controller
             $role = Role::find($roleId); // Obtener el rol basado en el ID proporcionado
 
             // Asignar el área y el estado activo basados en el personal seleccionado
-            $data['area_id'] = $personnel->area_id;
+            //$data['area_id'] = $personnel->area_id;
             $data['is_active'] = $personnel->isActive();
 
             if ($role) {
@@ -154,7 +154,7 @@ class UserController extends Controller
             // Si se actualiza el personnel_id, actualizar también el area_id
             if (isset($data['personnel_id'])) {
                 $personnel = Personnel::find($data['personnel_id']);
-                $data['area_id'] = $personnel->area_id;
+                //$data['area_id'] = $personnel->area_id;
                 $data['is_active'] = $personnel->isActive();
             }
             // Actualizar roles si se proporciona role_id
