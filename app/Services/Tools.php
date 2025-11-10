@@ -20,4 +20,9 @@ class Tools
         }
         return (string) $value;
     }
+
+    public static function generateFolio(string $prefix, int $number, int $year): string
+    {
+        return sprintf('%s-%d-%04d', $prefix, $year, $number);
+    }
 }

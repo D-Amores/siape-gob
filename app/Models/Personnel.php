@@ -104,6 +104,21 @@ class Personnel extends Model
         return $this->hasMany(PersonnelAsset::class, 'receiver_id');
     }
 
+    public function maintenanceReports()
+    {
+        return $this->hasMany(MaintenanceReport::class, 'reported_by');
+    }
+
+    public function maintenance()
+    {
+        return $this->hasMany(Maintenance::class, 'performed_by');
+    }
+
+    public function maintenanceReportsLogs()
+    {
+        return $this->hasMany(MaintenanceReportLog::class, 'personnel_id');
+    }
+
     public function syncWithUser(): void
     {
         if (!$this->user) return;
