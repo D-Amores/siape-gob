@@ -18,7 +18,7 @@ class AssetReportController extends Controller
      */
     public function index()
     {
-        //
+        return view('assets.reports.index');
     }
 
     /**

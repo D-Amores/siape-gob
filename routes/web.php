@@ -6,6 +6,7 @@ use App\Http\Controllers\AcceptAssignments\AssetsUniqueUserController;
 use App\Http\Controllers\AcceptAssignments\AcceptAssignmentsController;
 use App\Http\Controllers\Asset\AssetController;
 use App\Http\Controllers\Asset\AssetReportController;
+use App\Http\Controllers\Asset\AssetTrackingController;
 use App\Http\Controllers\Assigner\BrandController;
 use App\Http\Controllers\Assigner\CategoryController;
 use App\Http\Controllers\Assigner\AssetAcceptedController;
@@ -32,13 +33,14 @@ Route::middleware('auth')->group(function () {
     Route::post('historic/api',[HistoricController::class, 'historicApi']);
 
     //Service routes
-    Route::resource('asset-reports', AssetReportController::class)->only(['index', 'store', 'update', 'destroy']);
+    Route::resource('assets/asset-reports', AssetReportController::class)->only(['index', 'store', 'update', 'destroy']);
 
     // Logout route
     Route::post('logout', [LoginController::class, 'logout'])->name('logout');
 
     Route::middleware('role:assigner|admin')->group(function () {
         Route::resource('assets', AssetController::class)->only(['index', 'store', 'update', 'destroy']);
+        Route::resource('assets/asset-tracking', AssetTrackingController::class);
         Route::resource('brands', BrandController::class)->only(['index', 'store', 'update', 'destroy']);
         Route::resource('categories', CategoryController::class)->only(['index', 'store', 'update', 'destroy']);
         Route::resource('personnel-asset-pending', PersonnelAssetPendingController::class)->only(['index', 'store', 'update', 'destroy']);
