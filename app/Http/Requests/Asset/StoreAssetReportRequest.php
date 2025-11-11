@@ -25,10 +25,10 @@ class StoreAssetReportRequest extends FormRequest
     {
         return [
             'asset_id' => 'required|exists:assets,id',
-            'reported_by' => 'required|exists:personnel,id',
+            //'reported_by' => 'required|exists:personnel,id',
             //'status_id' => 'required|exists:statuses,id',
             'description' => 'required|string',
-            'observation' => 'nullable|string',
+            //'observation' => 'nullable|string',
             //'reported_at' => 'required|date',
             //'closed_at' => 'nullable|date|after_or_equal:reported_at',
         ];
@@ -39,13 +39,13 @@ class StoreAssetReportRequest extends FormRequest
         return [
             'asset_id.required' => 'El campo activo es obligatorio.',
             'asset_id.exists' => 'El activo seleccionado no existe.',
-            'reported_by.required' => 'El campo reportado por es obligatorio.',
-            'reported_by.exists' => 'El personal seleccionado no existe.',
+            //'reported_by.required' => 'El campo reportado por es obligatorio.',
+            //'reported_by.exists' => 'El personal seleccionado no existe.',
             //'status_id.required' => 'El campo estado es obligatorio.',
             //'status_id.exists' => 'El estado seleccionado no existe.',
             'description.required' => 'El campo descripción es obligatorio.',
             'description.string' => 'El campo descripción debe ser una cadena de texto.',
-            'observation.string' => 'El campo observación debe ser una cadena de texto.',
+            //'observation.string' => 'El campo observación debe ser una cadena de texto.',
             //'reported_at.required' => 'El campo fecha de reporte es obligatorio.',
             //'reported_at.date' => 'El campo fecha de reporte debe ser una fecha válida.',
             //'closed_at.date' => 'El campo fecha de cierre debe ser una fecha válida.',
@@ -60,7 +60,7 @@ class StoreAssetReportRequest extends FormRequest
             'reported_by' => 'reportado por',
             //'status_id' => 'estado',
             'description' => 'descripción',
-            'observation' => 'observación',
+            //'observation' => 'observación',
             //'reported_at' => 'fecha de reporte',
             //'closed_at' => 'fecha de cierre',
         ];
