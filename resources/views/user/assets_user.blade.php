@@ -219,6 +219,96 @@
         </div>
     </div>
 
+    <!-- Modal Reportar el Bien -->
+    <div class="modal fade" id="modalReportesUnicoUsuario" tabindex="-1" aria-labelledby="modalReportesBienLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-centered">
+            <div class="modal-content border-0 shadow rounded-4">
+
+                <!-- Encabezado -->
+                <div class="modal-header bg-light border-0">
+                    <h5 class="modal-title fw-bold text-primary" id="modalReportesBienLabel">
+                        <i class="fas fa-laptop me-2"></i>Reportar Bien
+                    </h5>
+                    <button type="button" class="btn-close" id="btnCerrarModalReporte" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+
+                <!-- Cuerpo -->
+                <div class="modal-body py-4 px-4">
+                    <form id="formReportarBien">
+                        <div class="row g-4">
+
+                            <!-- Columna Izquierda -->
+                            <div class="col-md-6">
+                                <div class="card h-100 border-0 bg-light-subtle">
+                                    <div class="card-body">
+                                        <h6 class="text-uppercase text-secondary fw-semibold mb-3">
+                                            <i class="fas fa-info-circle me-2"></i>Información del Reporte
+                                        </h6>
+
+                                        <div class="form-floating mb-3">
+                                            <input 
+                                                type="text" 
+                                                class="form-control" 
+                                                id="selectBien" 
+                                                name="bien" 
+                                                placeholder="Ingrese el bien" 
+                                                readonly
+                                                required
+                                            >
+                                            <label for="selectBien"><i class="fas fa-laptop me-1 text-muted"></i> Bien</label>
+                                        </div>
+
+                                        <div class="form-floating mb-3">
+                                            <input 
+                                                type="text" 
+                                                class="form-control" 
+                                                id="selectPersonal" 
+                                                name="personal" 
+                                                placeholder="Ingrese el nombre del personal" 
+                                                readonly
+                                                required
+                                            >
+                                            <label for="selectPersonal"><i class="fas fa-user me-1 text-muted"></i> Personal</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Columna Derecha -->
+                            <div class="col-md-6">
+                                <div class="card h-100 border-0 bg-light-subtle">
+                                    <div class="card-body">
+                                        <h6 class="text-uppercase text-secondary fw-semibold mb-3">
+                                            <i class="fas fa-align-left me-2"></i>Detalles del Reporte
+                                        </h6>
+
+                                        <div class="form-floating mb-3">
+                                            <textarea class="form-control" placeholder="Descripción" id="descripcionReporte" style="height: 100px" required></textarea>
+                                            <label for="descripcionReporte"><i class="fas fa-pen me-1 text-muted"></i> Descripción *</label>
+                                            <div class="form-text">Describa detalladamente el problema o situación a reportar.</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Footer -->
+                <div class="modal-footer border-0">
+                    <button type="button" class="btn btn-outline-secondary" id="btnCerrarFooterReporte" data-bs-dismiss="modal">
+                        <i class="fas fa-times me-1"></i> Cerrar
+                    </button>
+                    <button type="submit" form="formReportarBien" class="btn btn-primary">
+                        <i class="fas fa-paper-plane me-1"></i> Enviar Reporte
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
     <div class="dark-transparent sidebartoggler"></div>
 @endsection
 
@@ -235,20 +325,20 @@
 
     <script src="{{ asset('js/helpers/tools/datatable-manager.js') }}"></script>
     <script src="{{ asset('js/helpers/alerts/alerts.js') }}"></script>
-
+    <script src="{{ asset('js/helpers/modals/modal-actions.js') }}"></script>
     
     <script src="{{ asset('js/user/assets_unique_user.js') }}"></script>
 
     <script>
-        
         //Api uris
         const vURIUniqueAssetsTableApi = `${BASE_URL}/assets-unique-user/api`;
         const vURIAcceptActionApi = `${BASE_URL}/accept-assignments/accept`;
         const vURIAssetsDetails = `${BASE_URL}/assets-unique-user`;
+        const urlAssetApi = `${BASE_URL}/assets/api`;
+        const URIReport = `${BASE_URL}/asset-reports`;
         const vURIDownloadDocument = `${BASE_URL}/download-document`;
         const vURIDownloadRespaldoDocument = `${BASE_URL}/assets-user/download-respaldo-document`;
         const languageDataTable = "{{ asset('cdn/datatables-language/es-MX.json') }}";
     </script>
-
 
 @endsection

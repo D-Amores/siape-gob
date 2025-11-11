@@ -3,26 +3,57 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     // Definir columnas para la tabla
     const columns = [
-        { data: 'inventory_number', className: 'text-center' },
-        { data: 'model' },
-        { data: 'serial_number' },
-        { data: 'brand' },
-        { data: 'category' },
+        { 
+            data: 'inventory_number', 
+            className: 'text-center',
+            render: function(data, type, row) {
+                return data; 
+            }
+        },
+        { 
+            data: 'model',
+            render: function(data, type, row) {
+                return data; 
+            }
+        },
+        { 
+            data: 'serial_number',
+            render: function(data, type, row) {
+                return data; 
+            }
+        },
+        { 
+            data: 'brand',
+            render: function(data, type, row) {
+                return data; 
+            }
+        },
+        { 
+            data: 'category',
+            render: function(data, type, row) {
+                return data; 
+            }
+        },
         { 
             data: 'status', 
             className: 'text-center',
-            render: function(status) {
-                const badgeClass = status === 'Activo' ? 'bg-success' : 'bg-secondary';
-                return `<span class="badge ${badgeClass}">${status}</span>`;
+            render: function(data, type, row) {
+                const badgeClass = data === 'Activo' ? 'bg-success' : 'bg-secondary';
+                return `<span class="badge ${badgeClass}">${data}</span>`;
             }
         },
         {
             data: 'id',
             className: 'text-center',
-            render: function(id) {
+            render: function(data, type, row) {
                 return `
-                    <button class="btn btn-info btn-sm detalles-btn" data-id="${id}">
+                    <button class="btn btn-info btn-sm detalles-btn me-1" data-id="${data}">
                         <i class="fas fa-eye me-1"></i> Ver
+                    </button>
+                    <button class="btn btn-warning btn-sm reportar-btn" 
+                        data-id="${data}" 
+                        data-inventory="${row.inventory_number}">
+                        <i class="fas fa-flag me-1"></i> Reportar
                     </button>
                 `;
             }
@@ -298,6 +329,181 @@ document.addEventListener('DOMContentLoaded', async function () {
             btnDescargar.disabled = false;
         }
     }
+
+    // --------------------------
+    // Reporte de Bienes
+    // --------------------------
+    
+    // Función para abrir el modal de reporte
+    async function openReportModal(assignmentId, assetInventoryNumber) {
+        try {
+            // Cargar los detalles completos del bien para obtener la información del personal
+            const assetDetails = await loadAssetDetails(assignmentId);
+            
+            if (!assetDetails) {
+                showAlert('Error al cargar los detalles del bien', "red", "Error");
+                return;
+            }
+
+            // Verificar que tenemos la información del receptor
+            if (!assetDetails.receiver_id || !assetDetails.receiver_name) {
+                showAlert('No se pudo obtener la información del personal asignado', "red", "Error");
+                return;
+            }
+
+            // Obtener el asset_id real de la tabla
+            const assetId = await getAssetIdFromTable(assignmentId);
+        
+            if (!assetId) {
+                showAlert('No se pudo obtener el ID del activo', "red", "Error");
+                return;
+            }
+
+            // Llenar los campos del modal con los datos del registro
+            document.getElementById('selectBien').value = assetInventoryNumber;
+            document.getElementById('selectPersonal').value = assetDetails.receiver_name;
+            
+            // Guardar los IDs en data attributes para usarlos en el envío
+            const modal = document.getElementById('modalReportesUnicoUsuario');
+            modal.setAttribute('data-asset-id', assetId);
+            modal.setAttribute('data-personal-id', assetDetails.receiver_id);
+
+            
+            // Abrir el modal usando el helper
+            openModalForEdit('modalReportesUnicoUsuario');
+            
+        } catch (error) {
+            console.error('Error al abrir modal de reporte:', error);
+            showAlert('Error al preparar el reporte', "red", "Error");
+        }
+    }
+    
+
+    async function getAssetIdFromTable(assignmentId) {
+        try {
+            // Obtener la tabla DataTable
+            const table = $('#assets_unique_user').DataTable();
+            if (!table) return null;
+            
+            // Buscar la fila que corresponde al assignmentId
+            const data = table.rows().data();
+            for (let i = 0; i < data.length; i++) {
+                const row = data[i];
+                if (row.id == assignmentId) {
+                    // Ahora que la API devuelve asset_id, lo podemos usar
+                    return row.asset_id || null;
+                }
+            }
+            return null;
+        } catch (error) {
+            console.error('Error al obtener asset_id de la tabla:', error);
+            return null;
+        }
+    }
+
+    // Función para limpiar el modal cuando se cierre
+    function clearReportModal() {
+        document.getElementById('selectBien').value = '';
+        document.getElementById('selectPersonal').value = '';
+        document.getElementById('descripcionReporte').value = '';
+        
+        const modal = document.getElementById('modalReportesUnicoUsuario');
+        modal.removeAttribute('data-asset-id');
+        modal.removeAttribute('data-personal-id');
+    }
+
+    // Agregar event listener para los botones de reportar - CORREGIDO
+    document.addEventListener('click', function(e) {
+        if (e.target.closest('.reportar-btn')) {
+            const button = e.target.closest('.reportar-btn');
+            const assetId = button.getAttribute('data-id');
+            const inventoryNumber = button.getAttribute('data-inventory');
+            
+            openReportModal(assetId, inventoryNumber);
+        }
+    });
+
+    // Configurar los event listeners para cerrar el modal
+    closeModal('btnCerrarModalReporte', 'modalReportesUnicoUsuario', 'btnCerrarFooterReporte');
+    closeModal('btnCerrarFooterReporte', 'modalReportesUnicoUsuario', 'btnCerrarFooterReporte');
+    
+    // Limpiar el modal cuando se cierre
+    document.getElementById('modalReportesUnicoUsuario').addEventListener('hidden.bs.modal', function() {
+        clearReportModal();
+    });
+
+    // Event listener para el envío del formulario
+    document.getElementById('formReportarBien').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        const modal = document.getElementById('modalReportesUnicoUsuario');
+        const assetId = modal.getAttribute('data-asset-id');
+        const personalId = modal.getAttribute('data-personal-id');
+        const description = document.getElementById('descripcionReporte').value;
+        
+        // Validaciones básicas
+        if (!assetId || !personalId) {
+            showAlert('Error: No se encontró la información del bien o personal', "red", "Error");
+            return;
+        }
+        
+        if (!description.trim()) {
+            showAlert('Por favor ingresa una descripción del reporte', "red", "Error");
+            document.getElementById('descripcionReporte').focus();
+            return;
+        }
+        
+        try {
+            // Mostrar loading - SELECTOR CORREGIDO
+            const submitBtn = document.querySelector('button[form="formReportarBien"]');
+            if (!submitBtn) {
+                showAlert('Error: No se pudo encontrar el botón de envío', "red", "Error");
+                return;
+            }
+            
+            const originalText = submitBtn.innerHTML;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i> Enviando...';
+            submitBtn.disabled = true;
+            
+            // Preparar datos para enviar
+            const requestData = {
+                asset_id: assetId,
+                reported_by: personalId,
+                description: description
+            };
+            
+            const response = await fetch(URIReport, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': token,
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify(requestData)
+            });
+            
+            const data = await response.json();
+            
+            if (data.ok) {
+                showAlert('Reporte creado exitosamente', "green", "Éxito");
+                clearReportModal();
+                closeModalForSuccess('modalReportesUnicoUsuario', 'btnCerrarFooterReporte');
+            } else {
+                showAlert(data.message || 'Error al crear el reporte', "red", "Error");
+            }
+            
+        } catch (error) {
+            console.error('Error al enviar reporte:', error);
+            showAlert('Error de conexión al enviar el reporte', "red", "Error");
+        } finally {
+            // Restaurar botón - SELECTOR CORREGIDO
+            const submitBtn = document.querySelector('button[form="formReportarBien"]');
+            if (submitBtn) {
+                submitBtn.innerHTML = '<i class="fas fa-paper-plane me-1"></i> Enviar Reporte';
+                submitBtn.disabled = false;
+            }
+        }
+    });
 
     await loadAssetsUniqueUser();
 });

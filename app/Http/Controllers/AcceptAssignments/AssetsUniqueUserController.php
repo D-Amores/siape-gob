@@ -96,6 +96,7 @@ class AssetsUniqueUserController extends Controller
                 'receiver_name' => $personnelAsset->receiver?->name
                     ? trim("{$personnelAsset->receiver?->last_name} {$personnelAsset->receiver?->middle_name} {$personnelAsset->receiver?->name} ")
                     : 'Desconocido',
+                'receiver_id' => $personnelAsset->receiver_id,
                 'path_acceptance_doc' => $personnelAsset->path_acceptance_doc ?? 'No disponible',
                 'path_respaldo_acceptance' => $personnelAsset->path_respaldo_acceptance ?? 'No disponible'
             ];
@@ -275,6 +276,7 @@ class AssetsUniqueUserController extends Controller
             $data = $assets->map(function ($item) {
                 return [
                     'id' => $item->id,
+                    'asset_id' => $item->asset_id,
                     'inventory_number' => $item->asset->inventory_number ?? '—',
                     'model' => $item->asset->model ?? '—',
                     'serial_number' => $item->asset->serial_number ?? '—',
