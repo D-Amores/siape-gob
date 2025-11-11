@@ -327,7 +327,10 @@
     <script src="{{ asset('js/helpers/alerts/alerts.js') }}"></script>
     <script src="{{ asset('js/helpers/modals/modal-actions.js') }}"></script>
     
-    <script src="{{ asset('js/user/assets_unique_user.js') }}"></script>
+    <script src="{{ asset('js/user/assets/assets_table_manager.js') }}"></script>
+    <script src="{{ asset('js/user/assets/asset_details_manager.js') }}"></script>
+    <script src="{{ asset('js/user/assets/asset_reports_manager.js') }}"></script>
+    <script src="{{ asset('js/user/assets/assets_unique_user.js') }}"></script>
 
     <script>
         //Api uris
@@ -335,7 +338,7 @@
         const vURIAcceptActionApi = `${BASE_URL}/accept-assignments/accept`;
         const vURIAssetsDetails = `${BASE_URL}/assets-unique-user`;
         const urlAssetApi = `${BASE_URL}/assets/api`;
-        const URIReport = `${BASE_URL}/asset-reports`;
+        const URIReport = `${BASE_URL}/assets/asset-reports`;
         const vURIDownloadDocument = `${BASE_URL}/download-document`;
         const vURIDownloadRespaldoDocument = `${BASE_URL}/assets-user/download-respaldo-document`;
         const languageDataTable = "{{ asset('cdn/datatables-language/es-MX.json') }}";
