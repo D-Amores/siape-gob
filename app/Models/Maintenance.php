@@ -23,4 +23,9 @@ class Maintenance extends Model
     {
         return $this->belongsTo(Personnel::class, 'performed_by');
     }
+
+    public function scopeActiveMaintenance($query)
+    {
+        return $query->whereNull('end_date');
+    }
 }

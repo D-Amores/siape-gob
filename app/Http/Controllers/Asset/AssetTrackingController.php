@@ -97,12 +97,19 @@ class AssetTrackingController extends Controller
         $requestData = $request->validated();
 
         try{
+            $asset = Asset::findOrFail($report->asset_id); 
+            if (isset($requestData['asset_status_id'])) {
+                /**
+                 * Actualizar el estado del bien al proporcionado
+                 */
+                $asset->update(['status_id' => $requestData['asset_status_id']]);
+            }
             $report->update($requestData['status_id']);
             MaintenanceReportLog::create([
                 'maintenance_report_id' => $report->id,
                 'personnel_id' => Auth::user()->personnel_id,
                 'action' => 'Seguimiento actualizado.',
-                'comment' => $requestData['comment'] ?? 'No se proporcionó comentario.',
+                'comment' => $requestData['comment'] ?? 'Se realizo una nueva acción sobre el seguimiento.',
             ]);
             
             $response['ok'] = true;
@@ -120,14 +127,20 @@ class AssetTrackingController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(CloseAssetTrackingRequest $request, Maintenance $maintenance)
+    public function destroy(CloseAssetTrackingRequest $request, MaintenanceReport $report)
     {
         $response = ['ok' => false, 'message' => 'Error inesperado al cerrar el seguimiento.'];
         $statusCode = 500;
         $requestData = $request->validated();
-        $report = MaintenanceReport::find($maintenance->maintenance_report_id);
-
         try{
+            $maintenance = $report->maintenances()->activeMaintenance()->first();
+            if (!$maintenance) {
+                return response()->json([
+                    'ok' => false,
+                    'message' => 'No se encontró un seguimiento activo para este reporte.'
+                ], 404);
+            }
+
             /**
              * Actualizar el estado del bien al proporcionado
              */
