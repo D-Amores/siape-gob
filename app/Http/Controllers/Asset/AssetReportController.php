@@ -7,6 +7,7 @@ use App\Http\Requests\Asset\StoreAssetReportRequest;
 use App\Http\Requests\Asset\ApiAssetReportRequest;
 use App\Models\MaintenanceReport;
 use App\Models\MaintenanceReportLog;
+use App\Models\Asset;
 use App\Services\Tools;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Database\QueryException;
@@ -43,7 +44,7 @@ class AssetReportController extends Controller
                     'folio' => $report->folio,
                     'asset' => $report->asset->asset_name,
                     'description' => $report->description ?? 'Sin descripción',
-                    'status' => $report->status->name ?? 'Desconocido',
+                    'status' => $report->asset->status ?? 'Desconocido',
                     'reported_by' => $report->reporter->full_name ?? '—',
                     'reported_at' => optional($report->reported_at)->format('d/m/Y H:i') ?? '—',
                     'id' => $report->id,
@@ -91,6 +92,12 @@ class AssetReportController extends Controller
         $requestData = $request->validated();
 
         try{
+            /**
+             * Actualizar estado del activo a "En Mantenimiento"
+             */
+
+            //$asset = Asset::findOrFail($requestData['asset_id']); 
+            //$asset->update(['status_id' => 2]); // Actualizar estado del activo a "En Mantenimiento", estoy suponiendo que es 3, ahi lo cambias PENELITI
             // Generar folio
             $year = date('Y');
             $reportCount = MaintenanceReport::whereYear('created_at', $year)->count() + 1;
@@ -102,6 +109,9 @@ class AssetReportController extends Controller
                 'folio' => $folio,
                 'asset_id' => $requestData['asset_id'],
                 'reported_by' => Auth::user()->personnel_id,
+                /**
+                 * Actualizar estado del reporte a "Pendiente"
+                 */
                 'status_id' => 1, // Estado inicial: Pendiente, estoy suponiendo que es 1, ahi lo cambias PENELITI
                 'description' => $requestData['description'],
                 //'observation' => $requestData['observation'] ?? null,

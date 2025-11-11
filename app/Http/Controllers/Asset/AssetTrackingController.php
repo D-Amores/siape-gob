@@ -9,6 +9,7 @@ use App\Http\Requests\Asset\CloseAssetTrackingRequest;
 use App\Models\Maintenance;
 use App\Models\MaintenanceReport;
 use App\Models\MaintenanceReportLog;
+use App\Models\Asset;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 
@@ -47,6 +48,11 @@ class AssetTrackingController extends Controller
 
             $maintenanceReport->update(['status_id' => 2]); // Estado: En Proceso, estoy suponiendo que es 2, ahi lo cambias PENELITI
 
+            /**
+             * Actualizar el estado del bien a "En Mantenimiento"
+             */
+            $asset = Asset::findOrFail($maintenanceReport->asset_id); 
+            $asset->update(['status_id' => 2]); // Actualizar estado del activo a "En Mantenimiento", estoy suponiendo que es 2, ahi lo cambias PENEL
             MaintenanceReportLog::create([
                 'maintenance_report_id' => $requestData['maintenance_report_id'],
                 'personnel_id' => Auth::user()->personnel_id,
@@ -122,6 +128,12 @@ class AssetTrackingController extends Controller
         $report = MaintenanceReport::find($maintenance->maintenance_report_id);
 
         try{
+            /**
+             * Actualizar el estado del bien al proporcionado
+             */
+            $asset = Asset::findOrFail($report->asset_id); 
+            $asset->update(['status_id' => $requestData['asset_status_id']]); // Actualizar estado del activo al proporcionado
+            
             $report->update([
                 'status_id' => 3, // Estado: Cerrado, estoy suponiendo que es 3, ahi lo cambias PENELITI
                 'end_date' => now(), 

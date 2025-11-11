@@ -93,7 +93,7 @@ class Asset extends Model
         ->where('is_active', true);
     }
 
-    protected $appends = ['asset_name'];
+    protected $appends = ['asset_name', 'status_name'];
 
     protected function assetName(): Attribute
     {
@@ -102,6 +102,13 @@ class Asset extends Model
                 return $this->model . '-' . $this->inventory_number;
             }
             return '—';
+        });
+    }
+
+    protected function statusName(): Attribute
+    {
+        return Attribute::get(function () {
+            return $this->status->name ?? 'Desconocido';
         });
     }
 }
