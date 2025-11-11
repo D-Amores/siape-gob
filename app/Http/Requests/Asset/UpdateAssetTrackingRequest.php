@@ -28,6 +28,7 @@ class UpdateAssetTrackingRequest extends FormRequest
             //'work_done' => 'sometimes|string',
             //'observation' => 'sometimes|string',
             'status_id' => 'sometimes|exists:statuses,id',
+            'asset_status_id' => 'sometimes|exists:statuses,id',
             'comment' => 'sometimes|string',
 
         ];
@@ -40,6 +41,7 @@ class UpdateAssetTrackingRequest extends FormRequest
             //'maintenance_id.exists' => 'El mantenimiento seleccionado no existe.',
             //'work_done.string' => 'El campo trabajo realizado debe ser una cadena de texto.',
             //'observation.string' => 'El campo observación debe ser una cadena de texto.',
+            'asset_status_id.exists' => 'El estado del activo seleccionado no existe.',
             'status_id.exists' => 'El estado seleccionado no existe.',
             'comment.string' => 'El campo comentario debe ser una cadena de texto.',
         ];
@@ -52,6 +54,7 @@ class UpdateAssetTrackingRequest extends FormRequest
             //'work_done' => 'trabajo realizado',
            //'observation' => 'observación',
             'status_id' => 'estado',
+            'asset_status_id' => 'estado del activo',
             'comment' => 'comentario',
         ];
     }

@@ -28,7 +28,7 @@ class CloseAssetTrackingRequest extends FormRequest
             'asset_status_id' => 'required|exists:statuses,id',
             'observation' => 'required|string',
             'work_done' => 'required|string',
-            'comment' => 'sometimes|string',
+            'comment' => 'required|string',
         ];
     }
 
