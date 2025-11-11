@@ -25,7 +25,7 @@
                             Lista de reportes de bienes
                         </h4>
                         <div class="table-responsive">
-                            <table id="tracking-table" class="table table-hover w-100 table-striped table-bordered align-middle">
+                            <table id="reports-table" class="table table-hover w-100 table-striped table-bordered align-middle">
                                 <thead class="text-dark fs-4">
                                     <tr>
                                         <th scope="col">#</th>
@@ -39,20 +39,6 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                            <td>1</td>
-                            <td><span class="badge bg-secondary">SRV-2025-0001</span></td>
-                            <td>Computadora HP</td>
-                            <td>Falla al encender</td>
-                            <td><span class="badge bg-warning text-dark">En proceso</span></td>
-                            <td>Juan Pérez</td>
-                            <td>2025-11-10</td>
-                            <td>
-                                <button class="btn btn-sm btn-info text-white" data-bs-toggle="modal" data-bs-target="#seguimientoModal">
-                                    Ver seguimiento
-                                </button>
-                            </td>
-                        </tr>
                                 </tbody>
                             </table>
                         </div>
@@ -65,6 +51,7 @@
 
 @section('scripts')
     <script>
+        const assetTrackingUrl = `${BASE_URL}/assets/asset-tracking`;
         const reportApiUrl = `${BASE_URL}/assets/asset-reports/api`;
         const languageDataTable = '{{ asset('cdn/datatables-language/es-MX.json') }}';
     </script>
@@ -76,11 +63,12 @@
 
     <!-- Table config -->
     <script src="{{ asset('js/helpers/tools/datatable-manager.js') }}"></script>
-    {{-- <script src="{{ asset('js/assets/tracking/table-config.js') }}"></script>
+    <script src="{{ asset('js/assets/tracking/create/create-table-config.js') }}"></script>
 
     <!-- Api interactions -->
     <script src="{{ asset('js/assets/tracking/tracking-api.js') }}"></script>
+    <script src="{{ asset('js/assets/tracking/tracking-crud.js') }}"></script>
 
     <!-- tracking js -->
-    <script src="{{ asset('js/assets/tracking/tracking.js') }}"></script> --}}
+    <script src="{{ asset('js/assets/tracking/create/create-tracking.js') }}"></script>
 @endsection

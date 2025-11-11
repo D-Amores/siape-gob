@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 
 class Personnel extends Model
 {
@@ -117,6 +118,20 @@ class Personnel extends Model
     public function maintenanceReportsLogs()
     {
         return $this->hasMany(MaintenanceReportLog::class, 'personnel_id');
+    }
+
+    protected $appends = ['full_name'];
+    protected function fullName(): Attribute
+    {
+        return Attribute::get(function () {
+            $parts = array_filter([
+                $this->name,
+                $this->last_name,
+                $this->middle_name,
+            ]);
+
+            return implode(' ', $parts);
+        });
     }
 
     public function syncWithUser(): void

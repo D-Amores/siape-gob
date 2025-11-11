@@ -25,7 +25,7 @@ class StoreAssetReportRequest extends FormRequest
     {
         return [
             'asset_id' => 'required|exists:assets,id',
-            'reported_by' => 'required|exists:personnel,id',
+            //'reported_by' => 'required|exists:personnel,id',
             //'status_id' => 'required|exists:statuses,id',
             'description' => 'required|string',
             //'observation' => 'nullable|string',
@@ -39,8 +39,8 @@ class StoreAssetReportRequest extends FormRequest
         return [
             'asset_id.required' => 'El campo activo es obligatorio.',
             'asset_id.exists' => 'El activo seleccionado no existe.',
-            'reported_by.required' => 'El campo reportado por es obligatorio.',
-            'reported_by.exists' => 'El personal seleccionado no existe.',
+            //'reported_by.required' => 'El campo reportado por es obligatorio.',
+            //'reported_by.exists' => 'El personal seleccionado no existe.',
             //'status_id.required' => 'El campo estado es obligatorio.',
             //'status_id.exists' => 'El estado seleccionado no existe.',
             'description.required' => 'El campo descripción es obligatorio.',

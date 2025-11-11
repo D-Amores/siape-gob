@@ -26,7 +26,7 @@ class UpdateAssetTrackingRequest extends FormRequest
         return [
             //'maintenance_id' => 'required|exists:maintenances,id',
             //'work_done' => 'sometimes|string',
-            'observation' => 'sometimes|string',
+            //'observation' => 'sometimes|string',
             'status_id' => 'sometimes|exists:statuses,id',
             'comment' => 'sometimes|string',
 
@@ -39,7 +39,7 @@ class UpdateAssetTrackingRequest extends FormRequest
             //'maintenance_id.required' => 'El campo mantenimiento es obligatorio.',
             //'maintenance_id.exists' => 'El mantenimiento seleccionado no existe.',
             //'work_done.string' => 'El campo trabajo realizado debe ser una cadena de texto.',
-            'observation.string' => 'El campo observación debe ser una cadena de texto.',
+            //'observation.string' => 'El campo observación debe ser una cadena de texto.',
             'status_id.exists' => 'El estado seleccionado no existe.',
             'comment.string' => 'El campo comentario debe ser una cadena de texto.',
         ];
@@ -50,7 +50,7 @@ class UpdateAssetTrackingRequest extends FormRequest
         return [
             //'maintenance_id' => 'mantenimiento',
             //'work_done' => 'trabajo realizado',
-            'observation' => 'observación',
+           //'observation' => 'observación',
             'status_id' => 'estado',
             'comment' => 'comentario',
         ];

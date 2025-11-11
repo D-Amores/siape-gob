@@ -5,13 +5,12 @@ namespace App\Http\Controllers\Asset;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Asset\StoreAssetTrackingRequest;
 use App\Http\Requests\Asset\UpdateAssetTrackingRequest;
+use App\Http\Requests\Asset\CloseAssetTrackingRequest;
 use App\Models\Maintenance;
 use App\Models\MaintenanceReport;
 use App\Models\MaintenanceReportLog;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
-use Mpdf\Tag\Main;
-use Mpdf\Tag\U;
+use Illuminate\Support\Facades\Auth;
 
 class AssetTrackingController extends Controller
 {
@@ -28,7 +27,7 @@ class AssetTrackingController extends Controller
      */
     public function create()
     {
-        //
+        return view('assets.tracking.create');
     }
 
     /**
@@ -43,13 +42,14 @@ class AssetTrackingController extends Controller
 
         try{
             $requestData['start_date'] = now();
+            $requestData['performed_by'] = Auth::user()->personnel_id;
             Maintenance::create($requestData);
 
             $maintenanceReport->update(['status_id' => 2]); // Estado: En Proceso, estoy suponiendo que es 2, ahi lo cambias PENELITI
 
             MaintenanceReportLog::create([
                 'maintenance_report_id' => $requestData['maintenance_report_id'],
-                'personnel_id' => $requestData['performed_by'],
+                'personnel_id' => Auth::user()->personnel_id,
                 'action' => 'Seguimiento iniciado.',
                 'comment' => 'El seguimiento del reporte ha sido iniciado por el personal.',
             ]);
@@ -91,6 +91,13 @@ class AssetTrackingController extends Controller
         $requestData = $request->validated();
 
         try{
+            $report->update($requestData['status_id']);
+            MaintenanceReportLog::create([
+                'maintenance_report_id' => $report->id,
+                'personnel_id' => Auth::user()->personnel_id,
+                'action' => 'Seguimiento actualizado.',
+                'comment' => $requestData['comment'] ?? 'No se proporcionó comentario.',
+            ]);
             
             $response['ok'] = true;
             $response['message'] = 'Seguimiento actualizado exitosamente.';
@@ -107,8 +114,41 @@ class AssetTrackingController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Maintenance $maintenance)
+    public function destroy(CloseAssetTrackingRequest $request, Maintenance $maintenance)
     {
-        //
+        $response = ['ok' => false, 'message' => 'Error inesperado al cerrar el seguimiento.'];
+        $statusCode = 500;
+        $requestData = $request->validated();
+        $report = MaintenanceReport::find($maintenance->maintenance_report_id);
+
+        try{
+            $report->update([
+                'status_id' => 3, // Estado: Cerrado, estoy suponiendo que es 3, ahi lo cambias PENELITI
+                'end_date' => now(), 
+                'observation' => $requestData['observation'] ?? null
+            ]); 
+
+            $maintenance->update([
+                'end_date' => now(),
+                'status_id' => $requestData['status_id'],
+                'work_done' => $requestData['work_done'] ?? null,
+            ]);
+
+            MaintenanceReportLog::create([
+                'maintenance_report_id' => $maintenance->maintenance_report_id,
+                'personnel_id' => Auth::user()->personnel_id,
+                'action' => 'Seguimiento cerrado.',
+                'comment' => $requestData['comment'] ?? 'No se proporcionó comentario.',
+            ]);
+
+            $response['ok'] = true;
+            $response['message'] = 'Seguimiento cerrado exitosamente.';
+            $statusCode = 200;
+        }catch(\Exception $e){
+            $response['message'] = 'Error al procesar la solicitud.';
+            Log::error('Error al procesar la solicitud de cierre de seguimiento de activo: ' . $e->getMessage());
+            $statusCode = 500;
+        }
+        return response()->json($response, $statusCode);
     }
 }

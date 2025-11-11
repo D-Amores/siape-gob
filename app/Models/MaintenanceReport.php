@@ -17,6 +17,12 @@ class MaintenanceReport extends Model
         'closed_at',
     ];
 
+    protected $casts = [
+        'reported_at' => 'datetime',
+        'closed_at' => 'datetime',
+    ];
+
+
     public function asset()
     {
         return $this->belongsTo(Asset::class);
@@ -35,5 +41,38 @@ class MaintenanceReport extends Model
     public function maintenances()
     {
         return $this->hasMany(Maintenance::class);
+    }
+
+    public function logs()
+    {
+        return $this->hasMany(MaintenanceReportLog::class);
+    }
+
+    public function scopeAllReports($query)
+    {
+        return $query->with(['asset', 'status', 'logs']);
+    }
+
+    public function scopeOpenReports($query)
+    {
+        return $query->with(['asset', 'status', 'logs'])
+            ->whereNull('closed_at') // reporte no cerrado
+            ->whereDoesntHave('maintenances', function ($q) {
+                $q->whereNull('end_date'); // sin seguimientos activos
+            });
+    }
+
+    public function scopeReportsWithTracking($query)
+    {
+        return $query->with(['asset', 'status', 'logs'])
+            ->whereHas('maintenances', function ($q) {
+                $q->whereNull('end_date'); // tiene seguimiento activo
+            });
+    }
+
+    public function scopeClosedReports($query)
+    {
+        return $query->with(['asset', 'status', 'logs'])
+                    ->whereNotNull('closed_at'); // Assuming 'closed_at' being not null means the report is closed
     }
 }

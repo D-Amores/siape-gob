@@ -50,9 +50,11 @@ Route::middleware('auth')->group(function () {
         Route::post('brands/api', [BrandController::class, 'brandApi']);
         Route::post('categories/api', [CategoryController::class, 'categoryApi']);
         Route::post('assets/api', [AssetController::class, 'assetsApi'])->name('assets.api');
+        Route::post('assets/asset-reports/api', [AssetReportController::class, 'reportApi']);
         Route::delete('assets/unassigned/{personnelAsset}', [AssetUnassigedController::class, 'destroy']);
         Route::post('assignments/api', [AssetAcceptedController::class, 'assignmentsAssetApi']);
         Route::post('admin/personnel/api', [PersonnelController::class, 'personnelApi']);
+        
     });
 
     Route::middleware('role:user')->group(function () {
