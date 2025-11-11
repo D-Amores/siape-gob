@@ -29,13 +29,8 @@ function loadReportsTable(data) {
             data: 'status', 
             title: 'Estado', 
             className: 'text-center',
-            render: (data) => {
+            render: (data) => {                
                 let badgeClass = 'secondary';
-                switch (data?.toLowerCase()) {
-                    case 'pending': badgeClass = 'warning'; break;
-                    case 'open': badgeClass = 'info'; break;
-                    case 'closed': badgeClass = 'success'; break;
-                }
                 return `<span class="badge bg-${badgeClass}">${data ?? '—'}</span>`;
             }
         },

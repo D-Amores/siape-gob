@@ -26,7 +26,7 @@ async function createAssetTracking(reportId) {
         btnCreate.disabled = false;
         icon.classList.remove('d-none');
 
-    });
+    }, '¿Está seguro de crear el seguimiento para este reporte?');
 }
 
 async function startApp(){

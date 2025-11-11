@@ -22,7 +22,7 @@ class ApiAssetReportRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'option' => 'required|string|in:all,open,closed',
+            'option' => 'required|string|in:all,open,closed,tracking',
         ];
     }
 }

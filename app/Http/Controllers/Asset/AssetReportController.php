@@ -34,6 +34,9 @@ class AssetReportController extends Controller
                 case 'closed':
                     $reports = MaintenanceReport::closedReports()->get();
                     break;
+                case 'tracking':
+                    $reports = MaintenanceReport::reportsWithTracking()->get();
+                    break;
                 default:
                     $reports = [];
                     break;
@@ -44,7 +47,7 @@ class AssetReportController extends Controller
                     'folio' => $report->folio,
                     'asset' => $report->asset->asset_name,
                     'description' => $report->description ?? 'Sin descripción',
-                    'status' => $report->asset->status ?? 'Desconocido',
+                    'status' => $report->asset->status_name ?? 'Desconocido',
                     'reported_by' => $report->reporter->full_name ?? '—',
                     'reported_at' => optional($report->reported_at)->format('d/m/Y H:i') ?? '—',
                     'id' => $report->id,
