@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\StatusController;
 use App\Http\Controllers\AcceptAssignments\AssetsUniqueUserController;
 use App\Http\Controllers\AcceptAssignments\AcceptAssignmentsController;
 use App\Http\Controllers\Asset\AssetController;
@@ -35,6 +36,8 @@ Route::middleware('auth')->group(function () {
     //Service routes
     Route::resource('assets/asset-reports', AssetReportController::class)->only(['index', 'store', 'update', 'destroy']);
 
+    // Status routes
+    Route::post('statuses/api', [StatusController::class, 'statusApi']);
     // Logout route
     Route::post('logout', [LoginController::class, 'logout'])->name('logout');
 
