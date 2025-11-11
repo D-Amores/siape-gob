@@ -61,7 +61,9 @@ class AssetAcceptedController extends Controller
                             'assigner' => "{$assignment->assigner->name} {$assignment->assigner->last_name}",
                             'assignment_date' => optional($assignment->assignment_date)->format('Y-m-d'),
                             'confirmation_date' => optional($assignment->confirmation_date)->format('Y-m-d'),
-                            'path_acceptance_doc' => $assignment->path_acceptance_doc,
+                            'path_acceptance_doc' => $assignment->path_acceptance_doc
+                                ? asset('storage/' . str_replace('public/', '', $assignment->path_acceptance_doc))
+                                : null,
                         ];
                     });
 
