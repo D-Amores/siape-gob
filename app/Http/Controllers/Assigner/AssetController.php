@@ -23,9 +23,50 @@ class AssetController extends Controller
 
         switch ($option) {
             case 'table':
-                // Solo los campos necesarios para la tabla principal + relaciones básicas
-                $data = Asset::with(['brand', 'category'])
-                    ->get(['id', 'inventory_number', 'model', 'serial_number', 'brand_id', 'category_id', 'is_active', 'type']);
+                $recordsTotal = Asset::count();
+
+                $start = $request->input('start', 0);
+                $length = $request->input('length', 30);
+                $searchValue = $request->input('search.value', '');
+
+                $query = Asset::with(['brand', 'category', 'status'])
+                    ->select('assets.*')
+                    ->filterByStatus($request->input('filtroCondicion'))
+                    ->filterByState($request->input('filtroEstado'))
+                    ->filterByCategory($request->input('filtroCategoria'))
+                    ->filterByBrand($request->input('filtroMarca'))
+                    ->search($searchValue);
+
+                $recordsFiltered = $query->count();
+
+                $orderColumnIndex = $request->input('order.0.column', 0);
+                $orderColumnDir = $request->input('order.0.dir', 'asc');
+                $columns = [
+                    0 => 'inventory_number',
+                    1 => 'model',
+                    2 => 'serial_number',
+                    6 => 'is_active',
+                ];
+
+                $orderColumn = $columns[$orderColumnIndex] ?? 'inventory_number';
+                $query->orderBy($orderColumn, $orderColumnDir);
+
+                $data = $query->skip($start)
+                    ->take($length)
+                    ->get();
+
+                $data = $data->map(function ($asset) {
+                    $asset->is_active_label = $asset->isActive() ? 'Activo' : 'Inactivo';
+                    return $asset;
+                });
+
+                return response()->json([
+                    'draw' => intval($request->input('draw')),
+                    'recordsTotal' => $recordsTotal,
+                    'recordsFiltered' => $recordsFiltered,
+                    'data' => $data,
+                ]);
+
                 break;
 
             case 'details':
@@ -39,7 +80,7 @@ class AssetController extends Controller
                 }
 
                 $data = Asset::with(['brand', 'category', 'personnelAssets'])
-                            ->find($assetId);
+                    ->find($assetId);
 
                 if (!$data) {
                     return response()->json([
@@ -71,7 +112,7 @@ class AssetController extends Controller
         // Agregar label de estado para table y details
         if ($option !== 'available') {
             if ($data instanceof \Illuminate\Database\Eloquent\Collection) {
-                $data = $data->map(function($asset) {
+                $data = $data->map(function ($asset) {
                     $asset->is_active_label = $asset->isActive() ? 'Activo' : 'Inactivo';
                     return $asset;
                 });
@@ -86,7 +127,7 @@ class AssetController extends Controller
         ]);
 
         if ($option !== 'available') {
-            $data = $data->map(function($asset) {
+            $data = $data->map(function ($asset) {
                 $asset->is_active_label = $asset->isActive() ? 'Activo' : 'Inactivo';
                 return $asset;
             });
@@ -103,7 +144,15 @@ class AssetController extends Controller
      */
     public function index()
     {
-        return view('assets.asset');
+        $brands = \App\Models\Brand::orderBy('name')->get(['id', 'name']);
+        $categories = \App\Models\Category::orderBy('name')->get(['id', 'name']);
+        $conditions = \App\Models\Status::orderBy('name')->get(['id', 'name']);
+
+        return view('assets.asset', [
+            'brands' => $brands,
+            'categories' => $categories,
+            'conditions' => $conditions
+        ]);
     }
 
 
