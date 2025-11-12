@@ -34,9 +34,9 @@ Route::middleware('auth')->group(function () {
     Route::get('history', [HistoricController::class, 'index'])->name('historic.index');
     Route::post('historic/api',[HistoricController::class, 'historicApi']);
 
+    
     //Service routes
-    Route::resource('assets/asset-reports', AssetReportController::class)->only(['index', 'store', 'update', 'destroy']);
-
+    Route::resource('assets/asset-reports', AssetReportController::class)->only(['store']);
     // Status routes
     Route::post('statuses/api', [StatusController::class, 'statusApi']);
     // Logout route
