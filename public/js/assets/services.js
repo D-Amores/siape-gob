@@ -1,4 +1,8 @@
 // ------------------------------
+// Servicios: Cargar cactegorias, marccas y status
+// ------------------------------
+
+// ------------------------------
 // Cargar categorías dinámicamente
 // ------------------------------
 async function cargarCategorias(selectedId = null) {
@@ -92,3 +96,41 @@ async function cargarMarcas(selectedId = null) {
         showAlert('Error al cargar las marcas: ' + error.message, "red", "Error");
     }
 }
+
+// ------------------------------
+// Cargar estados dinámicamente
+// ------------------------------
+async function loadStatuses() {
+    try {
+        const response = await fetch(vURIStatusApi, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+            },
+            body: JSON.stringify({ option: 'all' })
+        });
+
+        const data = await response.json();
+            
+        if (data.ok) {
+            const statusSelect = document.getElementById('status_id');
+            statusSelect.innerHTML = '<option value="">Seleccione estado</option>';
+                
+            data.data.forEach(status => {
+                const option = document.createElement('option');
+                option.value = status.id;
+                option.textContent = status.name;
+                statusSelect.appendChild(option);
+            });
+        } else {
+            console.error('Error loading statuses:', data.message);
+        }
+    } catch (error) {
+        console.error('Error loading statuses:', error);
+    }
+}
+
+document.getElementById('modalBien').addEventListener('show.bs.modal', function () {
+    loadStatuses();
+});

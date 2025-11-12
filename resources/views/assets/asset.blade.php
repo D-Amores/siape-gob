@@ -121,12 +121,19 @@
                                         </div>
 
                                         <div class="form-floating mb-3">
-                                            <select class="form-select" id="estado" required>
+                                            <select class="form-select" id="status_id" name="status_id" required>
+                                                <option value="">Seleccione estado</option>
+                                                <!-- Las opciones se llenarán con JavaScript -->
+                                            </select>
+                                            <label for="status_id"><i class="fas fa-toggle-on me-1 text-muted"></i> Estado del bien</label>
+                                        </div>
+
+                                        <div class="form-floating mb-3">
+                                            <select class="form-select" id="is_active" name="is_active" required>
                                                 <option value="1" selected>Activo</option>
                                                 <option value="0">Inactivo</option>
                                             </select>
-                                            <label for="estado"><i class="fas fa-toggle-on me-1 text-muted"></i>
-                                                Estado</label>
+                                            <label for="is_active"><i class="fas fa-power-off me-1 text-muted"></i> Estado activo/inactivo</label>
                                         </div>
 
                                         <div class="form-floating">
@@ -338,6 +345,9 @@
 
         // Brands uris
         const vURIBrandssApi = `${BASE_URL}/brands/api`;
+
+        // Status uris
+        const vURIStatusApi = `${BASE_URL}/statuses/api`;
 
         const languageDataTable = "{{ asset('cdn/datatables-language/es-MX.json') }}";
     </script>

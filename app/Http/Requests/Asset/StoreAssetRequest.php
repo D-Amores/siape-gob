@@ -37,6 +37,7 @@ class StoreAssetRequest extends FormRequest
             'type' => 'nullable|string|max:100',
             'brand_id' => 'required|exists:brands,id',
             'category_id' => 'required|exists:categories,id',
+            'status_id' => 'required|exists:statuses,id',
             'is_active' => 'required|boolean',
         ];
     }
@@ -71,6 +72,10 @@ class StoreAssetRequest extends FormRequest
             'brand_id.exists' => 'La marca seleccionada no existe',
             'category_id.required' => 'La categoría es obligatoria',
             'category_id.exists' => 'La categoría seleccionada no existe',
+            
+            // status_id
+            'status_id.required' => 'El estado es obligatorio',
+            'status_id.exists' => 'El estado seleccionado no existe',
         ];
     }
 
@@ -88,6 +93,7 @@ class StoreAssetRequest extends FormRequest
             'type' => 'type',
             'brand_id' => 'marca',
             'category_id' => 'categoría',
+            'status_id' => 'estado',
         ];
     }
 
