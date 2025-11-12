@@ -10,6 +10,7 @@ use App\Models\Maintenance;
 use App\Models\MaintenanceReport;
 use App\Models\MaintenanceReportLog;
 use App\Models\Asset;
+use App\Models\Status;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 
@@ -46,13 +47,13 @@ class AssetTrackingController extends Controller
             $requestData['performed_by'] = Auth::user()->personnel_id;
             Maintenance::create($requestData);
 
-            $maintenanceReport->update(['status_id' => 2]); // Estado: En Proceso, estoy suponiendo que es 2, ahi lo cambias PENELITI
+            $maintenanceReport->update(['status_id' => Status::IN_PROGRESS]); // Estado: En Proceso, estoy suponiendo que es 2, ahi lo cambias PENELITI
 
             /**
              * Actualizar el estado del bien a "En Mantenimiento"
              */
-            $asset = Asset::findOrFail($maintenanceReport->asset_id); 
-            $asset->update(['status_id' => 2]); // Actualizar estado del activo a "En Mantenimiento", estoy suponiendo que es 2, ahi lo cambias PENEL
+            $asset = $maintenanceReport->asset;
+            $asset->update(['status_id' => Status::ON_MAINTENANCE]);
             MaintenanceReportLog::create([
                 'maintenance_report_id' => $requestData['maintenance_report_id'],
                 'personnel_id' => Auth::user()->personnel_id,
@@ -96,33 +97,41 @@ class AssetTrackingController extends Controller
         $statusCode = 500;
         $requestData = $request->validated();
 
-        try{
-            $asset = Asset::findOrFail($report->asset_id); 
+        try {
+            $asset = $report->asset;
+
+            // 🔹 Actualizar estado del activo si se proporciona
             if (isset($requestData['asset_status_id'])) {
-                /**
-                 * Actualizar el estado del bien al proporcionado
-                 */
                 $asset->update(['status_id' => $requestData['asset_status_id']]);
             }
-            $report->update($requestData['status_id']);
+
+            // 🔹 Actualizar estado del reporte si se proporciona
+            if (isset($requestData['status_id'])) {
+                $report->update(['status_id' => $requestData['status_id']]);
+            }
+
+            // 🔹 Registrar acción en el log
             MaintenanceReportLog::create([
                 'maintenance_report_id' => $report->id,
                 'personnel_id' => Auth::user()->personnel_id,
                 'action' => 'Seguimiento actualizado.',
-                'comment' => $requestData['comment'] ?? 'Se realizo una nueva acción sobre el seguimiento.',
+                'comment' => $requestData['comment'] ?? 'Se realizó una nueva acción sobre el seguimiento.',
             ]);
-            
+
             $response['ok'] = true;
             $response['message'] = 'Seguimiento actualizado exitosamente.';
             $statusCode = 200;
-        }catch(\Exception $e){
+        } catch (\Exception $e) {
             $response['message'] = 'Error al procesar la solicitud.';
-            Log::error('Error al procesar la solicitud de actualización de seguimiento de activo: ' . $e->getMessage());
+            Log::error('Error al actualizar seguimiento: ' . $e->getMessage(), [
+                'trace' => $e->getTraceAsString(),
+            ]);
             $statusCode = 500;
         }
 
         return response()->json($response, $statusCode);
     }
+
 
     /**
      * Remove the specified resource from storage.
@@ -144,23 +153,22 @@ class AssetTrackingController extends Controller
             /**
              * Actualizar el estado del bien al proporcionado
              */
-            $asset = Asset::findOrFail($report->asset_id); 
+            $asset = $report->asset; 
             $asset->update(['status_id' => $requestData['asset_status_id']]); // Actualizar estado del activo al proporcionado
             
             $report->update([
-                'status_id' => 3, // Estado: Cerrado, estoy suponiendo que es 3, ahi lo cambias PENELITI
-                'end_date' => now(), 
+                'status_id' => Status::CLOSED, // Estado: Cerrado, estoy suponiendo que es 3, ahi lo cambias PENELITI
+                'closed_at' => now(), 
                 'observation' => $requestData['observation'] ?? null
             ]); 
 
             $maintenance->update([
                 'end_date' => now(),
-                'status_id' => $requestData['status_id'],
                 'work_done' => $requestData['work_done'] ?? null,
             ]);
 
             MaintenanceReportLog::create([
-                'maintenance_report_id' => $maintenance->maintenance_report_id,
+                'maintenance_report_id' => $report->id,
                 'personnel_id' => Auth::user()->personnel_id,
                 'action' => 'Seguimiento cerrado.',
                 'comment' => $requestData['comment'] ?? 'No se proporcionó comentario.',

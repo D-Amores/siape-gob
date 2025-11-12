@@ -8,6 +8,7 @@ use App\Http\Requests\Asset\ApiAssetReportRequest;
 use App\Models\MaintenanceReport;
 use App\Models\MaintenanceReportLog;
 use App\Models\Asset;
+use App\Models\Status;
 use App\Services\Tools;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Database\QueryException;
@@ -115,7 +116,7 @@ class AssetReportController extends Controller
                 /**
                  * Actualizar estado del reporte a "Pendiente"
                  */
-                'status_id' => 1, // Estado inicial: Pendiente, estoy suponiendo que es 1, ahi lo cambias PENELITI
+                'status_id' => Status::OPEN, // Estado inicial: Pendiente, estoy suponiendo que es 1, ahi lo cambias PENELITI
                 'description' => $requestData['description'],
                 //'observation' => $requestData['observation'] ?? null,
                 'reported_at' => $reportedAt,
