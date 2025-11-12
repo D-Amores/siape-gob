@@ -27,7 +27,7 @@
                                     <th class="py-1">Serie</th>
                                     <th class="py-1">Marca</th>
                                     <th class="py-1">Categoría</th>
-                                    <th class="text-center py-1">Estado</th>
+                                    <th class="text-center py-1">Disponibilidad</th>
                                     <th class="text-center py-1">Acciones</th>
                                 </tr>
                             </thead>
@@ -41,7 +41,7 @@
                                     <th class="py-1">Serie</th>
                                     <th class="py-1">Marca</th>
                                     <th class="py-1">Categoría</th>
-                                    <th class="text-center py-1">Estado</th>
+                                    <th class="text-center py-1">Disponibilidad</th>
                                     <th class="text-center py-1">Acciones</th>
                                 </tr>
                             </tfoot>

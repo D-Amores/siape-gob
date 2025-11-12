@@ -99,14 +99,22 @@
                                             <span class="hide-menu">Aceptar Asignaciones</span>
                                         </a>
                                     </li>
-                                        <li class="sidebar-item">
-                                            <a class="sidebar-link" href="{{ route('assets-user.index') }}" aria-expanded="false">
-                                                <span>
-                                                    <i class="ti ti-package"></i>
-                                                </span>
-                                                <span class="hide-menu">Bienes</span>
-                                            </a>
-                                        </li>
+                                    <li class="sidebar-item">
+                                        <a class="sidebar-link" href="{{ route('assets-user.index') }}" aria-expanded="false">
+                                            <span>
+                                                <i class="ti ti-package"></i>
+                                            </span>
+                                            <span class="hide-menu">Bienes</span>
+                                        </a>
+                                    </li>
+                                    <li class="sidebar-item">
+                                        <a class="sidebar-link" href="{{ route('reports-user.index') }}" aria-expanded="false">
+                                            <span>
+                                                <i class="ti ti-report"></i>
+                                            </span>
+                                            <span class="hide-menu">Reportes</span>
+                                        </a>
+                                    </li>
                                     @endrole
                                     <li class="nav-small-cap">
                                         <i class="ti ti-dots nav-small-cap-icon fs-4"></i>

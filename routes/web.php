@@ -5,6 +5,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\StatusController;
 use App\Http\Controllers\AcceptAssignments\AssetsUniqueUserController;
 use App\Http\Controllers\AcceptAssignments\AcceptAssignmentsController;
+use App\Http\Controllers\Users\UserReportController;
 use App\Http\Controllers\Asset\AssetController;
 use App\Http\Controllers\Asset\AssetReportController;
 use App\Http\Controllers\Asset\AssetTrackingController;
@@ -63,6 +64,7 @@ Route::middleware('auth')->group(function () {
     Route::middleware('role:user')->group(function () {
         Route::resource('accept-assignments', AcceptAssignmentsController::class)->only(['index']);
         Route::resource('assets-user', AssetsUniqueUserController::class)->only(['index']);
+        Route::resource('reports-user', UserReportController::class)->only(['index']);
 
         // Ruta API para cargar asignaciones pendientes del usuario autenticado
         Route::post('accept-assignments/api', [AcceptAssignmentsController::class, 'pendingAssignmentsApi'])->name('accept-assignments.api');
@@ -89,6 +91,8 @@ Route::middleware('auth')->group(function () {
         // Ruta API para aceptar los bienes asignados al usuario
         Route::post('accept-assignments/accept', [AcceptAssignmentsController::class, 'acceptAssignmentApi'])->name('accept-assignments.accept');
         
+        // Ruta API para ver los reportes realizados por el usuario autenticado
+        Route::get('/user/reports', [UserReportController::class, 'userReportsApi']);
     });
 
     Route::middleware('role:admin')->group(function () {

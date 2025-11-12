@@ -12,7 +12,7 @@ class MaintenanceReport extends Model
         'reported_by',
         'status_id',
         'description',
-        'observation',
+        //'observation',
         'reported_at',
         'closed_at',
     ];
