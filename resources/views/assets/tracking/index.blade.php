@@ -62,7 +62,7 @@
                 </div>
 
                 <form id="trackingUpdateForm">
-                    <input type="hidden" id="maintenance_id_update" name="maintenance_id">
+                    <input type="hidden" id="maintenance_report_id_update" name="maintenance_report_id">
 
                     <div class="modal-body pb-0">
                         <div class="row g-3">
@@ -72,7 +72,7 @@
                                 <label for="status_id_update" class="form-label">
                                     <i class="bx bx-bar-chart-alt-2 me-1"></i> Estado del Seguimiento *
                                 </label>
-                                <select class="form-select" id="status_id_update" name="status_id" required>
+                                <select class="form-select status-select" id="status_id_update" name="status_id" required>
                                     <option value="">Seleccionar estado...</option>
                                 </select>
                             </div>
@@ -82,7 +82,7 @@
                                 <label for="asset_status_id_update" class="form-label">
                                     <i class="bx bx-cog me-1"></i> Estado del Activo *
                                 </label>
-                                <select class="form-select" id="asset_status_id_update" name="asset_status_id" required>
+                                <select class="form-select status-select" id="asset_status_id_update" name="asset_status_id" required>
                                     <option value="">Seleccionar estado...</option>
                                 </select>
                             </div>
@@ -110,14 +110,13 @@
                         <button type="button" class="btn btn-primary" id="btnTrackingEdit">
                             <span class="spinner-border spinner-border-sm me-2 d-none" id="trackingEditSpinner"
                                 role="status"></span>
-                            <i class="bx bx-save d-none d-md-inline me-1"></i> Guardar Cambios
+                            <i class="bx bx-save d-none d-md-inline me-1"></i> Actualizar
                         </button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
-
 
     <!-- Modal Cerrar Seguimiento -->
     <div class="modal fade" id="modalTrackingClose" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
@@ -142,7 +141,7 @@
                                 <label for="status_id_close" class="form-label">
                                     <i class="bx bx-bar-chart-alt me-1"></i> Estado del Seguimiento *
                                 </label>
-                                <select class="form-select" id="status_id_close" name="status_id" required>
+                                <select class="form-select status-select" id="status_id_close" name="status_id" required>
                                     <option value="">Seleccionar estado...</option>
                                 </select>
                             </div>
@@ -152,7 +151,7 @@
                                 <label for="asset_status_id_close" class="form-label">
                                     <i class="bx bx-cog me-1"></i> Estado del Activo *
                                 </label>
-                                <select class="form-select" id="asset_status_id_close" name="asset_status_id" required>
+                                <select class="form-select status-select" id="asset_status_id_close" name="asset_status_id" required>
                                     <option value="">Seleccionar estado...</option>
                                 </select>
                             </div>
@@ -214,6 +213,7 @@
     <script>
         const reportApiUrl = `${BASE_URL}/assets/asset-reports/api`;
         const statusApiUrl = `${BASE_URL}/statuses/api`;
+        const assetTrackingUrl = `${BASE_URL}/assets/asset-tracking`;
         const languageDataTable = '{{ asset('cdn/datatables-language/es-MX.json') }}';
     </script>
 
@@ -227,7 +227,9 @@
     <script src="{{ asset('js/assets/tracking/index/index-table-config.js') }}"></script>
     <!-- Api interactions -->
     <script src="{{ asset('js/assets/tracking/tracking-api.js') }}"></script>
+    <script src="{{ asset('js/assets/tracking/tracking-crud.js') }}"></script>
 
     <!-- tracking js -->
+    <script src="{{ asset('js/assets/tracking/index/form-validate.js') }}"></script>
     <script src="{{ asset('js/assets/tracking/index/index-tracking.js') }}"></script>
 @endsection

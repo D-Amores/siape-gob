@@ -30,3 +30,37 @@ async function storeAssetTracking(data){
 
     return isOk; // true si se creó, false si no
 }
+
+async function updateAssetTracking(id, data){
+    let isOk = false;
+    const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+    try {
+        console.log(data);
+        
+        const response = await fetch(`${assetTrackingUrl}/${id}`, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': csrfToken
+            },
+            body: JSON.stringify(data)
+        });
+        const result = await response.json();
+        
+        if (result.ok) { 
+            showAlert(result.message || 'Seguimiento actualizado exitosamente', 'green', 'Éxito', null, 2000);
+            isOk = true;
+        } else {
+            if (result.errors) {
+                const errorMessages = Object.values(result.errors).flat().join('<br>');
+                showAlert(errorMessages, 'red', 'Errores de validación', null, 4000);
+            } else {
+                showAlert(result.message || 'Error al actualizar el seguimiento', 'red', 'Error', null, 2000);
+            }
+        }
+    } catch (error) {
+        showAlert('Error al actualizar el seguimiento. Intente nuevamente.', 'red', 'Error');
+    }
+
+    return isOk; // true si se actualizó, false si no   
+}
