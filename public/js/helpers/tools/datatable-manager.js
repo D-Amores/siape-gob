@@ -1,5 +1,39 @@
 let dataTables = {};
 
+function basicTableConfig(tableId = 'dataUsersTable', data = [], columns = [], tooltips = null) {
+    const tableSelector = `#${tableId}`;
+
+    // Si ya existe una instancia para este ID, solo actualiza
+    if (dataTables[tableId]) {
+        dataTables[tableId].clear().rows.add(data).draw();
+        return dataTables[tableId];
+    }
+
+    // Si no existe, crea una nueva
+    dataTables[tableId] = new DataTable(tableSelector, {
+        data: data,
+        columns: columns,
+        pagingType: 'simple_numbers',
+        destroy: true,
+        responsive: true,
+        pageLength: 30,
+        lengthChange: false,
+        info: false,
+        language: { url: languageDataTable }
+    });
+
+    if (tooltips) {
+        const activateTooltips = () => {
+            document.querySelectorAll(tooltips).forEach((el) => new bootstrap.Tooltip(el));
+        };
+
+        dataTables[tableId].on('draw', activateTooltips);
+        activateTooltips();
+    }
+
+    return dataTables[tableId];
+}
+
 function bottomTableConfig(tableId = 'dataUsersTable', columns = [], tooltips = null) {
     const tableSelector = `#${tableId}`;
 
@@ -47,8 +81,16 @@ function bottomTableConfig(tableId = 'dataUsersTable', columns = [], tooltips = 
     });
 
     if (tooltips) {
+        // Limit tooltip activation to elements inside this table only to avoid interfering with Select2 fields
         const activateTooltips = () => {
-            document.querySelectorAll(tooltips).forEach((el) => new bootstrap.Tooltip(el));
+            const tableEl = document.querySelector(tableSelector);
+            const scope = tableEl || document;
+            scope.querySelectorAll(tooltips).forEach((el) => {
+                // Avoid creating duplicate tooltip instances on redraw
+                if (!bootstrap.Tooltip.getInstance(el)) {
+                    new bootstrap.Tooltip(el);
+                }
+            });
         };
 
         dataTables[tableId].on('draw', activateTooltips);
