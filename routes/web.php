@@ -43,7 +43,7 @@ Route::middleware('auth')->group(function () {
 
     Route::middleware('role:assigner|admin')->group(function () {
         Route::resource('assets', AssetController::class)->only(['index', 'store', 'update', 'destroy']);
-        Route::resource('assets/asset-tracking', AssetTrackingController::class);
+        Route::resource('assets/asset-tracking', AssetTrackingController::class)->parameters(['asset-tracking' => 'report']);
         Route::resource('brands', BrandController::class)->only(['index', 'store', 'update', 'destroy']);
         Route::resource('categories', CategoryController::class)->only(['index', 'store', 'update', 'destroy']);
         Route::resource('personnel-asset-pending', PersonnelAssetPendingController::class)->only(['index', 'store', 'update', 'destroy']);
