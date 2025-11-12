@@ -100,7 +100,7 @@ async function cargarMarcas(selectedId = null) {
 // ------------------------------
 // Cargar estados dinámicamente
 // ------------------------------
-async function loadStatuses() {
+async function loadStatuses(selectedId = null) {
     try {
         const response = await fetch(vURIStatusApi, {
             method: 'POST',
@@ -121,8 +121,15 @@ async function loadStatuses() {
                 const option = document.createElement('option');
                 option.value = status.id;
                 option.textContent = status.name;
+                if (selectedId && selectedId == status.id) {
+                    option.selected = true;
+                }
                 statusSelect.appendChild(option);
             });
+            
+            if (selectedId && !statusSelect.value) {
+                statusSelect.value = selectedId;
+            }
         } else {
             console.error('Error loading statuses:', data.message);
         }
@@ -131,6 +138,8 @@ async function loadStatuses() {
     }
 }
 
-document.getElementById('modalBien').addEventListener('show.bs.modal', function () {
-    loadStatuses();
+document.getElementById('modalBien').addEventListener('show.bs.modal', function (event) {
+    if (!formBien.dataset.mode || formBien.dataset.mode === 'create') {
+        loadStatuses();
+    }
 });

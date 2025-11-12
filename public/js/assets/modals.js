@@ -43,7 +43,8 @@ document.addEventListener('DOMContentLoaded', function () {
             try {
                 await Promise.all([
                     cargarCategorias(), 
-                    cargarMarcas() 
+                    cargarMarcas(),
+                    loadStatuses() 
                 ]);
                 openModalForEdit('modalBien');
             } catch (error) {
@@ -62,26 +63,26 @@ document.addEventListener('DOMContentLoaded', function () {
             formBien.dataset.mode = 'edit';
             formBien.dataset.id = id;
 
-            fetch(vURIAssetsTableApi, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': csrfToken
-                },
-                body: JSON.stringify({ 
-                    option: 'details',
-                    id: id 
-                })
-            })
-            .then(res => {
-                return res.json();
-            })
-            .then(async result => {
-
+            try {
+                const response = await fetch(vURIAssetsTableApi, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': csrfToken
+                    },
+                    body: JSON.stringify({ 
+                        option: 'details',
+                        id: id 
+                    })
+                });
+                
+                const result = await response.json();
+                
                 if (!result.ok) {
                     console.error('Error en respuesta de details');
                     return;
                 }
+                
                 const asset = Array.isArray(result.data) 
                     ? result.data.find(a => a.id == id)
                     : result.data;
@@ -91,41 +92,44 @@ document.addEventListener('DOMContentLoaded', function () {
                     return;
                 }
 
+                // PRIMERO cargar todos los datos asíncronos
+                await Promise.all([
+                    cargarCategorias(asset.category_id), 
+                    cargarMarcas(asset.brand_id),
+                    loadStatuses(asset.status_id) // Esperar a que termine
+                ]);
+
+                // LUEGO establecer los valores
                 document.getElementById('numeroInventario').value = asset.inventory_number ?? '';
                 document.getElementById('marca').value = asset.brand_id ?? '';
                 document.getElementById('modelo').value = asset.model ?? '';
                 document.getElementById('serie').value = asset.serial_number ?? '';
-                document.getElementById('estado').value = asset.is_active ? '1' : '0';
+                document.getElementById('is_active').value = asset.is_active ? '1' : '0';
+                document.getElementById('status_id').value = asset.status_id ?? ''; // Esto ahora funcionará
                 document.getElementById('categoria').value = asset.category_id ?? '';
                 document.getElementById('descripcion').value = asset.description ?? '';
                 document.getElementById('tipo').value = asset.type ?? '';
 
-                try {
-                    await Promise.all([
-                        cargarCategorias(asset.category_id), 
-                        cargarMarcas(asset.brand_id)
-                    ]);
-                } catch (error) {
-                    console.error('Error cargando datos:', error);
-                    showAlert('Error al cargar los datos del formulario', 'red', 'Error');
-                    return;
-                }
-
+                // Campos dinámicos
                 const categoriaSeleccionada = categoriasGlobales.find(cat => cat.id === asset.category_id);
                 if (categoriaSeleccionada && categoriaSeleccionada.special_specifications) {
                     camposDinamicos.innerHTML = camposGenericos;
+                    
+                    // Establecer valores de campos dinámicos después de crearlos
+                    setTimeout(() => {
+                        if (document.getElementById('procesador')) document.getElementById('procesador').value = asset.cpu ?? '';
+                        if (document.getElementById('velocidad')) document.getElementById('velocidad').value = asset.speed ?? '';
+                        if (document.getElementById('memoria')) document.getElementById('memoria').value = asset.memory ?? '';
+                        if (document.getElementById('almacenamiento')) document.getElementById('almacenamiento').value = asset.storage ?? '';
+                    }, 0);
                 } else {
                     camposDinamicos.innerHTML = '';
                 }
 
-                if (document.getElementById('procesador')) document.getElementById('procesador').value = asset.cpu ?? '';
-                if (document.getElementById('velocidad')) document.getElementById('velocidad').value = asset.speed ?? '';
-                if (document.getElementById('memoria')) document.getElementById('memoria').value = asset.memory ?? '';
-                if (document.getElementById('almacenamiento')) document.getElementById('almacenamiento').value = asset.storage ?? '';
-
+                // FINALMENTE abrir el modal
                 openModalForEdit('modalBien');
-            })
-            .catch(err => {
+                
+            } catch (err) {
                 console.error('Error en fetch details:', err);
                 showAlert(
                     "Error al obtener datos del fetch.",
@@ -133,8 +137,8 @@ document.addEventListener('DOMContentLoaded', function () {
                     "Error Fetch",
                     () => console.log("Error al cargar los datos"),
                     3000
-                )
-            });
+                );
+            }
         }
     });
 
@@ -194,6 +198,7 @@ document.addEventListener('DOMContentLoaded', function () {
             modal.querySelector('#detalle-serie').textContent = asset.serial_number ?? '—';
             modal.querySelector('#detalle-marca').textContent = asset.brand?.name ?? '—';
             modal.querySelector('#detalle-categoria').textContent = asset.category?.name ?? '—';
+            modal.querySelector('#detalle-status').textContent = asset.status?.name ?? '—';
 
             const estadoSpan = modal.querySelector('#detalle-estado');
             estadoSpan.textContent = asset.is_active_label;

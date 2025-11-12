@@ -248,6 +248,10 @@
                                             <div id="detalle-categoria" class="fw-semibold"></div>
                                         </div>
                                         <div class="col-6">
+                                            <div class="small text-muted">Status</div>
+                                            <div id="detalle-status" class="fw-semibold"></div>
+                                        </div>
+                                        <div class="col-6">
                                             <div class="small text-muted">Tipo</div>
                                             <div id="detalle-tipo" class="fw-semibold"></div>
                                         </div>

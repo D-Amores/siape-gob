@@ -38,7 +38,7 @@ class AssetController extends Controller
                     ], 422);
                 }
 
-                $data = Asset::with(['brand', 'category', 'personnelAssets'])
+                $data = Asset::with(['brand', 'category', 'personnelAssets', 'status'])
                             ->find($assetId);
 
                 if (!$data) {
@@ -122,7 +122,7 @@ class AssetController extends Controller
     {
         try {
             $asset = Asset::create($request->validated());
-            $asset->load(['brand', 'category']);
+            $asset->load(['brand', 'category', 'status']);
 
             return response()->json([
                 'ok' => true,
