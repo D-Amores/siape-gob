@@ -55,7 +55,7 @@ class AssetTrackingController extends Controller
             $asset = $maintenanceReport->asset;
             $asset->update(['status_id' => Status::ON_MAINTENANCE]);
             MaintenanceReportLog::create([
-                'maintenance_report_id' => $requestData['maintenance_report_id'],
+                'maintenance_report_id' => $maintenanceReport->id,
                 'personnel_id' => Auth::user()->personnel_id,
                 'action' => 'Seguimiento iniciado.',
                 'comment' => 'El seguimiento del reporte ha sido iniciado por el personal.',
@@ -153,7 +153,7 @@ class AssetTrackingController extends Controller
         $statusCode = 500;
         $requestData = $request->validated();
         try{
-            $maintenance = $report->maintenances()->activeMaintenance()->first();
+            $maintenance = $report->maintenance()->activeMaintenance()->first();
             if (!$maintenance) {
                 return response()->json([
                     'ok' => false,

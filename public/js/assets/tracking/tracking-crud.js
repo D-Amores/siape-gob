@@ -64,3 +64,32 @@ async function updateAssetTracking(id, data){
 
     return isOk; // true si se actualizó, false si no   
 }
+
+async function destroyAssetTracking(id, data) {
+    //peticion fetch para finalizar seguimiento
+    let isOk = false;
+    const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+    try {
+        const response = await fetch(`${assetTrackingUrl}/${id}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': csrfToken
+            },
+            body: JSON.stringify(data)
+        });
+
+        const result = await response.json();
+
+        if (result.ok) {
+            showAlert(result.message || 'Seguimiento finalizado exitosamente', 'green', 'Éxito', null, 2000);
+            isOk = true;
+        } else {
+            showAlert(result.message || 'Error al finalizar el seguimiento', 'red', 'Error', null, 2000);
+        }
+    } catch (error) {
+        showAlert('Error al finalizar el seguimiento. Intente nuevamente.', 'red', 'Error');
+    }
+
+    return isOk; // true si se finalizó, false si no
+}

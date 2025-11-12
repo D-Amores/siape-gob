@@ -26,6 +26,7 @@ class StatusSeeder extends Seeder
              */
             ['name' => 'ABIERTO', 'description' => 'El seguimiento del mantenimiento está en proceso.'],
             ['name' => 'EN SEGUIMIENTO', 'description' => 'El activo está en seguimiento.'],
+            ['name' => 'FINALIZANDO', 'description' => 'El seguimiento del mantenimiento está finalizando.'],
             ['name' => 'COMPLETADO', 'description' => 'El seguimiento del mantenimiento ha sido completado.'],
         ];
 

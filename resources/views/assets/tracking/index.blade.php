@@ -131,20 +131,20 @@
                 </div>
 
                 <form id="trackingCloseForm">
-                    <input type="hidden" id="maintenance_id_close" name="maintenance_id">
+                    <input type="hidden" id="maintenance_report_id_close" name="maintenance_report_id">
 
                     <div class="modal-body pb-0">
                         <div class="row g-3">
 
                             <!-- Estado del seguimiento -->
-                            <div class="col-md-6">
+                            {{-- <div class="col-md-6">
                                 <label for="status_id_close" class="form-label">
                                     <i class="bx bx-bar-chart-alt me-1"></i> Estado del Seguimiento *
                                 </label>
                                 <select class="form-select status-select" id="status_id_close" name="status_id" required>
                                     <option value="">Seleccionar estado...</option>
                                 </select>
-                            </div>
+                            </div> --}}
 
                             <!-- Estado del activo -->
                             <div class="col-md-6">
@@ -154,6 +154,13 @@
                                 <select class="form-select status-select" id="asset_status_id_close" name="asset_status_id" required>
                                     <option value="">Seleccionar estado...</option>
                                 </select>
+                            </div>
+                            <div class="col-md-6">
+                                <br>
+                                <div class="form-text text-muted mt-2">
+                                    <i class="bx bx-info-circle me-1"></i>
+                                    Al elegir el estado <strong>"Fuera de servicio"</strong>, el activo o bien se debe desasignar de forma manual, en su respectivo apartado.
+                                </div>
                             </div>
 
                             <!-- Trabajo realizado -->

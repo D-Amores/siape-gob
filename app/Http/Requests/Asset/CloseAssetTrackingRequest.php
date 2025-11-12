@@ -24,7 +24,7 @@ class CloseAssetTrackingRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'status_id' => 'required|exists:statuses,id',
+            //'status_id' => 'required|exists:statuses,id',
             'asset_status_id' => 'required|exists:statuses,id',
             'observation' => 'required|string',
             'work_done' => 'required|string',
@@ -37,8 +37,8 @@ class CloseAssetTrackingRequest extends FormRequest
         return [
             'asset_status_id.required' => 'El campo estado del activo es obligatorio.',
             'asset_status_id.exists' => 'El estado del activo seleccionado no existe.',
-            'status_id.required' => 'El campo estado es obligatorio.',
-            'status_id.exists' => 'El estado seleccionado no existe.',
+            //'status_id.required' => 'El campo estado es obligatorio.',
+            //'status_id.exists' => 'El estado seleccionado no existe.',
             'observation.required' => 'El campo observación es obligatorio.',
             'observation.string' => 'El campo observación debe ser una cadena de texto.',
             'work_done.required' => 'El campo trabajo realizado es obligatorio.',
@@ -51,7 +51,7 @@ class CloseAssetTrackingRequest extends FormRequest
     {
         return [
             'asset_status_id' => 'estado del activo',
-            'status_id' => 'estado',
+            //'status_id' => 'estado',
             'observation' => 'observación',
             'work_done' => 'trabajo realizado',
             'comment' => 'comentario',

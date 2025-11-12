@@ -7,7 +7,6 @@ use App\Http\Requests\Asset\StoreAssetReportRequest;
 use App\Http\Requests\Asset\ApiAssetReportRequest;
 use App\Models\MaintenanceReport;
 use App\Models\MaintenanceReportLog;
-use App\Models\Asset;
 use App\Models\Status;
 use App\Services\Tools;
 use Illuminate\Support\Facades\Log;

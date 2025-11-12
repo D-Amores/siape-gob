@@ -31,7 +31,7 @@ async function trackingUpdate() {
     const trackingEditSpinner = document.getElementById('trackingEditSpinner');
 
     const data = {};
-    let maintenanceReportId = formData.get('maintenance_report_id');
+    let maintenanceReportId = '';
     formData.forEach((value, key) => {
         const trimmedValue = value.trim();
         if (key === "maintenance_report_id") {
@@ -57,9 +57,42 @@ async function trackingUpdate() {
     '¿Estás seguro de actualizar el seguimiento del activo?');
 }
 
+async function trackingClose() {
+    if (!isTrackingFormValid('#trackingCloseForm')) return;
+    const formData = new FormData(document.getElementById('trackingCloseForm'));
+    const btnTrackingClose = document.getElementById('btnTrackingClose');
+    const trackingCloseSpinner = document.getElementById('trackingCloseSpinner');
+
+    const data = {};
+    let maintenanceReportId = '';
+    formData.forEach((value, key) => {
+        const trimmedValue = value.trim();
+        if (key === "maintenance_report_id") {
+            maintenanceReportId = trimmedValue; // Guardamos aparte
+        }else {
+            data[key] = trimmedValue;
+        }
+    });
+
+    confirmDestroy(async() => {
+        trackingCloseSpinner.classList.remove('d-none');
+        btnTrackingClose.disabled = true;
+        const isOk = await destroyAssetTracking(maintenanceReportId, data);
+        if (isOk) {
+            closeModalForSuccess('modalTrackingClose', 'btnOpenModalTrackingClose');
+            resetFormAndSelect(document.getElementById('trackingCloseForm'));
+            await statusToSelect();
+            await loadReportsTracking(); // Recargar tabla de reportes
+        }
+        trackingCloseSpinner.classList.add('d-none');
+        btnTrackingClose.disabled = false;
+    }, '¿Estás seguro de finalizar el seguimiento del activo? Esta acción no se puede deshacer.');
+}
+
 async function startApp(){
     const dataReportsTableBody = document.querySelector('#tracking-table tbody');
     const btnUpdateTracking = document.getElementById('btnTrackingEdit');
+    const btnCloseTracking = document.getElementById('btnTrackingClose');
     const reports =  await getAssetReports('tracking');
     loadReportsTable(reports);
 
@@ -69,6 +102,8 @@ async function startApp(){
     forceCloseModalWithRemoveId('btnCloseModalTrackingClose', 'modalTrackingClose', 'btnOpenModalTrackingClose');
     
     btnUpdateTracking.addEventListener('click', trackingUpdate);
+    btnCloseTracking.addEventListener('click', trackingClose);
+
     dataReportsTableBody.addEventListener('click', async (e)=>{
         const btnEdit = e.target.closest('.btn-edit');
         if (btnEdit) {
@@ -90,6 +125,8 @@ async function startApp(){
         if (btnClose) {
             btnClose.id = 'btnOpenModalTrackingClose';
             const reportId = btnClose.getAttribute('data-id');
+            const maintenanceReportIdClose = document.getElementById('maintenance_report_id_close');
+            maintenanceReportIdClose.value = reportId;
             openModalForEdit("modalTrackingClose");
             console.log(reportId);
         }
