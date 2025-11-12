@@ -99,6 +99,17 @@ class AssetTrackingController extends Controller
 
         try {
             $asset = $report->asset;
+            if (!$asset) {
+                Log::warning("Intento de actualizar seguimiento sin activo asociado", [
+                    'report_id' => $report->id,
+                    'user_id' => Auth::id(),
+                ]);
+
+                return response()->json([
+                    'ok' => false,
+                    'message' => 'No se encontró un activo asociado a este reporte.'
+                ], 404);
+            }
 
             // 🔹 Actualizar estado del activo si se proporciona
             if (isset($requestData['asset_status_id'])) {

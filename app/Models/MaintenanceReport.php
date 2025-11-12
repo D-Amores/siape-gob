@@ -38,9 +38,9 @@ class MaintenanceReport extends Model
         return $this->belongsTo(Status::class);
     }
 
-    public function maintenances()
+    public function maintenance()
     {
-        return $this->hasMany(Maintenance::class);
+        return $this->hasOne(Maintenance::class);
     }
 
     public function logs()
@@ -57,7 +57,7 @@ class MaintenanceReport extends Model
     {
         return $query->with(['asset', 'status', 'logs'])
             ->whereNull('closed_at') // reporte no cerrado
-            ->whereDoesntHave('maintenances', function ($q) {
+            ->whereDoesntHave('maintenance', function ($q) {
                 $q->whereNull('end_date'); // sin seguimientos activos
             });
     }
@@ -65,7 +65,7 @@ class MaintenanceReport extends Model
     public function scopeReportsWithTracking($query)
     {
         return $query->with(['asset', 'status', 'logs'])
-            ->whereHas('maintenances', function ($q) {
+            ->whereHas('maintenance', function ($q) {
                 $q->whereNull('end_date'); // tiene seguimiento activo
             });
     }

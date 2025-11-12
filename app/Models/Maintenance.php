@@ -14,7 +14,7 @@ class Maintenance extends Model
         'work_done',
     ];
 
-    public function maintenanceReport()
+    public function report()
     {
         return $this->belongsTo(MaintenanceReport::class);
     }
