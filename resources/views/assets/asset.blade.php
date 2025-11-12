@@ -24,6 +24,60 @@
         <div class="datatables">
             <div class="card shadow-lg">
                 <div class="card-body">
+                    <div class="row mb-3 g-2 align-items-end">
+
+                        <div class="col-md-3">
+                            <label for="filtroGeneral" class="form-label small">Buscar (Inv, Modelo, Serie):</label>
+                            <input type="text" id="filtroGeneral" class="form-control form-control-sm"
+                                placeholder="Escribe...">
+                        </div>
+
+                        <div class="col-md-2">
+                            <label for="filtroCategoria" class="form-label small">Categoría:</label>
+                            <select id="filtroCategoria" class="form-select form-select-sm" data-placeholder="Todas">
+                                <option value=""></option>
+                                @foreach ($categories as $category)
+                                    <option value="{{ $category->name }}">{{ $category->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <div class="col-md-2">
+                            <label for="filtroMarca" class="form-label small">Marca:</label>
+                            <select id="filtroMarca" class="form-select form-select-sm" data-placeholder="Todas">
+                                <option value=""></option>
+                                @foreach ($brands as $brand)
+                                    <option value="{{ $brand->name }}">{{ $brand->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <div class="col-md-2">
+                            <label for="filtroCondicion" class="form-label small">Condición:</label>
+                            <select id="filtroCondicion" class="form-select form-select-sm" data-placeholder="Todas">
+                                <option value=""></option>
+                                @foreach ($conditions as $condition)
+                                    <option value="{{ $condition->name }}">{{ $condition->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <div class="col-md-2">
+                            <label for="filtroEstado" class="form-label small">Estado:</label>
+                            <select id="filtroEstado" class="form-select form-select-sm" data-placeholder="Todas">
+                                <option value=""></option>
+                                <option value="Activo">Activo</option>
+                                <option value="Inactivo">Inactivo</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-1">
+                            <button class="btn btn-sm btn-outline-secondary w-100" id="btnLimpiarFiltros"
+                                title="Limpiar filtros">
+                                Limpiar
+                            </button>
+                        </div>
+                    </div>
                     <div class="table-responsive">
                         <table id="file_export"
                             class="table table-hover w-100 table-striped table-bordered text-nowrap align-middle">
@@ -113,13 +167,15 @@
                                         </div>
 
                                         <div class="form-floating mb-3">
-                                            <input type="text" class="form-control" id="modelo" placeholder="Modelo">
+                                            <input type="text" class="form-control" id="modelo"
+                                                placeholder="Modelo">
                                             <label for="modelo"><i class="fas fa-laptop-code me-1 text-muted"></i>
                                                 Modelo</label>
                                         </div>
 
                                         <div class="form-floating mb-3">
-                                            <input type="text" class="form-control" id="serie" placeholder="Serie">
+                                            <input type="text" class="form-control" id="serie"
+                                                placeholder="Serie">
                                             <label for="serie"><i class="fas fa-hashtag me-1 text-muted"></i>
                                                 Serie</label>
                                         </div>
