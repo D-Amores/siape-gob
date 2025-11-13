@@ -56,6 +56,23 @@ class UserReportController extends Controller
                     ];
                 }
 
+                // Formatear los logs para incluir información del personal
+                $formattedLogs = $report->logs->map(function ($log) {
+                    return [
+                        'id' => $log->id,
+                        'action' => $log->action,
+                        'comment' => $log->comment,
+                        'created_at' => $log->created_at,
+                        'updated_at' => $log->updated_at,
+                        'personnel' => $log->personnel ? [
+                            'id' => $log->personnel->id,
+                            'name' => $log->personnel->name,
+                            'last_name' => $log->personnel->last_name,
+                            'email' => $log->personnel->email,
+                        ] : null
+                    ];
+                });
+
                 return [
                     'id' => $report->id,
                     'folio' => $report->folio,
@@ -66,6 +83,7 @@ class UserReportController extends Controller
                     'closed_at' => $report->closed_at,
                     'created_at' => $report->created_at,
                     'updated_at' => $report->updated_at,
+                    'logs' => $formattedLogs,
                 ];
             });
 
