@@ -17,15 +17,17 @@ class Status extends Model
 
     protected $table = 'statuses';
 
-    // Estado de reportes
-    public const OPEN = 1;
-    public const IN_PROGRESS = 2;
-    public const CLOSED = 3;
-
     // Estado de activos
-    public const AVAILABLE = 4;
-    public const ON_MAINTENANCE = 5;
-    public const DAMAGED = 6;
+    public const AVAILABLE = 2;
+    public const ON_MAINTENANCE = 3;
+    public const DAMAGED = 4;
+
+    // Estado de reportes
+    public const OPEN = 5;
+    public const IN_PROGRESS = 6;
+    public const FINALIZING = 7;
+    public const CLOSED = 8;
+
 
 
     public function assets(): HasMany
