@@ -92,7 +92,7 @@ Route::middleware('auth')->group(function () {
         Route::post('accept-assignments/accept', [AcceptAssignmentsController::class, 'acceptAssignmentApi'])->name('accept-assignments.accept');
         
         // Ruta API para ver los reportes realizados por el usuario autenticado
-        Route::get('/user/reports', [UserReportController::class, 'userReportsApi']);
+        Route::post('/user/reports', [UserReportController::class, 'userReportsApi']);
     });
 
     Route::middleware('role:admin')->group(function () {

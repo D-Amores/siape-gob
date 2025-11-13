@@ -16,21 +16,69 @@ class UserReportController extends Controller
 
     public function userReportsApi(Request $request)
     {
-        $personnelId = Auth::user()->personnel_id;
+        try {
+            $personnelId = Auth::user()->personnel_id;
 
-        $reports = MaintenanceReport::where('reported_by', $personnelId)
-            ->with([
-                'asset', 
-                'status',
-                'logs.personnel', 
-                'reporter'
-            ])
-            ->orderBy('reported_at', 'desc')
-            ->get();
+            $reports = MaintenanceReport::where('reported_by', $personnelId)
+                ->with([
+                    'asset.brand',
+                    'asset.category',
+                    'asset.status',
+                    'status',
+                    'logs.personnel', 
+                    'reporter'
+                ])
+                ->orderBy('reported_at', 'desc')
+                ->get();
 
-        return response()->json([
-            'success' => true,
-            'data' => $reports
-        ]);
+            // Formatear los datos para incluir información completa del asset
+            $formattedReports = $reports->map(function ($report) {
+                $asset = $report->asset;
+                $assetData = null;
+                
+                if ($asset) {
+                    $assetData = [
+                        'id' => $asset->id,
+                        'inventory_number' => $asset->inventory_number,
+                        'model' => $asset->model,
+                        'serial_number' => $asset->serial_number,
+                        'cpu' => $asset->cpu,
+                        'speed' => $asset->speed,
+                        'memory' => $asset->memory,
+                        'storage' => $asset->storage,
+                        'description' => $asset->description,
+                        'type' => $asset->type,
+                        'brand_name' => $asset->brand->name ?? 'N/A',
+                        'category_name' => $asset->category->name ?? 'N/A',
+                        'status_name' => $asset->status_name,
+                        'asset_name' => $asset->asset_name, 
+                        'is_active' => $asset->is_active,
+                    ];
+                }
+
+                return [
+                    'id' => $report->id,
+                    'folio' => $report->folio,
+                    'asset' => $assetData,
+                    'status' => $report->status,
+                    'description' => $report->description,
+                    'reported_at' => $report->reported_at,
+                    'closed_at' => $report->closed_at,
+                    'created_at' => $report->created_at,
+                    'updated_at' => $report->updated_at,
+                ];
+            });
+
+            return response()->json([
+                'success' => true,
+                'data' => $formattedReports
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error al cargar los reportes: ' . $e->getMessage()
+            ], 500);
+        }
     }
 }
