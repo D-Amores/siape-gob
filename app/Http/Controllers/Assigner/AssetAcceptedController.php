@@ -49,8 +49,8 @@ class AssetAcceptedController extends Controller
                         return [
                             'id' => $assignment->id,
                             'asset' => [
-                                'model' => $assignment->asset->model,
-                                'serial_number' => $assignment->asset->serial_number,
+                                'status' => $assignment->asset->status->name ?? 'Sin estado',
+                                'asset_name' => $assignment->asset->asset_name ?? 'Sin nombre',
                                 'brand' => $assignment->asset->brand->name ?? 'Sin marca',
                                 'category' => $assignment->asset->category->name ?? 'Sin categoría',
                             ],

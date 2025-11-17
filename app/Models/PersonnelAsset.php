@@ -59,6 +59,7 @@ class PersonnelAsset extends Model
         return $query->with([
             'asset.brand',
             'asset.category',
+            'asset.status',
         ])
         ->whereNotNull('confirmation_date')
         ->whereNull('unassignment_date')
@@ -70,6 +71,7 @@ class PersonnelAsset extends Model
         return $query->with([
             'asset.brand',
             'asset.category',
+            'asset.status',
         ])
         ->whereNotNull('confirmation_date')
         ->whereNotNull('unassignment_date')

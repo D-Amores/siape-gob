@@ -115,7 +115,7 @@ class Asset extends Model
     {
         return Attribute::get(function () {
             if ($this->model && $this->inventory_number) {
-                return $this->model . '-' . $this->inventory_number;
+                return $this->inventory_number . ' - ' . $this->model;
             }
             return '—';
         });
