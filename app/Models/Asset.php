@@ -98,6 +98,16 @@ class Asset extends Model
         })
         ->where('is_active', true);
     }
+    
+    /**
+     * Scope para verificar si el asset ya tiene un reporte abierto
+     */
+    public function scopeHasOpenReport($query){
+        return $query->whereHas('reports', function ($q) {
+            $q->where('status_id', Status::OPEN)
+            ->whereNull('closed_at');
+        });
+    }
 
     protected $appends = ['asset_name', 'status_name'];
 

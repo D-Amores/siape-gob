@@ -8,6 +8,7 @@ use App\Http\Requests\Asset\ApiAssetReportRequest;
 use App\Models\MaintenanceReport;
 use App\Models\MaintenanceReportLog;
 use App\Models\Status;
+use App\Models\Asset;
 use App\Services\Tools;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Database\QueryException;
@@ -96,10 +97,13 @@ class AssetReportController extends Controller
 
         try{
             /**
-             * Actualizar estado del activo a "En Mantenimiento"
+             * Verificar si el activo ya tiene un reporte abierto
              */
-
-            //$asset = Asset::findOrFail($requestData['asset_id']); 
+            $asset = Asset::findOrFail($requestData['asset_id']); 
+            if($asset->hasOpenReport()->exists()){
+                $response['message'] = 'El activo ya tiene un reporte de mantenimiento abierto.';
+                return response()->json($response, 400);
+            }
             //$asset->update(['status_id' => 2]); // Actualizar estado del activo a "En Mantenimiento", estoy suponiendo que es 3, ahi lo cambias PENELITI
             // Generar folio
             $year = date('Y');
