@@ -1,26 +1,35 @@
-async function loadReportsTracking(){
-    const reports =  await getAssetReports('tracking');
+async function loadReportsTracking() {
+    const reports = await getAssetReports('tracking');
     loadReportsTable(reports)
+}
+
+// Función para cargar opciones en un select dado un array de opciones solo para status
+function loadSelectStatusOptions(selectElement, options) {
+    // Limpiar opciones existentes
+    selectElement.innerHTML = '<option value="">Seleccionar estado...</option>';
+    // Agregar nuevas opciones
+    options.forEach(optionData => {
+        const option = document.createElement('option');
+        option.value = optionData.id;
+        option.textContent = optionData.name;
+        selectElement.appendChild(option);
+    });
 }
 
 
 async function statusToSelect() {
-    const statuses = await getStatuses();
-    const statusSelects = document.querySelectorAll('.status-select');
-
-    statusSelects.forEach(select => {
-        // Limpiar opciones existentes
-        select.innerHTML = '';
-
-        // Agregar una opción por cada estado
-        statuses.forEach(status => {
-            const option = document.createElement('option');
-            option.value = status.id;
-            option.textContent = status.name;
-            select.appendChild(option);
-        });
-    });
-    
+    // Obtener los estados desde el servidor
+    const maintenanceStatusesUpdate = await getStatuses('maintenance_statuses_update');
+    const assetStatusesUpdate = await getStatuses('asset_statuses_update');
+    const assetStatusesClose = await getStatuses('asset_statuses_close');
+    // Seleccionar los elementos select del DOM
+    const maintenanceUpdateStatusSelect = document.getElementById('status_id_update');
+    const assetStatusesUpdateSelect = document.getElementById('asset_status_id_update');
+    const assetStatusesCloseSelect = document.getElementById('asset_status_id_close');
+    // Cargar las opciones en los selects
+    loadSelectStatusOptions(maintenanceUpdateStatusSelect, maintenanceStatusesUpdate);
+    loadSelectStatusOptions(assetStatusesUpdateSelect, assetStatusesUpdate);
+    loadSelectStatusOptions(assetStatusesCloseSelect, assetStatusesClose);
 }
 
 async function trackingUpdate() {
@@ -36,7 +45,7 @@ async function trackingUpdate() {
         const trimmedValue = value.trim();
         if (key === "maintenance_report_id") {
             maintenanceReportId = trimmedValue; // Guardamos aparte
-        }else {
+        } else {
             data[key] = trimmedValue;
         }
     });
@@ -54,7 +63,7 @@ async function trackingUpdate() {
         trackingEditSpinner.classList.add('d-none');
         btnTrackingEdit.disabled = false;
     },
-    '¿Estás seguro de actualizar el seguimiento del activo?');
+        '¿Estás seguro de actualizar el seguimiento del activo?');
 }
 
 async function trackingClose() {
@@ -69,12 +78,12 @@ async function trackingClose() {
         const trimmedValue = value.trim();
         if (key === "maintenance_report_id") {
             maintenanceReportId = trimmedValue; // Guardamos aparte
-        }else {
+        } else {
             data[key] = trimmedValue;
         }
     });
 
-    confirmDestroy(async() => {
+    confirmDestroy(async () => {
         trackingCloseSpinner.classList.remove('d-none');
         btnTrackingClose.disabled = true;
         const isOk = await destroyAssetTracking(maintenanceReportId, data);
@@ -89,22 +98,22 @@ async function trackingClose() {
     }, '¿Estás seguro de finalizar el seguimiento del activo? Esta acción no se puede deshacer.');
 }
 
-async function startApp(){
+async function startApp() {
     const dataReportsTableBody = document.querySelector('#tracking-table tbody');
     const btnUpdateTracking = document.getElementById('btnTrackingEdit');
     const btnCloseTracking = document.getElementById('btnTrackingClose');
-    const reports =  await getAssetReports('tracking');
+    const reports = await getAssetReports('tracking');
     loadReportsTable(reports);
 
     await statusToSelect();
 
     forceCloseModalWithRemoveId('btnCloseModalTrackingEdit', 'modalTrackingEdit', 'btnOpenModalTrackingEdit');
     forceCloseModalWithRemoveId('btnCloseModalTrackingClose', 'modalTrackingClose', 'btnOpenModalTrackingClose');
-    
+
     btnUpdateTracking.addEventListener('click', trackingUpdate);
     btnCloseTracking.addEventListener('click', trackingClose);
 
-    dataReportsTableBody.addEventListener('click', async (e)=>{
+    dataReportsTableBody.addEventListener('click', async (e) => {
         const btnEdit = e.target.closest('.btn-edit');
         if (btnEdit) {
             btnEdit.id = 'btnOpenModalTrackingEdit';
@@ -113,11 +122,11 @@ async function startApp(){
             maintenanceReportId.value = reportId;
             openModalForEdit("modalTrackingEdit");
             console.log(reportId);
-            
+
             //await editAssetTracking(reportId);
 
-        //     btnCreate.removeAttribute('id');
-        //     console.log('click en crear seguimiento para el reporte:', reportId);
+            //     btnCreate.removeAttribute('id');
+            //     console.log('click en crear seguimiento para el reporte:', reportId);
 
         }
 

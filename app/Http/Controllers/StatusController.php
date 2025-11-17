@@ -15,13 +15,22 @@ class StatusController extends Controller
 
         try{
             $requestData = $request->validate([
-                'option' => 'required|in:all',
+                'option' => 'required|in:all,asset_statuses_update,asset_statuses_close,maintenance_statuses_update',
             ]);
             $option = $requestData['option'];
 
             switch ($option) {
                 case 'all':
                     $statuses = Status::all();
+                    break;
+                case 'asset_statuses_update':
+                    $statuses = Status::assetStatusesOnlyOnMaintenance();
+                    break;
+                case 'asset_statuses_close':
+                    $statuses = Status::assetStatusesWithoutOnMaintenance();
+                    break;
+                case 'maintenance_statuses_update':
+                    $statuses = Status::maintenanceStatusesWithoutOpenAndClosed();
                     break;
                 default:
                     $statuses = collect();

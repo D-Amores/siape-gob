@@ -72,7 +72,7 @@
                                 <label for="status_id_update" class="form-label">
                                     <i class="bx bx-bar-chart-alt-2 me-1"></i> Estado del Seguimiento *
                                 </label>
-                                <select class="form-select status-select" id="status_id_update" name="status_id" required>
+                                <select class="form-select status-select-maintenance" id="status_id_update" name="status_id" required>
                                     <option value="">Seleccionar estado...</option>
                                 </select>
                             </div>
@@ -82,7 +82,7 @@
                                 <label for="asset_status_id_update" class="form-label">
                                     <i class="bx bx-cog me-1"></i> Estado del Activo *
                                 </label>
-                                <select class="form-select status-select" id="asset_status_id_update" name="asset_status_id" required>
+                                <select class="form-select status-select-asset" id="asset_status_id_update" name="asset_status_id" required>
                                     <option value="">Seleccionar estado...</option>
                                 </select>
                             </div>
@@ -151,7 +151,7 @@
                                 <label for="asset_status_id_close" class="form-label">
                                     <i class="bx bx-cog me-1"></i> Estado del Activo *
                                 </label>
-                                <select class="form-select status-select" id="asset_status_id_close" name="asset_status_id" required>
+                                <select class="form-select status-select-asset" id="asset_status_id_close" name="asset_status_id" required>
                                     <option value="">Seleccionar estado...</option>
                                 </select>
                             </div>
