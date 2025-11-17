@@ -28,7 +28,7 @@ class CloseAssetTrackingRequest extends FormRequest
             'asset_status_id' => 'required|exists:statuses,id',
             'observation' => 'required|string',
             'work_done' => 'required|string',
-            'comment' => 'required|string',
+            //'comment' => 'required|string',
         ];
     }
 
@@ -43,7 +43,7 @@ class CloseAssetTrackingRequest extends FormRequest
             'observation.string' => 'El campo observación debe ser una cadena de texto.',
             'work_done.required' => 'El campo trabajo realizado es obligatorio.',
             'work_done.string' => 'El campo trabajo realizado debe ser una cadena de texto.',
-            'comment.string' => 'El campo comentario debe ser una cadena de texto.',
+            //'comment.string' => 'El campo comentario debe ser una cadena de texto.',
         ];
     }
 
@@ -54,7 +54,7 @@ class CloseAssetTrackingRequest extends FormRequest
             //'status_id' => 'estado',
             'observation' => 'observación',
             'work_done' => 'trabajo realizado',
-            'comment' => 'comentario',
+            //'comment' => 'comentario',
         ];
     }
 

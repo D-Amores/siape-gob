@@ -182,7 +182,7 @@ class AssetTrackingController extends Controller
                 'maintenance_report_id' => $report->id,
                 'personnel_id' => Auth::user()->personnel_id,
                 'action' => 'Seguimiento cerrado.',
-                'comment' => $requestData['comment'] ?? 'No se proporcionó comentario.',
+                'comment' => 'El seguimiento del reporte ha sido cerrado por el personal encargado.',
             ]);
 
             $response['ok'] = true;

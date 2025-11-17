@@ -181,14 +181,14 @@
                                     placeholder="Agrega una observación sobre el cierre..." required></textarea>
                             </div>
 
-                            <!-- Comentario opcional -->
+                            {{-- <!-- Comentario opcional -->
                             <div class="col-12">
                                 <label for="comment_close" class="form-label">
                                     <i class="bx bx-comment-detail me-1"></i> Comentario *
                                 </label>
                                 <textarea class="form-control" id="comment_close" name="comment" rows="2"
                                     placeholder="Comentario adicional..." required></textarea>
-                            </div>
+                            </div> --}}
 
                         </div>
 

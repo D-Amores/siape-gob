@@ -95,7 +95,10 @@ async function trackingClose() {
         }
         trackingCloseSpinner.classList.add('d-none');
         btnTrackingClose.disabled = false;
-    }, '¿Estás seguro de finalizar el seguimiento del activo? Esta acción no se puede deshacer.');
+        }, 
+        '¿Estás seguro de finalizar el seguimiento del activo? Esta acción no se puede deshacer.',
+        'Finalizar'
+    );
 }
 
 async function startApp() {
