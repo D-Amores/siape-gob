@@ -127,7 +127,7 @@ class Personnel extends Model
             $parts = array_filter([
                 $this->name,
                 $this->last_name,
-                $this->middle_name,
+                $this->middle_name ?? '',
             ]);
 
             return implode(' ', $parts);

@@ -32,9 +32,9 @@ class AssetAcceptedController extends Controller
                             'id' => $item->id,
                             'assignment_date' => $item->assignment_date ? $item->assignment_date->format('Y-m-d') : 'Sin fecha',
                             'confirmation_date' => optional($item->confirmation_date)->format('Y-m-d'),
-                            'asset_id' => $item->asset->model ?? 'Sin nombre',
-                            'assigner_name' => $item->assigner->name ?? 'Desconocido',
-                            'receiver_name' => $item->receiver->name ?? 'Desconocido',
+                            'asset_name' => $item->asset->asset_name ?? 'Sin nombre',
+                            'assigner_name' => $item->assigner->full_name ?? 'Desconocido',
+                            'receiver_name' => $item->receiver->full_name ?? 'Desconocido',
                         ];
                     });
                     $response = [
@@ -55,15 +55,13 @@ class AssetAcceptedController extends Controller
                                 'category' => $assignment->asset->category->name ?? 'Sin categoría',
                             ],
                             'receiver' => [
-                                'name' => "{$assignment->receiver->name} {$assignment->receiver->last_name}",
+                                'name' => $assignment->receiver->full_name ?? 'Desconocido',
                                 'area' => $assignment->receiver->area_name ?? 'Sin área',
                             ],
-                            'assigner' => "{$assignment->assigner->name} {$assignment->assigner->last_name}",
+                            'assigner' => $assignment->assigner->full_name ?? 'Desconocido',
                             'assignment_date' => optional($assignment->assignment_date)->format('Y-m-d'),
                             'confirmation_date' => optional($assignment->confirmation_date)->format('Y-m-d'),
-                            'path_acceptance_doc' => $assignment->path_acceptance_doc
-                                ? asset('storage/' . str_replace('public/', '', $assignment->path_acceptance_doc))
-                                : null,
+                            'path_acceptance_doc' => $assignment->acceptance_doc_url,
                         ];
                     });
 
