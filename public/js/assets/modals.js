@@ -1,9 +1,6 @@
 
 document.addEventListener('DOMContentLoaded', function () {
-    
-    // ------------------------------
-    // Variables del modal
-    // ------------------------------
+
     const modalBien = document.getElementById('modalBien');
     const formBien = document.getElementById('formNuevoBien');
     const modalTitle = document.getElementById('modalBienTitulo');
@@ -14,22 +11,16 @@ document.addEventListener('DOMContentLoaded', function () {
         return;
     }
 
-    // ------------------------------
-    // CONFIGURACIÓN DE BOTONES DE CIERRE DEL MODAL
-    // ------------------------------
     closeModal('btnCerrarModalBien', 'modalBien', 'focusAfterSave');
     closeModal('btnCerrarFooter', 'modalBien', 'focusAfterSave');
 
-    // ------------------------------
-    // Abrir modal según modo
-    // ------------------------------
     document.addEventListener('click', async e => {
         const btn = e.target.closest('.btn-modal-bien');
         if (!btn) return;
 
         const mode = btn.dataset.mode;
         const id = btn.dataset.id || null;
-        
+
         if (formBien) formBien.reset();
 
         if (mode === 'create') {
@@ -82,11 +73,10 @@ document.addEventListener('DOMContentLoaded', function () {
                     console.error('Error en respuesta de details');
                     return;
                 }
-                
-                const asset = Array.isArray(result.data) 
+                const asset = Array.isArray(result.data)
                     ? result.data.find(a => a.id == id)
                     : result.data;
-                    
+
                 if (!asset) {
                     console.error('Asset no encontrado');
                     return;
@@ -111,6 +101,17 @@ document.addEventListener('DOMContentLoaded', function () {
                 document.getElementById('tipo').value = asset.type ?? '';
 
                 // Campos dinámicos
+                try {
+                    await Promise.all([
+                        cargarCategorias(asset.category_id),
+                        cargarMarcas(asset.brand_id)
+                    ]);
+                } catch (error) {
+                    console.error('Error cargando datos:', error);
+                    showAlert('Error al cargar los datos del formulario', 'red', 'Error');
+                    return;
+                }
+
                 const categoriaSeleccionada = categoriasGlobales.find(cat => cat.id === asset.category_id);
                 if (categoriaSeleccionada && categoriaSeleccionada.special_specifications) {
                     camposDinamicos.innerHTML = camposGenericos;
@@ -159,9 +160,9 @@ document.addEventListener('DOMContentLoaded', function () {
                     'Content-Type': 'application/json',
                     'X-CSRF-TOKEN': csrfToken
                 },
-                body: JSON.stringify({ 
+                body: JSON.stringify({
                     option: 'details',
-                    id: id 
+                    id: id
                 })
             });
             const result = await response.json();
@@ -247,9 +248,9 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
 
                 showAlert(result.message || 'Activo eliminado correctamente.', "green", "Éxito", () => {
-                    const table = $('#file_export').DataTable();
-                    const row = document.querySelector(`.btn-delete-asset[data-id="${assetIdToDelete}"]`).closest('tr');
-                    table.row(row).remove().draw();
+                    if(tableApi) {
+                        tableApi.draw(false);
+                    }
                 });
 
             } catch (error) {

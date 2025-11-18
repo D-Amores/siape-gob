@@ -9,14 +9,14 @@ document.addEventListener('DOMContentLoaded', function () {
         if ($.fn.DataTable.isDataTable('#file_export')) {
             const table = $('#file_export').DataTable();
 
-            fetch(vURIAssetsTableApi, {  
-                method: 'POST',   
+            fetch(vURIAssetsTableApi, {
+                method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                     'X-CSRF-TOKEN': csrfToken
                 },
-                body: JSON.stringify({ 
-                    option: 'table' 
+                body: JSON.stringify({
+                    option: 'table'
                 })
             })
             .then(res => res.json())
@@ -41,7 +41,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Carga inicial
     loadAssets();
-
     
     // ------------------------------
     // Envío del formulario
@@ -103,7 +102,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
                     showAlert(result.message || 'Operación exitosa.', "green", "Éxito", () => {
                         closeModalForSuccess('modalBien', 'focusAfterSave');
-                        loadAssets();
+                        if (tableApi) {
+                            tableApi.draw(false);
+                        }
                     });
 
                 } catch (error) {
