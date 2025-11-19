@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests\Assigner;
+namespace App\Http\Requests\Asset;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
@@ -35,6 +35,7 @@ class UpdateAssetRequest extends FormRequest
             'type' => 'sometimes|nullable|string|max:100',
             'brand_id' => 'sometimes|exists:brands,id',
             'category_id' => 'sometimes|exists:categories,id',
+            'status_id' => 'sometimes|exists:statuses,id',
             'is_active' => 'sometimes|boolean',
         ];
     }
@@ -63,6 +64,7 @@ class UpdateAssetRequest extends FormRequest
             'brand_id.exists' => 'La marca seleccionada no existe',
             'category_id.required' => 'La categoría es obligatoria',
             'category_id.exists' => 'La categoría seleccionada no existe',
+            'status_id.exists' => 'El estado seleccionado no existe',
         ];
     }
 
@@ -80,6 +82,7 @@ class UpdateAssetRequest extends FormRequest
             'type' => 'type',
             'brand_id' => 'marca',
             'category_id' => 'categoría',
+            'status_id' => 'estado',
         ];
     }
 

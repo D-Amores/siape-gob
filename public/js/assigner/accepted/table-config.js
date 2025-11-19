@@ -9,19 +9,15 @@ function loadAssetsAccepted(assetPendings) {
             render: (data, type, row, meta) => meta.row + 1 // contador visual
         },
         { 
-            data: 'asset.serial_number', 
-            title: 'Activo', 
+            data: 'asset.asset_name', 
+            title: 'Bien', 
             className: 'text-center',
-            render: (data, type, row) => {
-                const model = row.asset?.model ?? '—';
-                return `<strong>${model} - </strong><small>${data}</small>`;
-            }
         },
-        // { 
-        //     data: 'asset.category', 
-        //     title: 'Categoría', 
-        //     className: 'text-center'
-        // },
+        { 
+            data: 'asset.status', 
+            title: 'Estado', 
+            className: 'text-center'
+        },
         // { 
         //     data: 'asset.brand', 
         //     title: 'Marca', 

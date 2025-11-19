@@ -31,11 +31,11 @@ class HistoricController extends Controller
                     $data = $query->get()->map(function ($item) {
                         return [
                             'id' => $item->id,
-                            'asset_name' => $item->asset->model.'-'.$item->asset->serial_number ?? '',
+                            'asset_name' => $item->asset->asset_name ?? '',
                             'brand' => $item->asset->brand->name ?? '',
                             'category' => $item->asset->category->name ?? '',
-                            'assigned_by' => $item->assigner->name.' '.$item->assigner->last_name ?? '',
-                            'assigned_to' => $item->receiver->name.' '.$item->receiver->last_name ?? '',
+                            'assigned_by' => $item->assigner->full_name ?? '',
+                            'assigned_to' => $item->receiver->full_name ?? '',
                             'assignment_date' => optional($item->assignment_date)->format('Y-m-d'),
                             'confirmation_date' => optional($item->confirmation_date)->format('Y-m-d'),
                             'unassignment_date' => optional($item->unassignment_date)->format('Y-m-d'),

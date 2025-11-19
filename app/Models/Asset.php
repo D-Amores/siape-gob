@@ -48,6 +48,11 @@ class Asset extends Model
         return $this->belongsTo(Status::class);
     }
 
+    public function reports()
+    {
+        return $this->hasMany(MaintenanceReport::class);
+    }
+
     /**
      * Check if the asset is active.
      *
@@ -73,7 +78,7 @@ class Asset extends Model
      */
     public function scopeAssignedAssetIds($query)
     {
-        return \App\Models\PersonnelAssetPending::whereNull('confirmation_date')
+        return PersonnelAssetPending::whereNull('confirmation_date')
             ->pluck('asset_id')
             ->toArray();
     }
@@ -155,5 +160,33 @@ class Asset extends Model
         if ($brandName) {
             $query->whereHas('brand', fn($q) => $q->where('name', $brandName));
         }
+    }
+    
+    /**
+     * Scope para verificar si el asset ya tiene un reporte abierto
+     */
+    public function scopeHasOpenReport($query){
+        return $query->whereHas('reports', function ($q) {
+            $q->where('status_id', Status::OPEN)
+            ->whereNull('closed_at');
+        });
+    }
+
+    protected $appends = ['asset_name', 'status_name'];
+
+    protected function assetName(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => $this->model && $this->inventory_number
+                ? $this->inventory_number . ' - ' . $this->model
+                : '—'
+        );
+    }
+
+    protected function statusName(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => $this->status->name ?? 'Desconocido'
+        );
     }
 }

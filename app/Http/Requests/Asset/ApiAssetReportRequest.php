@@ -1,17 +1,17 @@
 <?php
 
-namespace App\Http\Requests\Assigner;
+namespace App\Http\Requests\Asset;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class AssetsApiRequest extends FormRequest
+class ApiAssetReportRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-        return true; // Para hacer pruebas, en producción se debe ajustar.
+        return true;
     }
 
     /**
@@ -22,7 +22,7 @@ class AssetsApiRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'option' => 'required|string|in:table,details,available',
+            'option' => 'required|string|in:all,open,closed,tracking',
         ];
     }
 }

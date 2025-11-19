@@ -89,6 +89,31 @@
                                             <span class="hide-menu">Aceptadas</span>
                                         </a>
                                     </li>
+                                    <!-- ---------------------------------- -->
+                                    <!-- Servicios -->
+                                    <!-- ---------------------------------- -->
+                                    <li class="nav-small-cap">
+                                        <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
+                                        <span class="hide-menu">Servicios</span>
+                                    </li>
+                                    <li class="sidebar-item">
+                                        <a class="sidebar-link" href="{{ route('asset-tracking.create') }}"
+                                            aria-expanded="false">
+                                            <span>
+                                                <i class="ti ti-report"></i>
+                                            </span>
+                                            <span class="hide-menu">Reportes</span>
+                                        </a>
+                                    </li>
+                                    <li class="sidebar-item">
+                                        <a class="sidebar-link" href="{{ route('asset-tracking.index') }}"
+                                            aria-expanded="false">
+                                            <span>
+                                                <i class="ti ti-calendar"></i>
+                                            </span>
+                                            <span class="hide-menu">Seguimientos</span>
+                                        </a>
+                                    </li>
                                     @endhasanyrole
                                     @role('user')
                                     <li class="sidebar-item">
@@ -99,14 +124,22 @@
                                             <span class="hide-menu">Aceptar Asignaciones</span>
                                         </a>
                                     </li>
-                                        <li class="sidebar-item">
-                                            <a class="sidebar-link" href="{{ route('assets-user.index') }}" aria-expanded="false">
-                                                <span>
-                                                    <i class="ti ti-package"></i>
-                                                </span>
-                                                <span class="hide-menu">Bienes</span>
-                                            </a>
-                                        </li>
+                                    <li class="sidebar-item">
+                                        <a class="sidebar-link" href="{{ route('assets-user.index') }}" aria-expanded="false">
+                                            <span>
+                                                <i class="ti ti-package"></i>
+                                            </span>
+                                            <span class="hide-menu">Bienes</span>
+                                        </a>
+                                    </li>
+                                    <li class="sidebar-item">
+                                        <a class="sidebar-link" href="{{ route('reports-user.index') }}" aria-expanded="false">
+                                            <span>
+                                                <i class="ti ti-report"></i>
+                                            </span>
+                                            <span class="hide-menu">Reportes</span>
+                                        </a>
+                                    </li>
                                     @endrole
                                     <li class="nav-small-cap">
                                         <i class="ti ti-dots nav-small-cap-icon fs-4"></i>

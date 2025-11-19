@@ -59,6 +59,7 @@ class PersonnelAsset extends Model
         return $query->with([
             'asset.brand',
             'asset.category',
+            'asset.status',
         ])
         ->whereNotNull('confirmation_date')
         ->whereNull('unassignment_date')
@@ -70,9 +71,22 @@ class PersonnelAsset extends Model
         return $query->with([
             'asset.brand',
             'asset.category',
+            'asset.status',
         ])
         ->whereNotNull('confirmation_date')
         ->whereNotNull('unassignment_date')
         ->orderBy('unassignment_date', 'desc');
+    }
+
+    /**
+     * Get doc.
+     */
+    public function getAcceptanceDocUrlAttribute()
+    {
+        if (!$this->path_acceptance_doc || trim($this->path_acceptance_doc) === 'pending') {
+            return asset('storage/' . ltrim(str_replace('public/', '', $this->path_respaldo_acceptance), '/'));
+        }
+
+        return asset('storage/' . ltrim(str_replace('public/', '', $this->path_acceptance_doc), '/'));
     }
 }

@@ -41,7 +41,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Carga inicial
     loadAssets();
-
+    
     // ------------------------------
     // Envío del formulario
     // ------------------------------
@@ -55,7 +55,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 brand_id: document.getElementById('marca').value,
                 model: document.getElementById('modelo').value,
                 serial_number: document.getElementById('serie').value,
-                is_active: document.getElementById('estado').value === '1',
+                is_active: document.getElementById('is_active').value === '1',
+                status_id: document.getElementById('status_id').value,
                 category_id: document.getElementById('categoria').value,
                 description: document.getElementById('descripcion').value,
                 type: document.getElementById('tipo').value || null,

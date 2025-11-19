@@ -80,9 +80,9 @@ class AcceptAssignmentsController extends Controller
             $data = $assignments->map(function ($item) {
                 return [
                     'id' => $item->id,
-                    'asset_name' => $item->asset->model ?? 'Sin nombre',
-                    'assigner_name' => $item->assigner->name ?? 'Desconocido',
-                    'receiver_name' => $item->receiver->name ?? 'Desconocido',
+                    'asset_name' => $item->asset->asset_name ?? 'Sin nombre',
+                    'assigner_name' => $item->assigner->full_name ?? 'Desconocido',
+                    'receiver_name' => $item->receiver->full_name ?? 'Desconocido',
                     'assignment_date' => $item->assignment_date ? $item->assignment_date->format('Y-m-d') : 'Sin fecha',
                 ];
             });

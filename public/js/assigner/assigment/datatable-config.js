@@ -20,14 +20,9 @@ function loadAssetsPending(assetPendings) {
             `
         },
         {
-            data: "asset_id",
+            data: "asset_name",
             title: "Bien",
             className: "text-center",
-            render: (asset) => `
-                <div class="text-center text-truncate" style="max-width:140px;" title="${asset ?? '—'}" data-bs-toggle="tooltip">
-                    ${asset ?? '—'}
-                </div>
-            `
         },
         {
             data: "assigner_name",

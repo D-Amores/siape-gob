@@ -16,6 +16,10 @@
     <div class="container-fluid">
         <div class="card shadow-lg">
             <div class="card-body">
+                <p class="card-text text-muted">
+                            Los bienes se muestran utilizando su <strong>numero de inventario</strong> y <strong>modelo</strong>,
+                            con el formato: <em>numero de inventario – modelo</em>.
+                        </p>
                 <div id="loading-spinner" class="text-center my-5">
                     <div class="spinner-grow text-primary mb-3" style="width: 3rem; height: 3rem;" role="status"></div>
                     <div class="progress w-50 mx-auto" style="height: 8px;">
@@ -31,7 +35,7 @@
                         <thead>
                             <tr>
                                 <th>#</th>
-                                <th>Activo</th>
+                                <th>Bien</th>
                                 <th>Marca</th>
                                 <th>Categoría</th>
                                 <th>Asigna</th>

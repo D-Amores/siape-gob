@@ -9,7 +9,7 @@ function loadHistoricTable(data) {
             title: "#",
             render: (data, type, row, meta) => meta.row + 1 // ✅ Numeración consecutiva
         },
-        { data: "asset_name", title: "Activo" },
+        { data: "asset_name", title: "Bien" },
         { data: "brand", title: "Marca" },
         { data: "category", title: "Categoría" },
         { data: "assigned_by", title: "Asigna" },

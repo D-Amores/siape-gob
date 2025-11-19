@@ -26,13 +26,18 @@
                 <div class="card-body">
                     <div class="mb-2">
                         <h4 class="card-title mb-0">Asignaciones Aceptadas</h4>
+                        <p class="card-text text-muted mt-1">
+                            Los bienes se muestran utilizando su <strong>numero de inventario</strong> y <strong>modelo</strong>,
+                            con el formato: <em>numero de inventario – modelo</em>.
+                        </p>
                     </div>
                     <div class="table-responsive">
                         <table id="accepted_assignments" class="table table-hover w-100 table-striped table-bordered">
                             <thead>
                                 <tr class="text-center">
                                     <th>#</th>
-                                    <th>Activo</th>
+                                    <th>Bien</th>
+                                    <th>Estado</th>
                                     <!-- <th>Categoría</th> -->
                                     <!-- <th>Marca</th> -->
                                     <th>Asignado por</th>
@@ -62,7 +67,7 @@
         const urlAssignmentApi = `${BASE_URL}/assignments/api`;
         const urlAssetApi = `${BASE_URL}/assets/api`;
         const vURIPersonnelApi = `${BASE_URL}/admin/personnel/api`;
-        
+
         //Assignment uris
         const URIUnassignedAsset = `${BASE_URL}/assets/unassigned`;
         const URIAssignedAsset = `${BASE_URL}/personnel-asset-pending`;

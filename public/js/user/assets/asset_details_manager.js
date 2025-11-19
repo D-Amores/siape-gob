@@ -1,62 +1,6 @@
-document.addEventListener('DOMContentLoaded', async function () {
+// asset_details_manager.js - Maneja la visualización y gestión de detalles de bienes
+const AssetDetailsManager = (function() {
     const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-
-    // Definir columnas para la tabla
-    const columns = [
-        { data: 'inventory_number', className: 'text-center' },
-        { data: 'model' },
-        { data: 'serial_number' },
-        { data: 'brand' },
-        { data: 'category' },
-        { 
-            data: 'status', 
-            className: 'text-center',
-            render: function(status) {
-                const badgeClass = status === 'Activo' ? 'bg-success' : 'bg-secondary';
-                return `<span class="badge ${badgeClass}">${status}</span>`;
-            }
-        },
-        {
-            data: 'id',
-            className: 'text-center',
-            render: function(id) {
-                return `
-                    <button class="btn btn-info btn-sm detalles-btn" data-id="${id}">
-                        <i class="fas fa-eye me-1"></i> Ver
-                    </button>
-                `;
-            }
-        }
-    ];
-
-    // Cargar bienes del usuario
-    async function loadAssetsUniqueUser() {
-        try {
-            const res = await fetch(vURIUniqueAssetsTableApi, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': token,
-                    'Accept': 'application/json'
-                },
-                body: JSON.stringify({})
-            });
-
-            const data = await res.json();
-
-            if (!data.ok) {
-                showAlert(data.message, "red", "Error");
-                bottomTableConfig('assets_unique_user', [], columns);
-                return;
-            }
-
-            bottomTableConfig('assets_unique_user', data.data, columns, '.tooltipped');
-
-        } catch (err) {
-            showAlert('Error al cargar bienes del usuario', "red", "Error");
-            bottomTableConfig('assets_unique_user', [], columns);
-        }
-    }
 
     // Función para cargar detalles del bien
     async function loadAssetDetails(assignmentId) {
@@ -85,24 +29,24 @@ document.addEventListener('DOMContentLoaded', async function () {
         }
     }
 
+    function formatDate(isoString) {
+        if (!isoString) return '—';
+        const date = new Date(isoString);
+        return date.toLocaleString('es-MX', {
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit',
+            hour: '2-digit',
+            minute: '2-digit',
+        });
+    }
+
     // Función para mostrar detalles en el modal
     async function showAssetDetails(assignmentId) {
         const assetDetails = await loadAssetDetails(assignmentId);
         
         if (!assetDetails) return;
         
-        function formatDate(isoString) {
-            if (!isoString) return '—';
-            const date = new Date(isoString);
-            return date.toLocaleString('es-MX', {
-                year: 'numeric',
-                month: '2-digit',
-                day: '2-digit',
-                hour: '2-digit',
-                minute: '2-digit',
-            });
-        }
-
         // Información General
         document.getElementById('detalle-inventario').textContent = assetDetails.inventory_number;
         document.getElementById('detalle-modelo').textContent = assetDetails.model;
@@ -210,15 +154,6 @@ document.addEventListener('DOMContentLoaded', async function () {
         modal.show();
     }
 
-    // Event listener para los botones de detalles
-    document.addEventListener('click', function(e) {
-        if (e.target.closest('.detalles-btn')) {
-            const button = e.target.closest('.detalles-btn');
-            const assignmentId = button.getAttribute('data-id');
-            showAssetDetails(assignmentId);
-        }
-    });
-
     // Función para abrir el selector de archivos
     function openUploadModal(assignmentId) {
         const fileInput = document.createElement('input');
@@ -299,5 +234,20 @@ document.addEventListener('DOMContentLoaded', async function () {
         }
     }
 
-    await loadAssetsUniqueUser();
-});
+    // Event listener para los botones de detalles
+    function initEventListeners() {
+        document.addEventListener('click', function(e) {
+            if (e.target.closest('.detalles-btn')) {
+                const button = e.target.closest('.detalles-btn');
+                const assignmentId = button.getAttribute('data-id');
+                showAssetDetails(assignmentId);
+            }
+        });
+    }
+
+    return {
+        init: initEventListeners,
+        showAssetDetails: showAssetDetails,
+        loadAssetDetails: loadAssetDetails
+    };
+})();
