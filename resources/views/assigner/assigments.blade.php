@@ -28,7 +28,7 @@
                 <div class="card-body">
                     <div class="mb-2">
                         <h4 class="card-title mb-0">Asignaciones Pendientes</h4>
-                        <p class="card-text text-muted">
+                        <p class="card-text text-muted mt-1">
                             Los bienes se muestran utilizando su <strong>numero de inventario</strong> y <strong>modelo</strong>,
                             con el formato: <em>numero de inventario – modelo</em>.
                         </p>

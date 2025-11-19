@@ -7,8 +7,6 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Casts\Attribute;
-use Mpdf\Tag\Main;
 
 class Asset extends Model
 {
@@ -80,7 +78,7 @@ class Asset extends Model
      */
     public function scopeAssignedAssetIds($query)
     {
-        return \App\Models\PersonnelAssetPending::whereNull('confirmation_date')
+        return PersonnelAssetPending::whereNull('confirmation_date')
             ->pluck('asset_id')
             ->toArray();
     }
@@ -178,18 +176,17 @@ class Asset extends Model
 
     protected function assetName(): Attribute
     {
-        return Attribute::get(function () {
-            if ($this->model && $this->inventory_number) {
-                return $this->inventory_number . ' - ' . $this->model;
-            }
-            return '—';
-        });
+        return Attribute::make(
+            get: fn () => $this->model && $this->inventory_number
+                ? $this->inventory_number . ' - ' . $this->model
+                : '—'
+        );
     }
 
     protected function statusName(): Attribute
     {
-        return Attribute::get(function () {
-            return $this->status->name ?? 'Desconocido';
-        });
+        return Attribute::make(
+            get: fn () => $this->status->name ?? 'Desconocido'
+        );
     }
 }

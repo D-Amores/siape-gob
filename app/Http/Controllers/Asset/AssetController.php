@@ -20,123 +20,118 @@ class AssetController extends Controller
         $option = $request->input('option');
 
         $data = null;
+        try {
+            switch ($option) {
+                case 'table':
+                    $recordsTotal = Asset::count();
 
-        switch ($option) {
-            case 'table':
-                $recordsTotal = Asset::count();
+                    $start = $request->input('start', 0);
+                    $length = $request->input('length', 30);
+                    $searchValue = $request->input('search.value', '');
 
-                $start = $request->input('start', 0);
-                $length = $request->input('length', 30);
-                $searchValue = $request->input('search.value', '');
+                    $query = Asset::with(['brand', 'category', 'status'])
+                        ->select('assets.*')
+                        ->filterByStatus($request->input('filtroCondicion'))
+                        ->filterByState($request->input('filtroEstado'))
+                        ->filterByCategory($request->input('filtroCategoria'))
+                        ->filterByBrand($request->input('filtroMarca'))
+                        ->search($searchValue);
 
-                $query = Asset::with(['brand', 'category', 'status'])
-                    ->select('assets.*')
-                    ->filterByStatus($request->input('filtroCondicion'))
-                    ->filterByState($request->input('filtroEstado'))
-                    ->filterByCategory($request->input('filtroCategoria'))
-                    ->filterByBrand($request->input('filtroMarca'))
-                    ->search($searchValue);
+                    $recordsFiltered = $query->count();
 
-                $recordsFiltered = $query->count();
+                    $orderColumnIndex = $request->input('order.0.column', 0);
+                    $orderColumnDir = $request->input('order.0.dir', 'asc');
+                    $columns = [
+                        0 => 'inventory_number',
+                        1 => 'model',
+                        2 => 'serial_number',
+                        6 => 'is_active',
+                    ];
 
-                $orderColumnIndex = $request->input('order.0.column', 0);
-                $orderColumnDir = $request->input('order.0.dir', 'asc');
-                $columns = [
-                    0 => 'inventory_number',
-                    1 => 'model',
-                    2 => 'serial_number',
-                    6 => 'is_active',
-                ];
+                    $orderColumn = $columns[$orderColumnIndex] ?? 'inventory_number';
+                    $query->orderBy($orderColumn, $orderColumnDir);
 
-                $orderColumn = $columns[$orderColumnIndex] ?? 'inventory_number';
-                $query->orderBy($orderColumn, $orderColumnDir);
+                    $data = $query->skip($start)
+                        ->take($length)
+                        ->get();
 
-                $data = $query->skip($start)
-                    ->take($length)
-                    ->get();
-
-                $data = $data->map(function ($asset) {
-                    $asset->is_active_label = $asset->isActive() ? 'Activo' : 'Inactivo';
-                    return $asset;
-                });
-
-                return response()->json([
-                    'draw' => intval($request->input('draw')),
-                    'recordsTotal' => $recordsTotal,
-                    'recordsFiltered' => $recordsFiltered,
-                    'data' => $data,
-                ]);
-
-                break;
-
-            case 'details':
-                $assetId = $request->input('id');
-
-                if (!$assetId) {
-                    return response()->json([
-                        'ok' => false,
-                        'message' => 'ID del activo requerido para detalles.'
-                    ], 422);
-                }
-
-                $data = Asset::with(['brand', 'category', 'personnelAssets', 'status'])
-                            ->find($assetId);
-
-                if (!$data) {
-                    return response()->json([
-                        'ok' => false,
-                        'message' => 'Activo no encontrado.'
-                    ], 404);
-                }
-                break;
-            case 'available':
-                // Activos que no están asignados (disponibles)
-                $data = Asset::available()
-                    ->orderBy('inventory_number', 'asc')
-                    ->get(['id', 'inventory_number', 'model'])
-                    ->map(function ($asset) {
-                        return [
-                            'id' => $asset->id,
-                            'text' => $asset->asset_name . ($asset->type ? " ({$asset->type})" : ''),
-                        ];
+                    $data = $data->map(function ($asset) {
+                        $asset->is_active_label = $asset->isActive() ? 'Activo' : 'Inactivo';
+                        return $asset;
                     });
-                break;
 
-            default:
-                return response()->json([
-                    'ok' => false,
-                    'message' => 'Opción no válida.',
-                ], 422);
-        }
+                    return response()->json([
+                        'draw' => intval($request->input('draw')),
+                        'recordsTotal' => $recordsTotal,
+                        'recordsFiltered' => $recordsFiltered,
+                        'data' => $data,
+                    ]);
 
-        // Agregar label de estado para table y details
-        if ($option !== 'available') {
-            if ($data instanceof \Illuminate\Database\Eloquent\Collection) {
-                $data = $data->map(function ($asset) {
-                    $asset->is_active_label = $asset->isActive() ? 'Activo' : 'Inactivo';
-                    return $asset;
-                });
-            } else {
-                $data->is_active_label = $data->isActive() ? 'Activo' : 'Inactivo';
+                    break;
+
+                case 'details':
+                    $assetId = $request->input('id');
+
+                    if (!$assetId) {
+                        return response()->json([
+                            'ok' => false,
+                            'message' => 'ID del activo requerido para detalles.'
+                        ], 422);
+                    }
+
+                    $data = Asset::with(['brand', 'category', 'personnelAssets', 'status'])
+                        ->find($assetId);
+
+                    if (!$data) {
+                        return response()->json([
+                            'ok' => false,
+                            'message' => 'Activo no encontrado.'
+                        ], 404);
+                    }
+                    break;
+                case 'available':
+                    // Activos que no están asignados (disponibles)
+                    $data = Asset::available()
+                        ->orderBy('inventory_number', 'asc')
+                        ->get(['id', 'inventory_number', 'model'])
+                        ->map(function ($asset) {
+                            return [
+                                'id' => $asset->id,
+                                'text' => $asset->asset_name . ($asset->type ? " ({$asset->type})" : ''),
+                            ];
+                        });
+                    break;
+
+                default:
+                    return response()->json([
+                        'ok' => false,
+                        'message' => 'Opción no válida.',
+                    ], 422);
             }
+
+            // Agregar label de estado para table y details
+            if ($option !== 'available') {
+                if ($data instanceof \Illuminate\Database\Eloquent\Collection) {
+                    $data = $data->map(function ($asset) {
+                        $asset->is_active_label = $asset->isActive() ? 'Activo' : 'Inactivo';
+                        return $asset;
+                    });
+                } else {
+                    $data->is_active_label = $data->isActive() ? 'Activo' : 'Inactivo';
+                }
+            }
+
+            return response()->json([
+                'ok' => true,
+                'data' => $data,
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Error en assetsApi: ' . $e->getMessage());
+            return response()->json([
+                'ok' => false,
+                'message' => 'Error al procesar la solicitud',
+            ], 500);
         }
-
-        return response()->json([
-            'ok' => true,
-            'data' => $data,
-        ]);
-
-        if ($option !== 'available') {
-            $data = $data->map(function ($asset) {
-                $asset->is_active_label = $asset->isActive() ? 'Activo' : 'Inactivo';
-                return $asset;
-            });
-        }
-
-        return response()->json([
-            'ok' => true,
-            'data' => $data,
-        ]);
     }
 
     /**
