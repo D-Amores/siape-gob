@@ -55,6 +55,9 @@ function bottomTableConfig(tableId = 'dataUsersTable', data = [], columns = [], 
     if (dataTables[tableId]) {
         dataTables[tableId].destroy();
     }
+
+    console.log(columns);
+    
     
     let config = {
         columns: columns,
@@ -69,8 +72,12 @@ function bottomTableConfig(tableId = 'dataUsersTable', data = [], columns = [], 
             topEnd: null,
             bottomStart: null,
             bottomEnd: 'paging'
-        }
+        },
     };
+
+    if(data && data.length > 0) {
+        config.data = data;
+    }
 
     if (filtros) {
         config.serverSide = true;
@@ -86,6 +93,9 @@ function bottomTableConfig(tableId = 'dataUsersTable', data = [], columns = [], 
             contentType: 'application/json',
         };
     }
+
+    console.log(config);
+    
 
     dataTables[tableId] = new DataTable(tableSelector, config);
 
