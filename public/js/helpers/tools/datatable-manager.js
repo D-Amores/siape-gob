@@ -52,12 +52,12 @@ function bottomTableConfig(tableId = 'dataUsersTable', data = [], columns = [], 
 {
     const tableSelector = `#${tableId}`;
 
-    if (dataTables[tableId]) {
+    if (dataTables[tableId] && filtros) {
         dataTables[tableId].destroy();
-    }
-
-    console.log(columns);
-    
+    }else if (dataTables[tableId]) {
+        dataTables[tableId].clear().rows.add(data).draw();
+        return dataTables[tableId];
+    }    
     
     let config = {
         columns: columns,
@@ -93,9 +93,6 @@ function bottomTableConfig(tableId = 'dataUsersTable', data = [], columns = [], 
             contentType: 'application/json',
         };
     }
-
-    console.log(config);
-    
 
     dataTables[tableId] = new DataTable(tableSelector, config);
 
