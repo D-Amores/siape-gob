@@ -34,37 +34,29 @@ function basicTableConfig(tableId = 'dataUsersTable', data = [], columns = [], t
     return dataTables[tableId];
 }
 
-function bottomTableConfig(tableId = 'dataUsersTable', columns = [], tooltips = null) {
+// Lo que debe recibir filtros
+// {
+//     ajaxUrl: urlFiltered,
+//     csrfToken: csrfToken,
+//     ajaxDataFn: (d) => {
+//         d.option = 'table';
+//         d.filtroCondicion = $('#filtroCondicion').val();
+//         d.filtroEstado = $('#filtroEstado').val();
+//         d.filtroCategoria = $('#filtroCategoria').val();
+//         d.filtroMarca = $('#filtroMarca').val();
+//         return JSON.stringify(d);
+//     }
+// }
+
+function bottomTableConfig(tableId = 'dataUsersTable', data = [], columns = [], tooltips = null, filtros = null)  
+{
     const tableSelector = `#${tableId}`;
 
     if (dataTables[tableId]) {
         dataTables[tableId].destroy();
     }
-
-    dataTables[tableId] = new DataTable(tableSelector, {
-
-        serverSide: true,
-        processing: true,
-        ajax: {
-            url: vURIAssetsTableApi,
-            type: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': csrfToken
-            },
-            data: function (d) {
-                d.option = 'table';
-
-                d.filtroCondicion = $('#filtroCondicion').val();
-                d.filtroEstado = $('#filtroEstado').val();
-                d.filtroCategoria = $('#filtroCategoria').val();
-                d.filtroMarca = $('#filtroMarca').val();
-
-                return JSON.stringify(d);
-            },
-            contentType: 'application/json',
-        },
-
+    
+    let config = {
         columns: columns,
         pagingType: 'simple_numbers',
         responsive: true,
@@ -78,7 +70,24 @@ function bottomTableConfig(tableId = 'dataUsersTable', columns = [], tooltips = 
             bottomStart: null,
             bottomEnd: 'paging'
         }
-    });
+    };
+
+    if (filtros) {
+        config.serverSide = true;
+        config.processing = true;
+        config.ajax = {
+            url: filtros.ajaxUrl,
+            type: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': filtros.csrfToken
+            },
+            data: filtros.ajaxDataFn,
+            contentType: 'application/json',
+        };
+    }
+
+    dataTables[tableId] = new DataTable(tableSelector, config);
 
     if (tooltips) {
         // Limit tooltip activation to elements inside this table only to avoid interfering with Select2 fields

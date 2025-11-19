@@ -45,7 +45,18 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     ];
 
-    tableApi = bottomTableConfig('file_export', columns, '[title]');
+    tableApi = bottomTableConfig('file_export', [], columns, '[title]', {
+        ajaxUrl: vURIAssetsTableApi,
+        csrfToken: csrfToken,
+        ajaxDataFn: (d) => {
+            d.option = 'table';
+            d.filtroCondicion = $('#filtroCondicion').val();
+            d.filtroEstado = $('#filtroEstado').val();
+            d.filtroCategoria = $('#filtroCategoria').val();
+            d.filtroMarca = $('#filtroMarca').val();
+            return JSON.stringify(d);
+        }
+    });
 
     $('#filtroCategoria').select2({
         theme: 'bootstrap-5',
