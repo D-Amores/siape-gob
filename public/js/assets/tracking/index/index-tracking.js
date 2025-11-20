@@ -124,7 +124,7 @@ async function startApp() {
             const maintenanceReportId = document.getElementById('maintenance_report_id_update');
             maintenanceReportId.value = reportId;
             openModalForEdit("modalTrackingEdit");
-            console.log(reportId);
+            // console.log(reportId);
 
             //await editAssetTracking(reportId);
 

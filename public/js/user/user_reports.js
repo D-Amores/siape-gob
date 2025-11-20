@@ -113,7 +113,6 @@ function renderReportsTable(reportsData) {
 
 // Función para generar las clases CSS según el estado
 function getStatusClass(status) {
-    console.log('getStatusClass recibió:', status);
     
     // Mapeo completo de estados con sus clases correspondientes
     const statusMap = {
