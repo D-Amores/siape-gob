@@ -137,9 +137,3 @@ async function loadStatuses(selectedId = null) {
         console.error('Error loading statuses:', error);
     }
 }
-
-document.getElementById('modalBien').addEventListener('show.bs.modal', function (event) {
-    if (!formBien.dataset.mode || formBien.dataset.mode === 'create') {
-        loadStatuses();
-    }
-});

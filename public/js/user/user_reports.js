@@ -70,11 +70,11 @@ function renderReportsTable(reportsData) {
             className: 'text-center'
         },
         { data: 'asset' },
-        { 
+        {  
             data: 'status',
             render: function(data, type, row) {
-                const statusClass = getStatusClass(data);
-                return `<span class="badge ${statusClass}">${data}</span>`;
+                // Usar siempre bg-secondary para todos los estados
+                return `<span class="badge bg-secondary">${data}</span>`;
             }
         },
         { 
@@ -114,17 +114,34 @@ function renderReportsTable(reportsData) {
 // Función para generar las clases CSS según el estado
 function getStatusClass(status) {
     console.log('getStatusClass recibió:', status);
+    
+    // Mapeo completo de estados con sus clases correspondientes
     const statusMap = {
         'Nuevo': 'bg-success text-white',
         'Pendiente': 'bg-warning text-dark',
-        'En Proceso': 'bg-info text-white',
-        'Completado': 'bg-success text-white',
+        'En proceso': 'bg-info text-white',
+        'En Proceso': 'bg-info text-white', // Por si viene con mayúscula
+        'Completado': 'bg-primary text-white',
+        'Finalizado': 'bg-success text-white',
         'Cancelado': 'bg-danger text-white',
         'Cerrado': 'bg-secondary text-white',
+        'Disponible': 'bg-success text-white',
+        'En mantenimiento': 'bg-warning text-dark',
+        'Dañado': 'bg-danger text-white',
+        'Fuera de servicio': 'bg-dark text-white'
     };
     
-    const result = statusMap[status] || 'bg-light text-dark';
-    return result;
+    // Buscar coincidencia exacta primero
+    if (statusMap[status]) {
+        return statusMap[status];
+    }
+    
+    // Buscar coincidencia insensible a mayúsculas/minúsculas
+    const normalizedStatus = Object.keys(statusMap).find(key => 
+        key.toLowerCase() === status.toLowerCase()
+    );
+    
+    return normalizedStatus ? statusMap[normalizedStatus] : 'bg-light text-dark';
 }
 
 // Función para generar los botones de acción
@@ -162,11 +179,10 @@ function getStatusClass(status) {
 }
 
 function populateLogsModal(report) {
-
     // Información del Reporte
     document.getElementById('log-folio').textContent = report.folio || '—';
     document.getElementById('log-status').textContent = report.status?.name || '—';
-    document.getElementById('log-status').className = `badge rounded-pill px-3 py-2 ${getStatusClass(report.status?.name)}`;
+    document.getElementById('log-status').className = `badge rounded-pill px-3 py-2 bg-secondary`;
     document.getElementById('log-reported-at').textContent = formatDate(report.reported_at) || '—';
     document.getElementById('log-closed-at').textContent = formatDate(report.closed_at) || '—';
     document.getElementById('log-description').textContent = report.description || '—';
@@ -179,8 +195,11 @@ function populateLogsModal(report) {
         document.getElementById('log-asset-serial').textContent = asset.serial_number || '—';
         document.getElementById('log-asset-brand').textContent = asset.brand_name || '—';
         document.getElementById('log-asset-category').textContent = asset.category_name || '—';
-        document.getElementById('log-asset-status').textContent = asset.status_name || '—';
-        document.getElementById('log-asset-status').className = `badge rounded-pill px-3 py-2 ${getAssetStatusClass(asset.is_active)}`;
+        
+        // Mejor manejo del estado del activo
+        const assetStatus = asset.status_name || (asset.is_active ? 'Activo' : 'Inactivo');
+        document.getElementById('log-asset-status').textContent = assetStatus;
+        document.getElementById('log-asset-status').className = `badge rounded-pill px-3 py-2 ${getAssetStatusClass(assetStatus)}`;
     } else {
         // Si no hay asset, limpiar los campos
         document.getElementById('log-asset-inventory').textContent = '—';

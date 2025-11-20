@@ -61,6 +61,11 @@ const AssetDetailsManager = (function() {
         estadoBadge.textContent = assetDetails.status;
         estadoBadge.className = `badge rounded-pill px-3 py-2 ${assetDetails.status === 'Activo' ? 'bg-success' : 'bg-secondary'}`;
 
+        // NUEVO: Status/Disponibilidad
+        const statusBadge = document.getElementById('detalle-status');
+        statusBadge.textContent = assetDetails.status_name || assetDetails.status || '—';
+        statusBadge.className = 'badge rounded-pill px-3 py-2 bg-secondary'; 
+        
         // Especificaciones Técnicas
         document.getElementById('detalle-cpu').textContent = assetDetails.cpu;
         document.getElementById('detalle-velocidad').textContent = assetDetails.speed;

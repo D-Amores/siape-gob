@@ -25,7 +25,7 @@
                                 <tr>
                                     <th class="text-center py-1">Folio</th>
                                     <th class="py-1">Activo</th>
-                                    <th class="py-1">Estado</th>
+                                    <th class="py-1">Estado del Reporte</th>
                                     <th class="py-1">Descripción</th>
                                     <th class="py-1">Fecha Reporte</th>
                                     <th class="py-1">Fecha Cierre</th>
@@ -39,7 +39,7 @@
                                 <tr>
                                     <th class="text-center py-1">Folio</th>
                                     <th class="py-1">Activo</th>
-                                    <th class="py-1">Estado</th>
+                                    <th class="py-1">Estado del Reporte</th>
                                     <th class="py-1">Descripción</th>
                                     <th class="py-1">Fecha Reporte</th>
                                     <th class="py-1">Fecha Cierre</th>
@@ -82,7 +82,7 @@
                                             <div id="log-folio" class="fw-semibold">—</div>
                                         </div>
                                         <div class="col-6">
-                                            <div class="small text-muted">Estado</div>
+                                            <div class="small text-muted">Estado del Reporte</div>
                                             <span id="log-status" class="badge rounded-pill px-3 py-2">—</span>
                                         </div>
                                         <div class="col-6">
@@ -131,7 +131,7 @@
                                             <div id="log-asset-category" class="fw-semibold">—</div>
                                         </div>
                                         <div class="col-6">
-                                            <div class="small text-muted">Estado del Bien</div>
+                                            <div class="small text-muted">Disponibilidad</div>
                                             <span id="log-asset-status" class="badge rounded-pill px-3 py-2">—</span>
                                         </div>
                                     </div>

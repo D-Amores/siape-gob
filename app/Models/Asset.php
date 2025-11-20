@@ -43,6 +43,14 @@ class Asset extends Model
         return $this->hasMany(PersonnelAsset::class);
     }
 
+    /**
+     * Relación con las asignaciones pendientes
+     */
+    public function personnelAssetPendings()
+    {
+        return $this->hasMany(PersonnelAssetPending::class);
+    }
+
     public function status(): BelongsTo
     {
         return $this->belongsTo(Status::class);

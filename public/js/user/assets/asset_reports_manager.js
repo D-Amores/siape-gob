@@ -142,16 +142,16 @@ const AssetReportsManager = (function() {
                 
                 const data = await response.json();
                 
-                if (data.ok) {
+                if (data.ok || response.status === 200) {
                     showAlert('Reporte creado exitosamente', "green", "Éxito");
                     clearReportModal();
                     closeModalForSuccess('modalReportesUnicoUsuario', 'btnCerrarFooterReporte');
                     
-                    // Opcional: Recargar la tabla o actualizar la interfaz
                     if (typeof reloadAssetsTable === 'function') {
                         reloadAssetsTable();
                     }
                 } else {
+                    // Mostrar mensaje del servidor para errores controlados
                     showAlert(data.message || 'Error al crear el reporte', "red", "Error");
                 }
                 
