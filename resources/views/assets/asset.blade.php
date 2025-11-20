@@ -14,7 +14,7 @@
 @endsection
 
 @section('actions')
-    <button class="btn btn-primary btn-modal-bien" data-bs-toggle="modal" data-bs-target="#modalBien" data-mode="create">
+    <button class="btn btn-primary btn-modal-bien" data-mode="create">
         <i class="fas fa-plus-circle me-2"></i> Agregar bien
     </button>
 @endsection
@@ -24,8 +24,63 @@
         <div class="datatables">
             <div class="card shadow-lg">
                 <div class="card-body">
+                    <div class="row mb-3 g-2 align-items-end">
+
+                        <div class="col-md-3">
+                            <label for="filtroGeneral" class="form-label small">Buscar (Inv, Modelo, Serie):</label>
+                            <input type="text" id="filtroGeneral" class="form-control form-control-sm"
+                                placeholder="Escribe...">
+                        </div>
+
+                        <div class="col-md-2">
+                            <label for="filtroCategoria" class="form-label small">Categoría:</label>
+                            <select id="filtroCategoria" class="form-select form-select-sm" data-placeholder="Todas">
+                                <option value=""></option>
+                                @foreach ($categories as $category)
+                                    <option value="{{ $category->name }}">{{ $category->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <div class="col-md-2">
+                            <label for="filtroMarca" class="form-label small">Marca:</label>
+                            <select id="filtroMarca" class="form-select form-select-sm" data-placeholder="Todas">
+                                <option value=""></option>
+                                @foreach ($brands as $brand)
+                                    <option value="{{ $brand->name }}">{{ $brand->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <div class="col-md-2">
+                            <label for="filtroCondicion" class="form-label small">Condición:</label>
+                            <select id="filtroCondicion" class="form-select form-select-sm" data-placeholder="Todas">
+                                <option value=""></option>
+                                @foreach ($conditions as $condition)
+                                    <option value="{{ $condition->name }}">{{ $condition->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <div class="col-md-2">
+                            <label for="filtroEstado" class="form-label small">Estado:</label>
+                            <select id="filtroEstado" class="form-select form-select-sm" data-placeholder="Todas">
+                                <option value=""></option>
+                                <option value="Activo">Activo</option>
+                                <option value="Inactivo">Inactivo</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-1">
+                            <button class="btn btn-sm btn-outline-secondary w-100" id="btnLimpiarFiltros"
+                                title="Limpiar filtros">
+                                Limpiar
+                            </button>
+                        </div>
+                    </div>
                     <div class="table-responsive">
-                        <table id="file_export" class="table table-hover w-100 table-striped table-bordered display text-nowrap align-middle">
+                        <table id="file_export"
+                            class="table table-hover w-100 table-striped table-bordered text-nowrap align-middle">
                             <thead class>
                                 <tr>
                                     <th class="text-center py-1">N. de Inventario</th>
@@ -33,6 +88,7 @@
                                     <th class="py-1">Serie</th>
                                     <th class="py-1">Marca</th>
                                     <th class="py-1">Categoría</th>
+                                    <th class="text-center py-1">Condición</th>
                                     <th class="text-center py-1">Estado</th>
                                     <th class="text-center py-1">Acciones</th>
                                 </tr>
@@ -47,6 +103,7 @@
                                     <th class="py-1">Serie</th>
                                     <th class="py-1">Marca</th>
                                     <th class="py-1">Categoría</th>
+                                    <th class="text-center py-1">Condición</th>
                                     <th class="text-center py-1">Estado</th>
                                     <th class="text-center py-1">Acciones</th>
                                 </tr>
@@ -78,7 +135,8 @@
                     <h5 class="modal-title fw-bold text-primary" id="modalBienLabel">
                         <i class="fas fa-laptop me-2"></i><span id="modalBienTitulo">Nuevo Bien</span>
                     </h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                    <button type="button" class="btn-close" id="btnCerrarModalBien" data-bs-dismiss="modal"
+                        aria-label="Cerrar"></button>
                 </div>
 
                 <!-- Body -->
@@ -109,24 +167,33 @@
                                         </div>
 
                                         <div class="form-floating mb-3">
-                                            <input type="text" class="form-control" id="modelo" placeholder="Modelo">
+                                            <input type="text" class="form-control" id="modelo"
+                                                placeholder="Modelo">
                                             <label for="modelo"><i class="fas fa-laptop-code me-1 text-muted"></i>
                                                 Modelo</label>
                                         </div>
 
                                         <div class="form-floating mb-3">
-                                            <input type="text" class="form-control" id="serie" placeholder="Serie">
+                                            <input type="text" class="form-control" id="serie"
+                                                placeholder="Serie">
                                             <label for="serie"><i class="fas fa-hashtag me-1 text-muted"></i>
                                                 Serie</label>
                                         </div>
 
                                         <div class="form-floating mb-3">
-                                            <select class="form-select" id="estado" required>
+                                            <select class="form-select" id="status_id" name="status_id" required>
+                                                <option value="">Seleccione estado</option>
+                                                <!-- Las opciones se llenarán con JavaScript -->
+                                            </select>
+                                            <label for="status_id"><i class="fas fa-toggle-on me-1 text-muted"></i> Estado del bien</label>
+                                        </div>
+
+                                        <div class="form-floating mb-3">
+                                            <select class="form-select" id="is_active" name="is_active" required>
                                                 <option value="1" selected>Activo</option>
                                                 <option value="0">Inactivo</option>
                                             </select>
-                                            <label for="estado"><i class="fas fa-toggle-on me-1 text-muted"></i>
-                                                Estado</label>
+                                            <label for="is_active"><i class="fas fa-power-off me-1 text-muted"></i> Estado activo/inactivo</label>
                                         </div>
 
                                         <div class="form-floating">
@@ -156,6 +223,19 @@
                                             <label for="descripcion"><i class="fas fa-pen me-1 text-muted"></i>
                                                 Descripción</label>
                                         </div>
+                                        <h6 class="text-uppercase text-secondary fw-semibold mt-4 mb-3">
+                                            <i class="fas fa-align-left me-2"></i>Tipo
+                                        </h6>
+                                        <div class="form-floating">
+                                            <select class="form-select" id="tipo">
+                                                <option value="">Seleccione tipo</option>
+                                                <option value="Interno">Interno</option>
+                                                <option value="Patrimonio">Patrimonio</option>
+                                                <option value="Otro">Otro</option>
+                                            </select>
+                                            <label for="tipo"><i class="fas fa-layer-group me-1 text-muted"></i>
+                                                Tipo</label>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -166,7 +246,8 @@
 
                 <!-- Footer -->
                 <div class="modal-footer border-0">
-                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                    <button type="button" class="btn btn-outline-secondary" id="btnCerrarFooter"
+                        data-bs-dismiss="modal">
                         <i class="fas fa-times me-1"></i> Cerrar
                     </button>
                     <button type="submit" form="formNuevoBien" class="btn btn-primary">
@@ -177,6 +258,9 @@
             </div>
         </div>
     </div>
+
+    <!-- Elemento para el foco después de guardar -->
+    <div id="focusAfterSave" tabindex="-1" style="position: absolute; left: -9999px;"></div>
 
     <!-- Modal Detalles del Bien -->
     <div class="modal fade" id="modalDetallesBien" tabindex="-1" aria-labelledby="modalDetallesBienLabel"
@@ -223,6 +307,14 @@
                                         <div class="col-6">
                                             <div class="small text-muted">Categoría</div>
                                             <div id="detalle-categoria" class="fw-semibold"></div>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="small text-muted">Tipo</div>
+                                            <div id="detalle-tipo" class="fw-semibold"></div>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="small text-muted">Disponibilidad</div>
+                                            <div id="detalle-status" class="fw-semibold"></div>
                                         </div>
                                         <div class="col-6">
                                             <div class="small text-muted">Estado</div>
@@ -285,54 +377,41 @@
             </div>
         </div>
     </div>
-
-    <!-- Modal Confirmación Eliminar -->
-    <div class="modal fade" id="modalConfirmDelete" tabindex="-1" aria-labelledby="modalConfirmDeleteLabel"
-        aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content border-0 shadow rounded-4">
-
-                <!-- Encabezado -->
-                <div class="modal-header bg-light border-0">
-                    <h5 class="modal-title fw-bold text-primary" id="modalConfirmDeleteLabel">
-                        <i class="fas fa-exclamation-triangle me-2"></i>Confirmación
-                    </h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
-                </div>
-
-                <!-- Cuerpo -->
-                <div class="modal-body py-4 px-4 d-flex align-items-center">
-                    <i class="fas fa-trash-alt fa-2x text-danger me-3"></i>
-                    <span id="modalConfirmDeleteMessage" class="text-secondary">
-                        ¿Estás seguro de eliminar este activo? Esta acción no se puede deshacer.
-                    </span>
-                </div>
-
-                <!-- Footer -->
-                <div class="modal-footer border-0">
-                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="button" class="btn btn-primary" id="confirmDeleteBtn">Eliminar</button>
-                </div>
-
-            </div>
-        </div>
-    </div>
 @endsection
 
 @section('scripts')
-    <script src="{{ asset('modernize/assets/libs/datatables.net/js/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ asset('cdn/buttons/3.0.2/js/dataTables.buttons.min.js') }}"></script>
+    <script src="{{ asset('cdn/buttons/3.0.2/js/buttons.html5.min.js') }}"></script>
+    <script src="{{ asset('cdn/buttons/3.0.2/js/buttons.print.min.js') }}"></script>
 
-    <script src="{{ asset('cdn/buttons/2.4.2/js/dataTables.buttons.min.js') }}"></script>
     <script src="{{ asset('cdn/ajax/libs/jszip/3.10.1/jszip.min.js') }}"></script>
-    <script src="{{ asset('cdn/ajax/libs/pdfmake/0.1.53/pdfmake.min.js') }}"></script>
-    <script src="{{ asset('cdn/ajax/libs/pdfmake/0.1.53/vfs_fonts.js') }}"></script>
-    <script src="{{ asset('cdn/buttons/2.4.2/js/buttons.html5.min.js') }}"></script>
-    <script src="{{ asset('cdn/buttons/2.4.2/js/buttons.print.min.js') }}"></script>
+    <script src="{{ asset('cdn/ajax/libs/pdfmake/0.2.7/pdfmake.min.js') }}"></script>
+    <script src="{{ asset('cdn/ajax/libs/pdfmake/0.2.7/vfs_fonts.js') }}"></script>
 
-    <script src="{{ asset('modernize/assets/js/datatable/datatable-advanced.init.js') }}"></script>
-    <script src="/js/helpers/alerts/alerts.js"></script>
-    <script src="{{ asset('js/assets/assets.js') }}"></script>
+    <script src="{{ asset('js/helpers/tools/datatable-manager.js') }}"></script>
+    <script src="{{ asset('js/helpers/alerts/alerts.js') }}"></script>
+    <script src="{{ asset('js/helpers/modals/modal-actions.js') }}"></script>
+
+    <script src="{{ asset('js/assets/utils.js') }}"></script>
+    <script src="{{ asset('js/assets/services.js') }}"></script>
+    <script src="{{ asset('js/assets/form.js') }}"></script>
+    <script src="{{ asset('js/assets/modals.js') }}"></script>
+    <script src="{{ asset('js/assets/datatable.js') }}"></script>
+
     <script>
-        const language = "{{ asset('cdn/datatables-language/es-MX.json') }}";
+        //Api uris
+        const vURIAssetsTableApi = `${BASE_URL}/assets/api`;
+        const vURIAssetsApi = `${BASE_URL}/assets`;
+
+        // Categories uris
+        const vURICategoriesApi = `${BASE_URL}/categories/api`;
+
+        // Brands uris
+        const vURIBrandssApi = `${BASE_URL}/brands/api`;
+
+        // Status uris
+        const vURIStatusApi = `${BASE_URL}/statuses/api`;
+
+        const languageDataTable = "{{ asset('cdn/datatables-language/es-MX.json') }}";
     </script>
 @endsection

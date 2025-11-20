@@ -25,7 +25,7 @@
             <div class="card shadow-lg">
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table id="file_export" class="table table-hover w-100 table-striped table-bordered display">
+                        <table id="file_export" class="table table-hover w-100 table-striped table-bordered">
                             <thead>
                                 <tr>
                                     <th scope="col">#</th>
@@ -135,21 +135,25 @@
 @endsection
 
 @section('scripts')
+    <script src="{{ asset('cdn/buttons/3.0.2/js/dataTables.buttons.min.js') }}"></script>
+    <script src="{{ asset('cdn/buttons/3.0.2/js/buttons.html5.min.js') }}"></script>
+    <script src="{{ asset('cdn/buttons/3.0.2/js/buttons.print.min.js') }}"></script>
 
-    <script src="{{ asset('cdn/buttons/3.0.2/js/dataTables.buttons.min.js')}}"></script>
-    <script src="{{ asset('cdn/buttons/3.0.2/js/buttons.html5.min.js')}}"></script>
-    <script src="{{ asset('cdn/buttons/3.0.2/js/buttons.print.min.js')}}"></script>
 
-
-    <script src="{{ asset('cdn/ajax/libs/jszip/3.10.1/jszip.min.js')}}"></script>
-    <script src="{{ asset('cdn/ajax/libs/pdfmake/0.2.7/pdfmake.min.js')}}"></script>
-    <script src="{{ asset('cdn/ajax/libs/pdfmake/0.2.7/vfs_fonts.js')}}"></script>
+    <script src="{{ asset('cdn/ajax/libs/jszip/3.10.1/jszip.min.js') }}"></script>
+    <script src="{{ asset('cdn/ajax/libs/pdfmake/0.2.7/pdfmake.min.js') }}"></script>
+    <script src="{{ asset('cdn/ajax/libs/pdfmake/0.2.7/vfs_fonts.js') }}"></script>
 
     <script src="{{ asset('js/helpers/tools/datatable-manager.js') }}"></script>
+        <script src="{{ asset('js/helpers/alerts/alerts.js') }}"></script>
     <script src="{{ asset('js/categories/category.js') }}"></script>
 
     <script>
         const languageDataTable = "{{ asset('cdn/datatables-language/es-MX.json') }}";
+
+        //URL base
+        const baseUrl = `${BASE_URL}/categories`;
+        const UrlLoad = `${BASE_URL}/categories/api`;
+
     </script>
 @endsection
-

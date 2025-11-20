@@ -1,7 +1,6 @@
 @extends('layouts.layout')
 
 @section('styles')
-    {{-- <link rel="stylesheet" href="{{ asset('modernize/assets/libs/datatables.net-bs5/css/dataTables.bootstrap5.min.css') }}"> --}}
     <link rel="stylesheet" href="{{ asset('cdn/buttons/2.4.2/css/buttons.dataTables.min.css') }}">
 @endsection
 @section('title', 'Panel de Administración')
@@ -27,7 +26,7 @@
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
-                            <table id="dataUsersTable" class="table table-hover w-100 table-striped table-bordered display align-middle">
+                            <table id="dataUsersTable" class="table table-hover w-100 table-striped table-bordered align-middle">
                                 <thead class="text-dark fs-4">
                                     <tr>
                                         <th scope="col">#</th>
@@ -108,7 +107,7 @@
                                 <select class="form-select rolSelect" id="role_id" name="role_id" required>
                                     <option value="">Seleccionar rol...</option>
                                 </select>
-                            </div> 
+                            </div>
                         </div>
 
                         {{-- <div class="alert alert-info mt-3">
@@ -182,7 +181,7 @@
                                 <select class="form-select rolSelect" id="role_id_edit" name="role_id" required>
                                     <option value="">Seleccionar rol...</option>
                                 </select>
-                            </div> 
+                            </div>
                         </div>
 
                         <div class="alert alert-info mt-3">
@@ -208,12 +207,20 @@
 @endsection
 
 @section('scripts')
-<script>
-    const languageDataTable = '{{ asset('cdn/datatables-language/es-MX.json') }}';
+    <script>
+        const languageDataTable = '{{ asset('cdn/datatables-language/es-MX.json') }}';
+
+        //Api uris
+        const vURIPersonnelApi = `${BASE_URL}/admin/personnel/api`;
+        const vURIAreaApi = `${BASE_URL}/admin/areas/api`;
+        const vURIUserApi = `${BASE_URL}/admin/users/api`;
+
+        //Personnel uris
+        const vURIPersonnel = `${BASE_URL}/admin/personnel`;
+
+        //User uris
+        const vURIUsers = `${BASE_URL}/admin/users`;
     </script>
-    {{-- <script src="{{ asset('modernize/assets/libs/datatables.net/js/jquery.dataTables.min.js') }}"></script> --}}
-    {{-- <script src="{{ asset('modernize/assets/js/datatable/datatable-advanced.init.js') }}"></script> --}}
-    {{-- <script src="{{ asset('cdn/buttons/2.4.2/js/dataTables.buttons.min.js') }}"></script> --}}
 
     <!-- Helpers -->
     <script src="{{ asset('js/helpers/tools/utils.js') }}"></script>

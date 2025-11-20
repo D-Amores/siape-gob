@@ -15,7 +15,10 @@ class PersonnelAsset extends Model
     protected $fillable = [
         'assignment_date',
         'confirmation_date',
-        'pac_acceptance_doc',
+        'path_acceptance_doc',
+        'path_respaldo_acceptance',
+        'status',
+        'unassignment_date',
         'asset_id',
         'assigner_id',
         'receiver_id',
@@ -24,6 +27,7 @@ class PersonnelAsset extends Model
     protected $casts = [
         'assignment_date' => 'date',
         'confirmation_date' => 'date',
+        'unassignment_date' => 'date',
     ];
 
     /**
@@ -48,5 +52,41 @@ class PersonnelAsset extends Model
     public function receiver(): BelongsTo
     {
         return $this->belongsTo(Personnel::class, 'receiver_id');
+    }
+
+    public function scopeAcceptedWithRelations($query)
+    {
+        return $query->with([
+            'asset.brand',
+            'asset.category',
+            'asset.status',
+        ])
+        ->whereNotNull('confirmation_date')
+        ->whereNull('unassignment_date')
+        ->orderBy('confirmation_date', 'desc');
+    }
+
+    public function scopeHistoricWithRelations($query)
+    {
+        return $query->with([
+            'asset.brand',
+            'asset.category',
+            'asset.status',
+        ])
+        ->whereNotNull('confirmation_date')
+        ->whereNotNull('unassignment_date')
+        ->orderBy('unassignment_date', 'desc');
+    }
+
+    /**
+     * Get doc.
+     */
+    public function getAcceptanceDocUrlAttribute()
+    {
+        if (!$this->path_acceptance_doc || trim($this->path_acceptance_doc) === 'pending') {
+            return asset('storage/' . ltrim(str_replace('public/', '', $this->path_respaldo_acceptance), '/'));
+        }
+
+        return asset('storage/' . ltrim(str_replace('public/', '', $this->path_acceptance_doc), '/'));
     }
 }

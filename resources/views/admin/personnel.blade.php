@@ -1,10 +1,4 @@
 @extends('layouts.layout')
-
-@section('styles')
-    {{-- <link rel="stylesheet" href="{{ asset('modernize/assets/libs/datatables.net-bs5/css/dataTables.bootstrap5.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('cdn/buttons/2.4.2/css/buttons.dataTables.min.css') }}"> --}}
-
-@endsection
 @section('title', 'Panel de Administración')
 @section('subtitle', 'Gestión de personal')
 
@@ -28,7 +22,7 @@
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
-                            <table id="dataPersonnelTable" class="table table-hover w-100 table-striped table-bordered display align-middle">
+                            <table id="dataPersonnelTable" class="table table-hover w-100 table-striped table-bordered align-middle">
                                 <thead class="text-dark fs-4">
                                     <tr>
                                         <th scope="col">#</th>
@@ -67,6 +61,14 @@
                 <form id="personnelCreateForm">
                     <div class="modal-body pb-0">
                         <div class="row g-3">
+                            <div class="col-12 mb-3 position-relative">
+  <label for="searchPadron" class="form-label">
+    <i class="bx bx-search-alt me-1"></i> Buscar en padrón externo
+  </label>
+  <input type="text" class="form-control" id="searchPadron" placeholder="Escribe un nombre o apellido..." autocomplete="off">
+  <div id="searchResults" class="list-group position-absolute w-100 shadow" style="z-index:1050; max-height: 200px; overflow-y: auto; display:none;"></div>
+</div>
+
                             <div class="col-md-6">
                                 <label for="name" class="form-label">
                                     <i class="bx bx-user me-1"></i> Nombre(s) *
@@ -91,6 +93,14 @@
                                     maxlength="255">
                             </div>
 
+                            
+                            <div class="col-md-6">
+                                <label for="phone" class="form-label">
+                                    <i class="bx bx-phone me-1"></i> Teléfono
+                                </label>
+                                <input type="text" class="form-control" id="phone" name="phone" maxlength="20">
+                            </div>
+                            
                             <div class="col-md-6">
                                 <label for="email" class="form-label">
                                     <i class="bx bx-envelope me-1"></i> Correo Electrónico *
@@ -99,19 +109,21 @@
                             </div>
 
                             <div class="col-md-6">
-                                <label for="phone" class="form-label">
-                                    <i class="bx bx-phone me-1"></i> Teléfono
+                                <label for="curp" class="form-label">
+                                    <i class="bx bx-envelope me-1"></i> CURP *
                                 </label>
-                                <input type="text" class="form-control" id="phone" name="phone" maxlength="20">
+                                <input type="text" class="form-control" id="curp" name="curp" required readonly>
                             </div>
 
-                            <div class="col-md-6">
+                            <div class="col-md-12">
                                 <label for="area_id" class="form-label">
                                     <i class="bx bx-buildings me-1"></i> Área *
                                 </label>
-                                <select class="form-select areaSelect select2" id="area_id" name="area_id" required>
+                                <input type="text" class="form-control" id="area_name" name="area_name" readonly required>
+                                <input type="text" class="form-control" id="area_id" name="area_id" hidden readonly>
+                                {{-- <select class="form-select areaSelect select2" id="area_id" name="area_id" required>
                                     <option value="">Seleccionar área...</option>
-                                </select>
+                                </select> --}}
                             </div>
                         </div>
 
@@ -208,14 +220,16 @@
                             </div>
 
                             <!-- Área -->
-                            <div class="col-md-6">
+                            {{-- <div class="col-md-6">
                                 <label for="area_id_edit" class="form-label">
                                     <i class="bx bx-buildings me-1"></i> Área *
                                 </label>
+                                <input type="text" class="form-control" id="area_name_edit" name="area_name" readonly required>
+                                <input type="text" class="form-control" id="area_id_edit" name="area_id" hidden readonly>
                                 <select class="form-select areaSelect select2" id="area_id_edit" name="area_id" required>
                                     <option value="">Seleccionar área...</option>
                                 </select>
-                            </div>
+                            </div> --}}
                         </div>
                     </div>
                     <div class="modal-footer d-flex flex-row justify-content-md-end ps-1 justify-content-center">
@@ -237,10 +251,18 @@
 @section('scripts')
     <script>
         const languageDataTable = '{{ asset('cdn/datatables-language/es-MX.json') }}';
-    </script>
-    {{-- <script src="{{ asset('modernize/assets/libs/datatables.net/js/jquery.dataTables.min.js') }}"></script>
-    <script src="{{ asset('modernize/assets/js/datatable/datatable-advanced.init.js') }}"></script> --}}
 
+        //Api uris
+        const vURIPersonnelApi = `${BASE_URL}/admin/personnel/api`;
+        const vURIAreaApi = `${BASE_URL}/admin/areas/api`;
+        const vURIUserApi = `${BASE_URL}/admin/users/api`;
+
+        //Personnel uris
+        const vURIPersonnel = `${BASE_URL}/admin/personnel`;
+
+        //User uris
+        const vURIUsers = `${BASE_URL}/admin/users`;
+    </script>
     <!-- Helpers -->
     <script src="{{ asset('js/helpers/tools/utils.js') }}"></script>
     <script src="{{ asset('js/helpers/modals/modal-actions.js') }}"></script>
@@ -257,4 +279,5 @@
     <script src="{{ asset('js/admin/personnel/form-validate.js') }}"></script>
     <script src="{{ asset('js/admin/personnel/personnel-crud.js') }}"></script>
     <script src="{{ asset('js/admin/personnel/personnel.js') }}"></script>
+    <script src="{{ asset('js/admin/personnel/search-personnel.js') }}"></script>
 @endsection

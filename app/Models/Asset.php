@@ -2,8 +2,11 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Asset extends Model
 {
@@ -18,9 +21,11 @@ class Asset extends Model
         'memory',
         'storage',
         'description',
+        'type',
         'brand_id',
         'category_id',
         'is_active',
+        'status_id',
     ];
 
     public function brand()
@@ -39,6 +44,24 @@ class Asset extends Model
     }
 
     /**
+     * Relación con las asignaciones pendientes
+     */
+    public function personnelAssetPendings()
+    {
+        return $this->hasMany(PersonnelAssetPending::class);
+    }
+
+    public function status(): BelongsTo
+    {
+        return $this->belongsTo(Status::class);
+    }
+
+    public function reports()
+    {
+        return $this->hasMany(MaintenanceReport::class);
+    }
+
+    /**
      * Check if the asset is active.
      *
      * @return bool
@@ -46,5 +69,143 @@ class Asset extends Model
     public function isActive(): bool
     {
         return (bool) $this->is_active;
+    }
+
+    /**
+     * Scope para obtener solo los assets pendientes asignados.
+     */
+    public function scopeAssigned($query)
+    {
+        return $query->whereHas('personnelAssets', function ($q) {
+            $q->whereNull('confirmation_date');
+        });
+    }
+
+    /**
+     * Scope para obtener IDs de assets ya asignados.
+     */
+    public function scopeAssignedAssetIds($query)
+    {
+        return PersonnelAssetPending::whereNull('confirmation_date')
+            ->pluck('asset_id')
+            ->toArray();
+    }
+
+    /**
+     * Scope para obtener solo los assets que NO están asignados (disponibles)
+     */
+    public function scopeAvailable($query)
+    {
+        return $query->whereNotIn('id', function ($sub) {
+            $sub->select('asset_id')
+                ->from('personnel_assets')
+                ->whereNull('unassignment_date');
+        })
+            ->whereNotIn('id', function ($sub) {
+                $sub->select('asset_id')->from('personnel_assets_pending');
+            })
+            ->where('is_active', true);
+    }
+
+    /**
+     * Scope para el buscador general de DataTables.
+     * El scope se encarga de revisar si el valor no está vacío.
+     */
+    public function scopeSearch(Builder $query, ?string $searchValue): void
+    {
+        if ($searchValue) {
+            $query->where(function ($q) use ($searchValue) {
+                $q->where('inventory_number', 'like', "%{$searchValue}%")
+                    ->orWhere('model', 'like', "%{$searchValue}%")
+                    ->orWhere('serial_number', 'like', "%{$searchValue}%")
+                    ->orWhereHas('brand', function ($brandQuery) use ($searchValue) {
+                        $brandQuery->where('name', 'like', "%{$searchValue}%");
+                    })
+                    ->orWhereHas('category', function ($catQuery) use ($searchValue) {
+                        $catQuery->where('name', 'like', "%{$searchValue}%");
+                    });
+            });
+        }
+    }
+
+    /**
+     * Scope para filtrar por nombre de estado (Condición).
+     */
+    public function scopeFilterByStatus(Builder $query, ?string $statusName): void
+    {
+        if ($statusName) {
+            // Usamos una función de flecha (PHP 7.4+), es más limpio
+            $query->whereHas('status', fn($q) => $q->where('name', $statusName));
+        }
+    }
+
+    /**
+     * Scope para filtrar por Activo/Inactivo (Estado).
+     */
+    public function scopeFilterByState(Builder $query, ?string $state): void
+    {
+        if ($state) {
+            $isActive = $state === 'Activo';
+            $query->where('is_active', $isActive);
+        }
+    }
+
+    /**
+     * Scope para filtrar por nombre de categoría.
+     */
+    public function scopeFilterByCategory(Builder $query, ?string $categoryName): void
+    {
+        if ($categoryName) {
+            $query->whereHas('category', fn($q) => $q->where('name', $categoryName));
+        }
+    }
+
+    /**
+     * Scope para filtrar por nombre de marca.
+     */
+    public function scopeFilterByBrand(Builder $query, ?string $brandName): void
+    {
+        if ($brandName) {
+            $query->whereHas('brand', fn($q) => $q->where('name', $brandName));
+        }
+    }
+    
+    /**
+     * Scope para verificar si el asset ya tiene un reporte abierto
+     */
+    public function scopeHasOpenReport($query){
+        return $query->whereHas('reports', function ($q) {
+            $q->where('status_id', Status::OPEN)
+            ->whereNull('closed_at');
+        });
+    }
+
+    /**
+     * Método de instancia para verificar si este asset específico tiene reporte abierto
+     */
+    public function hasOpenMaintenanceReport()
+    {
+        return $this->reports()
+            ->where('status_id', Status::OPEN)
+            ->whereNull('closed_at')
+            ->exists();
+    }
+
+    protected $appends = ['asset_name', 'status_name'];
+
+    protected function assetName(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => $this->model && $this->inventory_number
+                ? $this->inventory_number . ' - ' . $this->model
+                : '—'
+        );
+    }
+
+    protected function statusName(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => $this->status->name ?? 'Desconocido'
+        );
     }
 }

@@ -15,10 +15,13 @@ return new class extends Migration
             $table->id();
             $table->date('assignment_date')->nullable();
             $table->date('confirmation_date')->nullable();
-            $table->string('pac_acceptance_doc');
-            $table->foreignId('asset_id')->constrained('assets')->onDelete('cascade');
-            $table->foreignId('assigner_id')->constrained('personnel', 'id')->onDelete('cascade');
-            $table->foreignId('receiver_id')->constrained('personnel', 'id')->onDelete('cascade');
+            $table->string('path_acceptance_doc');
+            $table->string('path_respaldo_acceptance')->nullable();
+            $table->enum('status', ['assigned', 'unassigned'])->default('assigned');
+            $table->date('unassignment_date')->nullable();
+            $table->foreignId('asset_id')->constrained('assets')->onDelete('restrict');
+            $table->foreignId('assigner_id')->constrained('personnel', 'id')->onDelete('restrict');
+            $table->foreignId('receiver_id')->constrained('personnel', 'id')->onDelete('restrict');
             $table->timestamps();
         });
     }

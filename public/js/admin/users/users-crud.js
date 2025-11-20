@@ -1,10 +1,4 @@
 // ===============================
-// VARIABLES GLOBALES
-// ===============================
-const vURIUsers = `${window.location.origin}/admin/users`;
-
-
-// ===============================
 // FUNCIONES STORE, UPDATE, DELETE
 // ===============================
 async function storeUsers(users) {

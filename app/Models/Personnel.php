@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 
 class Personnel extends Model
 {
@@ -18,8 +19,10 @@ class Personnel extends Model
         'middle_name',
         'phone',
         'email',
+        'curp',
         'is_active',
-        'area_id'
+        'area_id',
+        'area_name'
     ];
     /**
      * Get the attributes that should be cast.
@@ -58,10 +61,10 @@ class Personnel extends Model
     /**
      * Scopes for querying personnel with specific relationships.
      */
-    public function scopeWithArea($query)
-    {
-        return $query->with('area');
-    }
+    // public function scopeWithArea($query)
+    // {
+    //     return $query->with('area');
+    // }
 
     public function scopeWithUser($query)
     {
@@ -83,10 +86,10 @@ class Personnel extends Model
     }
 
 
-    public function area()
-    {
-        return $this->belongsTo(Area::class);
-    }
+    // public function area()
+    // {
+    //     return $this->belongsTo(Area::class);
+    // }
 
     public function user()
     {
@@ -100,6 +103,35 @@ class Personnel extends Model
     public function receivedAssets()
     {
         return $this->hasMany(PersonnelAsset::class, 'receiver_id');
+    }
+
+    public function maintenanceReports()
+    {
+        return $this->hasMany(MaintenanceReport::class, 'reported_by');
+    }
+
+    public function maintenance()
+    {
+        return $this->hasMany(Maintenance::class, 'performed_by');
+    }
+
+    public function maintenanceReportsLogs()
+    {
+        return $this->hasMany(MaintenanceReportLog::class, 'personnel_id');
+    }
+
+    protected $appends = ['full_name'];
+    protected function fullName(): Attribute
+    {
+        return Attribute::get(function () {
+            $parts = array_filter([
+                $this->name,
+                $this->last_name,
+                $this->middle_name ?? '',
+            ]);
+
+            return implode(' ', $parts);
+        });
     }
 
     public function syncWithUser(): void
@@ -129,7 +161,7 @@ class Personnel extends Model
 
          $this->user->update([
             'is_active' => false,
-            'area_id' => null,
+            //'area_id' => null,
         ]);
     }
 

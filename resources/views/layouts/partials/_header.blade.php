@@ -12,7 +12,7 @@
             </ul>
 
             <div class="d-block d-lg-none py-4">
-                <a href="{{ asset('modernize/main/index.html') }}" class="text-nowrap logo-img">
+                <a href="{{ route('dashboard') }}" class="text-nowrap logo-img">
                     <img src="{{ asset('modernize/assets/images/logos/dark-logo.svg') }}"
                         class="dark-logo" alt="Logo-Dark" />
                     <img src="{{ asset('modernize/assets/images/logos/light-logo.svg') }}"
@@ -30,14 +30,15 @@
                         <!-- ------------------------------- -->
                         <!-- start language Dropdown -->
                         <!-- ------------------------------- -->
-                        <li class="nav-item nav-icon-hover-bg rounded-circle">
+
+                        {{-- <li class="nav-item nav-icon-hover-bg rounded-circle">
                             <a class="nav-link moon dark-layout" href="javascript:void(0)">
                                 <i class="ti ti-moon moon"></i>
                             </a>
                             <a class="nav-link sun light-layout" href="javascript:void(0)">
                                 <i class="ti ti-sun sun"></i>
                             </a>
-                        </li>
+                        </li> --}}
 
                         <!-- ------------------------------- -->
                         <!-- end language Dropdown -->
@@ -46,7 +47,7 @@
                         <!-- ------------------------------- -->
                         <!-- start notification Dropdown -->
                         <!-- ------------------------------- -->
-                        <li class="nav-item nav-icon-hover-bg rounded-circle dropdown">
+                        {{-- <li class="nav-item nav-icon-hover-bg rounded-circle dropdown">
                             <a class="nav-link position-relative" href="javascript:void(0)"
                                 id="drop2" aria-expanded="false">
                                 <i class="ti ti-bell-ringing"></i>
@@ -80,7 +81,7 @@
                                         Notifications</button>
                                 </div>
                             </div>
-                        </li>
+                        </li> --}}
                         <!-- ------------------------------- -->
                         <!-- end notification Dropdown -->
                         <!-- ------------------------------- -->

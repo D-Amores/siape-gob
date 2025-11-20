@@ -23,19 +23,18 @@ async function logoutUser() {
     const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
     try {
-        const response = await fetch('/logout', {
+        const response = await fetch(logoutURI, {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
                 'X-CSRF-TOKEN': csrfToken
             },
-            credentials: 'same-origin'
+            credentials: 'same-origin',
         });
 
         if (response.ok) {
             const data = await response.json();
-            console.log('Logout successful:', data.message);
-            window.location.href = '/login';
+            window.location.href = loginURL;
         } else {
             const errorData = await response.json();
             console.error('Error logging out:', response.status, errorData);

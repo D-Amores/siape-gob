@@ -1,0 +1,205 @@
+body{
+    font-family: Gotham;
+    margin-top: 60px;
+}
+.titulo {
+    font-size: 14px;
+    text-align: right;
+    vertical-align: middle;
+/*    font-weight:bold;*/
+}
+
+.titulo2 {
+    font-size: 14px;
+    text-align: center;
+    font-weight:bold;
+    padding-bottom: 0px;
+    margin-bottom: 0px;
+}
+
+.subtitulo {
+    font-size: 12px;
+    text-align: center;
+    vertical-align: middle;
+    padding-top: 0px;
+    margin-top: 0px;
+    padding-bottom: 0px;
+    margin-bottom: 0px;    
+}
+
+/*Tabla de datos de la declaracion*/
+.table_dts_dec {
+	border-collapse:collapse;
+	border-spacing:0;
+    font-size: 	0.6em;
+    width: 100%;
+    padding-top: 0px;
+    margin-top: 0px;
+    padding-bottom: 0px;
+    margin-bottom: 20px;      
+}
+.td_dec{
+	padding:5px;
+	border: 1px solid #e5e5e5;
+}
+.variable{
+	background:#cbcdce;
+	color:#000;
+}
+
+/*Tabla de datos de la declaracion*/
+.table_informacion {
+	font-size: 0.625em;
+}
+.td_infor{
+	font-weight: bold;
+}
+
+abbr, acronym{
+	border-bottom:1px dotted #333;
+	cursor:help;
+}
+address{
+	color:#333;
+	font-size:.9em;
+}
+
+
+.titulo_modulos {
+	font-size: 	0.875em;
+	font-weight:bold;
+	padding: 5px;
+	background-color: #1d2226;
+	border-bottom: 1px solid #999;
+	letter-spacing: .06em;
+    color: #fff;
+    margin-bottom: 0px;
+    position: relative;
+    z-index: 1;
+}
+
+
+
+.documentacion-recibida {
+    font-size: .75rem;
+}
+
+div.lblarea {
+    margin-top: 10px;
+    margin-bottom: 5px; 
+    font-weight:bold;   
+    font-size: 12px;
+}
+
+ol.a {
+    list-style-position: outside;
+    font-size: .65rem;
+  }
+
+  ol.a li{
+    font-size: .65rem;
+    text-align: justify;
+  }  
+
+ol {
+    margin-top: 0.83em;
+    margin-bottom: 0.83em;
+}
+
+p.nota{
+    font-size: .65rem;
+    text-align: justify;
+  } 
+
+/* --------------------------
+PDF ASIGNACIÓN DE ACTIVO
+-------------------------- */
+.table_dts_dec {
+    font-size: 0.7em;
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 8px;
+}
+
+.table_dts_dec td {
+    padding: 4px 6px;
+    border: 1px solid #bfbfbf;
+    vertical-align: top;
+}
+
+.variable {
+    background-color: #1d2226;
+    color: #fff;
+}
+
+.titulo_modulos {
+    background-color: #1d2226;
+    color: #fff;
+    font-weight: bold;
+    text-transform: uppercase;
+    text-align: left;
+    padding: 4px 8px;
+    font-size: 0.75em;
+    border: none;
+}
+
+.titulo2 {
+    font-size: 15px;
+    font-weight: bold;
+    text-align: center;
+    color: #000;
+    margin-bottom: 2px;
+}
+
+.subtitulo {
+    font-size: 11px;
+    text-align: center;
+    color: #444;
+    margin-top: 0;
+}
+
+.td_infor {
+    font-weight: bold;
+    width: 35%;
+    background-color: #f4f4f4;
+}
+
+.td_dec {
+    border: 1px solid #e5e5e5;
+}
+
+p {
+    margin: 2px 0;
+}
+
+body {
+    margin-top: 40px;
+    font-family: "Gotham", sans-serif;
+    font-size: 12px;
+    color: #333;
+}
+
+/* --------------------------
+FIRMA DEL RECEPTOR
+-------------------------- */
+.firma-container {
+    text-align: center;
+    margin-top: 40px;
+}
+
+.firma-linea {
+    width: 50%;
+    border-bottom: 1px solid #000;
+    margin: 0 auto 6px auto;
+    height: 1px;
+}
+
+.firma-nombre {
+    font-size: 11px;
+    font-weight: bold;
+}
+
+.firma-cargo {
+    font-size: 10px;
+    color: #555;
+}

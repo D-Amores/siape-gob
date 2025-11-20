@@ -6,6 +6,8 @@ use App\Http\Requests\Assigner\StoreBrandRequest;
 use App\Http\Requests\Assigner\UpdateBrandRequest;
 use App\Models\Brand;
 use App\Http\Controllers\Controller;
+use Illuminate\Database\QueryException;
+use Illuminate\Support\Facades\Log;
 
 class BrandController extends Controller
 {
@@ -92,19 +94,25 @@ class BrandController extends Controller
      */
     public function destroy(Brand $brand)
     {
+        $response = ['ok' => false, 'message' => ''];
+        $status = 400;
         try {
             $brand->delete();
-            return response()->json([
+            $response = [
                 'ok' => true,
                 'message' => 'Marca eliminada exitosamente'
-            ], 200);
-        } catch (\Exception $e) {
-            return response()->json([
-                'ok' => false,
-                'message' => 'Error al eliminar la marca',
-                'error' => config('app.debug') ? $e->getMessage() : 'Error interno'
-            ], 500);
+            ];
+            $status = 200;
+        }catch (QueryException $e) {
+            Log::error('Error de clave foránea al eliminar la marca: '.$e);
+            $response['message'] = 'No se puede eliminar la marca porque está relacionada con otros registros.';
+            $status = 400;
+        }catch (\Exception $e) {
+            Log::error('Error al eliminar la marca: '.$e);
+            $response['message'] = 'Error al eliminar la marca';
+            $status = 500;
         }
+        return response()->json($response, $status);
     }
 
     public function brandApi()

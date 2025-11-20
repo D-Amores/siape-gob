@@ -1,34 +1,43 @@
 let dataOriginal = [];
 // Cargar datos en las tablas y selects, modales, etc.
-async function personnelToSelect() {
-    const selects = document.getElementsByClassName('personnelSelect');
-    const personnels = await getPersonnelApi('winthout_user');
+async function personnelToSelect(selectId = 'personnel_id', option = 'personnel_without_user_assignment', personnelCurrentSelect = null) {
+    const selects = document.getElementById(selectId)
+        ? [document.getElementById(selectId)]
+        : document.getElementsByClassName('personnelSelect');
 
-    if (!personnels) {
-        showAlert('No se pudieron cargar los personales. Recargue la página e intente de nuevo.', 'red', 'Error');
-        return;
+    // 🔹 Obtener los personales sin usuario asignado
+    const personnels = await getPersonnelApi(option);
+
+    // 🔹 Si hay un personal actual (por ejemplo, al editar un usuario)
+    if (personnelCurrentSelect) {
+        const currentPersonnel = personnelCurrentSelect.personnel ?? personnelCurrentSelect;
+
+        const exists = personnels.some(p => p.id === currentPersonnel.id);
+        if (!exists && currentPersonnel.id) {
+            personnels.push(currentPersonnel);
+        }
     }
 
+    // 🔹 Llenar los selects con las opciones
     Array.from(selects).forEach(select => {
-        // Limpiar opciones
-        select.innerHTML = '<option value="" disabled selected>Seleccionar personal</option>';
-
-        // Llenar opciones
-        personnels.forEach(personnel => {
-            const fullName = [
-                capitalizeWords(personnel.name ?? ''),
-                capitalizeWords(personnel.last_name ?? ''),
-                capitalizeWords(personnel.middle_name ?? '')
-            ].filter(Boolean).join(' ');
-
+        select.innerHTML = '<option value="" disabled selected>Seleccione un personal</option>';
+        personnels.forEach(person => {
             const option = document.createElement('option');
-            option.value = personnel.id;
-            option.textContent = fullName;
-
+            option.value = person.id;
+            option.textContent = `${person.name} ${person.last_name}`;
             select.appendChild(option);
         });
+
+        if (personnelCurrentSelect) {
+            const currentPersonnelId = personnelCurrentSelect.personnel?.id ?? personnelCurrentSelect.id;
+            if (currentPersonnelId) {
+                select.value = currentPersonnelId;
+            }
+        }
     });
 }
+
+
 
 //cargar datos en el select de roles
 async function rolesToSelect() {
@@ -61,6 +70,8 @@ async function rolesToSelect() {
 // Abrir modal de edición y cargar datos
 async function loadUserDataOnModalEdit(userId) {
     const user = await showUser(userId);
+
+    await personnelToSelect('personnel_id_edit', 'personnel_without_user_assignment', user); // Cargar personales con usuario asignado
     if(!user){
         showAlert('No se pudo cargar la información del usuario.', 'red', 'Error');
         return;

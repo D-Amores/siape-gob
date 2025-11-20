@@ -28,6 +28,7 @@
     <!-- DataTables -->
     <link rel="stylesheet" href="https://cdn.datatables.net/2.3.4/css/dataTables.dataTables.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/responsive/3.0.7/css/responsive.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css" />
 
     @yield('styles')
 </head>
@@ -117,6 +118,11 @@
     <!-- DataTables -->
     <script src="{{ asset('cdn/2.3.4/js/dataTables.min.js') }}"></script>
     <script src="{{ asset('cdn/responsive/3.0.7/js/dataTables.responsive.min.js')}}"></script>
+    <script>
+        const BASE_URL = "{{ url('/') }}";
+        const logoutURI = `${BASE_URL}/logout`;
+        const loginURL = `${BASE_URL}/login`;
+    </script>
     @yield('scripts')
 </body>
 

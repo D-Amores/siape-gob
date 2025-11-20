@@ -25,6 +25,8 @@ class AdminSeeder extends Seeder
                 'phone' => null,
                 'is_active' => true,
                 'area_id' => 17,
+                'curp' => 'ABC1234567890',
+                'area_name' => 'Desarrollo de Sistemas',
             ]
         );
 
@@ -34,7 +36,7 @@ class AdminSeeder extends Seeder
             [
                 'password' => Hash::make('admin12345'), // 🔒 cámbialo después
                 'personnel_id' => $personnel->id,
-                'area_id' => $personnel->area_id,
+                //'area_id' => $personnel->area_id,
                 'is_active' => $personnel->is_active,
             ]
         );
@@ -44,6 +46,6 @@ class AdminSeeder extends Seeder
             $user->assignRole($adminRole);
         }
 
-        $this->command->info('✅ Administrador creado: admin / admin123');
+        $this->command->info('✅ Administrador creado: adminGob / admin12345');
     }
 }
