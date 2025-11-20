@@ -193,7 +193,7 @@
                                                 <option value="1" selected>Activo</option>
                                                 <option value="0">Inactivo</option>
                                             </select>
-                                            <label for="is_active"><i class="fas fa-power-off me-1 text-muted"></i> Estado activo/inactivo</label>
+                                            <label for="is_active"><i class="fas fa-power-off me-1 text-muted"></i> Disponibilidad</label>
                                         </div>
 
                                         <div class="form-floating">

@@ -172,6 +172,17 @@ class Asset extends Model
         });
     }
 
+    /**
+     * Método de instancia para verificar si este asset específico tiene reporte abierto
+     */
+    public function hasOpenMaintenanceReport()
+    {
+        return $this->reports()
+            ->where('status_id', Status::OPEN)
+            ->whereNull('closed_at')
+            ->exists();
+    }
+
     protected $appends = ['asset_name', 'status_name'];
 
     protected function assetName(): Attribute

@@ -97,13 +97,16 @@ class AssetReportController extends Controller
 
         try{
             /**
-             * Verificar si el activo ya tiene un reporte abierto
+             * Verificar si el activo ya tiene un reporte abierto 
              */
             $asset = Asset::findOrFail($requestData['asset_id']); 
-            if($asset->hasOpenReport()->exists()){
+            
+            // Usar el método de instancia en lugar del scope
+            if($asset->hasOpenMaintenanceReport()){
                 $response['message'] = 'El activo ya tiene un reporte de mantenimiento abierto.';
                 return response()->json($response, 400);
             }
+            
             //$asset->update(['status_id' => 2]); // Actualizar estado del activo a "En Mantenimiento", estoy suponiendo que es 3, ahi lo cambias PENELITI
             // Generar folio
             $year = date('Y');
