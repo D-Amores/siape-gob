@@ -42,7 +42,6 @@ async function startApp(){
             await createAssetTracking(reportId);
 
             btnCreate.removeAttribute('id');
-            console.log('click en crear seguimiento para el reporte:', reportId);
 
         }
     });

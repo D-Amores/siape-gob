@@ -8,7 +8,15 @@ document.addEventListener('DOMContentLoaded', function () {
         { data: 'serial_number', className: 'fw-normal', title: 'N° Serie' },
         { data: 'brand.name', className: 'fw-normal', title: 'Marca', orderable: false }, // Deshabilitar orden en columnas de relación (más simple por ahora)
         { data: 'category.name', className: 'fw-normal', title: 'Categoría', orderable: false },
-        { data: 'status.name', className: 'fw-normal', title: 'Condición', orderable: false },
+        {
+            data: 'status.name', 
+            className: 'fw-normal', 
+            title: 'Disponibilidad', 
+            orderable: false,
+            render: function(data) {
+                return `<span class="badge bg-secondary rounded-pill px-3 py-1">${data}</span>`;
+            }
+        },
         {
             data: 'is_active_label',
             className: 'text-center',

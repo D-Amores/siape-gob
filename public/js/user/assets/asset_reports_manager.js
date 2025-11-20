@@ -17,18 +17,12 @@ const AssetReportsManager = (function() {
         setupReportForm();
     }
 
-    // Función para abrir el modal de reporte
     async function openReportModal(assignmentId, assetInventoryNumber) {
         try {
             const assetDetails = await AssetDetailsManager.loadAssetDetails(assignmentId);
             
             if (!assetDetails) {
                 showAlert('Error al cargar los detalles del bien', "red", "Error");
-                return;
-            }
-
-            if (!assetDetails.receiver_id || !assetDetails.receiver_name) {
-                showAlert('No se pudo obtener la información del personal asignado', "red", "Error");
                 return;
             }
 
@@ -42,11 +36,8 @@ const AssetReportsManager = (function() {
             document.getElementById('selectBien').value = assetInventoryNumber;
             document.getElementById('selectPersonal').value = assetDetails.receiver_name;
             
-            // Guardar los IDs en data attributes para usarlos en el envío
             const modal = document.getElementById('modalReportesUnicoUsuario');
             modal.setAttribute('data-asset-id', assetId);
-            modal.setAttribute('data-personal-id', assetDetails.receiver_id);
-
             
             openModalForEdit('modalReportesUnicoUsuario');
             
@@ -55,7 +46,6 @@ const AssetReportsManager = (function() {
             showAlert('Error al preparar el reporte', "red", "Error");
         }
     }
-    
 
     async function getAssetIdFromTable(assignmentId) {
         try {
@@ -86,7 +76,6 @@ const AssetReportsManager = (function() {
         modal.removeAttribute('data-personal-id');
     }
 
-    // Configurar el formulario de reportes
     function setupReportForm() {
         document.addEventListener('click', function(e) {
             if (e.target.closest('.reportar-btn')) {
@@ -105,17 +94,16 @@ const AssetReportsManager = (function() {
             clearReportModal();
         });
 
-        // Event listener para el envío del formulario
+        // Event listener para el envío del formulario - CORREGIDO
         document.getElementById('formReportarBien').addEventListener('submit', async function(e) {
             e.preventDefault();
             
             const modal = document.getElementById('modalReportesUnicoUsuario');
             const assetId = modal.getAttribute('data-asset-id');
-            const personalId = modal.getAttribute('data-personal-id');
             const description = document.getElementById('descripcionReporte').value;
             
-            if (!assetId || !personalId) {
-                showAlert('Error: No se encontró la información del bien o personal', "red", "Error");
+            if (!assetId) {
+                showAlert('Error: No se encontró la información del bien', "red", "Error");
                 return;
             }
             
@@ -136,9 +124,9 @@ const AssetReportsManager = (function() {
                 submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i> Enviando...';
                 submitBtn.disabled = true;
                 
+                // SOLO enviar asset_id y description - CORREGIDO
                 const requestData = {
                     asset_id: assetId,
-                    reported_by: personalId,
                     description: description
                 };
                 
@@ -154,11 +142,16 @@ const AssetReportsManager = (function() {
                 
                 const data = await response.json();
                 
-                if (data.ok) {
+                if (data.ok || response.status === 200) {
                     showAlert('Reporte creado exitosamente', "green", "Éxito");
                     clearReportModal();
                     closeModalForSuccess('modalReportesUnicoUsuario', 'btnCerrarFooterReporte');
+                    
+                    if (typeof reloadAssetsTable === 'function') {
+                        reloadAssetsTable();
+                    }
                 } else {
+                    // Mostrar mensaje del servidor para errores controlados
                     showAlert(data.message || 'Error al crear el reporte', "red", "Error");
                 }
                 

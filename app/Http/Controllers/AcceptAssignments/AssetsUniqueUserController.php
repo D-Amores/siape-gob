@@ -80,6 +80,7 @@ class AssetsUniqueUserController extends Controller
                 'category' => $asset->category->name ?? '—',
                 'type' => $asset->type ?? '—',
                 'status' => $asset->is_active ? 'Activo' : 'Inactivo',
+                'status_name' => $asset->status_name ?? '—',
                 'cpu' => $asset->cpu ?? '—',
                 'speed' => $asset->speed ?? '—',
                 'memory' => $asset->memory ?? '—',

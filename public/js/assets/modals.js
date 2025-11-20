@@ -199,7 +199,9 @@ document.addEventListener('DOMContentLoaded', function () {
             modal.querySelector('#detalle-serie').textContent = asset.serial_number ?? '—';
             modal.querySelector('#detalle-marca').textContent = asset.brand?.name ?? '—';
             modal.querySelector('#detalle-categoria').textContent = asset.category?.name ?? '—';
-            modal.querySelector('#detalle-status').textContent = asset.status?.name ?? '—';
+            const detalleStatus = modal.querySelector('#detalle-status');
+            detalleStatus.textContent = asset.status?.name ?? '—';
+            detalleStatus.className = 'badge rounded-pill px-3 py-2 bg-secondary';
 
             const estadoSpan = modal.querySelector('#detalle-estado');
             estadoSpan.textContent = asset.is_active_label;
@@ -224,38 +226,106 @@ document.addEventListener('DOMContentLoaded', function () {
     // Eliminar bien
     // ------------------------------
     document.addEventListener('click', (e) => {
-        const deleteButton = e.target.closest('.btn-delete-asset');
-        if (!deleteButton) return;
+    const deleteButton = e.target.closest('.btn-delete-asset');
+    if (!deleteButton) return;
 
-        const assetIdToDelete = deleteButton.dataset.id;
-        if (!assetIdToDelete) return;
+    const assetIdToDelete = deleteButton.dataset.id;
+    if (!assetIdToDelete) return;
 
-        // Llamar a la función confirmDestroy con la función de eliminación
-        confirmDestroy(async function() {
-            try {
-                const response = await fetch(`${vURIAssetsApi}/${assetIdToDelete}`, {
-                    method: 'DELETE',
-                    headers: {
-                        'X-CSRF-TOKEN': csrfToken
-                    }
-                });
+    confirmDestroy(async function() {
+        try {
+            const response = await fetch(`${vURIAssetsApi}/${assetIdToDelete}`, {
+                method: 'DELETE',
+                headers: {
+                    'X-CSRF-TOKEN': csrfToken,
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                }
+            });
 
-                const result = await response.json();
+            const { success, data, status } = await handleHttpResponse(response);
 
-                if (!result.ok) {
-                    showAlert(result.message || 'Error al eliminar el activo', "red", "Error");
-                    return;
+            if (success) {
+                showAlert(
+                    data.message || 'Activo eliminado correctamente.',
+                    "green",
+                    "Éxito",
+                    () => {
+                        if (tableApi) {
+                            tableApi.draw(false);
+                        }
+                    },
+                    3000
+                );
+            } else {
+                // Manejar diferentes tipos de errores
+                let errorMessage = data.message || 'No se pudo eliminar el activo.';
+                let errorTitle = "Error";
+                
+                if (status === 400) {
+                    errorTitle = "No se puede eliminar";
+                } else if (status === 404) {
+                    errorMessage = 'El activo no fue encontrado.';
+                } else if (status >= 500) {
+                    errorTitle = "Error del servidor";
+                    errorMessage = 'Error interno del servidor. Por favor, contacte al administrador.';
                 }
 
-                showAlert(result.message || 'Activo eliminado correctamente.', "green", "Éxito", () => {
-                    if(tableApi) {
-                        tableApi.draw(false);
-                    }
-                });
-
-            } catch (error) {
-                showAlert('Ocurrió un error al eliminar el activo: ' + error.message, "red", "Error inesperado");
+                showAlert(
+                    errorMessage,
+                    "red",
+                    errorTitle,
+                    null,
+                    5000
+                );
             }
-        });
-    });
+
+        } catch (error) {
+            console.error('Error en eliminación:', error);
+            
+            // Mensajes de error amigables según el tipo de error
+            let userMessage = 'Ocurrió un error inesperado. Por favor, intente nuevamente.';
+            let userTitle = 'Error';
+            
+            if (error.message.includes('inválida')) {
+                userMessage = 'Error de comunicación con el servidor. Verifique su conexión.';
+                userTitle = 'Error de conexión';
+            } else if (error.name === 'TypeError' && error.message.includes('Failed to fetch')) {
+                userMessage = 'No se pudo conectar con el servidor. Verifique su conexión a internet.';
+                userTitle = 'Error de red';
+            }
+
+            showAlert(
+                userMessage,
+                "red",
+                userTitle,
+                null,
+                5000
+            );
+        }
+    }, "¿Está seguro de que desea eliminar este bien? Esta acción no se puede deshacer.");
+});
+
+    /**
+     * Maneja respuestas HTTP de manera uniforme
+     */
+    async function handleHttpResponse(response) {
+        const contentType = response.headers.get('content-type');
+        
+        // Verificar si la respuesta es JSON válido
+        if (!contentType || !contentType.includes('application/json')) {
+            const textResponse = await response.text();
+            console.warn('Respuesta no JSON:', textResponse.substring(0, 200));
+            throw new Error('Respuesta del servidor inválida');
+        }
+        
+        const result = await response.json();
+        
+        return {
+            success: response.ok && result.ok,
+            data: result,
+            status: response.status,
+            statusText: response.statusText
+        };
+    }
 });

@@ -43,6 +43,14 @@ class Asset extends Model
         return $this->hasMany(PersonnelAsset::class);
     }
 
+    /**
+     * Relación con las asignaciones pendientes
+     */
+    public function personnelAssetPendings()
+    {
+        return $this->hasMany(PersonnelAssetPending::class);
+    }
+
     public function status(): BelongsTo
     {
         return $this->belongsTo(Status::class);
@@ -170,6 +178,17 @@ class Asset extends Model
             $q->where('status_id', Status::OPEN)
             ->whereNull('closed_at');
         });
+    }
+
+    /**
+     * Método de instancia para verificar si este asset específico tiene reporte abierto
+     */
+    public function hasOpenMaintenanceReport()
+    {
+        return $this->reports()
+            ->where('status_id', Status::OPEN)
+            ->whereNull('closed_at')
+            ->exists();
     }
 
     protected $appends = ['asset_name', 'status_name'];

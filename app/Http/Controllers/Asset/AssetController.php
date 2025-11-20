@@ -226,6 +226,17 @@ class AssetController extends Controller
     public function destroy(Asset $asset)
     {
         try {
+            // Validar si el bien tiene asignaciones pendientes o confirmadas
+            $hasAssignments = $asset->personnelAssets()->exists() || 
+                            $asset->personnelAssetPendings()->exists();
+
+            if ($hasAssignments) {
+                return response()->json([
+                    'ok' => false,
+                    'message' => 'No se puede eliminar el bien porque tiene asignaciones activas o pendientes.'
+                ], 400);
+            }
+
             $asset->delete();
 
             return response()->json([

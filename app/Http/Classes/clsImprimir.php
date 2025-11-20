@@ -65,8 +65,8 @@
 
             $stylesheet = file_get_contents(public_path()."/css/print.css");                
             $mpdf->SetProtection(array('print'));
-            $mpdf->SetTitle("Acuse Invitación");
-            $mpdf->SetAuthor("Secretaría de la Honestidad y Función Pública");
+            $mpdf->SetTitle("Acuse Aceptación");
+            $mpdf->SetAuthor("Secretaría Anticorrupción y Buen Gobierno");
             $mpdf->SetDisplayMode('fullpage');
             $mpdf->SetHTMLHeader($this->encabezado());
             $mpdf->SetHTMLFooter($this->pie());

@@ -35,7 +35,6 @@ async function updateAssetTracking(id, data){
     let isOk = false;
     const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
     try {
-        console.log(data);
         
         const response = await fetch(`${assetTrackingUrl}/${id}`, {
             method: 'PATCH',
