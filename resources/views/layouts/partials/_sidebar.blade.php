@@ -3,7 +3,7 @@
         <!-- Start Vertical Layout Sidebar -->
         <!-- ---------------------------------- -->
         <div class="brand-logo d-flex align-items-center justify-content-between">
-            <a href="http://localhost/modernize/main/index.html" class="text-nowrap logo-img">
+            <a href="{{ route('dashboard') }}" class="text-nowrap logo-img">
 
                 <img src="{{ asset('modernize/assets/images/logos/kanan.png') }}" class="dark-logo" width="108"
                     alt="Logo-Dark">

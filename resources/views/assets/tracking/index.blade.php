@@ -22,7 +22,7 @@
                     <div class="card-body">
                         <h4 class="mb-3">
                             <i class="ti ti-user"></i>
-                            Lista de reportes de bienes
+                            Lista de seguimiento de bienes
                         </h4>
                         <div class="table-responsive">
                             <table id="tracking-table"

@@ -11,7 +11,7 @@
                 alt="Logo-light" style="display: none;" />
 
         </a>
-        <h3 class="text-center mb-4">Iniciar Sesión</h3>
+
         <div id="alert" class="alert alert-danger d-none" role="alert"></div>
 
         <form id="loginForm">
