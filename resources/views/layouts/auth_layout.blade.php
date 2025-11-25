@@ -9,7 +9,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <!-- Favicon icon-->
-    <link rel="shortcut icon" type="image/png" href="{{ asset('modernize/assets/images/logos/favicon.png') }}" />
+    <link rel="shortcut icon" type="image/png" href="{{ asset('modernize/assets/images/logos/kananIcon.png') }}" />
 
     <!-- Core Css -->
     <link rel="stylesheet" href="{{ asset('modernize/assets/css/styles.css') }}" />
@@ -21,7 +21,7 @@
 <body>
     <!-- Preloader -->
     <div class="preloader">
-        <img src="{{ asset('modernize/assets/images/logos/favicon.png') }}" alt="loader" class="lds-ripple img-fluid" />
+        <img src="{{ asset('modernize/assets/images/logos/kananIcon.png') }}" alt="loader" class="lds-ripple img-fluid" />
     </div>
     <div id="main-wrapper" class="auth-customizer-none">
         <div

@@ -9,7 +9,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <!-- Favicon icon-->
-    <link rel="shortcut icon" type="image/png" href="{{ asset('modernize/assets/images/logos/favicon.png') }}" />
+    <link rel="shortcut icon" type="image/png" href="{{ asset('modernize/assets/images/logos/kananIcon.png') }}" />
     <!-- Boxicons CSS -->
     <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
     <!-- Core Css -->
@@ -35,7 +35,7 @@
 
 <body>
     <div class="preloader">
-        <img src="{{ asset('modernize/assets/images/logos/favicon.png') }}" alt="loader"
+        <img src="{{ asset('modernize/assets/images/logos/kananIcon.png') }}" alt="loader"
             class="lds-ripple img-fluid" />
     </div>
     <div id="main-wrapper">
