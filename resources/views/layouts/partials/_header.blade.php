@@ -13,15 +13,18 @@
 
             <div class="d-block d-lg-none py-4">
                 <a href="{{ route('dashboard') }}" class="text-nowrap logo-img">
-                    <img src="{{ asset('modernize/assets/images/logos/dark-logo.svg') }}"
-                        class="dark-logo" alt="Logo-Dark" />
-                    <img src="{{ asset('modernize/assets/images/logos/light-logo.svg') }}"
-                        class="light-logo" alt="Logo-light" />
+
+                    <img src="{{ asset('modernize/assets/images/logos/kanan.png') }}" class="dark-logo" width="150"
+                        alt="Logo-Dark" />
+
+                    <img src="{{ asset('modernize/assets/images/logos/kanan.png') }}" class="light-logo" width="150"
+                        alt="Logo-light" style="display: none;" />
+
                 </a>
             </div>
-            <a class="navbar-toggler nav-icon-hover-bg rounded-circle p-0 mx-0 border-0"
-                href="javascript:void(0)" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <a class="navbar-toggler nav-icon-hover-bg rounded-circle p-0 mx-0 border-0" href="javascript:void(0)"
+                data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false"
+                aria-label="Toggle navigation">
                 <i class="ti ti-dots fs-7"></i>
             </a>
             <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
@@ -90,13 +93,11 @@
                         <!-- start profile Dropdown -->
                         <!-- ------------------------------- -->
                         <li class="nav-item dropdown">
-                            <a class="nav-link pe-0" href="javascript:void(0)" id="drop1"
-                                aria-expanded="false">
+                            <a class="nav-link pe-0" href="javascript:void(0)" id="drop1" aria-expanded="false">
                                 <div class="d-flex align-items-center">
                                     <div class="user-profile-img">
-                                        <img src="{{ auth()->user()->avatar_url }}"
-                                            class="rounded-circle" width="35" height="35"
-                                            alt="modernize-img" />
+                                        <img src="{{ auth()->user()->avatar_url }}" class="rounded-circle"
+                                            width="35" height="35" alt="modernize-img" />
                                     </div>
                                 </div>
                             </a>
@@ -107,14 +108,15 @@
                                         <h5 class="mb-0 fs-5 fw-semibold">Perfil de usuario</h5>
                                     </div>
                                     <div class="d-flex align-items-center py-9 mx-7 border-bottom">
-                                        <img src="{{ auth()->user()->avatar_url }}"
-                                            class="rounded-circle" width="80" height="80"
-                                            alt="modernize-img" />
+                                        <img src="{{ auth()->user()->avatar_url }}" class="rounded-circle"
+                                            width="80" height="80" alt="modernize-img" />
                                         <div class="ms-3">
                                             <h5 class="mb-1 fs-3">{{ auth()->user()->username }}</h5>
-                                            <span class="mb-1 d-block">{{ auth()->user()->getRoleNames()->first() ?? 'Sin rol' }}</span>
+                                            <span
+                                                class="mb-1 d-block">{{ auth()->user()->getRoleNames()->first() ?? 'Sin rol' }}</span>
                                             <p class="mb-0 d-flex align-items-center gap-2">
-                                                <i class="ti ti-mail fs-4"></i> {{ auth()->user()->personnel?->email ?? 'Sin correo' }}
+                                                <i class="ti ti-mail fs-4"></i>
+                                                {{ auth()->user()->personnel?->email ?? 'Sin correo' }}
                                             </p>
                                         </div>
                                     </div>

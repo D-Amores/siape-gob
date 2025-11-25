@@ -48,17 +48,18 @@ function basicTableConfig(tableId = 'dataUsersTable', data = [], columns = [], t
 //     }
 // }
 
-function bottomTableConfig(tableId = 'dataUsersTable', data = [], columns = [], tooltips = null, filtros = null)  
-{
+function bottomTableConfig(tableId = 'dataUsersTable', data = [], columns = [], tooltips = null, filtros = null) {
     const tableSelector = `#${tableId}`;
 
     if (dataTables[tableId] && filtros) {
         dataTables[tableId].destroy();
-    }else if (dataTables[tableId]) {
+    } else if (dataTables[tableId]) {
         dataTables[tableId].clear().rows.add(data).draw();
         return dataTables[tableId];
-    }    
-    
+    }
+
+    const topEndContent = filtros ? null : 'search';
+
     let config = {
         columns: columns,
         pagingType: 'simple_numbers',
@@ -66,16 +67,17 @@ function bottomTableConfig(tableId = 'dataUsersTable', data = [], columns = [], 
         pageLength: 30,
         lengthChange: false,
         info: true,
+        searching: !filtros,
         language: { url: languageDataTable },
         layout: {
             topStart: { buttons: ['copy', 'csv', 'excel', 'pdf', 'print'] },
-            topEnd: null,
-            bottomStart: null,
+            topEnd: topEndContent,
+            bottomStart: 'info',
             bottomEnd: 'paging'
         },
     };
 
-    if(data && data.length > 0) {
+    if (data && data.length > 0) {
         config.data = data;
     }
 
@@ -97,18 +99,15 @@ function bottomTableConfig(tableId = 'dataUsersTable', data = [], columns = [], 
     dataTables[tableId] = new DataTable(tableSelector, config);
 
     if (tooltips) {
-        // Limit tooltip activation to elements inside this table only to avoid interfering with Select2 fields
         const activateTooltips = () => {
             const tableEl = document.querySelector(tableSelector);
             const scope = tableEl || document;
             scope.querySelectorAll(tooltips).forEach((el) => {
-                // Avoid creating duplicate tooltip instances on redraw
                 if (!bootstrap.Tooltip.getInstance(el)) {
                     new bootstrap.Tooltip(el);
                 }
             });
         };
-
         dataTables[tableId].on('draw', activateTooltips);
         activateTooltips();
     }

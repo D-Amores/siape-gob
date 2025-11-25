@@ -4,9 +4,13 @@
         <!-- ---------------------------------- -->
         <div class="brand-logo d-flex align-items-center justify-content-between">
             <a href="http://localhost/modernize/main/index.html" class="text-nowrap logo-img">
-                <img src="{{ asset('modernize/assets/images/logos/dark-logo.svg') }}" class="dark-logo" alt="Logo-Dark">
-                <img src="{{ asset('modernize/assets/images/logos/light-logo.svg') }}" class="light-logo" alt="Logo-light"
-                    style="display: none;">
+
+                <img src="{{ asset('modernize/assets/images/logos/kanan.png') }}" class="dark-logo" width="108"
+                    alt="Logo-Dark">
+
+                <img src="{{ asset('modernize/assets/images/logos/kanan.png') }}" class="light-logo" width="108"
+                    alt="Logo-light" style="display: none;">
+
             </a>
             <a href="javascript:void(0)" class="sidebartoggler ms-auto text-decoration-none fs-5 d-block d-xl-none">
                 <i class="ti ti-x"></i>
@@ -64,89 +68,93 @@
                                         </li>
                                         <li class="sidebar-item">
                                             <a class="sidebar-link" href="{{ route('assets.index') }}"
-                                            aria-expanded="false">
-                                            <span>
-                                                <i class="ti ti-package"></i>
-                                            </span>
-                                            <span class="hide-menu">Bienes</span>
-                                        </a>
-                                    </li>
-                                    <li class="sidebar-item">
-                                        <a class="sidebar-link" href="{{ route('personnel-asset-pending.index') }}"
-                                            aria-expanded="false">
-                                            <span>
-                                                <i class="ti ti-arrow-right"></i>
-                                            </span>
-                                            <span class="hide-menu">Asignaciones</span>
-                                        </a>
-                                    </li>
-                                    <li class="sidebar-item">
-                                        <a class="sidebar-link" href="{{ route('assignments.index') }}"
-                                            aria-expanded="false">
-                                            <span>
-                                                <i class="ti ti-arrow-left"></i>
-                                            </span>
-                                            <span class="hide-menu">Aceptadas</span>
-                                        </a>
-                                    </li>
-                                    <!-- ---------------------------------- -->
-                                    <!-- Servicios -->
-                                    <!-- ---------------------------------- -->
-                                    <li class="nav-small-cap">
-                                        <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
-                                        <span class="hide-menu">Servicios</span>
-                                    </li>
-                                    <li class="sidebar-item">
-                                        <a class="sidebar-link" href="{{ route('asset-tracking.create') }}"
-                                            aria-expanded="false">
-                                            <span>
-                                                <i class="ti ti-report"></i>
-                                            </span>
-                                            <span class="hide-menu">Reportes</span>
-                                        </a>
-                                    </li>
-                                    <li class="sidebar-item">
-                                        <a class="sidebar-link" href="{{ route('asset-tracking.index') }}"
-                                            aria-expanded="false">
-                                            <span>
-                                                <i class="ti ti-calendar"></i>
-                                            </span>
-                                            <span class="hide-menu">Seguimientos</span>
-                                        </a>
-                                    </li>
+                                                aria-expanded="false">
+                                                <span>
+                                                    <i class="ti ti-package"></i>
+                                                </span>
+                                                <span class="hide-menu">Bienes</span>
+                                            </a>
+                                        </li>
+                                        <li class="sidebar-item">
+                                            <a class="sidebar-link" href="{{ route('personnel-asset-pending.index') }}"
+                                                aria-expanded="false">
+                                                <span>
+                                                    <i class="ti ti-arrow-right"></i>
+                                                </span>
+                                                <span class="hide-menu">Asignaciones</span>
+                                            </a>
+                                        </li>
+                                        <li class="sidebar-item">
+                                            <a class="sidebar-link" href="{{ route('assignments.index') }}"
+                                                aria-expanded="false">
+                                                <span>
+                                                    <i class="ti ti-arrow-left"></i>
+                                                </span>
+                                                <span class="hide-menu">Aceptadas</span>
+                                            </a>
+                                        </li>
+                                        <!-- ---------------------------------- -->
+                                        <!-- Servicios -->
+                                        <!-- ---------------------------------- -->
+                                        <li class="nav-small-cap">
+                                            <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
+                                            <span class="hide-menu">Servicios</span>
+                                        </li>
+                                        <li class="sidebar-item">
+                                            <a class="sidebar-link" href="{{ route('asset-tracking.create') }}"
+                                                aria-expanded="false">
+                                                <span>
+                                                    <i class="ti ti-report"></i>
+                                                </span>
+                                                <span class="hide-menu">Reportes</span>
+                                            </a>
+                                        </li>
+                                        <li class="sidebar-item">
+                                            <a class="sidebar-link" href="{{ route('asset-tracking.index') }}"
+                                                aria-expanded="false">
+                                                <span>
+                                                    <i class="ti ti-calendar"></i>
+                                                </span>
+                                                <span class="hide-menu">Seguimientos</span>
+                                            </a>
+                                        </li>
                                     @endhasanyrole
                                     @role('user')
-                                    <li class="sidebar-item">
-                                        <a class="sidebar-link" href="{{ route('accept-assignments.index') }}" aria-expanded="false">
-                                            <span>
-                                                <i class="ti ti-arrows-exchange me-2"></i>
-                                            </span>
-                                            <span class="hide-menu">Aceptar Asignaciones</span>
-                                        </a>
-                                    </li>
-                                    <li class="sidebar-item">
-                                        <a class="sidebar-link" href="{{ route('assets-user.index') }}" aria-expanded="false">
-                                            <span>
-                                                <i class="ti ti-package"></i>
-                                            </span>
-                                            <span class="hide-menu">Bienes</span>
-                                        </a>
-                                    </li>
-                                    <li class="sidebar-item">
-                                        <a class="sidebar-link" href="{{ route('reports-user.index') }}" aria-expanded="false">
-                                            <span>
-                                                <i class="ti ti-report"></i>
-                                            </span>
-                                            <span class="hide-menu">Reportes</span>
-                                        </a>
-                                    </li>
+                                        <li class="sidebar-item">
+                                            <a class="sidebar-link" href="{{ route('accept-assignments.index') }}"
+                                                aria-expanded="false">
+                                                <span>
+                                                    <i class="ti ti-arrows-exchange me-2"></i>
+                                                </span>
+                                                <span class="hide-menu">Aceptar Asignaciones</span>
+                                            </a>
+                                        </li>
+                                        <li class="sidebar-item">
+                                            <a class="sidebar-link" href="{{ route('assets-user.index') }}"
+                                                aria-expanded="false">
+                                                <span>
+                                                    <i class="ti ti-package"></i>
+                                                </span>
+                                                <span class="hide-menu">Bienes</span>
+                                            </a>
+                                        </li>
+                                        <li class="sidebar-item">
+                                            <a class="sidebar-link" href="{{ route('reports-user.index') }}"
+                                                aria-expanded="false">
+                                                <span>
+                                                    <i class="ti ti-report"></i>
+                                                </span>
+                                                <span class="hide-menu">Reportes</span>
+                                            </a>
+                                        </li>
                                     @endrole
                                     <li class="nav-small-cap">
                                         <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
                                         <span class="hide-menu">Historial</span>
                                     </li>
                                     <li class="sidebar-item">
-                                        <a class="sidebar-link" href="{{ route('historic.index') }}" aria-expanded="false">
+                                        <a class="sidebar-link" href="{{ route('historic.index') }}"
+                                            aria-expanded="false">
                                             <span>
                                                 <i class="ti ti-history"></i>
                                             </span>
@@ -169,7 +177,8 @@
                                             </a>
                                         </li>
                                         <li class="sidebar-item">
-                                            <a class="sidebar-link" href="{{ route('users.index') }}" aria-expanded="false">
+                                            <a class="sidebar-link" href="{{ route('users.index') }}"
+                                                aria-expanded="false">
                                                 <span>
                                                     <i class="ti ti-user"></i>
                                                 </span>
@@ -196,15 +205,16 @@
         <div class="fixed-profile p-3 mx-4 mb-2 bg-secondary-subtle rounded mt-3">
             <div class="hstack gap-3">
                 <div class="john-img">
-                    <img src="{{auth()->user()->avatar_url}}" class="rounded-circle"
-                        width="40" height="40" alt="modernize-img">
+                    <img src="{{ auth()->user()->avatar_url }}" class="rounded-circle" width="40"
+                        height="40" alt="modernize-img">
                 </div>
                 <div class="john-title">
-                    <h6 class="mb-0 fs-4 fw-semibold">{{auth()->user()->username}}</h6>
+                    <h6 class="mb-0 fs-4 fw-semibold">{{ auth()->user()->username }}</h6>
                     <span class="fs-2">{{ auth()->user()->getRoleNames()->first() ?? 'Sin rol' }}</span>
                 </div>
-                <button id="btnLogout" class="border-0 bg-transparent text-primary ms-auto" tabindex="0" type="button"
-                    aria-label="logout" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="logout">
+                <button id="btnLogout" class="border-0 bg-transparent text-primary ms-auto" tabindex="0"
+                    type="button" aria-label="logout" data-bs-toggle="tooltip" data-bs-placement="top"
+                    data-bs-title="logout">
                     <i class="ti ti-power fs-6"></i>
                 </button>
             </div>

@@ -5,8 +5,8 @@
     <link rel="stylesheet" href="{{ asset('cdn/buttons/2.4.2/css/buttons.dataTables.min.css') }}">
 @endsection
 
-@section('title', 'Dashboard - SIAPE')
-@section('subtitle', 'Sistema de Inventario y Asignación de Personal y Equipos')
+@section('title', 'Dashboard - KANAN')
+@section('subtitle', 'Sistema de Inventario y Resguardos')
 
 @section('actions')
     <div class="d-flex gap-2">
@@ -27,8 +27,8 @@
         style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
         <div class="row align-items-center">
             <div class="col-lg-8">
-                <h1 class="mb-3 fw-bold display-5 text-white">Bienvenido a <span class="text-warning">SIAPE</span></h1>
-                <h4 class="mb-3 opacity-90 text-white">Sistema de Inventario y Asignación de Personal y Equipos</h4>
+                <h1 class="mb-3 fw-bold display-5 text-white">Bienvenido a <span class="text-warning">KANAN</span></h1>
+                <h4 class="mb-3 opacity-90 text-white">Sistema de Inventario y Resguardos</h4>
                 <p class="lead mb-4">
                     Plataforma integral para la gestión eficiente de activos tecnológicos, control de inventarios
                     y asignación de equipos al personal de la organización.
@@ -337,7 +337,7 @@
                             <i class="bx bx-target-lock me-2"></i>Objetivo del Sistema
                         </h6>
                         <p class="text-muted mb-0">
-                            SIAPE (Sistema de Inventario y Asignación de Personal y Equipos) fue diseñado para
+                            KANAN (Sistema de Inventario y Resguardos) fue diseñado para
                             optimizar la gestión de activos tecnológicos en organizaciones gubernamentales,
                             proporcionando un control eficiente del inventario, asignaciones responsables del
                             personal y seguimiento detallado de recursos, garantizando transparencia y
