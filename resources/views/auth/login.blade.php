@@ -32,7 +32,7 @@
         </div>
         <button type="button" id="btnSubmit" class="btn btn-primary w-100 py-8 mb-4 rounded-2">Iniciar Sesión</button>
         <div class="d-flex align-items-center justify-content-center">
-            <p class="fs-4 mb-0 fw-medium">SIAPE - 2025</p>
+            <p class="fs-4 mb-0 fw-medium">KANAN - 2025</p>
             {{-- <a class="text-primary fw-medium ms-2"
                                             href="{{ asset('modernize/main/authentication-register.html') }}">Crear una
                                             cuenta</a> --}}
