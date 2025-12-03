@@ -77,17 +77,22 @@ async function getPersonnelApi(consultOption = 'area') {
     return [];
 }
 
-async function acceptAssetApi(option = 'accepted') {
+async function acceptAssetApi(option = 'accepted', filter = null, personnelId = null) {
     try {
+        const payload = { option: option };
+        if (filter) {
+            payload.filter = filter;
+        }
+        if (personnelId) {
+            payload.personnel_id = personnelId;
+        }
         const response = await fetch(urlAssignmentApi, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
                 'X-CSRF-Token': csrfToken
             },
-            body: JSON.stringify({
-                option: option,
-            })
+            body: JSON.stringify(payload)
         });
 
         if (!response.ok) throw new Error(`Error HTTP: ${response.status}`);

@@ -4,8 +4,10 @@ namespace App\Http\Controllers\Assigner;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Assigner\AssetAcceptedApiRequest;
+use App\Models\Personnel;
 use App\Models\PersonnelAsset;
 use App\Models\PersonnelAssetPending;
+use Faker\Provider\Person;
 use Illuminate\Support\Facades\Log;
 
 class AssetAcceptedController extends Controller
@@ -41,11 +43,55 @@ class AssetAcceptedController extends Controller
                         'ok' => true,
                         'message' => 'Asignaciones pendientes obtenidas correctamente.',
                         'data' => $data
-                    ];;
+                    ];
                     $status = 200;
                     break;
                 case 'accepted':
-                    $data = PersonnelAsset::acceptedWithRelations()->get()->map(function ($assignment) {
+                    $filter = $request->input('filter');
+                    $data = Personnel::acceptedReceivers($filter)
+                    ->take(10)
+                    ->get()
+                    ->map(function ($p){
+                        return [
+                            'id' => $p->id,
+                            'receiver_name' => $p->full_name,
+                            'receiver_area' => $p->area_name ?? 'Sin área',
+                            'assignments_count' => $p->receivedAssets()->accepted()->count(),
+                            'assigner_name' => optional(
+                                $p->receivedAssets()->accepted()->first()->assigner ?? null
+                            )->full_name ?? 'Desconocido',
+                        ];
+                    });
+                    // $data = PersonnelAsset::acceptedWithRelations($filter)->take(10)->get()->map(function ($assignment) {
+                    //     return [
+                    //         'id' => $assignment->id,
+                    //         'asset' => [
+                    //             'status' => $assignment->asset->status->name ?? 'Sin estado',
+                    //             'asset_name' => $assignment->asset->asset_name ?? 'Sin nombre',
+                    //             'brand' => $assignment->asset->brand->name ?? 'Sin marca',
+                    //             'category' => $assignment->asset->category->name ?? 'Sin categoría',
+                    //         ],
+                    //         'receiver' => [
+                    //             'name' => $assignment->receiver->full_name ?? 'Desconocido',
+                    //             'area' => $assignment->receiver->area_name ?? 'Sin área',
+                    //         ],
+                    //         'assigner' => $assignment->assigner->full_name ?? 'Desconocido',
+                    //         'assignment_date' => optional($assignment->assignment_date)->format('Y-m-d'),
+                    //         'confirmation_date' => optional($assignment->confirmation_date)->format('Y-m-d'),
+                    //         'path_acceptance_doc' => $assignment->acceptance_doc_url,
+                    //     ];
+                    // });
+
+                    $response = [
+                        'ok' => true,
+                        'message' => 'Asignaciones aceptadas obtenidas correctamente.',
+                        'data' => $data
+                    ];
+                    $status = 200;
+                    break;
+                case 'details':
+                    $personnelId = $request->input('personnel_id');
+                    $data = PersonnelAsset::assignmentsList($personnelId)->accepted()->get()->map(function ($assignment){
                         return [
                             'id' => $assignment->id,
                             'asset' => [
@@ -55,24 +101,22 @@ class AssetAcceptedController extends Controller
                                 'category' => $assignment->asset->category->name ?? 'Sin categoría',
                             ],
                             'receiver' => [
+                                //'receiver_id' => $assignment->receiver->id,
                                 'name' => $assignment->receiver->full_name ?? 'Desconocido',
                                 'area' => $assignment->receiver->area_name ?? 'Sin área',
                             ],
-                            'assigner' => $assignment->assigner->full_name ?? 'Desconocido',
                             'assignment_date' => optional($assignment->assignment_date)->format('Y-m-d'),
                             'confirmation_date' => optional($assignment->confirmation_date)->format('Y-m-d'),
                             'path_acceptance_doc' => $assignment->acceptance_doc_url,
                         ];
                     });
-
                     $response = [
                         'ok' => true,
-                        'message' => 'Asignaciones aceptadas obtenidas correctamente.',
+                        'message' => 'Detalles de la asignación obtenidos correctamente.',
                         'data' => $data
                     ];
-                    $status = 200;
+                    $status = 200;;
                     break;
-
                 default:
                     $response['message'] = 'Opción no válida.';
                     $status = 400;

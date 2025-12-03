@@ -85,6 +85,21 @@ class Personnel extends Model
         return $query->whereDoesntHave('user');
     }
 
+    public function scopeAcceptedReceivers($query, $name = null)
+    {
+        $query->whereHas('receivedAssets', function ($q) {
+            $q->accepted();
+        });
+
+        if (!empty($name) && strlen($name) >= 3) {
+            $query->whereRaw("
+                CONCAT(name, ' ', last_name, ' ', COALESCE(middle_name, ''))
+                LIKE ?
+            ", [$name . '%']);
+        }
+
+        return $query->orderBy('name');
+    }
 
     // public function area()
     // {

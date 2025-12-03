@@ -54,16 +54,43 @@ class PersonnelAsset extends Model
         return $this->belongsTo(Personnel::class, 'receiver_id');
     }
 
-    public function scopeAcceptedWithRelations($query)
+    public function scopeAccepted($query)
+    {
+        return $query->whereNotNull('confirmation_date')
+                    ->whereNull('unassignment_date');
+    }
+
+    public function scopeAssignmentsList($query, $personnelId)
     {
         return $query->with([
             'asset.brand',
             'asset.category',
             'asset.status',
+            'receiver',
+        ])
+        ->where('receiver_id', $personnelId);
+    }
+
+    public function scopeAcceptedWithRelations($query, $name = null)
+    {
+        $query->with([
+            'asset.brand',
+            'asset.category',
+            'asset.status',
         ])
         ->whereNotNull('confirmation_date')
-        ->whereNull('unassignment_date')
-        ->orderBy('confirmation_date', 'desc');
+        ->whereNull('unassignment_date');
+
+        if(!empty($name) && strlen($name) >= 3){
+            $query->whereHas('receiver', function ($q) use ($name) {
+                $q->whereRaw("
+                    CONCAT(name, ' ', last_name, ' ', COALESCE(middle_name, ''))
+                    LIKE ?
+                ", [$name . '%']);
+            });
+        }
+
+        return $query->orderBy('confirmation_date', 'desc');
     }
 
     public function scopeHistoricWithRelations($query)
