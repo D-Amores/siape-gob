@@ -98,7 +98,7 @@
                     <!-- Botón generar reporte -->
                     <div class="text-start mt-3">
                         <button id="details-generate-report" class="btn btn-primary px-4">
-                            <i class="fas fa-file-alt me-2"></i> Generar Reporte
+                            <i class="fas fa-file-pdf me-2"></i> Generar Reporte
                         </button>
                     </div>
 

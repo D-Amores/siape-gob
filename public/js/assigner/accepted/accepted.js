@@ -3,6 +3,23 @@ async function filter(text) {
     loadAssetsAcceptedBasicInfo(acceptedTableData);
 }
 
+async function downloadPdfReport(personnelId) {
+    const result = await getPdfReport(personnelId);
+
+    if (result.pdf) {
+        const url = window.URL.createObjectURL(result.pdf);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "reporte_asignaciones.pdf";
+        a.click();
+        window.URL.revokeObjectURL(url);
+        return;
+    }
+
+    showAlert('Error', 'No se pudo generar el reporte PDF.', 'error');
+}
+
+
 async function unassign(assetId, personnelId) {
     confirmDestroy(
         async () => {
@@ -26,6 +43,7 @@ async function startApp() {
     const inputFilter = document.getElementById('filter-accepted-assignments');
 
     //const btnDetails = document.querySelectorAll('.btn-details');
+    const btnGenerateReport = document.getElementById('details-generate-report');
     const assignedTableTbody = document.querySelector('#accepted-assignments-names tbody');
     const detailTableTbody = document.querySelector('#details-table tbody');
     const acceptedTableData = await acceptAssetApi('accepted');
@@ -74,6 +92,12 @@ async function startApp() {
             await unassign(assetId, personnelId);
         }
     });
+    btnGenerateReport.addEventListener('click', async () => {
+        const personnelId = document.getElementById('receiver-id').innerText;
+        await downloadPdfReport(personnelId);
+    });
+
+
 }
 
 document.addEventListener('DOMContentLoaded', function () {

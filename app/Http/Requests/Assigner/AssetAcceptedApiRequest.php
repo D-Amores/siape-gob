@@ -24,9 +24,9 @@ class AssetAcceptedApiRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'option' => 'required|string|in:accepted,pending,details',
+            'option' => 'required|string|in:accepted,pending,details,pdf_report',
             'filter' => 'nullable|string|min:3|max:255',
-            'personnel_id' => 'required_if:option,details|integer|exists:personnel,id',
+            'personnel_id' => 'required_if:option,details,pdf_report|integer|exists:personnel,id',
         ];
     }
 

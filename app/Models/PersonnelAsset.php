@@ -67,6 +67,7 @@ class PersonnelAsset extends Model
             'asset.category',
             'asset.status',
             'receiver',
+            'assigner',
         ])
         ->where('receiver_id', $personnelId);
     }

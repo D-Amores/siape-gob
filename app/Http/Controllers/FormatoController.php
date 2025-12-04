@@ -48,7 +48,7 @@ class FormatoController extends Controller
 
         $vhtml = '
         <div class="titulo2">Detalle del Activo Asignado</div>
-        <div class="subtitulo">Sistema de Inventario y Asignación de Personal y Equipos</div>
+        <div class="subtitulo">Sistema de Inventario y Resguardos</div>
 
         <br>
 
