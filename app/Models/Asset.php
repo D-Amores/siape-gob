@@ -26,6 +26,13 @@ class Asset extends Model
         'category_id',
         'is_active',
         'status_id',
+        'acquisition_date',
+        'model_year',
+    ];
+
+    protected $casts = [
+        'acquisition_date' => 'date',
+        'model_year' => 'integer',
     ];
 
     public function brand()
@@ -169,7 +176,7 @@ class Asset extends Model
             $query->whereHas('brand', fn($q) => $q->where('name', $brandName));
         }
     }
-    
+
     /**
      * Scope para verificar si el asset ya tiene un reporte abierto
      */
