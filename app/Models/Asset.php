@@ -130,7 +130,9 @@ class Asset extends Model
                     })
                     ->orWhereHas('category', function ($catQuery) use ($searchValue) {
                         $catQuery->where('name', 'like', "%{$searchValue}%");
-                    });
+                    })
+                    ->orWhere('acquisition_date', 'like', "%{$searchValue}%")
+                    ->orWhere('model_year', 'like', "%{$searchValue}%");
             });
         }
     }

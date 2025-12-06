@@ -91,12 +91,14 @@
                                     <th class="text-center py-1">Condición</th>
                                     <th class="text-center py-1">Estado</th>
                                     <th class="text-center py-1">Acciones</th>
+                                    <th class="text-center py-1">Fecha Adquisición</th>
+                                    <th class="text-center py-1">Año Modelo</th>
                                 </tr>
                             </thead>
                             <tbody>
 
                             </tbody>
-                            <tfoot>
+                            {{-- <tfoot>
                                 <tr>
                                     <th class="text-center py-1">N. de Inventario</th>
                                     <th class="py-1">Modelo</th>
@@ -106,8 +108,10 @@
                                     <th class="text-center py-1">Condición</th>
                                     <th class="text-center py-1">Estado</th>
                                     <th class="text-center py-1">Acciones</th>
+                                    <th class="text-center py-1">Fecha Adquisición</th>
+                                    <th class="text-center py-1">Año Modelo</th>
                                 </tr>
-                            </tfoot>
+                            </tfoot> --}}
                         </table>
                     </div>
                 </div>

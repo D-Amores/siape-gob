@@ -9,9 +9,9 @@ document.addEventListener('DOMContentLoaded', function () {
         { data: 'brand.name', className: 'fw-normal', title: 'Marca', orderable: false }, // Deshabilitar orden en columnas de relación (más simple por ahora)
         { data: 'category.name', className: 'fw-normal', title: 'Categoría', orderable: false },
         {
-            data: 'status.name', 
-            className: 'fw-normal', 
-            title: 'Disponibilidad', 
+            data: 'status.name',
+            className: 'fw-normal',
+            title: 'Disponibilidad',
             orderable: false,
             render: function(data) {
                 return `<span class="badge bg-secondary rounded-pill px-3 py-1">${data}</span>`;
@@ -24,6 +24,22 @@ document.addEventListener('DOMContentLoaded', function () {
             render: function (data, type, row) {
                 const badgeClass = row.is_active ? 'bg-success' : 'bg-danger';
                 return `<span class="badge ${badgeClass} rounded-pill px-3 py-1">${data}</span>`;
+            }
+        },
+        {
+            data: 'acquisition_date',
+            className: 'text-center',
+            title: 'Fecha Adquisición',
+            render: function(data) {
+                return data ? new Date(data).toLocaleDateString() : '';
+            }
+        },
+        {
+            data: 'model_year',
+            className: 'text-center',
+            title: 'Año Modelo',
+            render: function(data) {
+                return data || '';
             }
         },
         {
