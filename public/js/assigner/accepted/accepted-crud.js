@@ -2,7 +2,7 @@ async function unassignAsset(id) {
     let isOk = false; // usar let, no const
     const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
     try {
-        const response = await fetch(`${URIUnassignedAsset}/${id}`, {
+        const response = await fetch(`${urlUnassignedAsset}/${id}`, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
