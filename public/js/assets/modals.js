@@ -99,6 +99,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 document.getElementById('categoria').value = asset.category_id ?? '';
                 document.getElementById('descripcion').value = asset.description ?? '';
                 document.getElementById('tipo').value = asset.type ?? '';
+                document.getElementById('model_year').value = asset.model_year ?? '';
+                document.getElementById('acquisition_date').value = asset.acquisition_date ? asset.acquisition_date.split('T')[0] : '';
 
                 // Campos dinámicos
                 try {
@@ -216,7 +218,7 @@ document.addEventListener('DOMContentLoaded', function () {
             modal.querySelector('#detalle-descripcion').textContent = asset.description ?? '—';
             modal.querySelector('#detalle-tipo').textContent = asset.type ?? '—';
             modal.querySelector('#detalle-model_year').textContent = asset.model_year ?? '—';
-            modal.querySelector('#detalle-acquisition_date').textContent = formatDate(asset.acquisition_date) ?? '—';
+            modal.querySelector('#detalle-acquisition_date').textContent = asset.acquisition_date_formatted ?? '—';
 
             openModalForEdit('modalDetallesBien');
         } catch (error) {

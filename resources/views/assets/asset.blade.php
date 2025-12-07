@@ -74,8 +74,7 @@
 
                         <div class="col-6 col-md-3 col-lg-1">
                             <label for="filtroAnioModelo" class="form-label small text-muted fw-bold mb-1">Año</label>
-                            <input type="number" id="filtroAnioModelo" class="form-control form-control-sm"
-                                placeholder="2025" step="1" value="{{ old('model_year') }}">
+                            <input type="number" id="filtroAnioModelo" class="form-control form-control-sm" placeholder="Todos">
                         </div>
 
                         <div class="col-6 col-md-3 col-lg-2">
@@ -242,8 +241,7 @@
                                             <div class="col-md-6">
                                                 <div class="form-floating">
                                                     <input type="number" class="form-control" id="model_year"
-                                                        name="model_year" placeholder="Ej: 2025" min="1900"
-                                                        max="{{ date('Y') + 1 }}" value="{{ old('model_year') }}">
+                                                        name="model_year" placeholder="Ej: 2025">
                                                     <label for="model_year">
                                                         <i class="fas fa-calendar me-1 text-muted"></i> Año del Modelo
                                                     </label>
@@ -253,8 +251,7 @@
                                             <div class="col-md-6">
                                                 <div class="form-floating">
                                                     <input type="date" class="form-control" id="acquisition_date"
-                                                        name="acquisition_date" placeholder="Fecha"
-                                                        value="{{ old('acquisition_date') }}">
+                                                        name="acquisition_date" placeholder="Fecha">
                                                     <label for="acquisition_date">
                                                         <i class="fas fa-calendar-check me-1 text-muted"></i> Fecha
                                                         Adquisición

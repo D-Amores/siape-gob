@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', function () {
             className: 'fw-normal',
             title: 'Disponibilidad',
             orderable: false,
-            render: function(data) {
+            render: function (data) {
                 return `<span class="badge bg-secondary rounded-pill px-3 py-1">${data}</span>`;
             }
         },
@@ -30,15 +30,16 @@ document.addEventListener('DOMContentLoaded', function () {
             data: 'acquisition_date',
             className: 'text-center',
             title: 'Fecha Adquisición',
-            render: function(data) {
-                return data ? new Date(data).toLocaleDateString() : '';
+            render: function (data) {
+                if (!data) return '';
+                return data.split('T')[0].split('-').reverse().join('/');
             }
         },
         {
             data: 'model_year',
             className: 'text-center',
             title: 'Año Modelo',
-            render: function(data) {
+            render: function (data) {
                 return data || '';
             }
         },
