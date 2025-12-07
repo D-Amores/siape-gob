@@ -39,6 +39,8 @@ class StoreAssetRequest extends FormRequest
             'category_id' => 'required|exists:categories,id',
             'status_id' => 'required|exists:statuses,id',
             'is_active' => 'required|boolean',
+            'acquisition_date' => 'nullable|date',
+            'model_year' => 'nullable|integer|min:1900|max:' . (date('Y') + 1),
         ];
     }
 
@@ -72,10 +74,15 @@ class StoreAssetRequest extends FormRequest
             'brand_id.exists' => 'La marca seleccionada no existe',
             'category_id.required' => 'La categoría es obligatoria',
             'category_id.exists' => 'La categoría seleccionada no existe',
-            
+
             // status_id
             'status_id.required' => 'El estado es obligatorio',
             'status_id.exists' => 'El estado seleccionado no existe',
+
+            'acquisition_date.date' => 'La fecha de adquisición no es una fecha válida',
+            'model_year.integer' => 'El año del modelo debe ser un número entero',
+            'model_year.min' => 'El año del modelo no puede ser anterior a 1900',
+            'model_year.max' => 'El año del modelo no puede ser posterior al próximo año',
         ];
     }
 
@@ -94,6 +101,8 @@ class StoreAssetRequest extends FormRequest
             'brand_id' => 'marca',
             'category_id' => 'categoría',
             'status_id' => 'estado',
+            'acquisition_date' => 'fecha de adquisición',
+            'model_year' => 'año del modelo',
         ];
     }
 
@@ -110,6 +119,8 @@ class StoreAssetRequest extends FormRequest
             'description' => trim($this->description ?? ''),
             'type' => $this->type ? trim($this->type) : null,
             'is_active' => $this->filled('is_active') ? (bool) $this->is_active : true,
+            'acquisition_date' => $this->acquisition_date ? trim($this->acquisition_date) : null,
+            'model_year' => $this->model_year ? (int) $this->model_year : null,
         ]);
     }
 
