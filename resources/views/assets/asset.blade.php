@@ -36,7 +36,7 @@
                         <div class="col-6 col-md-3 col-lg-2">
                             <label for="filtroCategoria" class="form-label small text-muted fw-bold mb-1">Categoría</label>
                             <select id="filtroCategoria" class="form-select form-select-sm">
-                                <option value="">Todas</option>
+                                <option value="">Seleccione...</option>
                                 @foreach ($categories as $category)
                                     <option value="{{ $category->name }}">{{ $category->name }}</option>
                                 @endforeach
@@ -74,7 +74,8 @@
 
                         <div class="col-6 col-md-3 col-lg-1">
                             <label for="filtroAnioModelo" class="form-label small text-muted fw-bold mb-1">Año</label>
-                            <input type="number" id="filtroAnioModelo" class="form-control form-control-sm" placeholder="Todos">
+                            <input type="number" id="filtroAnioModelo" class="form-control form-control-sm"
+                                placeholder="Todos">
                         </div>
 
                         <div class="col-6 col-md-3 col-lg-2">
@@ -83,11 +84,21 @@
                             <input type="date" id="filtroFechaAdquisicion" class="form-control form-control-sm">
                         </div>
 
-                        <div class="col-6 col-md-3 col-lg-12 col-xl-auto d-grid">
+                        <div class="col-6 col-md-3 col-lg-12 col-xl-auto">
                             <button class="btn btn-sm btn-outline-secondary text-nowrap" id="btnLimpiarFiltros"
                                 type="button">
-                                <i class="bi bi-x-lg"></i> Limpiar </button>
+                                <i class="bi bi-x-lg"></i> Limpiar
+                            </button>
                         </div>
+
+                        <!-- Badges de categorías seleccionadas -->
+                        <div class="col-12" id="categoriasSeleccionadasContainer" style="display: none;">
+                            <div class="d-flex align-items-center gap-2 flex-wrap">
+                                <span class="small text-muted fw-bold">Categorías:</span>
+                                <div id="categoriasSeleccionadas" class="d-flex gap-2 flex-wrap"></div>
+                            </div>
+                        </div>
+
                     </div>
                     <div class="table-responsive">
                         <table id="file_export"

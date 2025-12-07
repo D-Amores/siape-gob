@@ -79,7 +79,7 @@ document.addEventListener('DOMContentLoaded', function () {
             d.filtroGeneral = $('#filtroGeneral').val();
             d.filtroCondicion = $('#filtroCondicion').val();
             d.filtroEstado = $('#filtroEstado').val();
-            d.filtroCategoria = $('#filtroCategoria').val();
+            d.filtroCategoria = categoriasSeleccionadas;
             d.filtroMarca = $('#filtroMarca').val();
             d.filtroAnioModelo = $('#filtroAnioModelo').val();
             d.filtroFechaAdquisicion = $('#filtroFechaAdquisicion').val();
@@ -87,11 +87,72 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
+    // Array para almacenar las categorías seleccionadas
+    let categoriasSeleccionadas = [];
+
     $('#filtroCategoria').select2({
         theme: 'bootstrap-5',
-        multiple: false,
         allowClear: true,
-        placeholder: "Todas",
+        placeholder: "Seleccione..."
+    });
+
+    // Función para actualizar los badges de categorías
+    function actualizarBadgesCategorias() {
+        const container = document.getElementById('categoriasSeleccionadas');
+        const containerPrincipal = document.getElementById('categoriasSeleccionadasContainer');
+
+        // Limpiar completamente el contenedor
+        container.innerHTML = '';
+
+        if (categoriasSeleccionadas.length === 0) {
+            containerPrincipal.style.display = 'none';
+            return;
+        }
+
+        containerPrincipal.style.display = 'block';
+
+        categoriasSeleccionadas.forEach(categoria => {
+            const badge = document.createElement('span');
+            badge.className = 'badge bg-primary d-inline-flex align-items-center gap-2 pe-2';
+            badge.style.fontSize = '0.875rem';
+
+            const texto = document.createElement('span');
+            texto.textContent = categoria;
+
+            const botonCerrar = document.createElement('span');
+            botonCerrar.className = 'btn-cerrar-categoria';
+            botonCerrar.style.cursor = 'pointer';
+            botonCerrar.style.fontWeight = 'bold';
+            botonCerrar.style.fontSize = '1.1rem';
+            botonCerrar.dataset.categoria = categoria;
+            botonCerrar.innerHTML = '&times;';
+
+            badge.appendChild(texto);
+            badge.appendChild(botonCerrar);
+            container.appendChild(badge);
+        });
+    }
+
+    // Evento cuando se selecciona una categoría
+    $('#filtroCategoria').on('change', function(e) {
+        const valorSeleccionado = $(this).val();
+
+        if (valorSeleccionado && !categoriasSeleccionadas.includes(valorSeleccionado)) {
+            categoriasSeleccionadas.push(valorSeleccionado);
+            actualizarBadgesCategorias();
+            tableApi.draw();
+
+            // Resetear el select sin disparar eventos (evita bucle infinito)
+            $(this).val('');
+        }
+    });
+
+    // Evento para eliminar una categoría desde el badge
+    $(document).on('click', '.btn-cerrar-categoria', function() {
+        const categoria = $(this).data('categoria');
+        categoriasSeleccionadas = categoriasSeleccionadas.filter(c => c !== categoria);
+        actualizarBadgesCategorias();
+        tableApi.draw();
     });
 
     $('#filtroMarca').select2({
@@ -128,10 +189,6 @@ document.addEventListener('DOMContentLoaded', function () {
         tableApi.draw();
     });
 
-    $('#filtroCategoria').on('change', function () {
-        tableApi.draw();
-    });
-
     $('#filtroMarca').on('change', function () {
         tableApi.draw();
     });
@@ -145,15 +202,40 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     $('#btnLimpiarFiltros').on('click', function () {
-
+        // Limpiar campos de texto simples
         $('#filtroGeneral').val('');
-        $('#filtroCondicion').val('').trigger('change');
-        $('#filtroEstado').val('').trigger('change');
-        $('#filtroCategoria').val('').trigger('change');
-        $('#filtroMarca').val('').trigger('change');
         $('#filtroAnioModelo').val('');
         $('#filtroFechaAdquisicion').val('');
 
+        // Limpiar Select2 de categoría de forma especial (para evitar el bucle)
+        const $filtroCategoria = $('#filtroCategoria');
+        $filtroCategoria.val(null);
+        $filtroCategoria.select2('destroy');
+        $filtroCategoria.select2({
+            theme: 'bootstrap-5',
+            allowClear: true,
+            placeholder: "Seleccione..."
+        });
+
+        // Limpiar otros selects normalmente
+        $('#filtroCondicion').val(null);
+        $('#filtroEstado').val(null);
+        $('#filtroMarca').val(null);
+
+        // Limpiar categorías seleccionadas
+        categoriasSeleccionadas.length = 0;
+
+        // Forzar limpieza del DOM
+        const container = document.getElementById('categoriasSeleccionadas');
+        const containerPrincipal = document.getElementById('categoriasSeleccionadasContainer');
+        if (container) {
+            container.innerHTML = '';
+        }
+        if (containerPrincipal) {
+            containerPrincipal.style.display = 'none';
+        }
+
+        // Redibujar la tabla (esto recargará con valores vacíos)
         tableApi.draw();
     });
 });

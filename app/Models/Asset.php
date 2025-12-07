@@ -160,12 +160,20 @@ class Asset extends Model
     }
 
     /**
-     * Scope para filtrar por nombre de categoría.
+     * Scope para filtrar por nombre de categoría o múltiples categorías.
      */
-    public function scopeFilterByCategory(Builder $query, ?string $categoryName): void
+    public function scopeFilterByCategory(Builder $query, $categoryNames): void
     {
-        if ($categoryName) {
-            $query->whereHas('category', fn($q) => $q->where('name', $categoryName));
+        if ($categoryNames) {
+            // Si es un string, convertirlo a array
+            if (is_string($categoryNames)) {
+                $categoryNames = [$categoryNames];
+            }
+
+            // Si es un array y no está vacío
+            if (is_array($categoryNames) && count($categoryNames) > 0) {
+                $query->whereHas('category', fn($q) => $q->whereIn('name', $categoryNames));
+            }
         }
     }
 
