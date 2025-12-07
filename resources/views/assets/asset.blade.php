@@ -27,7 +27,8 @@
                     <div class="row g-2 mb-3 align-items-end">
 
                         <div class="col-6 col-md-3 col-lg-2">
-                            <label for="filtroGeneral" class="form-label small text-muted fw-bold mb-1">Búsqueda General</label>
+                            <label for="filtroGeneral" class="form-label small text-muted fw-bold mb-1">Búsqueda
+                                General</label>
                             <input type="text" id="filtroGeneral" class="form-control form-control-sm"
                                 placeholder="Buscar en todos los campos...">
                         </div>
@@ -367,6 +368,14 @@
                                             <div class="small text-muted">Estado</div>
                                             <span id="detalle-estado" class="badge rounded-pill px-3 py-2"></span>
                                         </div>
+                                        <div class="col-6">
+                                            <div class="small text-muted">Año Modelo</div>
+                                            <div id="detalle-anio-modelo" class="fw-semibold">—</div>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="small text-muted">Fecha Adquisición</div>
+                                            <div id="detalle-fecha-adquisicion" class="fw-semibold">—</div>
+                                        </div>
                                         <div class="col-12">
                                             <div class="small text-muted">Creado el</div>
                                             <div id="detalle-creado" class="fw-semibold">—</div>
@@ -380,7 +389,29 @@
                         <div class="col-md-6">
                             <div class="card h-100 border-0 bg-light-subtle">
                                 <div class="card-body">
-                                    <h6 class="text-uppercase text-secondary fw-semibold mb-3">
+
+                                    <h6 class="text-uppercase text-secondary fw-semibold mt-4 mb-3">
+                                        <i class="fas fa-clock me-2"></i>Detalles de Adquisición
+                                    </h6>
+
+                                    <div class="row g-3 mt-2">
+                                        <div class="col-6">
+                                            <div class="small text-muted">
+                                                <i class="fas fa-calendar me-1"></i> Año del Modelo
+                                            </div>
+                                            <div id="detalle-model_year" class="fw-semibold">-</div>
+                                        </div>
+
+                                        <div class="col-6">
+                                            <div class="small text-muted">
+                                                <i class="fas fa-calendar-check me-1"></i> Fecha Adquisición
+                                            </div>
+                                            <div id="detalle-acquisition_date" class="fw-semibold">-</div>
+                                        </div>
+
+                                    </div>
+
+                                    <h6 class="text-uppercase text-secondary fw-semibold mb-3 my-4">
                                         <i class="fas fa-microchip me-2"></i>Especificaciones Técnicas
                                     </h6>
                                     <div class="row g-3">
