@@ -24,58 +24,69 @@
         <div class="datatables">
             <div class="card shadow-lg">
                 <div class="card-body">
-                    <div class="row mb-3 g-2 align-items-end">
+                    <div class="row g-2 mb-3 align-items-end">
 
-                        <div class="col-md-3">
-                            <label for="filtroGeneral" class="form-label small">Buscar (Inv, Modelo, Serie):</label>
+                        <div class="col-6 col-md-3 col-lg-2">
+                            <label for="filtroGeneral" class="form-label small text-muted fw-bold mb-1">Búsqueda General</label>
                             <input type="text" id="filtroGeneral" class="form-control form-control-sm"
-                                placeholder="Escribe...">
+                                placeholder="Buscar en todos los campos...">
                         </div>
 
-                        <div class="col-md-2">
-                            <label for="filtroCategoria" class="form-label small">Categoría:</label>
-                            <select id="filtroCategoria" class="form-select form-select-sm" data-placeholder="Todas">
-                                <option value=""></option>
+                        <div class="col-6 col-md-3 col-lg-2">
+                            <label for="filtroCategoria" class="form-label small text-muted fw-bold mb-1">Categoría</label>
+                            <select id="filtroCategoria" class="form-select form-select-sm">
+                                <option value="">Todas</option>
                                 @foreach ($categories as $category)
                                     <option value="{{ $category->name }}">{{ $category->name }}</option>
                                 @endforeach
                             </select>
                         </div>
 
-                        <div class="col-md-2">
-                            <label for="filtroMarca" class="form-label small">Marca:</label>
-                            <select id="filtroMarca" class="form-select form-select-sm" data-placeholder="Todas">
-                                <option value=""></option>
+                        <div class="col-6 col-md-3 col-lg-2">
+                            <label for="filtroMarca" class="form-label small text-muted fw-bold mb-1">Marca</label>
+                            <select id="filtroMarca" class="form-select form-select-sm">
+                                <option value="">Todas</option>
                                 @foreach ($brands as $brand)
                                     <option value="{{ $brand->name }}">{{ $brand->name }}</option>
                                 @endforeach
                             </select>
                         </div>
 
-                        <div class="col-md-2">
-                            <label for="filtroCondicion" class="form-label small">Condición:</label>
-                            <select id="filtroCondicion" class="form-select form-select-sm" data-placeholder="Todas">
-                                <option value=""></option>
+                        <div class="col-6 col-md-3 col-lg-2">
+                            <label for="filtroCondicion" class="form-label small text-muted fw-bold mb-1">Condición</label>
+                            <select id="filtroCondicion" class="form-select form-select-sm">
+                                <option value="">Todas</option>
                                 @foreach ($conditions as $condition)
                                     <option value="{{ $condition->name }}">{{ $condition->name }}</option>
                                 @endforeach
                             </select>
                         </div>
 
-                        <div class="col-md-2">
-                            <label for="filtroEstado" class="form-label small">Estado:</label>
-                            <select id="filtroEstado" class="form-select form-select-sm" data-placeholder="Todas">
-                                <option value=""></option>
+                        <div class="col-6 col-md-3 col-lg-1">
+                            <label for="filtroEstado" class="form-label small text-muted fw-bold mb-1">Estado</label>
+                            <select id="filtroEstado" class="form-select form-select-sm">
+                                <option value="">Todos</option>
                                 <option value="Activo">Activo</option>
                                 <option value="Inactivo">Inactivo</option>
                             </select>
                         </div>
 
-                        <div class="col-md-1">
-                            <button class="btn btn-sm btn-outline-secondary w-100" id="btnLimpiarFiltros"
-                                title="Limpiar filtros">
-                                Limpiar
-                            </button>
+                        <div class="col-6 col-md-3 col-lg-1">
+                            <label for="filtroAnioModelo" class="form-label small text-muted fw-bold mb-1">Año</label>
+                            <input type="number" id="filtroAnioModelo" class="form-control form-control-sm"
+                                placeholder="2025" step="1" value="{{ old('model_year') }}">
+                        </div>
+
+                        <div class="col-6 col-md-3 col-lg-2">
+                            <label for="filtroFechaAdquisicion" class="form-label small text-muted fw-bold mb-1">Fecha
+                                Adq.</label>
+                            <input type="date" id="filtroFechaAdquisicion" class="form-control form-control-sm">
+                        </div>
+
+                        <div class="col-6 col-md-3 col-lg-12 col-xl-auto d-grid">
+                            <button class="btn btn-sm btn-outline-secondary text-nowrap" id="btnLimpiarFiltros"
+                                type="button">
+                                <i class="bi bi-x-lg"></i> Limpiar </button>
                         </div>
                     </div>
                     <div class="table-responsive">
@@ -189,7 +200,8 @@
                                                 <option value="">Seleccione estado</option>
                                                 <!-- Las opciones se llenarán con JavaScript -->
                                             </select>
-                                            <label for="status_id"><i class="fas fa-toggle-on me-1 text-muted"></i> Estado del bien</label>
+                                            <label for="status_id"><i class="fas fa-toggle-on me-1 text-muted"></i> Estado
+                                                del bien</label>
                                         </div>
 
                                         <div class="form-floating mb-3">
@@ -197,7 +209,8 @@
                                                 <option value="1" selected>Activo</option>
                                                 <option value="0">Inactivo</option>
                                             </select>
-                                            <label for="is_active"><i class="fas fa-power-off me-1 text-muted"></i> Estado activo/inactivo</label>
+                                            <label for="is_active"><i class="fas fa-power-off me-1 text-muted"></i> Estado
+                                                activo/inactivo</label>
                                         </div>
 
                                         <div class="form-floating">
@@ -218,6 +231,36 @@
 
                                         <!-- Campos dinámicos -->
                                         <div id="camposDinamicos"></div>
+
+                                        <h6 class="text-uppercase text-secondary fw-semibold mt-4 mb-3">
+                                            <i class="fas fa-clock me-2"></i>Detalles de Adquisición
+                                        </h6>
+
+                                        <div class="row g-3">
+
+                                            <div class="col-md-6">
+                                                <div class="form-floating">
+                                                    <input type="number" class="form-control" id="model_year"
+                                                        name="model_year" placeholder="Ej: 2025" min="1900"
+                                                        max="{{ date('Y') + 1 }}" value="{{ old('model_year') }}">
+                                                    <label for="model_year">
+                                                        <i class="fas fa-calendar me-1 text-muted"></i> Año del Modelo
+                                                    </label>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-6">
+                                                <div class="form-floating">
+                                                    <input type="date" class="form-control" id="acquisition_date"
+                                                        name="acquisition_date" placeholder="Fecha"
+                                                        value="{{ old('acquisition_date') }}">
+                                                    <label for="acquisition_date">
+                                                        <i class="fas fa-calendar-check me-1 text-muted"></i> Fecha
+                                                        Adquisición
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
 
                                         <h6 class="text-uppercase text-secondary fw-semibold mt-4 mb-3">
                                             <i class="fas fa-align-left me-2"></i>Descripción
