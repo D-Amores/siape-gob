@@ -27,7 +27,7 @@ class AssetController extends Controller
 
                     $start = $request->input('start', 0);
                     $length = $request->input('length', 30);
-                    $searchValue = $request->input('search.value', '');
+                    $searchValue = $request->input('filtroGeneral', '');
 
                     $query = Asset::with(['brand', 'category', 'status'])
                         ->select('assets.*')
@@ -35,6 +35,8 @@ class AssetController extends Controller
                         ->filterByState($request->input('filtroEstado'))
                         ->filterByCategory($request->input('filtroCategoria'))
                         ->filterByBrand($request->input('filtroMarca'))
+                        ->modelYear($request->input('filtroAnioModelo'))
+                        ->acquisitionDate($request->input('filtroFechaAdquisicion'))
                         ->search($searchValue);
 
                     $recordsFiltered = $query->count();
@@ -48,8 +50,8 @@ class AssetController extends Controller
                         1 => 'model',
                         2 => 'serial_number',
                         6 => 'is_active',
-                        7 => 'acquisition_date', // Tu nombre original
-                        8 => 'model_year',       // Tu nombre original
+                        7 => 'acquisition_date',
+                        8 => 'model_year',
                     ];
 
                     $orderColumn = $columns[$orderColumnIndex] ?? 'inventory_number';
@@ -59,11 +61,9 @@ class AssetController extends Controller
                         ->take($length)
                         ->get();
 
-                    // Formateamos los datos antes de enviarlos
                     $data->transform(function ($asset) {
                         $asset->is_active_label = $asset->isActive() ? 'Activo' : 'Inactivo';
 
-                        // Formato de fecha seguro (usando tus nombres)
                         $asset->acquisition_date_formatted = optional($asset->acquisition_date)->format('d/m/Y');
                         $asset->model_year_text = $asset->model_year ?? '-';
 

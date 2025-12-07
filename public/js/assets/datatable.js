@@ -73,11 +73,15 @@ document.addEventListener('DOMContentLoaded', function () {
         ajaxUrl: vURIAssetsTableApi,
         csrfToken: csrfToken,
         ajaxDataFn: (d) => {
+            // Agregar parámetros personalizados
             d.option = 'table';
+            d.filtroGeneral = $('#filtroGeneral').val();
             d.filtroCondicion = $('#filtroCondicion').val();
             d.filtroEstado = $('#filtroEstado').val();
             d.filtroCategoria = $('#filtroCategoria').val();
             d.filtroMarca = $('#filtroMarca').val();
+            d.filtroAnioModelo = $('#filtroAnioModelo').val();
+            d.filtroFechaAdquisicion = $('#filtroFechaAdquisicion').val();
             return JSON.stringify(d);
         }
     });
@@ -112,7 +116,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     $('#filtroGeneral').on('keyup', function () {
-        tableApi.search(this.value).draw();
+        tableApi.draw();
     });
 
     $('#filtroCondicion').on('change', function () {
@@ -131,6 +135,14 @@ document.addEventListener('DOMContentLoaded', function () {
         tableApi.draw();
     });
 
+    $('#filtroAnioModelo').on('input', function () {
+        tableApi.draw();
+    });
+
+    $('#filtroFechaAdquisicion').on('change', function () {
+        tableApi.draw();
+    });
+
     $('#btnLimpiarFiltros').on('click', function () {
 
         $('#filtroGeneral').val('');
@@ -138,8 +150,9 @@ document.addEventListener('DOMContentLoaded', function () {
         $('#filtroEstado').val('').trigger('change');
         $('#filtroCategoria').val('').trigger('change');
         $('#filtroMarca').val('').trigger('change');
+        $('#filtroAnioModelo').val('');
+        $('#filtroFechaAdquisicion').val('');
 
-        tableApi.search('');
         tableApi.draw();
     });
 });

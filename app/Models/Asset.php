@@ -179,6 +179,20 @@ class Asset extends Model
         }
     }
 
+    public function scopeModelYear(Builder $query, ?int $year): void
+    {
+        if ($year) {
+            $query->where('model_year', $year);
+        }
+    }
+
+    public function scopeAcquisitionDate(Builder $query, ?string $date): void
+    {
+        if ($date) {
+            $query->whereDate('acquisition_date', $date);
+        }
+    }
+
     /**
      * Scope para verificar si el asset ya tiene un reporte abierto
      */
