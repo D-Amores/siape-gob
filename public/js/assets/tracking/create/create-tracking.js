@@ -1,5 +1,7 @@
-async function loadReports(){
-    const reports =  await getAssetReports('open');
+let filterOption = 'all';
+
+async function loadReports(option = 'all') {
+    const reports =  await getAssetReports(option);
     loadReportsTable(reports)
 }
 
@@ -20,7 +22,7 @@ async function createAssetTracking(reportId) {
         icon.classList.add('d-none');
         const isOk = await storeAssetTracking(trackingData);
         if (isOk) {
-            await loadReports(); // Recargar tabla de reportes
+            await loadReports(filterOption); // Recargar tabla de reportes
         }
         spinner.classList.add('d-none');
         btnCreate.disabled = false;
@@ -30,9 +32,12 @@ async function createAssetTracking(reportId) {
 }
 
 async function startApp(){
+    const btnFilter = document.getElementById('btn-filter');
     const dataReportsTableBody = document.querySelector('#reports-table tbody');
-    const reports =  await getAssetReports('open');
+    const reports =  await getAssetReports('all');
     loadReportsTable(reports);
+    console.log(reports);
+    
 
     dataReportsTableBody.addEventListener('click', async (e)=>{
         const btnCreate = e.target.closest('.btn-create');
@@ -44,6 +49,13 @@ async function startApp(){
             btnCreate.removeAttribute('id');
 
         }
+    });
+
+    btnFilter.addEventListener('click', async ()=>{
+        const filterSelect = document.getElementById('filter-reports');
+        const selectedOption = filterSelect.value;
+        filterOption = selectedOption;
+        await loadReports(selectedOption);
     });
 }
 
