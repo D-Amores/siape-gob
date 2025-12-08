@@ -186,7 +186,7 @@ class Asset extends Model
     public function hasOpenMaintenanceReport()
     {
         return $this->reports()
-            ->where('status_id', Status::OPEN)
+            //->where('status_id', Status::OPEN)
             ->whereNull('closed_at')
             ->exists();
     }

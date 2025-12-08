@@ -10,22 +10,27 @@ async function storeAssetTracking(data){
             },
             body: JSON.stringify(data)
         });
-
+        const codeHttp = response.status;
         const result = await response.json();
         
         if (result.ok) {
-            showAlert(result.message || 'Usuario creado exitosamente', 'green', 'Éxito', null, 2000);
+            showAlert(result.message || 'Seguimiento creado exitosamente', 'green', 'Éxito', null, 2000);
             isOk = true;
         } else {
+            console.log(result);
+            
             if (result.errors) {
                 const errorMessages = Object.values(result.errors).flat().join('<br>');
                 showAlert(errorMessages, 'red', 'Errores de validación', null, 4000);
-            } else {
-                showAlert(result.message || 'Error al crear el usuario', 'red', 'Error', null, 2000);
+            } else if(codeHttp === 400){
+                showAlert(result.message || 'Ya existe un seguimiento activo para este reporte.', 'orange', 'Advertencia', null, 2000);
+            } 
+            else {
+                showAlert(result.message || 'Error al crear el seguimiento', 'red', 'Error', null, 2000);
             }
         }
     } catch (error) {
-        showAlert('Error al crear el usuario. Intente nuevamente.', 'red', 'Error');
+        showAlert('Error al crear el seguimiento. Intente nuevamente.', 'red', 'Error');
     }
 
     return isOk; // true si se creó, false si no

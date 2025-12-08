@@ -78,6 +78,6 @@ class MaintenanceReport extends Model
 
     public function getIsClosedAttribute()
     {
-        return (bool) $this->closed_at;
+        return (bool) $this-> closed_at;
     }
 }
