@@ -178,12 +178,20 @@ class Asset extends Model
     }
 
     /**
-     * Scope para filtrar por nombre de marca.
+     * Scope para filtrar por nombre de marca o múltiples marcas.
      */
-    public function scopeFilterByBrand(Builder $query, ?string $brandName): void
+    public function scopeFilterByBrand(Builder $query, $brandNames): void
     {
-        if ($brandName) {
-            $query->whereHas('brand', fn($q) => $q->where('name', $brandName));
+        if ($brandNames) {
+            // Si es un string, convertirlo a array
+            if (is_string($brandNames)) {
+                $brandNames = [$brandNames];
+            }
+            
+            // Si es un array y no está vacío
+            if (is_array($brandNames) && count($brandNames) > 0) {
+                $query->whereHas('brand', fn($q) => $q->whereIn('name', $brandNames));
+            }
         }
     }
 

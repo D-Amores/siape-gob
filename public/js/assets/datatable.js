@@ -80,15 +80,16 @@ document.addEventListener('DOMContentLoaded', function () {
             d.filtroCondicion = $('#filtroCondicion').val();
             d.filtroEstado = $('#filtroEstado').val();
             d.filtroCategoria = categoriasSeleccionadas;
-            d.filtroMarca = $('#filtroMarca').val();
+            d.filtroMarca = marcasSeleccionadas;
             d.filtroAnioModelo = $('#filtroAnioModelo').val();
             d.filtroFechaAdquisicion = $('#filtroFechaAdquisicion').val();
             return JSON.stringify(d);
         }
     });
 
-    // Array para almacenar las categorías seleccionadas
+    // Arrays para almacenar las categorías y marcas seleccionadas
     let categoriasSeleccionadas = [];
+    let marcasSeleccionadas = [];
 
     $('#filtroCategoria').select2({
         theme: 'bootstrap-5',
@@ -147,6 +148,43 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
+    // Función para actualizar los badges de marcas
+    function actualizarBadgesMarcas() {
+        const container = document.getElementById('marcasSeleccionadas');
+        const containerPrincipal = document.getElementById('marcasSeleccionadasContainer');
+
+        // Limpiar completamente el contenedor
+        container.innerHTML = '';
+
+        if (marcasSeleccionadas.length === 0) {
+            containerPrincipal.style.display = 'none';
+            return;
+        }
+
+        containerPrincipal.style.display = 'block';
+
+        marcasSeleccionadas.forEach(marca => {
+            const badge = document.createElement('span');
+            badge.className = 'badge bg-success d-inline-flex align-items-center gap-2 pe-2';
+            badge.style.fontSize = '0.875rem';
+
+            const texto = document.createElement('span');
+            texto.textContent = marca;
+
+            const botonCerrar = document.createElement('span');
+            botonCerrar.className = 'btn-cerrar-marca';
+            botonCerrar.style.cursor = 'pointer';
+            botonCerrar.style.fontWeight = 'bold';
+            botonCerrar.style.fontSize = '1.1rem';
+            botonCerrar.dataset.marca = marca;
+            botonCerrar.innerHTML = '&times;';
+
+            badge.appendChild(texto);
+            badge.appendChild(botonCerrar);
+            container.appendChild(badge);
+        });
+    }
+
     // Evento para eliminar una categoría desde el badge
     $(document).on('click', '.btn-cerrar-categoria', function() {
         const categoria = $(this).data('categoria');
@@ -155,11 +193,32 @@ document.addEventListener('DOMContentLoaded', function () {
         tableApi.draw();
     });
 
+    // Evento para eliminar una marca desde el badge
+    $(document).on('click', '.btn-cerrar-marca', function() {
+        const marca = $(this).data('marca');
+        marcasSeleccionadas = marcasSeleccionadas.filter(m => m !== marca);
+        actualizarBadgesMarcas();
+        tableApi.draw();
+    });
+
     $('#filtroMarca').select2({
         theme: 'bootstrap-5',
-        multiple: false,
         allowClear: true,
-        placeholder: "Todas",
+        placeholder: "Seleccione..."
+    });
+
+    // Evento cuando se selecciona una marca
+    $('#filtroMarca').on('change', function(e) {
+        const valorSeleccionado = $(this).val();
+
+        if (valorSeleccionado && !marcasSeleccionadas.includes(valorSeleccionado)) {
+            marcasSeleccionadas.push(valorSeleccionado);
+            actualizarBadgesMarcas();
+            tableApi.draw();
+
+            // Resetear el select sin disparar eventos
+            $(this).val('');
+        }
     });
 
     $('#filtroCondicion').select2({
@@ -189,9 +248,7 @@ document.addEventListener('DOMContentLoaded', function () {
         tableApi.draw();
     });
 
-    $('#filtroMarca').on('change', function () {
-        tableApi.draw();
-    });
+
 
     $('#filtroAnioModelo').on('input', function () {
         tableApi.draw();
@@ -217,22 +274,40 @@ document.addEventListener('DOMContentLoaded', function () {
             placeholder: "Seleccione..."
         });
 
+        // Limpiar Select2 de marca de forma especial
+        const $filtroMarca = $('#filtroMarca');
+        $filtroMarca.val(null);
+        $filtroMarca.select2('destroy');
+        $filtroMarca.select2({
+            theme: 'bootstrap-5',
+            allowClear: true,
+            placeholder: "Seleccione..."
+        });
+
         // Limpiar otros selects normalmente
         $('#filtroCondicion').val(null);
         $('#filtroEstado').val(null);
-        $('#filtroMarca').val(null);
 
         // Limpiar categorías seleccionadas
         categoriasSeleccionadas.length = 0;
-
-        // Forzar limpieza del DOM
-        const container = document.getElementById('categoriasSeleccionadas');
-        const containerPrincipal = document.getElementById('categoriasSeleccionadasContainer');
-        if (container) {
-            container.innerHTML = '';
+        const containerCat = document.getElementById('categoriasSeleccionadas');
+        const containerPrincipalCat = document.getElementById('categoriasSeleccionadasContainer');
+        if (containerCat) {
+            containerCat.innerHTML = '';
         }
-        if (containerPrincipal) {
-            containerPrincipal.style.display = 'none';
+        if (containerPrincipalCat) {
+            containerPrincipalCat.style.display = 'none';
+        }
+
+        // Limpiar marcas seleccionadas
+        marcasSeleccionadas.length = 0;
+        const containerMar = document.getElementById('marcasSeleccionadas');
+        const containerPrincipalMar = document.getElementById('marcasSeleccionadasContainer');
+        if (containerMar) {
+            containerMar.innerHTML = '';
+        }
+        if (containerPrincipalMar) {
+            containerPrincipalMar.style.display = 'none';
         }
 
         // Redibujar la tabla (esto recargará con valores vacíos)

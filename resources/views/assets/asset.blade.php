@@ -99,6 +99,14 @@
                             </div>
                         </div>
 
+                        <!-- Badges de marcas seleccionadas -->
+                        <div class="col-12" id="marcasSeleccionadasContainer" style="display: none;">
+                            <div class="d-flex align-items-center gap-2 flex-wrap">
+                                <span class="small text-muted fw-bold">Marcas:</span>
+                                <div id="marcasSeleccionadas" class="d-flex gap-2 flex-wrap"></div>
+                            </div>
+                        </div>
+
                     </div>
                     <div class="table-responsive">
                         <table id="file_export"
