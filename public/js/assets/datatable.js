@@ -97,41 +97,76 @@ document.addEventListener('DOMContentLoaded', function () {
         placeholder: "Seleccione..."
     });
 
+    // Función para actualizar el contador de filtros activos
+    function actualizarContadorFiltros() {
+        let contador = 0;
+
+        // Contar filtros simples activos
+        if ($('#filtroGeneral').val()) contador++;
+        if ($('#filtroCondicion').val()) contador++;
+        if ($('#filtroEstado').val()) contador++;
+        if ($('#filtroAnioModelo').val()) contador++;
+        if ($('#filtroFechaAdquisicion').val()) contador++;
+
+        // Contar categorías y marcas seleccionadas
+        contador += categoriasSeleccionadas.length;
+        contador += marcasSeleccionadas.length;
+
+        // Actualizar el badge contador
+        const badgeContador = document.getElementById('contadorFiltros');
+        if (contador > 0) {
+            badgeContador.textContent = contador;
+            badgeContador.style.display = 'inline-block';
+        } else {
+            badgeContador.style.display = 'none';
+        }
+    }
+
     // Función para actualizar los badges de categorías
     function actualizarBadgesCategorias() {
         const container = document.getElementById('categoriasSeleccionadas');
         const containerPrincipal = document.getElementById('categoriasSeleccionadasContainer');
+        const badgesContainer = document.getElementById('badgesContainer');
 
         // Limpiar completamente el contenedor
         container.innerHTML = '';
 
         if (categoriasSeleccionadas.length === 0) {
             containerPrincipal.style.display = 'none';
-            return;
+        } else {
+            containerPrincipal.style.display = 'block';
+
+            categoriasSeleccionadas.forEach(categoria => {
+                const badge = document.createElement('span');
+                badge.className = 'badge bg-info text-white d-inline-flex align-items-center gap-2 pe-2';
+                badge.style.fontSize = '0.875rem';
+
+                const texto = document.createElement('span');
+                texto.textContent = categoria;
+
+                const botonCerrar = document.createElement('span');
+                botonCerrar.className = 'btn-cerrar-categoria';
+                botonCerrar.style.cursor = 'pointer';
+                botonCerrar.style.fontWeight = 'bold';
+                botonCerrar.style.fontSize = '1.1rem';
+                botonCerrar.dataset.categoria = categoria;
+                botonCerrar.innerHTML = '&times;';
+
+                badge.appendChild(texto);
+                badge.appendChild(botonCerrar);
+                container.appendChild(badge);
+            });
         }
 
-        containerPrincipal.style.display = 'block';
+        // Mostrar u ocultar el contenedor de badges
+        if (categoriasSeleccionadas.length > 0 || marcasSeleccionadas.length > 0) {
+            badgesContainer.style.display = 'block';
+        } else {
+            badgesContainer.style.display = 'none';
+        }
 
-        categoriasSeleccionadas.forEach(categoria => {
-            const badge = document.createElement('span');
-            badge.className = 'badge bg-primary d-inline-flex align-items-center gap-2 pe-2';
-            badge.style.fontSize = '0.875rem';
-
-            const texto = document.createElement('span');
-            texto.textContent = categoria;
-
-            const botonCerrar = document.createElement('span');
-            botonCerrar.className = 'btn-cerrar-categoria';
-            botonCerrar.style.cursor = 'pointer';
-            botonCerrar.style.fontWeight = 'bold';
-            botonCerrar.style.fontSize = '1.1rem';
-            botonCerrar.dataset.categoria = categoria;
-            botonCerrar.innerHTML = '&times;';
-
-            badge.appendChild(texto);
-            badge.appendChild(botonCerrar);
-            container.appendChild(badge);
-        });
+        // Actualizar contador
+        actualizarContadorFiltros();
     }
 
     // Evento cuando se selecciona una categoría
@@ -152,37 +187,47 @@ document.addEventListener('DOMContentLoaded', function () {
     function actualizarBadgesMarcas() {
         const container = document.getElementById('marcasSeleccionadas');
         const containerPrincipal = document.getElementById('marcasSeleccionadasContainer');
+        const badgesContainer = document.getElementById('badgesContainer');
 
         // Limpiar completamente el contenedor
         container.innerHTML = '';
 
         if (marcasSeleccionadas.length === 0) {
             containerPrincipal.style.display = 'none';
-            return;
+        } else {
+            containerPrincipal.style.display = 'block';
+
+            marcasSeleccionadas.forEach(marca => {
+                const badge = document.createElement('span');
+                badge.className = 'badge bg-success text-white d-inline-flex align-items-center gap-2 pe-2';
+                badge.style.fontSize = '0.875rem';
+
+                const texto = document.createElement('span');
+                texto.textContent = marca;
+
+                const botonCerrar = document.createElement('span');
+                botonCerrar.className = 'btn-cerrar-marca';
+                botonCerrar.style.cursor = 'pointer';
+                botonCerrar.style.fontWeight = 'bold';
+                botonCerrar.style.fontSize = '1.1rem';
+                botonCerrar.dataset.marca = marca;
+                botonCerrar.innerHTML = '&times;';
+
+                badge.appendChild(texto);
+                badge.appendChild(botonCerrar);
+                container.appendChild(badge);
+            });
         }
 
-        containerPrincipal.style.display = 'block';
+        // Mostrar u ocultar el contenedor de badges
+        if (categoriasSeleccionadas.length > 0 || marcasSeleccionadas.length > 0) {
+            badgesContainer.style.display = 'block';
+        } else {
+            badgesContainer.style.display = 'none';
+        }
 
-        marcasSeleccionadas.forEach(marca => {
-            const badge = document.createElement('span');
-            badge.className = 'badge bg-success d-inline-flex align-items-center gap-2 pe-2';
-            badge.style.fontSize = '0.875rem';
-
-            const texto = document.createElement('span');
-            texto.textContent = marca;
-
-            const botonCerrar = document.createElement('span');
-            botonCerrar.className = 'btn-cerrar-marca';
-            botonCerrar.style.cursor = 'pointer';
-            botonCerrar.style.fontWeight = 'bold';
-            botonCerrar.style.fontSize = '1.1rem';
-            botonCerrar.dataset.marca = marca;
-            botonCerrar.innerHTML = '&times;';
-
-            badge.appendChild(texto);
-            badge.appendChild(botonCerrar);
-            container.appendChild(badge);
-        });
+        // Actualizar contador
+        actualizarContadorFiltros();
     }
 
     // Evento para eliminar una categoría desde el badge
@@ -237,24 +282,27 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     $('#filtroGeneral').on('keyup', function () {
+        actualizarContadorFiltros();
         tableApi.draw();
     });
 
     $('#filtroCondicion').on('change', function () {
+        actualizarContadorFiltros();
         tableApi.draw();
     });
 
     $('#filtroEstado').on('change', function () {
+        actualizarContadorFiltros();
         tableApi.draw();
     });
 
-
-
     $('#filtroAnioModelo').on('input', function () {
+        actualizarContadorFiltros();
         tableApi.draw();
     });
 
     $('#filtroFechaAdquisicion').on('change', function () {
+        actualizarContadorFiltros();
         tableApi.draw();
     });
 
@@ -284,9 +332,9 @@ document.addEventListener('DOMContentLoaded', function () {
             placeholder: "Seleccione..."
         });
 
-        // Limpiar otros selects normalmente
-        $('#filtroCondicion').val(null);
-        $('#filtroEstado').val(null);
+        // Limpiar otros selects con Select2
+        $('#filtroCondicion').val(null).trigger('change');
+        $('#filtroEstado').val(null).trigger('change');
 
         // Limpiar categorías seleccionadas
         categoriasSeleccionadas.length = 0;
@@ -309,6 +357,15 @@ document.addEventListener('DOMContentLoaded', function () {
         if (containerPrincipalMar) {
             containerPrincipalMar.style.display = 'none';
         }
+
+        // Ocultar el contenedor principal de badges si no hay ninguno
+        const badgesContainer = document.getElementById('badgesContainer');
+        if (badgesContainer) {
+            badgesContainer.style.display = 'none';
+        }
+
+        // Actualizar contador
+        actualizarContadorFiltros();
 
         // Redibujar la tabla (esto recargará con valores vacíos)
         tableApi.draw();

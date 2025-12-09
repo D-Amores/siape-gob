@@ -24,89 +24,122 @@
         <div class="datatables">
             <div class="card shadow-lg">
                 <div class="card-body">
-                    <div class="row g-2 mb-3 align-items-end">
-
-                        <div class="col-6 col-md-3 col-lg-2">
-                            <label for="filtroGeneral" class="form-label small text-muted fw-bold mb-1">Búsqueda
-                                General</label>
-                            <input type="text" id="filtroGeneral" class="form-control form-control-sm"
-                                placeholder="Buscar en todos los campos...">
+                    <!-- Barra de herramientas compacta -->
+                    <div class="d-flex gap-2 mb-3 align-items-center flex-wrap">
+                        <!-- Búsqueda rápida -->
+                        <div class="flex-grow-1" style="min-width: 250px;">
+                            <input type="text" id="filtroGeneral" class="form-control"
+                                placeholder="🔍 Buscar por código, nombre, serie...">
                         </div>
 
-                        <div class="col-6 col-md-3 col-lg-2">
-                            <label for="filtroCategoria" class="form-label small text-muted fw-bold mb-1">Categoría</label>
-                            <select id="filtroCategoria" class="form-select form-select-sm">
-                                <option value="">Seleccione...</option>
-                                @foreach ($categories as $category)
-                                    <option value="{{ $category->name }}">{{ $category->name }}</option>
-                                @endforeach
-                            </select>
-                        </div>
+                        <!-- Botón de filtros avanzados -->
+                        <button class="btn btn-outline-primary" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#collapseFiltros" aria-expanded="false" aria-controls="collapseFiltros">
+                            <i class="bi bi-funnel"></i> Filtros
+                            <span class="badge bg-primary ms-1" id="contadorFiltros" style="display: none;">0</span>
+                        </button>
 
-                        <div class="col-6 col-md-3 col-lg-2">
-                            <label for="filtroMarca" class="form-label small text-muted fw-bold mb-1">Marca</label>
-                            <select id="filtroMarca" class="form-select form-select-sm">
-                                <option value="">Todas</option>
-                                @foreach ($brands as $brand)
-                                    <option value="{{ $brand->name }}">{{ $brand->name }}</option>
-                                @endforeach
-                            </select>
-                        </div>
+                        <!-- Botón limpiar -->
+                        <button class="btn btn-outline-secondary" id="btnLimpiarFiltros" type="button">
+                            <i class="bi bi-x-circle"></i> Limpiar
+                        </button>
+                    </div>
 
-                        <div class="col-6 col-md-3 col-lg-2">
-                            <label for="filtroCondicion" class="form-label small text-muted fw-bold mb-1">Condición</label>
-                            <select id="filtroCondicion" class="form-select form-select-sm">
-                                <option value="">Todas</option>
-                                @foreach ($conditions as $condition)
-                                    <option value="{{ $condition->name }}">{{ $condition->name }}</option>
-                                @endforeach
-                            </select>
-                        </div>
+                    <!-- Panel colapsable de filtros -->
+                    <div class="collapse" id="collapseFiltros">
+                        <div class="card card-body bg-light mb-3">
+                            <div class="row g-3">
+                                <!-- Categoría -->
+                                <div class="col-6 col-md-4 col-lg-3">
+                                    <label for="filtroCategoria" class="form-label small fw-semibold mb-1">
+                                        <i class="bi bi-tags text-info"></i> Categoría
+                                    </label>
+                                    <select id="filtroCategoria" class="form-select form-select-sm">
+                                        <option value="">Todas</option>
+                                        @foreach ($categories as $category)
+                                            <option value="{{ $category->name }}">{{ $category->name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
 
-                        <div class="col-6 col-md-3 col-lg-1">
-                            <label for="filtroEstado" class="form-label small text-muted fw-bold mb-1">Estado</label>
-                            <select id="filtroEstado" class="form-select form-select-sm">
-                                <option value="">Todos</option>
-                                <option value="Activo">Activo</option>
-                                <option value="Inactivo">Inactivo</option>
-                            </select>
-                        </div>
+                                <!-- Marca -->
+                                <div class="col-6 col-md-4 col-lg-2">
+                                    <label for="filtroMarca" class="form-label small fw-semibold mb-1">
+                                        <i class="bi bi-award text-success"></i> Marca
+                                    </label>
+                                    <select id="filtroMarca" class="form-select form-select-sm">
+                                        <option value="">Todas</option>
+                                        @foreach ($brands as $brand)
+                                            <option value="{{ $brand->name }}">{{ $brand->name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
 
-                        <div class="col-6 col-md-3 col-lg-1">
-                            <label for="filtroAnioModelo" class="form-label small text-muted fw-bold mb-1">Año</label>
-                            <input type="number" id="filtroAnioModelo" class="form-control form-control-sm"
-                                placeholder="Todos">
-                        </div>
+                                <!-- Condición -->
+                                <div class="col-6 col-md-4 col-lg-2">
+                                    <label for="filtroCondicion" class="form-label small fw-semibold mb-1">
+                                        <i class="bi bi-shield-check text-warning"></i> Condición
+                                    </label>
+                                    <select id="filtroCondicion" class="form-select form-select-sm">
+                                        <option value="">Todas</option>
+                                        @foreach ($conditions as $condition)
+                                            <option value="{{ $condition->name }}">{{ $condition->name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
 
-                        <div class="col-6 col-md-3 col-lg-2">
-                            <label for="filtroFechaAdquisicion" class="form-label small text-muted fw-bold mb-1">Fecha
-                                Adq.</label>
-                            <input type="date" id="filtroFechaAdquisicion" class="form-control form-control-sm">
-                        </div>
+                                <!-- Estado -->
+                                <div class="col-6 col-md-4 col-lg-2">
+                                    <label for="filtroEstado" class="form-label small fw-semibold mb-1">
+                                        <i class="bi bi-toggle-on text-danger"></i> Estado
+                                    </label>
+                                    <select id="filtroEstado" class="form-select form-select-sm">
+                                        <option value="">Todos</option>
+                                        <option value="Activo">Activo</option>
+                                        <option value="Inactivo">Inactivo</option>
+                                    </select>
+                                </div>
 
-                        <div class="col-6 col-md-3 col-lg-12 col-xl-auto">
-                            <button class="btn btn-sm btn-outline-secondary text-nowrap" id="btnLimpiarFiltros"
-                                type="button">
-                                <i class="bi bi-x-lg"></i> Limpiar
-                            </button>
-                        </div>
+                                <!-- Año -->
+                                <div class="col-6 col-md-4 col-lg-1">
+                                    <label for="filtroAnioModelo" class="form-label small fw-semibold mb-1">
+                                        <i class="bi bi-calendar-event"></i> Año
+                                    </label>
+                                    <input type="number" id="filtroAnioModelo" class="form-control form-control-sm" placeholder="2024">
+                                </div>
 
-                        <!-- Badges de categorías seleccionadas -->
-                        <div class="col-12" id="categoriasSeleccionadasContainer" style="display: none;">
-                            <div class="d-flex align-items-center gap-2 flex-wrap">
-                                <span class="small text-muted fw-bold">Categorías:</span>
-                                <div id="categoriasSeleccionadas" class="d-flex gap-2 flex-wrap"></div>
+                                <!-- Fecha Adquisición -->
+                                <div class="col-6 col-md-4 col-lg-2">
+                                    <label for="filtroFechaAdquisicion" class="form-label small fw-semibold mb-1">
+                                        <i class="bi bi-calendar3"></i> Adq.
+                                    </label>
+                                    <input type="date" id="filtroFechaAdquisicion" class="form-control form-control-sm">
+                                </div>
+                            </div>
+
+                            <!-- Badges de selecciones múltiples -->
+                            <div class="mt-3 pt-2 border-top" id="badgesContainer" style="display: none;">
+                                <!-- Badges de categorías -->
+                                <div class="mb-2" id="categoriasSeleccionadasContainer" style="display: none;">
+                                    <div class="d-flex align-items-center gap-2 flex-wrap">
+                                        <span class="badge bg-info bg-opacity-10 text-info border border-info">
+                                            <i class="bi bi-tags"></i> Categorías:
+                                        </span>
+                                        <div id="categoriasSeleccionadas" class="d-flex gap-2 flex-wrap"></div>
+                                    </div>
+                                </div>
+
+                                <!-- Badges de marcas -->
+                                <div id="marcasSeleccionadasContainer" style="display: none;">
+                                    <div class="d-flex align-items-center gap-2 flex-wrap">
+                                        <span class="badge bg-success bg-opacity-10 text-success border border-success">
+                                            <i class="bi bi-award"></i> Marcas:
+                                        </span>
+                                        <div id="marcasSeleccionadas" class="d-flex gap-2 flex-wrap"></div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-
-                        <!-- Badges de marcas seleccionadas -->
-                        <div class="col-12" id="marcasSeleccionadasContainer" style="display: none;">
-                            <div class="d-flex align-items-center gap-2 flex-wrap">
-                                <span class="small text-muted fw-bold">Marcas:</span>
-                                <div id="marcasSeleccionadas" class="d-flex gap-2 flex-wrap"></div>
-                            </div>
-                        </div>
-
                     </div>
                     <div class="table-responsive">
                         <table id="file_export"
