@@ -9,11 +9,11 @@ document.addEventListener('DOMContentLoaded', function () {
         { data: 'brand.name', className: 'fw-normal', title: 'Marca', orderable: false }, // Deshabilitar orden en columnas de relación (más simple por ahora)
         { data: 'category.name', className: 'fw-normal', title: 'Categoría', orderable: false },
         {
-            data: 'status.name', 
-            className: 'fw-normal', 
-            title: 'Disponibilidad', 
+            data: 'status.name',
+            className: 'fw-normal',
+            title: 'Disponibilidad',
             orderable: false,
-            render: function(data) {
+            render: function (data) {
                 return `<span class="badge bg-secondary rounded-pill px-3 py-1">${data}</span>`;
             }
         },
@@ -24,6 +24,23 @@ document.addEventListener('DOMContentLoaded', function () {
             render: function (data, type, row) {
                 const badgeClass = row.is_active ? 'bg-success' : 'bg-danger';
                 return `<span class="badge ${badgeClass} rounded-pill px-3 py-1">${data}</span>`;
+            }
+        },
+        {
+            data: 'acquisition_date',
+            className: 'text-center',
+            title: 'Fecha Adquisición',
+            render: function (data) {
+                if (!data) return '';
+                return data.split('T')[0].split('-').reverse().join('/');
+            }
+        },
+        {
+            data: 'model_year',
+            className: 'text-center',
+            title: 'Año Modelo',
+            render: function (data) {
+                return data || '';
             }
         },
         {
@@ -58,72 +75,23 @@ document.addEventListener('DOMContentLoaded', function () {
         csrfToken: csrfToken,
         ajaxDataFn: (d) => {
             d.option = 'table';
-            d.filtroCondicion = $('#filtroCondicion').val();
-            d.filtroEstado = $('#filtroEstado').val();
-            d.filtroCategoria = $('#filtroCategoria').val();
-            d.filtroMarca = $('#filtroMarca').val();
+            if (window.assetsFilters && typeof window.assetsFilters.getSelectedFilters === 'function') {
+                const filtros = window.assetsFilters.getSelectedFilters();
+                Object.assign(d, {
+                    filtroGeneral: filtros.filtroGeneral,
+                    filtroCondicion: filtros.filtroCondicion,
+                    filtroEstado: filtros.filtroEstado,
+                    filtroCategoria: filtros.filtroCategoria,
+                    filtroMarca: filtros.filtroMarca,
+                    filtroAnioModelo: filtros.filtroAnioModelo,
+                    filtroFechaAdquisicion: filtros.filtroFechaAdquisicion,
+                });
+            }
             return JSON.stringify(d);
         }
     });
 
-    $('#filtroCategoria').select2({
-        theme: 'bootstrap-5',
-        multiple: false,
-        allowClear: true,
-        placeholder: "Todas",
-    });
-
-    $('#filtroMarca').select2({
-        theme: 'bootstrap-5',
-        multiple: false,
-        allowClear: true,
-        placeholder: "Todas",
-    });
-
-    $('#filtroCondicion').select2({
-        theme: 'bootstrap-5',
-        multiple: false,
-        allowClear: true,
-        placeholder: "Todas",
-    });
-
-    $('#filtroEstado').select2({
-        theme: 'bootstrap-5',
-        multiple: false,
-        allowClear: true,
-        placeholder: "Todas",
-        dropdownParent: $('#filtroEstado').parent()
-    });
-
-    $('#filtroGeneral').on('keyup', function () {
-        tableApi.search(this.value).draw();
-    });
-
-    $('#filtroCondicion').on('change', function () {
-        tableApi.draw();
-    });
-
-    $('#filtroEstado').on('change', function () {
-        tableApi.draw();
-    });
-
-    $('#filtroCategoria').on('change', function () {
-        tableApi.draw();
-    });
-
-    $('#filtroMarca').on('change', function () {
-        tableApi.draw();
-    });
-
-    $('#btnLimpiarFiltros').on('click', function () {
-
-        $('#filtroGeneral').val('');
-        $('#filtroCondicion').val('').trigger('change');
-        $('#filtroEstado').val('').trigger('change');
-        $('#filtroCategoria').val('').trigger('change');
-        $('#filtroMarca').val('').trigger('change');
-
-        tableApi.search('');
-        tableApi.draw();
-    });
+    if (window.assetsFilters && typeof window.assetsFilters.init === 'function') {
+        window.assetsFilters.init(tableApi);
+    }
 });

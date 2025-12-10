@@ -26,6 +26,13 @@ class Asset extends Model
         'category_id',
         'is_active',
         'status_id',
+        'acquisition_date',
+        'model_year',
+    ];
+
+    protected $casts = [
+        'acquisition_date' => 'date',
+        'model_year' => 'integer',
     ];
 
     public function brand()
@@ -123,7 +130,9 @@ class Asset extends Model
                     })
                     ->orWhereHas('category', function ($catQuery) use ($searchValue) {
                         $catQuery->where('name', 'like', "%{$searchValue}%");
-                    });
+                    })
+                    ->orWhere('acquisition_date', 'like', "%{$searchValue}%")
+                    ->orWhere('model_year', 'like', "%{$searchValue}%");
             });
         }
     }
@@ -151,25 +160,55 @@ class Asset extends Model
     }
 
     /**
-     * Scope para filtrar por nombre de categoría.
+     * Scope para filtrar por nombre de categoría o múltiples categorías.
      */
-    public function scopeFilterByCategory(Builder $query, ?string $categoryName): void
+    public function scopeFilterByCategory(Builder $query, $categoryNames): void
     {
-        if ($categoryName) {
-            $query->whereHas('category', fn($q) => $q->where('name', $categoryName));
+        if ($categoryNames) {
+            // Si es un string, convertirlo a array
+            if (is_string($categoryNames)) {
+                $categoryNames = [$categoryNames];
+            }
+
+            // Si es un array y no está vacío
+            if (is_array($categoryNames) && count($categoryNames) > 0) {
+                $query->whereHas('category', fn($q) => $q->whereIn('name', $categoryNames));
+            }
         }
     }
 
     /**
-     * Scope para filtrar por nombre de marca.
+     * Scope para filtrar por nombre de marca o múltiples marcas.
      */
-    public function scopeFilterByBrand(Builder $query, ?string $brandName): void
+    public function scopeFilterByBrand(Builder $query, $brandNames): void
     {
-        if ($brandName) {
-            $query->whereHas('brand', fn($q) => $q->where('name', $brandName));
+        if ($brandNames) {
+            // Si es un string, convertirlo a array
+            if (is_string($brandNames)) {
+                $brandNames = [$brandNames];
+            }
+            
+            // Si es un array y no está vacío
+            if (is_array($brandNames) && count($brandNames) > 0) {
+                $query->whereHas('brand', fn($q) => $q->whereIn('name', $brandNames));
+            }
         }
     }
-    
+
+    public function scopeModelYear(Builder $query, ?int $year): void
+    {
+        if ($year) {
+            $query->where('model_year', $year);
+        }
+    }
+
+    public function scopeAcquisitionDate(Builder $query, ?string $date): void
+    {
+        if ($date) {
+            $query->whereDate('acquisition_date', $date);
+        }
+    }
+
     /**
      * Scope para verificar si el asset ya tiene un reporte abierto
      */

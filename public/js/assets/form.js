@@ -41,7 +41,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Carga inicial
     loadAssets();
-    
+
     // ------------------------------
     // Envío del formulario
     // ------------------------------
@@ -63,7 +63,9 @@ document.addEventListener('DOMContentLoaded', function () {
                 cpu: document.getElementById('procesador')?.value || null,
                 speed: document.getElementById('velocidad')?.value || null,
                 memory: document.getElementById('memoria')?.value || null,
-                storage: document.getElementById('almacenamiento')?.value || null
+                storage: document.getElementById('almacenamiento')?.value || null,
+                acquisition_date: document.getElementById('acquisition_date')?.value || null,
+                model_year: document.getElementById('model_year')?.value || null
             };
 
             const action = async () => {

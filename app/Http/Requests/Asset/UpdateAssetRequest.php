@@ -37,6 +37,8 @@ class UpdateAssetRequest extends FormRequest
             'category_id' => 'sometimes|exists:categories,id',
             'status_id' => 'sometimes|exists:statuses,id',
             'is_active' => 'sometimes|boolean',
+            'model_year' => 'sometimes|nullable|date_format:Y',
+            'acquisition_date' => 'sometimes|nullable|date',
         ];
     }
 
@@ -65,6 +67,8 @@ class UpdateAssetRequest extends FormRequest
             'category_id.required' => 'La categoría es obligatoria',
             'category_id.exists' => 'La categoría seleccionada no existe',
             'status_id.exists' => 'El estado seleccionado no existe',
+            'model_year.date_format' => 'El año del modelo debe tener el formato YYYY',
+            'acquisition_date.date' => 'La fecha de adquisición no es una fecha válida',
         ];
     }
 
@@ -83,6 +87,8 @@ class UpdateAssetRequest extends FormRequest
             'brand_id' => 'marca',
             'category_id' => 'categoría',
             'status_id' => 'estado',
+            'model_year' => 'año del modelo',
+            'acquisition_date' => 'fecha de adquisición',
         ];
     }
 
@@ -128,6 +134,14 @@ class UpdateAssetRequest extends FormRequest
 
         if ($this->has('is_active')) {
             $data['is_active'] = filter_var($this->is_active, FILTER_VALIDATE_BOOLEAN);
+        }
+
+        if($this->has('model_year')) {
+            $data['model_year'] = $this->model_year ? trim($this->model_year) : null;
+        }
+
+        if($this->has('acquisition_date')) {
+            $data['acquisition_date'] = $this->acquisition_date ? trim($this->acquisition_date) : null;
         }
 
         $this->merge($data);

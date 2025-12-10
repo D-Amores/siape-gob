@@ -24,58 +24,121 @@
         <div class="datatables">
             <div class="card shadow-lg">
                 <div class="card-body">
-                    <div class="row mb-3 g-2 align-items-end">
-
-                        <div class="col-md-3">
-                            <label for="filtroGeneral" class="form-label small">Buscar (Inv, Modelo, Serie):</label>
-                            <input type="text" id="filtroGeneral" class="form-control form-control-sm"
-                                placeholder="Escribe...">
+                    <!-- Barra de herramientas compacta -->
+                    <div class="d-flex gap-2 mb-3 align-items-center flex-wrap">
+                        <!-- Búsqueda rápida -->
+                        <div class="flex-grow-1" style="min-width: 250px;">
+                            <input type="text" id="filtroGeneral" class="form-control"
+                                placeholder="🔍 Buscar por código, nombre, serie...">
                         </div>
 
-                        <div class="col-md-2">
-                            <label for="filtroCategoria" class="form-label small">Categoría:</label>
-                            <select id="filtroCategoria" class="form-select form-select-sm" data-placeholder="Todas">
-                                <option value=""></option>
-                                @foreach ($categories as $category)
-                                    <option value="{{ $category->name }}">{{ $category->name }}</option>
-                                @endforeach
-                            </select>
-                        </div>
+                        <!-- Botón de filtros avanzados -->
+                        <button class="btn btn-outline-primary" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#collapseFiltros" aria-expanded="false" aria-controls="collapseFiltros">
+                            <i class="bi bi-funnel"></i> Filtros
+                            <span class="badge bg-primary ms-1" id="contadorFiltros" style="display: none;">0</span>
+                        </button>
 
-                        <div class="col-md-2">
-                            <label for="filtroMarca" class="form-label small">Marca:</label>
-                            <select id="filtroMarca" class="form-select form-select-sm" data-placeholder="Todas">
-                                <option value=""></option>
-                                @foreach ($brands as $brand)
-                                    <option value="{{ $brand->name }}">{{ $brand->name }}</option>
-                                @endforeach
-                            </select>
-                        </div>
+                        <!-- Botón limpiar -->
+                        <button class="btn btn-outline-secondary" id="btnLimpiarFiltros" type="button">
+                            <i class="bi bi-x-circle"></i> Limpiar
+                        </button>
+                    </div>
 
-                        <div class="col-md-2">
-                            <label for="filtroCondicion" class="form-label small">Condición:</label>
-                            <select id="filtroCondicion" class="form-select form-select-sm" data-placeholder="Todas">
-                                <option value=""></option>
-                                @foreach ($conditions as $condition)
-                                    <option value="{{ $condition->name }}">{{ $condition->name }}</option>
-                                @endforeach
-                            </select>
-                        </div>
+                    <!-- Panel colapsable de filtros -->
+                    <div class="collapse" id="collapseFiltros">
+                        <div class="card card-body bg-light mb-3">
+                            <div class="row g-3">
+                                <!-- Categoría -->
+                                <div class="col-6 col-md-4 col-lg-3">
+                                    <label for="filtroCategoria" class="form-label small fw-semibold mb-1">
+                                        <i class="bi bi-tags text-info"></i> Categoría
+                                    </label>
+                                    <select id="filtroCategoria" class="form-select form-select-sm">
+                                        <option value="">Todas</option>
+                                        @foreach ($categories as $category)
+                                            <option value="{{ $category->name }}">{{ $category->name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
 
-                        <div class="col-md-2">
-                            <label for="filtroEstado" class="form-label small">Estado:</label>
-                            <select id="filtroEstado" class="form-select form-select-sm" data-placeholder="Todas">
-                                <option value=""></option>
-                                <option value="Activo">Activo</option>
-                                <option value="Inactivo">Inactivo</option>
-                            </select>
-                        </div>
+                                <!-- Marca -->
+                                <div class="col-6 col-md-4 col-lg-2">
+                                    <label for="filtroMarca" class="form-label small fw-semibold mb-1">
+                                        <i class="bi bi-award text-success"></i> Marca
+                                    </label>
+                                    <select id="filtroMarca" class="form-select form-select-sm">
+                                        <option value="">Todas</option>
+                                        @foreach ($brands as $brand)
+                                            <option value="{{ $brand->name }}">{{ $brand->name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
 
-                        <div class="col-md-1">
-                            <button class="btn btn-sm btn-outline-secondary w-100" id="btnLimpiarFiltros"
-                                title="Limpiar filtros">
-                                Limpiar
-                            </button>
+                                <!-- Condición -->
+                                <div class="col-6 col-md-4 col-lg-2">
+                                    <label for="filtroCondicion" class="form-label small fw-semibold mb-1">
+                                        <i class="bi bi-shield-check text-warning"></i> Condición
+                                    </label>
+                                    <select id="filtroCondicion" class="form-select form-select-sm">
+                                        <option value="">Todas</option>
+                                        @foreach ($conditions as $condition)
+                                            <option value="{{ $condition->name }}">{{ $condition->name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+
+                                <!-- Estado -->
+                                <div class="col-6 col-md-4 col-lg-2">
+                                    <label for="filtroEstado" class="form-label small fw-semibold mb-1">
+                                        <i class="bi bi-toggle-on text-danger"></i> Estado
+                                    </label>
+                                    <select id="filtroEstado" class="form-select form-select-sm">
+                                        <option value="">Todos</option>
+                                        <option value="Activo">Activo</option>
+                                        <option value="Inactivo">Inactivo</option>
+                                    </select>
+                                </div>
+
+                                <!-- Año -->
+                                <div class="col-6 col-md-4 col-lg-1">
+                                    <label for="filtroAnioModelo" class="form-label small fw-semibold mb-1">
+                                        <i class="bi bi-calendar-event"></i> Año
+                                    </label>
+                                    <input type="number" id="filtroAnioModelo" class="form-control form-control-sm" placeholder='...'>
+                                </div>
+
+                                <!-- Fecha Adquisición -->
+                                <div class="col-6 col-md-4 col-lg-2">
+                                    <label for="filtroFechaAdquisicion" class="form-label small fw-semibold mb-1">
+                                        <i class="bi bi-calendar3"></i> Adq.
+                                    </label>
+                                    <input type="date" id="filtroFechaAdquisicion" class="form-control form-control-sm">
+                                </div>
+                            </div>
+
+                            <!-- Badges de selecciones múltiples -->
+                            <div class="mt-3 pt-2 border-top" id="badgesContainer" style="display: none;">
+                                <!-- Badges de categorías -->
+                                <div class="mb-2" id="categoriasSeleccionadasContainer" style="display: none;">
+                                    <div class="d-flex align-items-center gap-2 flex-wrap">
+                                        <span class="badge bg-info bg-opacity-10 text-info border border-info">
+                                            <i class="bi bi-tags"></i> Categorías:
+                                        </span>
+                                        <div id="categoriasSeleccionadas" class="d-flex gap-2 flex-wrap"></div>
+                                    </div>
+                                </div>
+
+                                <!-- Badges de marcas -->
+                                <div id="marcasSeleccionadasContainer" style="display: none;">
+                                    <div class="d-flex align-items-center gap-2 flex-wrap">
+                                        <span class="badge bg-success bg-opacity-10 text-success border border-success">
+                                            <i class="bi bi-award"></i> Marcas:
+                                        </span>
+                                        <div id="marcasSeleccionadas" class="d-flex gap-2 flex-wrap"></div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="table-responsive">
@@ -91,12 +154,14 @@
                                     <th class="text-center py-1">Condición</th>
                                     <th class="text-center py-1">Estado</th>
                                     <th class="text-center py-1">Acciones</th>
+                                    <th class="text-center py-1">Fecha Adquisición</th>
+                                    <th class="text-center py-1">Año Modelo</th>
                                 </tr>
                             </thead>
                             <tbody>
 
                             </tbody>
-                            <tfoot>
+                            {{-- <tfoot>
                                 <tr>
                                     <th class="text-center py-1">N. de Inventario</th>
                                     <th class="py-1">Modelo</th>
@@ -106,8 +171,10 @@
                                     <th class="text-center py-1">Condición</th>
                                     <th class="text-center py-1">Estado</th>
                                     <th class="text-center py-1">Acciones</th>
+                                    <th class="text-center py-1">Fecha Adquisición</th>
+                                    <th class="text-center py-1">Año Modelo</th>
                                 </tr>
-                            </tfoot>
+                            </tfoot> --}}
                         </table>
                     </div>
                 </div>
@@ -185,7 +252,8 @@
                                                 <option value="">Seleccione estado</option>
                                                 <!-- Las opciones se llenarán con JavaScript -->
                                             </select>
-                                            <label for="status_id"><i class="fas fa-toggle-on me-1 text-muted"></i> Estado del bien</label>
+                                            <label for="status_id"><i class="fas fa-toggle-on me-1 text-muted"></i> Estado
+                                                del bien</label>
                                         </div>
 
                                         <div class="form-floating mb-3">
@@ -193,7 +261,8 @@
                                                 <option value="1" selected>Activo</option>
                                                 <option value="0">Inactivo</option>
                                             </select>
-                                            <label for="is_active"><i class="fas fa-power-off me-1 text-muted"></i> Estado activo/inactivo</label>
+                                            <label for="is_active"><i class="fas fa-power-off me-1 text-muted"></i> Estado
+                                                activo/inactivo</label>
                                         </div>
 
                                         <div class="form-floating">
@@ -214,6 +283,34 @@
 
                                         <!-- Campos dinámicos -->
                                         <div id="camposDinamicos"></div>
+
+                                        <h6 class="text-uppercase text-secondary fw-semibold mt-4 mb-3">
+                                            <i class="fas fa-clock me-2"></i>Detalles de Adquisición
+                                        </h6>
+
+                                        <div class="row g-3">
+
+                                            <div class="col-md-6">
+                                                <div class="form-floating">
+                                                    <input type="number" class="form-control" id="model_year"
+                                                        name="model_year" placeholder="Ej: 2025">
+                                                    <label for="model_year">
+                                                        <i class="fas fa-calendar me-1 text-muted"></i> Año del Modelo
+                                                    </label>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-6">
+                                                <div class="form-floating">
+                                                    <input type="date" class="form-control" id="acquisition_date"
+                                                        name="acquisition_date" placeholder="Fecha">
+                                                    <label for="acquisition_date">
+                                                        <i class="fas fa-calendar-check me-1 text-muted"></i> Fecha
+                                                        Adquisición
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
 
                                         <h6 class="text-uppercase text-secondary fw-semibold mt-4 mb-3">
                                             <i class="fas fa-align-left me-2"></i>Descripción
@@ -320,6 +417,14 @@
                                             <div class="small text-muted">Estado</div>
                                             <span id="detalle-estado" class="badge rounded-pill px-3 py-2"></span>
                                         </div>
+                                        <div class="col-6">
+                                            <div class="small text-muted">Año Modelo</div>
+                                            <div id="detalle-anio-modelo" class="fw-semibold">—</div>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="small text-muted">Fecha Adquisición</div>
+                                            <div id="detalle-fecha-adquisicion" class="fw-semibold">—</div>
+                                        </div>
                                         <div class="col-12">
                                             <div class="small text-muted">Creado el</div>
                                             <div id="detalle-creado" class="fw-semibold">—</div>
@@ -333,7 +438,29 @@
                         <div class="col-md-6">
                             <div class="card h-100 border-0 bg-light-subtle">
                                 <div class="card-body">
-                                    <h6 class="text-uppercase text-secondary fw-semibold mb-3">
+
+                                    <h6 class="text-uppercase text-secondary fw-semibold mt-4 mb-3">
+                                        <i class="fas fa-clock me-2"></i>Detalles de Adquisición
+                                    </h6>
+
+                                    <div class="row g-3 mt-2">
+                                        <div class="col-6">
+                                            <div class="small text-muted">
+                                                <i class="fas fa-calendar me-1"></i> Año del Modelo
+                                            </div>
+                                            <div id="detalle-model_year" class="fw-semibold">-</div>
+                                        </div>
+
+                                        <div class="col-6">
+                                            <div class="small text-muted">
+                                                <i class="fas fa-calendar-check me-1"></i> Fecha Adquisición
+                                            </div>
+                                            <div id="detalle-acquisition_date" class="fw-semibold">-</div>
+                                        </div>
+
+                                    </div>
+
+                                    <h6 class="text-uppercase text-secondary fw-semibold mb-3 my-4">
                                         <i class="fas fa-microchip me-2"></i>Especificaciones Técnicas
                                     </h6>
                                     <div class="row g-3">
@@ -396,6 +523,7 @@
     <script src="{{ asset('js/assets/services.js') }}"></script>
     <script src="{{ asset('js/assets/form.js') }}"></script>
     <script src="{{ asset('js/assets/modals.js') }}"></script>
+    <script src="{{ asset('js/assets/filters.js') }}"></script>
     <script src="{{ asset('js/assets/datatable.js') }}"></script>
 
     <script>
