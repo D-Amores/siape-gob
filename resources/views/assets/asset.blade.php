@@ -105,7 +105,7 @@
                                     <label for="filtroAnioModelo" class="form-label small fw-semibold mb-1">
                                         <i class="bi bi-calendar-event"></i> Año
                                     </label>
-                                    <input type="number" id="filtroAnioModelo" class="form-control form-control-sm" placeholder="2024">
+                                    <input type="number" id="filtroAnioModelo" class="form-control form-control-sm" placeholder='...'>
                                 </div>
 
                                 <!-- Fecha Adquisición -->
@@ -523,6 +523,7 @@
     <script src="{{ asset('js/assets/services.js') }}"></script>
     <script src="{{ asset('js/assets/form.js') }}"></script>
     <script src="{{ asset('js/assets/modals.js') }}"></script>
+    <script src="{{ asset('js/assets/filters.js') }}"></script>
     <script src="{{ asset('js/assets/datatable.js') }}"></script>
 
     <script>
