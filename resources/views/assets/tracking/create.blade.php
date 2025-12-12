@@ -15,17 +15,39 @@
 @endsection
 
 @section('content')
-<div class="container-fluid">
+    <div class="container-fluid">
         <div class="datatables">
             <div class="col-12">
                 <div class="card shadow">
                     <div class="card-body">
-                        <h4 class="mb-3">
-                            <i class="ti ti-user"></i>
-                            Lista de reportes de bienes
+                        <div class="mb-2">
+                        <h4>
+                            <i class="ti ti-list"></i>
+                            Reporte de Bienes
                         </h4>
+                        <p class="card-text text-muted mt-1">
+                            Al inicar el seguimiento de un reporte, el reporte desaparece de este apartado y aparece en su sección correspondiente.
+                        </p>
+                        </div>
+                        <div class="row">
+                            <div class="col-12 col-md-3">
+                                <label for="filter-reports" class="form-label fw-semibold">Filtrar por:</label>
+                                <select id="filter-reports" class="form-select shadow-sm border-primary">
+                                    <option value="all" selected>Todos los reportes</option>
+                                    <option value="open">Reportes abiertos</option>
+                                    <option value="closed">Reportes cerrados</option>
+                                </select>
+                            </div>
+                            <div class="col-6 col-md-2 d-flex align-items-end">
+                                <button id="btn-filter" class="btn btn-primary w-100 shadow-sm">
+                                    <i class="ti ti-filter"></i> Filtrar
+                                </button>
+                            </div>
+                        </div>
+
                         <div class="table-responsive">
-                            <table id="reports-table" class="table table-hover w-100 table-striped table-bordered align-middle">
+                            <table id="reports-table"
+                                class="table table-hover w-100 table-striped table-bordered align-middle">
                                 <thead class="text-dark fs-4">
                                     <tr>
                                         <th scope="col">#</th>
@@ -56,7 +78,7 @@
         const languageDataTable = '{{ asset('cdn/datatables-language/es-MX.json') }}';
     </script>
 
-        <!-- Helpers -->
+    <!-- Helpers -->
     <script src="{{ asset('js/helpers/tools/utils.js') }}"></script>
     <script src="{{ asset('js/helpers/modals/modal-actions.js') }}"></script>
     <script src="{{ asset('js/helpers/alerts/alerts.js') }}"></script>

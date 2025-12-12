@@ -13,6 +13,8 @@ function basicTableConfig(tableId = 'dataUsersTable', data = [], columns = [], t
     dataTables[tableId] = new DataTable(tableSelector, {
         data: data,
         columns: columns,
+        ordering: false, 
+        searching: false,
         pagingType: 'simple_numbers',
         destroy: true,
         responsive: true,
@@ -23,16 +25,74 @@ function basicTableConfig(tableId = 'dataUsersTable', data = [], columns = [], t
     });
 
     if (tooltips) {
+
         const activateTooltips = () => {
-            document.querySelectorAll(tooltips).forEach((el) => new bootstrap.Tooltip(el));
+            document.querySelectorAll(tooltips).forEach((el) => {
+                // 🔥 Si ya existe un tooltip, destrúyelo
+                const existing = bootstrap.Tooltip.getInstance(el);
+                if (existing) existing.dispose();
+
+                // 🔥 Crea uno nuevo limpio
+                new bootstrap.Tooltip(el);
+            });
         };
 
+        // Activar tooltips en cada redibujado
         dataTables[tableId].on('draw', activateTooltips);
+
+        // Activar en la primera carga
         activateTooltips();
     }
 
     return dataTables[tableId];
 }
+
+function basicTableConfigWithoutPaging(tableId = 'dataUsersTable', data = [], columns = [], tooltips = null) {
+    const tableSelector = `#${tableId}`;
+
+    // Si ya existe una instancia para este ID, solo actualiza
+    if (dataTables[tableId]) {
+        dataTables[tableId].clear().rows.add(data).draw();
+        return dataTables[tableId];
+    }
+
+    // Si no existe, crea una nueva
+    dataTables[tableId] = new DataTable(tableSelector, {
+        data: data,
+        columns: columns,
+        ordering: false, 
+        searching: false,
+        paging: false,
+        destroy: true,
+        responsive: true,
+        lengthChange: false,
+        info: false,
+        language: { url: languageDataTable }
+    });
+
+    if (tooltips) {
+
+        const activateTooltips = () => {
+            document.querySelectorAll(tooltips).forEach((el) => {
+                // 🔥 Si ya existe un tooltip, destrúyelo
+                const existing = bootstrap.Tooltip.getInstance(el);
+                if (existing) existing.dispose();
+
+                // 🔥 Crea uno nuevo limpio
+                new bootstrap.Tooltip(el);
+            });
+        };
+
+        // Activar tooltips en cada redibujado
+        dataTables[tableId].on('draw', activateTooltips);
+
+        // Activar en la primera carga
+        activateTooltips();
+    }
+
+    return dataTables[tableId];
+}
+
 
 // Lo que debe recibir filtros
 // {

@@ -75,4 +75,9 @@ class MaintenanceReport extends Model
         return $query->with(['asset', 'status', 'logs'])
                     ->whereNotNull('closed_at'); // Assuming 'closed_at' being not null means the report is closed
     }
+
+    public function getIsClosedAttribute()
+    {
+        return (bool) $this-> closed_at;
+    }
 }

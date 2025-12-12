@@ -1,5 +1,5 @@
-function loadAssetsAccepted(assetPendings) {
-    const tableId = "accepted_assignments";
+function loadAssignmentsList(assignments) {
+    const tableId = "details-table";
 
     const columns = [
         { 
@@ -17,26 +17,6 @@ function loadAssetsAccepted(assetPendings) {
             data: 'asset.status', 
             title: 'Estado', 
             className: 'text-center'
-        },
-        // { 
-        //     data: 'asset.brand', 
-        //     title: 'Marca', 
-        //     className: 'text-center'
-        // },
-        { 
-            data: 'assigner', 
-            title: 'Asignado por', 
-            className: 'text-center'
-        },
-        { 
-            data: 'receiver.name', 
-            title: 'Asignado a', 
-            className: 'text-center',
-        },
-        { 
-            data: 'receiver.area', 
-            title: 'Con Área', 
-            className: 'text-center',
         },
         { 
             data: 'assignment_date', 
@@ -84,5 +64,30 @@ function loadAssetsAccepted(assetPendings) {
     ];
 
     // Inicializa la DataTable
-    bottomTableConfig(tableId, assetPendings, columns, '[data-bs-toggle="tooltip"]');
+    basicTableConfigWithoutPaging(tableId, assignments, columns, '[data-bs-toggle="tooltip"]');
+}
+
+function loadAssetsAcceptedBasicInfo(data) {
+    const tableId = "accepted-assignments-names";
+    const columns = [
+        { data: 'id', title: '#', className: 'text-center', render: (data, type, row, meta) => meta.row + 1 },
+        { data: 'receiver_name', title: 'Asignado a', className: 'text-center' },
+        { data: 'receiver_area', title: 'Con Área', className: 'text-center' },
+        { data: 'assignments_count', title: 'Asignaciones', className: 'text-center' },
+        { data: 'assigner_name', title: 'Asignado por', className: 'text-center' },
+        { data: 'id', title: 'Acciones', className: 'text-center', render: (data, type, row) => {
+            return `
+                <button class="btn btn-sm btn-outline-primary border-0 btn-details" data-id="${data}" 
+                        data-bs-toggle="tooltip" 
+                        data-bs-title="Detalles">
+                    <i class="fas fa-info-circle"></i>
+                </button>
+            `;
+            } 
+        }
+
+    ];
+
+    // Inicializa la DataTable
+    basicTableConfig(tableId, data, columns, '[data-bs-toggle="tooltip"]');
 }

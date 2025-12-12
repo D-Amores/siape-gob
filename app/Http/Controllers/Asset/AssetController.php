@@ -19,15 +19,15 @@ class AssetController extends Controller
     {
         $option = $request->input('option');
 
-        $data = null;
         try {
             switch ($option) {
+                // ---------------- CASE TABLE ----------------
                 case 'table':
                     $recordsTotal = Asset::count();
 
                     $start = $request->input('start', 0);
                     $length = $request->input('length', 30);
-                    $searchValue = $request->input('search.value', '');
+                    $searchValue = $request->input('filtroGeneral', '');
 
                     $query = Asset::with(['brand', 'category', 'status'])
                         ->select('assets.*')
@@ -35,17 +35,23 @@ class AssetController extends Controller
                         ->filterByState($request->input('filtroEstado'))
                         ->filterByCategory($request->input('filtroCategoria'))
                         ->filterByBrand($request->input('filtroMarca'))
+                        ->modelYear($request->input('filtroAnioModelo'))
+                        ->acquisitionDate($request->input('filtroFechaAdquisicion'))
                         ->search($searchValue);
 
                     $recordsFiltered = $query->count();
 
                     $orderColumnIndex = $request->input('order.0.column', 0);
                     $orderColumnDir = $request->input('order.0.dir', 'asc');
+
+                    // Mantenemos tus nombres exactos aquí
                     $columns = [
                         0 => 'inventory_number',
                         1 => 'model',
                         2 => 'serial_number',
                         6 => 'is_active',
+                        7 => 'acquisition_date',
+                        8 => 'model_year',
                     ];
 
                     $orderColumn = $columns[$orderColumnIndex] ?? 'inventory_number';
@@ -55,11 +61,16 @@ class AssetController extends Controller
                         ->take($length)
                         ->get();
 
-                    $data = $data->map(function ($asset) {
+                    $data->transform(function ($asset) {
                         $asset->is_active_label = $asset->isActive() ? 'Activo' : 'Inactivo';
+
+                        $asset->acquisition_date_formatted = optional($asset->acquisition_date)->format('d/m/Y');
+                        $asset->model_year_text = $asset->model_year ?? '-';
+
                         return $asset;
                     });
 
+                    // Retornamos directamente aquí
                     return response()->json([
                         'draw' => intval($request->input('draw')),
                         'recordsTotal' => $recordsTotal,
@@ -67,8 +78,7 @@ class AssetController extends Controller
                         'data' => $data,
                     ]);
 
-                    break;
-
+                    // ---------------- CASE DETAILS ----------------
                 case 'details':
                     $assetId = $request->input('id');
 
@@ -88,19 +98,32 @@ class AssetController extends Controller
                             'message' => 'Activo no encontrado.'
                         ], 404);
                     }
-                    break;
+
+                    $data->is_active_label = $data->isActive() ? 'Activo' : 'Inactivo';
+                    $data->acquisition_date_formatted = optional($data->acquisition_date)->format('d/m/Y');
+                    $data->model_year_text = $data->model_year ?? '-';
+
+                    return response()->json([
+                        'ok' => true,
+                        'data' => $data,
+                    ]);
+
+                    // ---------------- CASE AVAILABLE ----------------
                 case 'available':
-                    // Activos que no están asignados (disponibles)
                     $data = Asset::available()
                         ->orderBy('inventory_number', 'asc')
-                        ->get(['id', 'inventory_number', 'model'])
+                        ->get(['id', 'inventory_number', 'model', 'asset_name', 'type']) // Asegúrate de incluir los campos necesarios aquí
                         ->map(function ($asset) {
                             return [
                                 'id' => $asset->id,
                                 'text' => $asset->asset_name . ($asset->type ? " ({$asset->type})" : ''),
                             ];
                         });
-                    break;
+
+                    return response()->json([
+                        'ok' => true,
+                        'data' => $data,
+                    ]);
 
                 default:
                     return response()->json([
@@ -108,23 +131,6 @@ class AssetController extends Controller
                         'message' => 'Opción no válida.',
                     ], 422);
             }
-
-            // Agregar label de estado para table y details
-            if ($option !== 'available') {
-                if ($data instanceof \Illuminate\Database\Eloquent\Collection) {
-                    $data = $data->map(function ($asset) {
-                        $asset->is_active_label = $asset->isActive() ? 'Activo' : 'Inactivo';
-                        return $asset;
-                    });
-                } else {
-                    $data->is_active_label = $data->isActive() ? 'Activo' : 'Inactivo';
-                }
-            }
-
-            return response()->json([
-                'ok' => true,
-                'data' => $data,
-            ]);
         } catch (\Exception $e) {
             Log::error('Error en assetsApi: ' . $e->getMessage());
             return response()->json([
@@ -227,8 +233,8 @@ class AssetController extends Controller
     {
         try {
             // Validar si el bien tiene asignaciones pendientes o confirmadas
-            $hasAssignments = $asset->personnelAssets()->exists() || 
-                            $asset->personnelAssetPendings()->exists();
+            $hasAssignments = $asset->personnelAssets()->exists() ||
+                $asset->personnelAssetPendings()->exists();
 
             if ($hasAssignments) {
                 return response()->json([

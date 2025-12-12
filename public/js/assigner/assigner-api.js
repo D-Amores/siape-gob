@@ -77,17 +77,22 @@ async function getPersonnelApi(consultOption = 'area') {
     return [];
 }
 
-async function acceptAssetApi(option = 'accepted') {
+async function acceptAssetApi(option = 'accepted', filter = null, personnelId = null) {
     try {
+        const payload = { option: option };
+        if (filter) {
+            payload.filter = filter;
+        }
+        if (personnelId) {
+            payload.personnel_id = personnelId;
+        }
         const response = await fetch(urlAssignmentApi, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
                 'X-CSRF-Token': csrfToken
             },
-            body: JSON.stringify({
-                option: option,
-            })
+            body: JSON.stringify(payload)
         });
 
         if (!response.ok) throw new Error(`Error HTTP: ${response.status}`);
@@ -103,3 +108,43 @@ async function acceptAssetApi(option = 'accepted') {
     }
     return [];
 }
+
+async function getPdfReport(personnelId) {
+    try {
+        if (!personnelId) return false;
+
+        const payload = {
+            option: 'pdf_report',
+            personnel_id: personnelId
+        };
+
+        const response = await fetch(urlAssignmentApi, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-Token': csrfToken
+            },
+            body: JSON.stringify(payload)
+        });
+
+        if (!response.ok) throw new Error(`HTTP error: ${response.status}`);
+
+        const contentType = response.headers.get("content-type");
+
+        // Si viene PDF
+        if (contentType && contentType.includes("application/pdf")) {
+            const blob = await response.blob();
+            return { ok: true, pdf: blob };
+        }
+
+        // Si viene JSON (errores o mensaje)
+        const result = await response.json();
+        return result;
+
+    } catch (error) {
+        console.error("Error al obtener el PDF:", error);
+        return { ok: false, error };
+    }
+}
+
+

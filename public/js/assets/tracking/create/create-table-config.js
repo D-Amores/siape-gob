@@ -52,9 +52,10 @@ function loadReportsTable(data) {
             className: 'text-center',
             render: (data, type, row) => {
                 return `
-                    <button class="btn btn-create btn-sm btn-outline-primary border-0 me-1 d-inline-flex align-items-center" 
+                    <button class="btn btn-create btn-sm ${row.is_closed ? 'btn-outline-secondary' : 'btn-outline-primary'} border-0 me-1 d-inline-flex align-items-center" 
                         data-id="${data}" 
-                        data-bs-toggle="tooltip" 
+                        data-bs-toggle="tooltip"
+                        ${row.is_closed ? 'disabled' : ''} 
                         data-bs-title="Dar seguimiento">
                         <span class="spinner-border spinner-border-sm me-1 d-none" role="status" aria-hidden="true"></span>
                         <i class="fas fa-arrow-right"></i>

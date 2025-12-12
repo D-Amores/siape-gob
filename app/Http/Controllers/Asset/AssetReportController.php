@@ -49,6 +49,7 @@ class AssetReportController extends Controller
                     'asset' => $report->asset->asset_name,
                     'description' => $report->description ?? 'Sin descripción',
                     'status' => $report->status->name ?? 'Desconocido',
+                    'is_closed' => $report->is_closed,
                     'reported_by' => $report->reporter->full_name ?? '—',
                     'reported_at' => optional($report->reported_at)->format('d/m/Y H:i') ?? '—',
                     'id' => $report->id,

@@ -13,6 +13,7 @@ use App\Models\Asset;
 use App\Models\Status;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
+use Mpdf\Tag\Main;
 
 class AssetTrackingController extends Controller
 {
@@ -43,6 +44,16 @@ class AssetTrackingController extends Controller
         $maintenanceReport = MaintenanceReport::find($requestData['maintenance_report_id']);
 
         try{
+            $maintenanceExist = Maintenance::where('maintenance_report_id', $maintenanceReport->id)
+                ->activeMaintenance()
+                ->first();
+            if ($maintenanceExist) {
+                return response()->json([
+                    'ok' => false,
+                    'message' => 'Ya existe un seguimiento activo para este reporte.'
+                ], 400);
+            }
+        
             $requestData['start_date'] = now();
             $requestData['performed_by'] = Auth::user()->personnel_id;
             Maintenance::create($requestData);

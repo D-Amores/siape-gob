@@ -158,7 +158,7 @@
                                             <span>
                                                 <i class="ti ti-history"></i>
                                             </span>
-                                            <span class="hide-menu">Movimientos</span>
+                                            <span class="hide-menu">Desasignados</span>
                                         </a>
                                     </li>
                                     @role('admin')

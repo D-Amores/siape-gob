@@ -33,9 +33,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
             try {
                 await Promise.all([
-                    cargarCategorias(), 
+                    cargarCategorias(),
                     cargarMarcas(),
-                    loadStatuses() 
+                    loadStatuses()
                 ]);
                 openModalForEdit('modalBien');
             } catch (error) {
@@ -61,14 +61,14 @@ document.addEventListener('DOMContentLoaded', function () {
                         'Content-Type': 'application/json',
                         'X-CSRF-TOKEN': csrfToken
                     },
-                    body: JSON.stringify({ 
+                    body: JSON.stringify({
                         option: 'details',
-                        id: id 
+                        id: id
                     })
                 });
-                
+
                 const result = await response.json();
-                
+
                 if (!result.ok) {
                     console.error('Error en respuesta de details');
                     return;
@@ -84,7 +84,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 // PRIMERO cargar todos los datos asíncronos
                 await Promise.all([
-                    cargarCategorias(asset.category_id), 
+                    cargarCategorias(asset.category_id),
                     cargarMarcas(asset.brand_id),
                     loadStatuses(asset.status_id) // Esperar a que termine
                 ]);
@@ -99,6 +99,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 document.getElementById('categoria').value = asset.category_id ?? '';
                 document.getElementById('descripcion').value = asset.description ?? '';
                 document.getElementById('tipo').value = asset.type ?? '';
+                document.getElementById('model_year').value = asset.model_year ?? '';
+                document.getElementById('acquisition_date').value = asset.acquisition_date ? asset.acquisition_date.split('T')[0] : '';
 
                 // Campos dinámicos
                 try {
@@ -115,7 +117,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 const categoriaSeleccionada = categoriasGlobales.find(cat => cat.id === asset.category_id);
                 if (categoriaSeleccionada && categoriaSeleccionada.special_specifications) {
                     camposDinamicos.innerHTML = camposGenericos;
-                    
+
                     // Establecer valores de campos dinámicos después de crearlos
                     setTimeout(() => {
                         if (document.getElementById('procesador')) document.getElementById('procesador').value = asset.cpu ?? '';
@@ -129,7 +131,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 // FINALMENTE abrir el modal
                 openModalForEdit('modalBien');
-                
+
             } catch (err) {
                 console.error('Error en fetch details:', err);
                 showAlert(
@@ -215,6 +217,8 @@ document.addEventListener('DOMContentLoaded', function () {
             modal.querySelector('#detalle-almacenamiento').textContent = asset.storage ?? '—';
             modal.querySelector('#detalle-descripcion').textContent = asset.description ?? '—';
             modal.querySelector('#detalle-tipo').textContent = asset.type ?? '—';
+            modal.querySelector('#detalle-model_year').textContent = asset.model_year ?? '—';
+            modal.querySelector('#detalle-acquisition_date').textContent = asset.acquisition_date_formatted ?? '—';
 
             openModalForEdit('modalDetallesBien');
         } catch (error) {
@@ -261,7 +265,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 // Manejar diferentes tipos de errores
                 let errorMessage = data.message || 'No se pudo eliminar el activo.';
                 let errorTitle = "Error";
-                
+
                 if (status === 400) {
                     errorTitle = "No se puede eliminar";
                 } else if (status === 404) {
@@ -282,11 +286,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
         } catch (error) {
             console.error('Error en eliminación:', error);
-            
+
             // Mensajes de error amigables según el tipo de error
             let userMessage = 'Ocurrió un error inesperado. Por favor, intente nuevamente.';
             let userTitle = 'Error';
-            
+
             if (error.message.includes('inválida')) {
                 userMessage = 'Error de comunicación con el servidor. Verifique su conexión.';
                 userTitle = 'Error de conexión';
@@ -311,16 +315,16 @@ document.addEventListener('DOMContentLoaded', function () {
      */
     async function handleHttpResponse(response) {
         const contentType = response.headers.get('content-type');
-        
+
         // Verificar si la respuesta es JSON válido
         if (!contentType || !contentType.includes('application/json')) {
             const textResponse = await response.text();
             console.warn('Respuesta no JSON:', textResponse.substring(0, 200));
             throw new Error('Respuesta del servidor inválida');
         }
-        
+
         const result = await response.json();
-        
+
         return {
             success: response.ok && result.ok,
             data: result,
